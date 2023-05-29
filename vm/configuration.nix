@@ -12,7 +12,7 @@
 
   # Bootloader.
   boot.loader = {
-    timeout = 5;
+    timeout = 3;
 
     efi = {
       canTouchEfiVariables = true;
@@ -24,12 +24,12 @@
       version = 2;
       devices = ["nodev"];
       efiSupport = true;
-      #useOSProber = true;
       configurationLimit = 3;
+      theme = pkgs.nixos-grub2-theme;
     };
   };
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "experimental"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -43,7 +43,7 @@
   time.timeZone = "Europe/Madrid";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.utf8";
+  i18n.defaultLocale = "es_ES.utf8";
 
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "es_ES.utf8";
@@ -57,30 +57,17 @@
     LC_TIME = "es_ES.utf8";
   };
 
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-  # Enable the KDE Plasma Desktop Environment.
-  #services.xserver.displayManager.sddm.enable = true;
-  #services.xserver.desktopManager.plasma5.enable = true;
-  
-  # Tests
+  # Desktop Environment
   services = {
     xserver = {
       enable = true;
+      layout = "es";
+      xkbVariant = "";
       displayManager = {
-        lightdm.enable = true;
-        defaultSession = "xfce";
+        sddm.enable = true;
       };
-      desktopManager.xfce.enable = true;
-      windowManager.bspwm.enable = true;
+      desktopManager.plasma5.enable = true;
     };
-  };
-
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "es";
-    xkbVariant = "";
   };
 
   # Configure console keymap
@@ -90,8 +77,8 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
-  hardware.pulseaudio.enable = false;
+  #sound.enable = true;
+  #hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -106,26 +93,18 @@
     #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
   # Spice guest additions for QEMU
   services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.egarcia = {
-    password = "egarcia";
+  # Administrator account. Don't forget to set a password with ‘passwd’.
+  users.users.administrador = {
+    password = "administrador";
     isNormalUser = true;
-    description = "Eloy";
-    extraGroups = [ "networkmanager" "wheel" "audio" "video" ];
+    description = "Administrador";
+    extraGroups = [ "wheel" "video" "audio" "networkmanager" "docker" ];
     packages = with pkgs; [
-      firefox
-      audacious
-      nano
-      git
-      curl
-      wget
+      #firefox
     ];
   };
 
@@ -135,8 +114,32 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+      firefox
+      #google-chrome
+      #audacious
+      #audacity
+      #carla
+      #darkice
+      nano
+      git
+      curl
+      wget
+      #tailscale
+      okular
+      #libreoffice
+      #kate
+      ntfs3g
+      gcc
+      gnumake
+      fltk
+      portaudio
+      #libmp3lame
+      lame
+      libvorbis
+      libogg
+      flac
+      wireplumber
+      pavucontrol
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -149,14 +152,40 @@
 
   # List services that you want to enable:
 
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  # OpenSSH daemon.
+  services.openssh.enable = true;
+
+  # Docker
+  virtualisation = {
+    docker = {
+      enable = true;
+      storageDriver = "btrfs";
+    };
+    #oci-containers = {
+    #  backend = "docker";
+    #  containers = {
+    #    # Darkice docker container
+    #    darkice = {
+    #      image = "jwater7/darkice";
+    #      autoStart = true;
+    #      extraOptions = ["--privileged"];
+    #      volumes = ["/home/administrador/config/docker/darkice/darkice.cfg:/etc/darkice.cfg:ro"];
+    #    };
+    #  };
+    #};
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.enable = false;
+
+  # Enabling experimental Nix flakes
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = "experimental-features = nix-command flakes";
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -164,6 +193,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "22.05"; # Did you read the comment?
+  system.stateVersion = "22.11"; # Did you read the comment?
 
 }
