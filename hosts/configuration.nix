@@ -141,6 +141,8 @@
       flac
       wireplumber
       pavucontrol
+      python3
+      python311Packages.pip
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

@@ -24,7 +24,10 @@
     stateVersion = "22.05";
     packages = with pkgs; [
       # Terminal
-      btop              # Resource Manager
+      #btop               # Resource Manager
+      nvd		 # NixOS package version diff tool
+      yadm		 # Yet Another Dot Manager
+      ansible            # Automation tool
       #nitch             # Minimal fetch
       #ranger            # File Manager
       #tldr              # Helper
