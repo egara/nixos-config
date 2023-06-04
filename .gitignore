@@ -1,2 +1,4 @@
 # Ignored files and directories
-result/
+
+# This link file will be created when executing nvd diff to see what packages can be updated
+result
