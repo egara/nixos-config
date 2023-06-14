@@ -125,6 +125,7 @@
       git
       curl
       wget
+      cheat
       #tailscale
       okular
       #libreoffice
