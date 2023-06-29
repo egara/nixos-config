@@ -6,15 +6,15 @@ This repository gathers all the configuration needed to install NixOS on several
 - Boot the system using NixOS live USB
 - Edit **/etc/nixos/configuration.nix**
 
-      sudo edit /etc/nixos/configuration.nix
+      sudo nano /etc/nixos/configuration.nix
 
 - Enable nix-command and flakes experimental features:
 
 ```
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 ```
 
 - Apply the new configuration:
