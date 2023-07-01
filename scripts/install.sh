@@ -46,7 +46,7 @@ echo "         NixOS will be re-installed"
 echo "         This is a destructive operation"
 echo
 read -p "Are you sure? [y/N]" -n 1 -r
-echo
+
 if [[ $REPLY =~ ^[Yy]$ ]]; then
   sudo true
 
