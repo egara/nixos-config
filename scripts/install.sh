@@ -23,12 +23,12 @@ if [[ -z "$TARGET_HOST" ]]; then
   exit 1
 fi
 
-# if [[ -z "$TARGET_USER" ]]; then
-#   echo "ERROR! $(basename "$0") requires a username as the second argument"
-#   echo "       The following users are available"
-#   ls -1 nixos/_mixins/users/ | grep -v -E "nixos|root"
-#   exit 1
-# fi
+if [[ -z "$TARGET_USER" ]]; then
+  echo "ERROR! $(basename "$0") requires a username as the second argument"
+  echo "       The following users are available"
+  ls -1 nixos/_mixins/users/ | grep -v -E "nixos|root"
+  exit 1
+fi
 
 # if [ ! -e "nixos/$TARGET_HOST/disks.nix" ]; then
 #   echo "ERROR! $(basename "$0") could not find the required nixos/$TARGET_HOST/disks.nix"
