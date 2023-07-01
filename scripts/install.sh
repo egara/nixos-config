@@ -64,6 +64,9 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     --mode zap_create_mount \
     "hosts/disko-config.nix"
 
+  # Creating mounting point for BTRFS full volume
+  sudo mkdir -p /mnt/mnt/defvol
+
   sudo nixos-install --no-root-password --flake ".#$TARGET_HOST"
 
   # Rsync nix-config to the target install and set the remote origin to SSH.
