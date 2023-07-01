@@ -13,22 +13,22 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-#  fileSystems."/" =
-#    { device = "/dev/disk/by-label/system";
-#      fsType = "btrfs";
-#      options = [ "subvol=@" "compress=zstd" "noatime" ];
-#    };
+  fileSystems."/" =
+    { device = "/dev/disk/by-label/system";
+      fsType = "btrfs";
+      options = [ "subvol=@" "compress=zstd" "noatime" ];
+    };
 
-#  fileSystems."/boot/efi" =
-#    { device = "/dev/disk/by-label/UEFI";
-#      fsType = "vfat";
-#    };
+  fileSystems."/boot/efi" =
+    { device = "/dev/disk/by-label/UEFI";
+      fsType = "vfat";
+    };
 
-#  fileSystems."/home" =
-#    { device = "/dev/disk/by-label/system";
-#      fsType = "btrfs";
-#      options = [ "subvol=@home" "compress=zstd" ];
-#    };
+  fileSystems."/home" =
+    { device = "/dev/disk/by-label/system";
+      fsType = "btrfs";
+      options = [ "subvol=@home" "compress=zstd" ];
+    };
 
   fileSystems."/mnt/defvol" =
     { device = "/dev/disk/by-label/system";
