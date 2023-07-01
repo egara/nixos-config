@@ -1,4 +1,4 @@
-{ disks ? [ "/dev/vdb" ], ... }: {
+{ disks ? [ "/dev/vda" ], ... }: {
   disko.devices = {
     disk = {
       vdb = {
@@ -8,10 +8,11 @@
           type = "table";
           format = "gpt";
           partitions = [
+            # UEFI
             {
               name = "UEFI";
               start = "1MiB";
-              end = "512MiB";
+              end = "513MiB";
               fs-type = "fat32";
               bootable = true;
               content = {
@@ -20,23 +21,30 @@
                 mountpoint = "/boot/efi";
               };
             }
+ 
+            # SWAP
             {
               name = "swap";
-              start = "512MiB";
-              end = "1536MiB";
+              start = "513MiB";
+              end = "1537MiB";
               part-type = "primary";
               content = {
                 type = "swap";
                 randomEncryption = true;
               };
             }
+
+            # SYSTEM
             {
               name = "system";
-              start = "1536MiB";
+              start = "1537MiB";
               end = "100%";
               content = {
                 type = "btrfs";
-                extraArgs = [ "-f --label system" ]; # Override existing partition and set a label called system
+
+                # Override existing partition and set a label called system
+                extraArgs = [ "-f --label system" ];
+
                 subvolumes = {
                   "@" = {
                     mountpoint = "/";

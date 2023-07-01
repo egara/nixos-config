@@ -10,22 +10,29 @@
 #            ├─ ./default.nix
 #            └─ ./home.nix 
 #
-
-{ lib, inputs, nixpkgs, home-manager, user, location, ... }:
-
+ 
+{ lib, inputs, nixpkgs, disko, home-manager, user, location, ... }:
+ 
 let
-  system = "x86_64-linux";                                  # System architecture
-
+  # System architecture
+  system = "x86_64-linux";
+ 
   pkgs = import nixpkgs {
     inherit system;
-    config.allowUnfree = true;                              # Allow proprietary software
-  };
 
+    # Allow proprietary software
+    config.allowUnfree = true;
+  };
+ 
   lib = nixpkgs.lib;
 in
 {
-  vm = lib.nixosSystem {                                    # VM profile
+  ############ Profiles ############
+
+  # VM profile
+  vm = lib.nixosSystem {
     inherit system;
+    
     specialArgs = {
       inherit inputs user location;
       host = {
@@ -33,9 +40,18 @@ in
         #mainMonitor = "Virtual-1";
       };
     };
-    modules = [
-      ./configuration.nix
 
+    modules = [
+      # Execute disko module
+      disko.nixosModules.disko {
+        _module.args.disks = [ "/dev/vda" ];
+        imports = [(import ./disko-config.nix)];
+      }
+      
+      # Execute configuration module
+      ./configuration.nix
+ 
+      # Execute home manager module
       home-manager.nixosModules.home-manager {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
@@ -53,4 +69,6 @@ in
       }
     ];
   };
+
+  # Next profile if it is necessary
 }
