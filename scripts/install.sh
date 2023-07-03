@@ -60,8 +60,14 @@ sudo nix run github:nix-community/disko \
   --mode zap_create_mount \
   "hosts/disko-config.nix"
 
-# Labeling swap
-sudo mkswap -L /dev/vda2
+# Executing additional scripts
+echo "Executing additional scripts for host $TARGET_HOST..."
+pushd "$HOME/Zero/nixos-config/hosts/$TARGET_HOST/scripts"
+for script in *.sh; do
+  bash "$script"
+done
+
+pushd "$HOME/Zero/nixos-config"
 
 # Creating mounting point for BTRFS full volume
 sudo mkdir -p /mnt/mnt/defvol
