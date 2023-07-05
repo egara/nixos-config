@@ -58,7 +58,7 @@ sudo nix run github:nix-community/disko \
   --no-write-lock-file \
   -- \
   --mode zap_create_mount \
-  "hosts/disko-config.nix"
+  "hosts/$TARGET_HOST/disko-config.nix"
 
 # Executing additional scripts
 echo "Executing additional scripts for host $TARGET_HOST..."
