@@ -57,14 +57,14 @@ in
       # Execute home manager module
       home-manager.nixosModules.home-manager {
         home-manager.useGlobalPkgs = true;
-        home-manager.useUsernamePackages = true;
+        home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = {
           inherit username;
           host = {
             hostName = "experimental";
           };
         };
-        home-manager.usernames.${username} = {
+        home-manager.users.${username} = {
           #imports = [(import ./home.nix)] ++ [(import ./vm/home.nix)];
           imports = [(import ./home.nix)];
         };
