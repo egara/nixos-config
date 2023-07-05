@@ -11,23 +11,29 @@
 #           └─ default.nix
 #
 
-{ config, lib, pkgs, user, ... }:
+{ config, lib, pkgs, username, ... }:
 
 { 
-  #imports =                                   # Home Manager Modules
+  #imports =
+    # Home Manager Modules
     #(import ../modules/programs) ++
     #(import ../modules/services);
 
   home = {
-    username = "${user}";
-    homeDirectory = "/home/${user}";
+    username = "${username}";
+    homeDirectory = "/home/${username}";
     stateVersion = "22.05";
     packages = with pkgs; [
-      # Terminal
+      # Command line applications
       #btop               # Resource Manager
-      nvd		 # NixOS package version diff tool
-      yadm		 # Yet Another Dot Manager
-      ansible            # Automation tool
+      yadm
+      ansible
+      git
+      curl
+      wget
+      cheat
+      gcc
+      gnumake
       #nitch             # Minimal fetch
       #ranger            # File Manager
       #tldr              # Helper

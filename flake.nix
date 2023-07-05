@@ -1,7 +1,7 @@
 {
-  description = "Flake to install my systems with all the configurations";
+  description = "Flake to install several systems with all their configurations";
 
-  # Channels (kind of repos)
+  # Channels (kind of repos and dependencies)
   inputs = {
     # Unstable Nix packages (bleeding edge)
     nixpkgs = {
@@ -29,16 +29,16 @@
   outputs = inputs @ { self, disko, nixpkgs, home-manager, ... }:   
     # Variables
     let
-      user = "egarcia";
+      username = "egarcia";
       location = "$HOME/.setup";
     in {
       nixosConfigurations = (
-        # Imports ./hosts/default.nix
+        # Imports ./hosts/default.nix module
         import ./hosts {
           inherit (nixpkgs) lib;
            # Also inherit disko, home-manager and the rest of the variables so it does not need 
-           # to be defined here.
-          inherit inputs nixpkgs disko home-manager user location;
+           # to be defined anymore.
+          inherit inputs nixpkgs disko home-manager username location;
         }
       );
     };

@@ -2,13 +2,13 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, user, ... }:
+{ config, pkgs, inputs, username, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  #imports =
+  #  [ # Include the results of the hardware scan.
+  #    ./hardware-configuration.nix
+  #  ];
 
   # Bootloader.
   boot.loader = {
@@ -21,8 +21,6 @@
 
     grub = {
       enable = true;
-      # Version is not needed anymore
-      #version = 2;
       devices = ["nodev"];
       efiSupport = true;
       configurationLimit = 3;
@@ -99,7 +97,7 @@
   services.spice-vdagentd.enable = true;
 
   # Administrator account. Don't forget to set a password with ‘passwd’.
-  users.users.${user} = {
+  users.users.${username} = {
     password = "administrador";
     isNormalUser = true;
     description = "Eloy";
@@ -115,24 +113,19 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-      firefox
+      nvd    # NixOS package version diff tool
+      #firefox
       #google-chrome
       #audacious
       #audacity
       #carla
       #darkice
       nano
-      git
-      curl
-      wget
-      cheat
       #tailscale
       okular
       #libreoffice
       #kate
       ntfs3g
-      gcc
-      gnumake
       fltk
       portaudio
       #libmp3lame

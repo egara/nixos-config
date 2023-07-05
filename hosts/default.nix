@@ -11,7 +11,7 @@
 #            └─ ./home.nix 
 #
  
-{ lib, inputs, nixpkgs, disko, home-manager, user, location, ... }:
+{ lib, inputs, nixpkgs, disko, home-manager, username, location, ... }:
  
 let
   # System architecture
@@ -34,19 +34,22 @@ in
     inherit system;
     
     specialArgs = {
-      inherit inputs user location;
+      inherit inputs username location;
       host = {
         hostName = "experimental";
-        #mainMonitor = "Virtual-1";
       };
     };
 
     modules = [
+      # Test if hostname can be defined as a variable and pass it to configuration module
       # Execute disko module
       disko.nixosModules.disko {
         _module.args.disks = [ "/dev/vda" ];
-        imports = [(import ./disko-config.nix)];
+        imports = [(import ./vm/disko-config.nix)];
       }
+
+      # Execute hardware configuration module
+      ./vm/hardware-configuration.nix
       
       # Execute configuration module
       ./configuration.nix
@@ -54,15 +57,14 @@ in
       # Execute home manager module
       home-manager.nixosModules.home-manager {
         home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
+        home-manager.useUsernamePackages = true;
         home-manager.extraSpecialArgs = {
-          inherit user;
+          inherit username;
           host = {
             hostName = "experimental";
-            #mainMonitor = "Virtual-1";
           };
         };
-        home-manager.users.${user} = {
+        home-manager.usernames.${username} = {
           #imports = [(import ./home.nix)] ++ [(import ./vm/home.nix)];
           imports = [(import ./home.nix)];
         };
