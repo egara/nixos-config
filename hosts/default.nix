@@ -32,50 +32,48 @@ in
   # VM profile
   vm = lib.nixosSystem {
 
-    let
-      hostname = "vm";
-    in
-    { 
-      inherit system;
-      
-      specialArgs = {
-        inherit inputs username location;
-        host = {
-          #hostName = "experimental";
-          hostName = ${hostname};
-        };
+    inherit system;
+    
+    specialArgs = {
+      inherit inputs username location;
+      host = {
+        hostName = "experimental";
       };
+    };
 
-      modules = [
-        # Execute disko module
-        disko.nixosModules.disko {
-          _module.args.disks = [ "/dev/vda" ];
-          imports = [(import ./vm/disko-config.nix)];
-        }
+    modules = [
+      # Execute disko module
+      disko.nixosModules.disko {
+        _module.args.disks = [ "/dev/vda" ];
+        imports = [(import ./vm/disko-config.nix)];
+      }
 
-        # Execute hardware configuration module
-        ./vm/hardware-configuration.nix
-        
-        # Execute configuration module
-        ./configuration.nix
-   
-        # Execute home manager module
-        home-manager.nixosModules.home-manager {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = {
-            inherit username;
-            host = {
-              hostName = "experimental";
-            };
+      # Execute hardware configuration module
+      ./vm/hardware-configuration.nix
+      
+      # Execute common configuration module
+      ./configuration.nix
+
+      # Execute specific configuration module for this profile
+      ./vm/configuration.nix
+ 
+      # Execute home manager module
+      home-manager.nixosModules.home-manager {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.extraSpecialArgs = {
+          inherit username;
+          host = {
+            hostName = "experimental";
           };
-          home-manager.users.${username} = {
-            #imports = [(import ./home.nix)] ++ [(import ./vm/home.nix)];
-            imports = [(import ./home.nix)];
-          };
-        }
-      ];
-    }
+        };
+        home-manager.users.${username} = {
+          #imports = [(import ./home.nix)] ++ [(import ./vm/home.nix)];
+          imports = [(import ./home.nix)];
+        };
+      }
+    ];
+
   };
 
   # Next profile if it is necessary

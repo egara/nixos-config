@@ -23,7 +23,6 @@
     };
   };
 
-  networking.hostName = "experimental"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -87,10 +86,6 @@
     #media-session.enable = true;
   };
 
-  # Spice guest additions for QEMU
-  services.qemuGuest.enable = true;
-  services.spice-vdagentd.enable = true;
-
   # Administrator account. Don't forget to set a password with ‘passwd’.
   users.users.${username} = {
     password = "administrador";
@@ -109,8 +104,8 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
       nvd    # NixOS package version diff tool
-      #firefox
-      #google-chrome
+      firefox
+      google-chrome
       #audacious
       #audacity
       #carla
@@ -132,6 +127,10 @@
       pavucontrol
       python3
       python311Packages.pip
+      p7zip
+      unzip
+      unrar
+      zip
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

@@ -25,7 +25,7 @@
     stateVersion = "22.05";
     packages = with pkgs; [
       # Command line applications
-      #btop               # Resource Manager
+      htop
       yadm
       ansible
       git
@@ -34,9 +34,6 @@
       cheat
       gcc
       gnumake
-      #nitch             # Minimal fetch
-      #ranger            # File Manager
-      #tldr              # Helper
 
       # Video/Audio
       #feh               # Image Viewer
@@ -56,21 +53,13 @@
       #gnome.file-roller # Archive Manager
       #okular            # PDF Viewer
       #pcmanfm           # File Manager
-      p7zip             # Zip Encryption
       #rsync             # Syncer - $ rsync -r dir1/ dir2/
-      unzip             # Zip Files
-      unrar             # Rar Files
-      zip               # Zip
 
       # General configuration
-      #git              # Repositories
       #killall          # Stop Applications
-      #nano             # Text Editor
       #pciutils         # Computer Utility Info
-      #pipewire         # Sound
       #usbutils         # USB Utility Info
       #wacomtablet      # Wacom Tablet
-      #wget             # Downloader
       #zsh              # Shell
       #
       # General home-manager
