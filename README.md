@@ -35,6 +35,21 @@ This is the selected layout for the UEFI/GPT system:
 | [SWAP]      | /dev/vda2 | Linux swap 		  | SWAP    | swap   | No  | 1 GiB     |
 | /           | /dev/vda3 | Linux 			  | BTRFS   | system | No  | Available |
 
+# BTRFS Layout
+This is the layout defined:
+
+```
+(Volume)
+|
+├─ @ (Subvolume - It will be the current /)
+|
+├─ @home (Subvolume -  It will be the current /home)
+|
+├─ @snapshots (Subvolume -  It will contain all the snapshots which are subvolumes too)
+```
+
+The whole volume will be mounted and available at **/mnt/defvol** once the system is installed.
+
 # Resources
 These are the resources I have used to get inspiration and learn a little bit about NixOs.
 
