@@ -1,5 +1,6 @@
 # nixos-config
-This repository gathers all the configuration needed to install NixOS on several machines using flakes
+This repository gathers all the configuration needed to install NixOS on several machines using flakes. It is a work in progress.
+I'm really new at NixOS and I want to experiment and learn about it step by step.
 
 # Installation
 
@@ -34,3 +35,9 @@ This is the selected layout for the UEFI/GPT system:
 | [SWAP]      | /dev/vda2 | Linux swap 		  | SWAP    | swap   | No  | 1 GiB     |
 | /           | /dev/vda3 | Linux 			  | BTRFS   | system | No  | Available |
 
+# Resources
+These are the resources I have used to get inspiration and learn a little bit about NixOs.
+
+- Matthias Benaets on GitHub [https://github.com/MatthiasBenaets/nixos-config](https://github.com/MatthiasBenaets/nixos-config)
+- Wimpy's World on GitHub [https://github.com/wimpysworld/nix-config](https://github.com/wimpysworld/nix-config)
+- NixOS Tutorial and basic concepts on YouTube by Mathhias Benaets [https://www.youtube.com/watch?v=AGVXJ-TIv3Y](https://www.youtube.com/watch?v=AGVXJ-TIv3Y)
