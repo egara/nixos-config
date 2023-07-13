@@ -24,7 +24,7 @@ if [[ -z "$YADM_TOKEN" ]]; then
   exit 1
 fi
 
-yadm clone https://egara:$YADM_TOKEN@github.com/egara/yadm.git
+yadm clone --bootstrap https://egara:$YADM_TOKEN@github.com/egara/yadm.git
 
 sudo true
 
