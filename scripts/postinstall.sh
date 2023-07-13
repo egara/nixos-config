@@ -24,8 +24,12 @@ if [[ -z "$YADM_TOKEN" ]]; then
   exit 1
 fi
 
+# Executing yadm in order to get all personal configurations for different applications
 yadm clone --bootstrap https://egara:$YADM_TOKEN@github.com/egara/yadm.git
 
-sudo true
-
+# Changing URL in order to use imported ssh keys
 yadm remote set-url origin git@github.com:egara/yadm
+
+# Executing ansible playbook for finishing customization
+pushd "$HOME/.ansible"
+ansible-playbook computers/nixos-desktop/playbooks/nixos-desktop-complete-instalation-01.yaml --ask-become-pass
