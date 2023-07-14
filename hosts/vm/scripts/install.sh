@@ -14,6 +14,7 @@ set -euo pipefail
 sudo true
 
 # Labeling swap
+echo "Labeling swap..."
 sudo swapoff -a
 sudo mkswap -L swap /dev/vda2
 sudo swapon /dev/vda2
