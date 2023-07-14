@@ -132,6 +132,7 @@
       unrar
       zip
       partition-manager
+      distrobox
   ];
 
   # List of programs that must be enabled
