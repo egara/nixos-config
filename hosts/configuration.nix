@@ -131,20 +131,25 @@
       unzip
       unrar
       zip
+      partition-manager
+      distrobox
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  # List of programs that must be enabled
+  programs = {
+    # Partition manager
+    partition-manager = {
+      enable = true;
+    };
+  };
 
-  # List services that you want to enable:
-
-  # OpenSSH daemon.
-  services.openssh.enable = true;
+  # List of services that must be enabled
+  services = {
+    # OpenSSH daemon
+    openssh = {
+      enable = true;
+    };
+  };
 
   # Docker
   virtualisation = {

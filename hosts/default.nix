@@ -68,8 +68,7 @@ in
           };
         };
         home-manager.users.${username} = {
-          #imports = [(import ./home.nix)] ++ [(import ./vm/home.nix)];
-          imports = [(import ./home.nix)];
+          imports = [(import ./home.nix)] ++ [(import ./vm/home.nix)];
         };
       }
     ];
