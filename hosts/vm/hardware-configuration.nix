@@ -36,9 +36,9 @@
       options = [ "subvol=/" ];
     };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-label/swap"; }
-    ];
+#  swapDevices =
+#    [ { device = "/dev/disk/by-label/swap"; }
+#    ];
 
   # Disko will create a swapfile using this configuration. Interesting, but not when it is used BTRFS filesystem, 
   # because no snapshots could be done over root

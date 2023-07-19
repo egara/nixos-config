@@ -28,6 +28,7 @@
               start = "513MiB";
               end = "1537MiB";
               part-type = "primary";
+              fs-type = "linux-swap";
               content = {
                 type = "swap";
                 randomEncryption = true;
