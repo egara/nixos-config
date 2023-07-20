@@ -39,19 +39,7 @@ if [[ -z "$TARGET_USER" ]]; then
   exit 1
 fi
 
-# if [ ! -e "nixos/$TARGET_HOST/disks.nix" ]; then
-#   echo "ERROR! $(basename "$0") could not find the required nixos/$TARGET_HOST/disks.nix"
-#   exit 1
-# fi
-
 sudo true
-
-#sudo nix run github:nix-community/disko \
-#  --extra-experimental-features "nix-command flakes" \
-#  --no-write-lock-file \
-#  -- \
-#  --mode zap_create_mount \
-#  "nixos/$TARGET_HOST/disks.nix"
 
 sudo nix run github:nix-community/disko \
   --extra-experimental-features "nix-command flakes" \
