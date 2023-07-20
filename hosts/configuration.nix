@@ -132,6 +132,7 @@
       zip
       partition-manager
       distrobox
+      neofetch
   ];
 
   # List of programs that must be enabled
