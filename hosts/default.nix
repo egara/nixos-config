@@ -75,5 +75,51 @@ in
 
   };
 
+  # Rocket profile (for testing purposes)
+  rocket = lib.nixosSystem {
+
+    inherit system;
+    
+    specialArgs = {
+      inherit inputs username location;
+      host = {
+        hostName = "rocket";
+      };
+    };
+
+    modules = [
+      # Execute disko module
+      disko.nixosModules.disko {
+        _module.args.disks = [ "/dev/vda" ];
+        imports = [(import ./rocket/disko-config.nix)];
+      }
+
+      # Execute hardware configuration module
+      ./rocket/hardware-configuration.nix
+      
+      # Execute common configuration module
+      ./configuration.nix
+
+      # Execute specific configuration module for this profile
+      ./rocket/configuration.nix
+ 
+      # Execute home manager module
+      home-manager.nixosModules.home-manager {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.extraSpecialArgs = {
+          inherit username;
+          host = {
+            hostName = "rocket";
+          };
+        };
+        home-manager.users.${username} = {
+          imports = [(import ./home.nix)] ++ [(import ./rocket/home.nix)];
+        };
+      }
+    ];
+
+  };
+
   # Next profile if it is necessary
 }
