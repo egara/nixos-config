@@ -90,7 +90,7 @@ in
     modules = [
       # Execute disko module
       disko.nixosModules.disko {
-        _module.args.disks = [ "/dev/vda" ];
+        _module.args.disks = [ "/dev/sda" ];
         imports = [(import ./rocket/disko-config.nix)];
       }
 
