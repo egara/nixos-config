@@ -26,7 +26,7 @@
             {
               name = "swap";
               start = "513MiB";
-              end = "1537MiB";
+              end = "8537MiB";
               part-type = "primary";
               fs-type = "linux-swap";
               content = {
@@ -38,7 +38,7 @@
             # SYSTEM
             {
               name = "system";
-              start = "1537MiB";
+              start = "8537MiB";
               end = "100%";
               content = {
                 type = "btrfs";
