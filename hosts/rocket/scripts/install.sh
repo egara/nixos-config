@@ -16,5 +16,5 @@ sudo true
 # Labeling swap
 echo "Labeling swap..."
 sudo swapoff -a
-sudo mkswap -L swap /dev/sda2
-sudo swapon /dev/sda2
+sudo mkswap -L swap /dev/sda3
+sudo swapon /dev/sda3
