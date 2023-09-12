@@ -50,6 +50,9 @@ in
 
       # Execute hardware configuration module
       ./vm/hardware-configuration.nix
+
+      # Execute common configuration for EFI boot systems
+      ./efi-configuration.nix
       
       # Execute common configuration module
       ./configuration.nix
