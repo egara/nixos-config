@@ -99,6 +99,9 @@ in
 
       # Execute hardware configuration module
       ./rocket/hardware-configuration.nix
+
+      # Execute common configuration for BIOS legacy systems
+      ./bios-configuration.nix
       
       # Execute common configuration module
       ./configuration.nix
