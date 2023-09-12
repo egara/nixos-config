@@ -1,14 +1,14 @@
 { disks ? [ "/dev/vda" ], ... }: {
   disko.devices = {
     disk = {
-      vdb = {
+      disk1 = {
         type = "disk";
         device = builtins.elemAt disks 0;
         #device = "/dev/vda";
         content = {
           type = "gpt";
           partitions = {
-            ESP = {
+            efi = {
               size = "512M";
               type = "EF00";
               content = {
