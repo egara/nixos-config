@@ -14,22 +14,9 @@
             root = {
               end = "-8G";
               content = {
-                type = "btrfs";
-                extraArgs = [ "-f --label system" ]; # Override existing partition and set a label called system
-                # Subvolumes must set a mountpoint in order to be mounted,
-                # unless their parent is mounted
-                subvolumes = {
-                  "@" = {
-                    mountOptions = [ "compress=zstd" "noatime" ];
-                    mountpoint = "/";
-                  };
-                  "@home" = {
-                    mountpoint = "/home";
-                    mountOptions = [ "compress=zstd" "noatime" ];
-                  };
-                  "@snapshots" = {
-                  };
-                };
+                type = "filesystem";
+                format = "ext4";
+                mountpoint = "/";
               };
             };
             swap = {

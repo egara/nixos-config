@@ -30,11 +30,11 @@
 #      options = [ "subvol=@home" "compress=zstd" ];
 #    };
 
-  fileSystems."/mnt/defvol" =
-    { device = "/dev/disk/by-label/system";
-      fsType = "btrfs";
-      options = [ "subvol=/" ];
-    };
+#  fileSystems."/mnt/defvol" =
+#    { device = "/dev/disk/by-label/system";
+#      fsType = "btrfs";
+#      options = [ "subvol=/" ];
+#    };
 
 #  swapDevices =
 #    [ { device = "/dev/disk/by-label/swap"; }
