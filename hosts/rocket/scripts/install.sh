@@ -9,12 +9,12 @@
 # Inspired by Martin Wimpress: https://github.com/wimpysworld/nix-config
 # ----------------------------------------------
 
-#set -euo pipefail
+set -euo pipefail
 
-#sudo true
+sudo true
 
 # Labeling swap
-#echo "Labeling swap..."
-#sudo swapoff -a
-#sudo mkswap -L swap /dev/sda3
-#sudo swapon /dev/sda3
+echo "Labeling swap..."
+sudo swapoff -a
+sudo mkswap -L swap /dev/sda4
+sudo swapon /dev/sda4
