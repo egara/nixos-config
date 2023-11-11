@@ -23,6 +23,7 @@
     # Specific packages for desktop
     packages = with pkgs; [
       filezilla
+      pciutils
     ];
   };
 }
