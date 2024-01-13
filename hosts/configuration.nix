@@ -115,6 +115,7 @@
       partition-manager
       distrobox
       neofetch
+      sublime3
   ];
 
   # List of programs that must be enabled
