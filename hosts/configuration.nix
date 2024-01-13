@@ -126,13 +126,16 @@
     };
   };
 
-  # List of services that must be enabled
+  # Enabling SSH
   services = {
     # OpenSSH daemon
     openssh = {
       enable = true;
     };
   };
+
+  # Enabling Flatpak
+  services.flatpak.enable = true;
 
   # Docker
   virtualisation = {
