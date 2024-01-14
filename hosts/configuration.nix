@@ -115,6 +115,7 @@
       partition-manager
       distrobox
       neofetch
+      insync
       sublime3
   ];
 
