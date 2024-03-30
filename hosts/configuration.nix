@@ -99,7 +99,6 @@
       ntfs3g
       fltk
       portaudio
-      libmp3lame
       lame
       libvorbis
       libogg
