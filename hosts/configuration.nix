@@ -116,6 +116,7 @@
       neofetch
       sublime3
       vlc
+      telegram-desktop
   ];
 
   # List of programs that must be enabled
