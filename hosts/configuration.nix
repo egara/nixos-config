@@ -87,7 +87,7 @@
       nvd    # NixOS package version diff tool
       firefox
       google-chrome
-      #audacious
+      audacious
       #audacity
       #carla
       #darkice
@@ -99,7 +99,7 @@
       ntfs3g
       fltk
       portaudio
-      #libmp3lame
+      libmp3lame
       lame
       libvorbis
       libogg
@@ -116,6 +116,7 @@
       distrobox
       neofetch
       sublime3
+      vlc
   ];
 
   # List of programs that must be enabled
