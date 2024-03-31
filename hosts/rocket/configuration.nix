@@ -19,7 +19,8 @@
     xserver = {
       videoDrivers = [ "amdgpu" ];
       displayManager = {
-        defaultSession = "plasmawayland";
+        #defaultSession = "plasmawayland";
+        defaultSession = "plasma";
         sddm = {
           wayland = {
             enable = true;

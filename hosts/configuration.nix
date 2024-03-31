@@ -42,7 +42,10 @@
       displayManager = {
         sddm.enable = true;
       };
-      desktopManager.plasma5.enable = true;
+      # Plasma 5
+      #desktopManager.plasma5.enable = true;
+      # Plasma 6
+      desktopManager.plasma6.enable = true;
     };
   };
 
@@ -93,7 +96,8 @@
       #darkice
       nano
       #tailscale
-      okular
+      #okular
+      kdePackages.okular
       #libreoffice
       #kate
       ntfs3g
