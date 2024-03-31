@@ -121,6 +121,7 @@
       sublime3
       vlc
       telegram-desktop
+      konsave
   ];
 
   # List of programs that must be enabled
