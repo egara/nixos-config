@@ -33,22 +33,6 @@
     };
   };
 
-  # Desktop Environment
-  services = {
-    xserver = {
-      enable = true;
-      layout = "es";
-      xkbVariant = "";
-      displayManager = {
-        sddm.enable = true;
-      };
-      # Plasma 5
-      #desktopManager.plasma5.enable = true;
-      # Plasma 6
-      desktopManager.plasma6.enable = true;
-    };
-  };
-
   # Configure console keymap
   console.keyMap = "es";
 
@@ -84,22 +68,19 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
+  # List of packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
       nvd    # NixOS package version diff tool
       firefox
       google-chrome
       audacious
-      #audacity
-      #carla
+      audacity
+      carla
       #darkice
       nano
       #tailscale
-      #okular
-      kdePackages.okular
       #libreoffice
-      #kate
       ntfs3g
       fltk
       portaudio
@@ -121,7 +102,6 @@
       sublime3
       vlc
       telegram-desktop
-      konsave
       insync
   ];
 

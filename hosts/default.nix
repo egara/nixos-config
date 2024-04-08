@@ -79,6 +79,7 @@ in
   };
 
   # Rocket profile (for testing purposes)
+  # Plasma 6 configurations
   rocket = lib.nixosSystem {
 
     inherit system;
@@ -91,6 +92,10 @@ in
     };
 
     modules = [
+      ########################
+      # Hyprland Configuration
+      ########################
+
       # Execute disko module
       disko.nixosModules.disko {
         _module.args.disks = [ "/dev/sda" ];
@@ -123,6 +128,47 @@ in
           imports = [(import ./home.nix)] ++ [(import ./rocket/home.nix)];
         };
       }
+
+
+#      Uncomment for Plasma 6 installation and comment above
+#
+#      ########################
+#      # Plasma 6 Configuration
+#      ########################
+#
+#      # Execute disko module
+#      disko.nixosModules.disko {
+#        _module.args.disks = [ "/dev/sda" ];
+#        imports = [(import ./rocketp/disko-config.nix)];
+#      }
+#
+#      # Execute hardware configuration module
+#      ./rocketp/hardware-configuration.nix
+#
+#      # Execute common configuration for BIOS legacy systems
+#      ./bios-configuration.nix
+#      
+#      # Execute common configuration module
+#      ./configuration.nix
+#
+#      # Execute specific configuration module for this profile
+#      ./rocketp/configuration.nix
+# 
+#      # Execute home manager module
+#      home-manager.nixosModules.home-manager {
+#        home-manager.useGlobalPkgs = true;
+#        home-manager.useUserPackages = true;
+#        home-manager.extraSpecialArgs = {
+#          inherit username;
+#          host = {
+#            hostName = "rocket";
+#          };
+#        };
+#        home-manager.users.${username} = {
+#          imports = [(import ./home.nix)] ++ [(import ./rocketp/home.nix)];
+#        };
+#      }
+
     ];
 
   };
