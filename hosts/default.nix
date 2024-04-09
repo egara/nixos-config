@@ -92,10 +92,6 @@ in
     };
 
     modules = [
-      ########################
-      # Hyprland Configuration
-      ########################
-
       # Execute disko module
       disko.nixosModules.disko {
         _module.args.disks = [ "/dev/sda" ];
@@ -111,9 +107,18 @@ in
       # Execute common configuration module
       ./configuration.nix
 
+      ########################
+      # Hyprland Configuration
+      ########################
       # Execute specific configuration module for this profile
       ./rocket/rocket-hyprland-configuration.nix
  
+      ########################
+      # Plasma 6 Configuration
+      ########################
+      # Execute specific configuration module for this profile
+      #./rocket/rocket-plasma-configuration.nix
+
       # Execute home manager module
       home-manager.nixosModules.home-manager {
         home-manager.useGlobalPkgs = true;
@@ -125,49 +130,16 @@ in
           };
         };
         home-manager.users.${username} = {
-          imports = [(import ./home.nix)] ++ [(import ./rocket/home.nix)];
+          ########################
+          # Hyprland Configuration
+          ########################
+          imports = [(import ./home.nix)] ++ [(import ./rocket/rocket-hyprland-home.nix)];
+          ########################
+          # Plasma 6 Configuration
+          ########################
+          #imports = [(import ./home.nix)] ++ [(import ./rocket/rocket-plasma-home.nix)];
         };
       }
-
-
-#      Uncomment for Plasma 6 installation and comment above
-#
-#      ########################
-#      # Plasma 6 Configuration
-#      ########################
-#
-#      # Execute disko module
-#      disko.nixosModules.disko {
-#        _module.args.disks = [ "/dev/sda" ];
-#        imports = [(import ./rocketp/disko-config.nix)];
-#      }
-#
-#      # Execute hardware configuration module
-#      ./rocketp/hardware-configuration.nix
-#
-#      # Execute common configuration for BIOS legacy systems
-#      ./bios-configuration.nix
-#      
-#      # Execute common configuration module
-#      ./configuration.nix
-#
-#      # Execute specific configuration module for this profile
-#      ./rocketp/configuration.nix
-# 
-#      # Execute home manager module
-#      home-manager.nixosModules.home-manager {
-#        home-manager.useGlobalPkgs = true;
-#        home-manager.useUserPackages = true;
-#        home-manager.extraSpecialArgs = {
-#          inherit username;
-#          host = {
-#            hostName = "rocket";
-#          };
-#        };
-#        home-manager.users.${username} = {
-#          imports = [(import ./home.nix)] ++ [(import ./rocketp/home.nix)];
-#        };
-#      }
 
     ];
 
