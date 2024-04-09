@@ -112,7 +112,7 @@ in
       ./configuration.nix
 
       # Execute specific configuration module for this profile
-      ./rocket/configuration.nix
+      ./rocket/rocket-hyprland-configuration.nix
  
       # Execute home manager module
       home-manager.nixosModules.home-manager {
