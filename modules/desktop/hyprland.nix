@@ -71,8 +71,6 @@
       # terminal emulator
       ###################
       kitty
-      foot
-      kdePackages.konsole
       #####################
       # notification daemon
       #####################
