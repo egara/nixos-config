@@ -79,7 +79,8 @@ in
   };
 
   # Rocket profile (for testing purposes)
-  # Plasma 6 configurations
+  # Hyprland configurations by default
+  # Comment Hyprland lines and uncomment Plasma 6 lines in order to switch installations
   rocket = lib.nixosSystem {
 
     inherit system;
@@ -110,7 +111,7 @@ in
       ########################
       # Hyprland Configuration
       ########################
-      # Execute specific configuration module for this profile
+      # Execute specific configuration module for this profile (default)
       ./rocket/rocket-hyprland-configuration.nix
  
       ########################
@@ -133,7 +134,9 @@ in
           ########################
           # Hyprland Configuration
           ########################
+          # (default)
           imports = [(import ./home.nix)] ++ [(import ./rocket/rocket-hyprland-home.nix)];
+
           ########################
           # Plasma 6 Configuration
           ########################
