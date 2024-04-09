@@ -24,8 +24,6 @@
     packages = with pkgs; [
       filezilla
       pciutils
-      audacity
-      carla
     ];
   };
 }

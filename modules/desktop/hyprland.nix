@@ -5,14 +5,13 @@
   # Hyprland                               #
   ##########################################
 
-## Hyprland
+  # Hyprland
   programs.hyprland = {
     enable = true; 
-#    xwayland.hidpi = true;
     xwayland.enable = true;
   };
 
-  # Hint Electon apps to use wayland
+  # Hint Electron apps to use wayland
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
   };
