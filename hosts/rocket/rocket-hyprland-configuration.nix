@@ -33,12 +33,16 @@
     };
   };
 
-## Hyprland
-  programs.hyprland = {
-    enable = true; 
-#    xwayland.hidpi = true;
-    xwayland.enable = true;
-  };
+  imports = [
+    ../modules/desktop/hyprland.nix
+  ];
+
+### Hyprland
+#  programs.hyprland = {
+#    enable = true; 
+##    xwayland.hidpi = true;
+#    xwayland.enable = true;
+#  };
 
   # Hint Electon apps to use wayland
   environment.sessionVariables = {
