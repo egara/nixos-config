@@ -25,5 +25,8 @@
       filezilla
       pciutils
     ];
+
+    # Hyprland configuration
+    file.".config/hypr/hyprland.conf".source = ../../home-manager/hyprland/config-files/hyprland.conf;
   };
 }
