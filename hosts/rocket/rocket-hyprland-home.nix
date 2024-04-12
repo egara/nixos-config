@@ -28,5 +28,10 @@
 
     # Hyprland configuration
     file.".config/hypr/hyprland.conf".source = ../../home-manager/hyprland/config-files/hyprland.conf;
+
+    # Waybar configuration
+    file.".config/waybar/config.jsonc".source = ../../home-manager/waybar/config-files/config.jsonc;
+    file.".config/waybar/style.css".source = ../../home-manager/waybar/config-files/style.css;
+
   };
 }
