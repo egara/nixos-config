@@ -34,13 +34,13 @@
     file.".config/waybar/style.css".source = ../../home-manager/waybar/config-files/style.css;
 
     # Wlogout configuration
-    ".config/wlogout/layout".source = ../../home-manager/wlogout/config-files/layout;
-    ".config/wlogout/style.css".source = ../../home-manager/wlogout/config-files/style.css;
-    ".config/wlogout/icons/hibernate.png".source = ../../home-manager/wlogout/icons/hibernate.png;
-    ".config/wlogout/icons/lock.png".source = ../../home-manager/wlogout/icons/lock.png;
-    ".config/wlogout/icons/logout.png".source = ../../home-manager/wlogout/icons/logout.png;
-    ".config/wlogout/icons/reboot.png".source = ../../home-manager/wlogout/icons/reboot.png;
-    ".config/wlogout/icons/shutdown.png".source = ../../home-manager/wlogout/icons/shutdown.png;
-    ".config/wlogout/icons/suspend.png".source = ../../home-manager/wlogout/icons/suspend.png;
+    file.".config/wlogout/layout".source = ../../home-manager/wlogout/config-files/layout;
+    file.".config/wlogout/style.css".source = ../../home-manager/wlogout/config-files/style.css;
+    file.".config/wlogout/icons/hibernate.png".source = ../../home-manager/wlogout/icons/hibernate.png;
+    file.".config/wlogout/icons/lock.png".source = ../../home-manager/wlogout/icons/lock.png;
+    file.".config/wlogout/icons/logout.png".source = ../../home-manager/wlogout/icons/logout.png;
+    file.".config/wlogout/icons/reboot.png".source = ../../home-manager/wlogout/icons/reboot.png;
+    file.".config/wlogout/icons/shutdown.png".source = ../../home-manager/wlogout/icons/shutdown.png;
+    file.".config/wlogout/icons/suspend.png".source = ../../home-manager/wlogout/icons/suspend.png;
   };
 }

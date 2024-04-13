@@ -25,26 +25,37 @@ button:focus, button:active, button:hover {
 	outline-style: none;
 }
 
+ /* 
+    ----------------------------------------------------- 
+    Buttons
+    ----------------------------------------------------- 
+ */
+
+#lock,#logout,#suspend,#hibernate,#shutdown,#reboot {
+margin: 10px;
+border-radius: ${toString config.theme.rounding}px;
+}
+
 #lock {
-    background-image: image(url("/nix/store/gnvp1pglhscyg94j35bfg2s2v9iv00kb-wlogout-1.2.1/share/wlogout/icons/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
+      background-image: image(url("icons/lock.png"));
 }
 
 #logout {
-    background-image: image(url("/nix/store/gnvp1pglhscyg94j35bfg2s2v9iv00kb-wlogout-1.2.1/share/wlogout/icons/logout.png"), url("/usr/local/share/wlogout/icons/logout.png"));
+      background-image: image(url("icons/logout.png"));
 }
 
 #suspend {
-    background-image: image(url("/nix/store/gnvp1pglhscyg94j35bfg2s2v9iv00kb-wlogout-1.2.1/share/wlogout/icons/suspend.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
+      background-image: image(url("icons/suspend.png"));
 }
 
 #hibernate {
-    background-image: image(url("/nix/store/gnvp1pglhscyg94j35bfg2s2v9iv00kb-wlogout-1.2.1/share/wlogout/icons/hibernate.png"), url("/usr/local/share/wlogout/icons/hibernate.png"));
+      background-image: image(url("icons/hibernate.png"));
 }
 
 #shutdown {
-    background-image: image(url("/nix/store/gnvp1pglhscyg94j35bfg2s2v9iv00kb-wlogout-1.2.1/share/wlogout/icons/shutdown.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
+      background-image: image(url("icons/shutdown.png"));
 }
 
 #reboot {
-    background-image: image(url("/nix/store/gnvp1pglhscyg94j35bfg2s2v9iv00kb-wlogout-1.2.1/share/wlogout/icons/reboot.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+      background-image: image(url("icons/reboot.png"));
 }
