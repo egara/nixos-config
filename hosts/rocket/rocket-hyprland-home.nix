@@ -11,13 +11,17 @@
 #               └─ home.nix
 #
 
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
-  imports =
-    [
-      #../../modules/desktop/bspwm/home.nix  #Window Manager
-    ];
+#  imports =
+#    [
+#      #../../modules/desktop/bspwm/home.nix  #Window Manager
+#   ];
+
+  imports = [
+    ../../home-manager/wofi
+  ];
 
   home = {
     # Specific packages for desktop
@@ -43,4 +47,7 @@
     file.".config/wlogout/icons/shutdown.png".source = ../../home-manager/wlogout/icons/shutdown.png;
     file.".config/wlogout/icons/suspend.png".source = ../../home-manager/wlogout/icons/suspend.png;
   };
+
+  programs.home-manager.enable = true;
+
 }

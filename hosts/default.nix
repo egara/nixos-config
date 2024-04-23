@@ -112,7 +112,7 @@ in
       # Hyprland Configuration
       ########################
       # Execute specific configuration module for this profile (default)
-      ./rocket/rocket-hyprland-configuration.nix
+      ./rocket/desktop/hyprland/configuration.nix
  
       ########################
       # Plasma 6 Configuration
