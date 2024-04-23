@@ -36,7 +36,7 @@
   # Modules
   imports = [
     # Hyprland common module
-    ../../modules/desktop/hyprland.nix
+    ../../../../modules/desktop/hyprland.nix
   ];
 
 }
