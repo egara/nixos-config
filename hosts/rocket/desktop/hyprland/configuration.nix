@@ -33,6 +33,9 @@
     };
   };
 
+  # Swaylock (for locking session)
+  security.pam.services.swaylock = {};
+
   # Modules
   imports = [
     # Hyprland common module
