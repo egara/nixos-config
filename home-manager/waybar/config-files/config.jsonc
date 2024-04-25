@@ -1,3 +1,5 @@
+[
+// Top waybar
 {
     "layer": "top",
     "position": "top",
@@ -9,47 +11,29 @@
 
     // Choose the order of the modules
 
-    "modules-left": ["hyprland/workspaces", "wlr/taskbar"],
+    "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock"],
-    "modules-right": ["cpu", "temperature", "memory", "backlight", "pulseaudio", "network", "tray", "custom/power"],
+    "modules-right": ["keyboard-state", "cpu", "temperature", "memory", "pulseaudio", "network", "tray", "custom/power"],
 
     // Modules configuration
     "hyprland/workspaces": {
-        "on-click": "activate",
-        //"active-only": false,
-        "all-outputs": true,
-        "persistent-workspaces": {
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-//            "5": [],
-//            "6": [],
-//            "7": [],
-//            "8": [],
-//            "9": [],
-//            "10": [],
-         },
-        "format": "{icon}",
-        "format-icons": {
-            "1": "",
-            "2": "",
-            "3": "",
-            "4": "",
-//            "1": "",
-//            "2": "",
-//            "3": "",
-//            "4": "",
-//            "5": "",
-//            "6": "",
-//            "7": "",
-//            "8": "",
-//            "9": "󰙯",
-//            "10": ""
-            // "urgent": "",
-            // "active": "",
-            // "default": ""
-         },
+      "on-click": "activate",
+      "format": "{icon}",
+      "format-icons": {
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "default": "",
+        "urgent": "",
+        "active": "",
+      },
+      "persistent-workspaces": {
+        "1": [],
+        "2": [],
+        "3": [],
+        "4": [],
+      },
     },
     "keyboard-state": {
         "numlock": true,
@@ -59,19 +43,6 @@
             "locked": "",
             "unlocked": ""
         }
-    },
-    "wlr/taskbar": {
-        "format": "{icon}",
-        "icon-size": 18,
-        "tooltip-format": "{title}",
-        "on-click": "activate",
-        "on-click-middle": "close",
-//        "ignore-list": [
-//           "kitty",
-//           "wezterm",
-//           "foot",
-//           "footclient"
-//        ],
     },
     "tray": {
         "icon-size": 18,
@@ -162,4 +133,30 @@
         "tooltip": false,
         "on-click": "wlogout --protocol layer-shell"
     }
-}
+},
+
+// Bottom waybar
+{
+    "layer": "top",
+    "position": "bottom",
+    "height": 25,
+    "margin-left": 5,
+    "margin-right": 5,
+    "margin-top": 5,
+    "spacing": 1,
+
+    // Choose the order of the modules
+
+    "modules-left": [],
+    "modules-center": ["wlr/taskbar"],
+    "modules-right": [],
+
+    // Modules configuration
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 18,
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-middle": "close",
+    },
+}]

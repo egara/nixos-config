@@ -59,7 +59,7 @@
     password = "administrador";
     isNormalUser = true;
     description = "Eloy";
-    extraGroups = [ "wheel" "video" "audio" "networkmanager" "docker" ];
+    extraGroups = [ "wheel" "video" "audio" "networkmanager" "docker" "input" ];
     packages = with pkgs; [
       #firefox
     ];
