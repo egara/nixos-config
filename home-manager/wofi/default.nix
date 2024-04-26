@@ -41,7 +41,7 @@
       }
 
       #window {
-        background-color: #101012;
+        background-color: transparent;
         color: #ECECEC;
         border-radius: 12px;
       }

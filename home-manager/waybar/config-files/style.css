@@ -29,22 +29,8 @@ window#waybar.hidden {
     opacity: 0.2;
 }
 
-/*
 window#waybar.empty {
     background-color: transparent;
-}
-window#waybar.solo {
-    background-color: #FFFFFF;
-}
-*/
-
-window#waybar.termite {
-    background-color: #3F3F3F;
-}
-
-window#waybar.chromium {
-    background-color: #000000;
-    border: none;
 }
 
 button {
@@ -95,13 +81,17 @@ button:hover {
     background-color: transparent;
 }
 
+
 /* If workspaces is the leftmost module, omit left margin */
+
 /*
 .modules-left > widget:first-child > #workspaces {
     margin-left: 0;
 }
 */
+
 /* If workspaces is the rightmost module, omit right margin */
+
 /*
 .modules-right > widget:last-child > #workspaces {
     margin-right: 0;
@@ -164,22 +154,16 @@ label:focus {
 }
 
 #cpu {
-    /*background-color: #2ecc71;
-    color: #000000;
-    */
     background-color: transparent;
-    /*margin: 4px 4px;*/
     padding: 5px 5px;
 }
 
 #memory {
-    /*background-color: #9b59b6;*/
     background-color: transparent;        
     padding: 5px 5px;
 }
 
 #disk {
-    /*background-color: #964B00;*/
     background-color: transparent;        
     padding: 5px 5px;
 }
@@ -190,7 +174,6 @@ label:focus {
 }
 
 #network {
-    /*background-color: #2980b9;*/
     background-color: transparent;    
     padding: 5px 5px;
 }
@@ -200,10 +183,6 @@ label:focus {
 }
 
 #pulseaudio {
-    /*
-    background-color: #f1c40f;
-    color: #000000;
-    */
     background-color: transparent;        
     padding: 5px 5px;
 }
@@ -214,8 +193,7 @@ label:focus {
 }
 
 #wireplumber {
-    background-color: #fff0f5;
-    color: #000000;
+    background-color: transparent;        
     padding: 5px 5px;
 }
 
@@ -247,7 +225,6 @@ label:focus {
 }
 
 #tray {
-    /*background-color: #2980b9;*/
     background-color: transparent;
     padding: 5px 5px;
 }
