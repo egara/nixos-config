@@ -15,7 +15,7 @@
 
 {
   imports = [
-    ../../home-manager/wofi
+    ../../../../home-manager/wofi
   ];
 
   home = {
