@@ -1,15 +1,28 @@
 * {
+    border: none;
+    border-radius: 0;
+    min-height: 0;
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
     font-size: 13px;
 }
 
+
 window#waybar {
-    background-color: rgba(43, 48, 59, 0.5);
-    border-bottom: 3px solid rgba(100, 114, 125, 0.5);
-    color: #ffffff;
+    /*background-color: rgba(43, 48, 59, 0.5);*/
+    background-color: rgba(0, 0, 0, 0);
+    /*border-bottom: 3px solid rgba(100, 114, 125, 0.5);*/
+    border-radius: 5px;
+    font-size: 13px;
+    /*color: #ffffff;*/
     transition-property: background-color;
-    transition-duration: .5s;
+    transition-duration: 0.5s;
+}
+
+.modules-left, .modules-center, .modules-right {
+    border-radius: 5px;
+    background-color: rgba(43, 48, 59, 0.5);
+    padding: 2px 6px;
 }
 
 window#waybar.hidden {
@@ -72,44 +85,31 @@ button:hover {
     box-shadow: inset 0 -3px #ffffff;
 }
 
-#clock,
-#battery,
-#cpu,
-#memory,
-#disk,
-#temperature,
-#backlight,
-#network,
-#pulseaudio,
-#wireplumber,
-#custom-media,
-#tray,
-#mode,
-#idle_inhibitor,
-#scratchpad,
-#power-profiles-daemon,
 #mpd {
     padding: 0 10px;
     color: #ffffff;
 }
 
-#window,
 #workspaces {
     margin: 0 4px;
+    background-color: transparent;
 }
 
 /* If workspaces is the leftmost module, omit left margin */
+/*
 .modules-left > widget:first-child > #workspaces {
     margin-left: 0;
 }
-
+*/
 /* If workspaces is the rightmost module, omit right margin */
+/*
 .modules-right > widget:last-child > #workspaces {
     margin-right: 0;
 }
+*/
 
 #clock {
-    background-color: #64727D;
+    background-color: transparent;    
 }
 
 #battery {
@@ -164,24 +164,35 @@ label:focus {
 }
 
 #cpu {
-    background-color: #2ecc71;
+    /*background-color: #2ecc71;
     color: #000000;
+    */
+    background-color: transparent;
+    /*margin: 4px 4px;*/
+    padding: 5px 5px;
 }
 
 #memory {
-    background-color: #9b59b6;
+    /*background-color: #9b59b6;*/
+    background-color: transparent;        
+    padding: 5px 5px;
 }
 
 #disk {
-    background-color: #964B00;
+    /*background-color: #964B00;*/
+    background-color: transparent;        
+    padding: 5px 5px;
 }
 
 #backlight {
     background-color: #90b1b1;
+    padding: 5px 5px;
 }
 
 #network {
-    background-color: #2980b9;
+    /*background-color: #2980b9;*/
+    background-color: transparent;    
+    padding: 5px 5px;
 }
 
 #network.disconnected {
@@ -189,8 +200,12 @@ label:focus {
 }
 
 #pulseaudio {
+    /*
     background-color: #f1c40f;
     color: #000000;
+    */
+    background-color: transparent;        
+    padding: 5px 5px;
 }
 
 #pulseaudio.muted {
@@ -201,6 +216,7 @@ label:focus {
 #wireplumber {
     background-color: #fff0f5;
     color: #000000;
+    padding: 5px 5px;
 }
 
 #wireplumber.muted {
@@ -223,6 +239,7 @@ label:focus {
 
 #temperature {
     background-color: #f0932b;
+    padding: 5px 5px;
 }
 
 #temperature.critical {
@@ -230,7 +247,9 @@ label:focus {
 }
 
 #tray {
-    background-color: #2980b9;
+    /*background-color: #2980b9;*/
+    background-color: transparent;
+    padding: 5px 5px;
 }
 
 #tray > .passive {
@@ -274,14 +293,16 @@ label:focus {
     padding: 0 5px;
     margin: 0 5px;
     min-width: 16px;
+    padding: 5px 5px;
 }
 
 #keyboard-state {
-    background: #97e1ad;
-    color: #000000;
-    padding: 0 0px;
+    background-color: transparent;
+    /*background: #97e1ad;
+    color: #000000;*/
     margin: 0 5px;
     min-width: 16px;
+    padding: 5px 5px;
 }
 
 #keyboard-state > label {
@@ -319,4 +340,9 @@ label:focus {
 
 #privacy-item.audio-out {
     background-color: #0069d4;
+}
+
+#taskbar {
+    background-color: transparent;
+    padding: 5px 5px;
 }
