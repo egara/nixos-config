@@ -135,7 +135,7 @@ in
           # Hyprland Configuration
           ########################
           # (default)
-          imports = [(import ./home.nix)] ++ [(import ./rocket/rocket-hyprland-home.nix)];
+          imports = [(import ./home.nix)] ++ [(import ./rocket/desktop/hyprland/home.nix)];
 
           ########################
           # Plasma 6 Configuration

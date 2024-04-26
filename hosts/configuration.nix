@@ -103,6 +103,8 @@
       vlc
       telegram-desktop
       insync
+      filezilla
+      pciutils
   ];
 
   # List of programs that must be enabled
