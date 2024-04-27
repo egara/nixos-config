@@ -18,8 +18,6 @@
     # Wofi configuration via home-manager
     ../../../../home-manager/wofi
 
-    # Dunst configuration via home-manager
-    ../../../../home-manager/dunst
   ];
 
   home = {
@@ -43,6 +41,9 @@
     file.".config/wlogout/icons/reboot.png".source = ../../../../home-manager/wlogout/icons/reboot.png;
     file.".config/wlogout/icons/shutdown.png".source = ../../../../home-manager/wlogout/icons/shutdown.png;
     file.".config/wlogout/icons/suspend.png".source = ../../../../home-manager/wlogout/icons/suspend.png;
+
+    # Dunst
+    file.".config/dunst/dunstrc".source = ../../../../home-manager/dunst/config-files/dunstrc;
 
   };
 
