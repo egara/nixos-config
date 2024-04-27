@@ -105,6 +105,7 @@
       insync
       filezilla
       pciutils
+      spotify
   ];
 
   # List of programs that must be enabled
