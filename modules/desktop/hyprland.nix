@@ -33,9 +33,19 @@
     })
   ];
 
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
+    font-awesome
     nerdfonts
     meslo-lgs-nf
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    liberation_ttf
+    fira-code
+    fira-code-symbols
+    mplus-outline-fonts.githubRelease
+    dina-font
+    proggyfonts
   ];
 
   # Udisks2 to automount USB devices
