@@ -33,7 +33,7 @@
     origin = top-center
 
     # Offset from the origin
-    # offset = (10, 50)
+    offset = (0, 20)
 
     # Scale factor. It is auto-detected if value is 0.
     scale = 0
@@ -81,7 +81,7 @@
     # The transparency of the window.  Range: [0; 100].
     # This option will only work if a compositing window manager is
     # present (e.g. xcompmgr, compiz, etc.). (X11 only)
-    transparency = 10
+    transparency = 30
 
     # Draw a line of "separator_height" pixel height between two
     # notifications.
@@ -336,6 +336,7 @@
     background = "#2b2b2b"
     foreground = "#ffffff"
     timeout = 10
+    highlight = "#a158ff" # Hint color (progress bar, for example)
     # Icon for notifications with low urgency, uncomment to enable
     #default_icon = /path/to/icon
 
@@ -344,6 +345,7 @@
     foreground = "#ffffff"
     timeout = 10
     override_pause_level = 30
+    highlight = "#a158ff" # Hint color (progress bar, for example)
     # Icon for notifications with normal urgency, uncomment to enable
     #default_icon = /path/to/icon
 

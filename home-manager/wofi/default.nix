@@ -35,7 +35,8 @@
       /** ********** Fonts ********** **/
 
       * {
-        font-family: "SFProDisplay Nerd Font";
+        /*font-family: "SFProDisplay Nerd Font";*/
+        font-family: "FontAwesome";
         font-weight: 500;
         font-size: 12px;
       }

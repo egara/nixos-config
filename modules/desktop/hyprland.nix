@@ -85,6 +85,7 @@
       #####################
       dunst
       libnotify
+      pamixer # For getting the volume via command line and integrate it with dunst and hyprland
       #########################
       # System locking and IDLE
       #########################
