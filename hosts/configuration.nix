@@ -153,10 +153,13 @@
   # Or disable the firewall altogether.
   networking.firewall.enable = false;
 
-  # Enabling experimental Nix flakes
+  # Enabling experimental Nix flakes and disabling 'Git tree ... is dirty' message
   nix = {
     package = pkgs.nixFlakes;
-    extraOptions = "experimental-features = nix-command flakes";
+    extraOptions = ''
+      experimental-features = nix-command flakes
+      warn-dirty = false
+    '';
   };
 
   # This value determines the NixOS release from which the default
