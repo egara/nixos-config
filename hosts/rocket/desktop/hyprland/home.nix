@@ -57,6 +57,7 @@
     size = 10;
   };
 
+  # GTK configuration and theming
   gtk = {
     enable = true;
     theme = {
