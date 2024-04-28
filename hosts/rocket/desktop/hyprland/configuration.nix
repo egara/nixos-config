@@ -17,18 +17,22 @@
 
   # SDDM
   services = {
+    displayManager = {
+      sddm = {
+        enable = true;
+        wayland = {
+          enable = true;
+        };
+      };
+    };
+
     xserver = {
       enable = true;
       videoDrivers = [ "amdgpu" ];
-      layout = "es";
-      xkbVariant = "";
-      displayManager = {
-        sddm = {
-          enable = true;
-          wayland = {
-            enable = true;
-          };
-        };
+
+      xkb = {
+        layout = "es";
+        variant = "";
       };
     };
   };

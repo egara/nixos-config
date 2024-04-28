@@ -33,6 +33,7 @@
     })
   ];
 
+  # Fonts
   fonts.packages = with pkgs; [
     font-awesome
     nerdfonts
@@ -48,8 +49,25 @@
     proggyfonts
   ];
 
+  # SDDM theming
+  services.displayManager.sddm.theme = "Elegant";
+
   # Udisks2 to automount USB devices
   services.udisks2.enable = true;
+
+  # Thunar
+  programs = {
+    thunar = {
+      enable = true;
+    };
+
+    xfconf = {
+      enable = true;
+    };
+
+  };
+  services.gvfs.enable = true; # Mount, trash, and other functionalities
+  services.tumbler.enable = true; # Thumbnail support for images
 
   # List of packages installed in system profile related to Hyprland
   environment.systemPackages = with pkgs; [
@@ -94,6 +112,7 @@
       #########
       # Theming
       #########
+      elegant-sddm
       kdePackages.qt6ct # QT theming configurator
       kdePackages.breeze
       kdePackages.breeze-icons
