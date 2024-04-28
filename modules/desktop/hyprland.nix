@@ -124,14 +124,14 @@
       # Theming
       #########
       elegant-sddm
-      gnome.adwaita-icon-theme
-      yaru-theme
+      #rose-pine-gtk-theme
+      #moka-icon-theme
       #############
       # Other tools
       #############
       udiskie # Automount USB devices
       swww # for wallpapers
-      kdePackages.dolphin
+      #kdePackages.dolphin
 
   ];
 }
