@@ -55,7 +55,7 @@
   # Udisks2 to automount USB devices
   services.udisks2.enable = true;
 
-  # Thunar
+  # Thunar (Part 1)
   programs = {
     thunar = {
       enable = true;
@@ -66,8 +66,19 @@
     };
 
   };
-  services.gvfs.enable = true; # Mount, trash, and other functionalities
-  services.tumbler.enable = true; # Thumbnail support for images
+
+  # Thunar (Part 2)
+  services = {
+    # Mount, trash, and other functionalities
+    gvfs = {
+      enable = true;
+    };
+
+    # Thumbnail support for images
+    tumbler = {
+      enable = true;
+    };
+  };
 
   # List of packages installed in system profile related to Hyprland
   environment.systemPackages = with pkgs; [
@@ -113,13 +124,7 @@
       # Theming
       #########
       elegant-sddm
-      kdePackages.qt6ct # QT theming configurator
-      kdePackages.breeze
-      kdePackages.breeze-icons
-      kdePackages.breeze-gtk
-      adwaita-qt6
       gnome.adwaita-icon-theme
-      kdePackages.qtwayland
       yaru-theme
       #############
       # Other tools
