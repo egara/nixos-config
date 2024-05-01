@@ -162,6 +162,11 @@
     '';
   };
 
+  # Copying display manager avatars for every user
+  system.activationScripts.script.text = ''
+    cp ../modules/display-manager/avatars/egarcia.png /var/lib/AccountsService/icons/egarcia
+  '';  
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave

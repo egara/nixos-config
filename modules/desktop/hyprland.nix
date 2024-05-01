@@ -80,6 +80,13 @@
     };
   };
 
+  # Udev rules
+  # USB plugin and eject notifications
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb",ENV{ID_TYPE}=="disk", ENV{ID_USB_DRIVER}=="usb-storage",RUN+="${pkgs.systemd}/bin/dunstify -a 'USB' -u low 'A new USB device has been connected'"
+    ACTION=="remove", SUBSYSTEM=="usb",ENV{ID_TYPE}=="disk",ENV{ID_USB_DRIVER}=="usb-storage",RUN+="${pkgs.systemd}/bin/dunstify -a 'USB' -u low 'USB device has been desconnected'"
+  '';
+
   # List of packages installed in system profile related to Hyprland
   environment.systemPackages = with pkgs; [
       ##################################
@@ -131,6 +138,7 @@
       #############
       udiskie # Automount USB devices
       swww # for wallpapers
+      feh # Image viewer
       #kdePackages.dolphin
 
   ];
