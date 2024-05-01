@@ -164,7 +164,7 @@
 
   # Copying display manager avatars for every user
   system.activationScripts.script.text = ''
-    cp ../modules/display-manager/avatars/egarcia.png /var/lib/AccountsService/icons/egarcia
+    cp /home/egarcia/Zero/nixos-config/modules/display-manager/avatars/egarcia.png /var/lib/AccountsService/icons/egarcia
   '';  
 
   # This value determines the NixOS release from which the default
