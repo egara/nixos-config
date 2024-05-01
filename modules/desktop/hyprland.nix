@@ -81,11 +81,12 @@
   };
 
   # Udev rules
-  # USB plugin and eject notifications
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="usb",ENV{ID_TYPE}=="disk", ENV{ID_USB_DRIVER}=="usb-storage",RUN+="${pkgs.dunst}/bin/dunstify -a 'USB' -u low 'A new USB device has been connected'"
-    ACTION=="remove", SUBSYSTEM=="usb",ENV{ID_TYPE}=="disk",ENV{ID_USB_DRIVER}=="usb-storage",RUN+="${pkgs.dunst}/bin/dunstify -a 'USB' -u low 'USB device has been desconnected'"
-  '';
+  # USB plugin and eject notifications (actually this is not needed because udiskie always notifies)
+  # For more information about it: https://askubuntu.com/questions/949331/how-to-set-rule-only-for-usb-flash-drives-in-rules-d
+  #services.udev.extraRules = ''
+  #  ACTION=="add", SUBSYSTEM=="usb",ENV{ID_TYPE}=="disk", ENV{ID_USB_DRIVER}=="usb-storage",RUN+="${pkgs.dunst}/bin/dunstify -a 'USB' -u low 'A new USB device has been connected'"
+  #  ACTION=="remove", SUBSYSTEM=="usb",ENV{ID_TYPE}=="disk",ENV{ID_USB_DRIVER}=="usb-storage",RUN+="${pkgs.dunst}/bin/dunstify -a 'USB' -u low 'USB device has been desconnected'"
+  #'';
 
   # List of packages installed in system profile related to Hyprland
   environment.systemPackages = with pkgs; [
