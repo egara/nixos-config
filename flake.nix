@@ -23,10 +23,15 @@
       # must be the same that the one defined by myself, which in this case is nixos-unstable
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Hyprswitch
+    hyprswitch = {
+      url = "github:h3rmt/hyprswitch/release";
+    };
   };
 
   # Function that tells my flake which to use and what do what to do with the dependencies.
-  outputs = inputs @ { self, disko, nixpkgs, home-manager, ... }:   
+  outputs = inputs @ { self, disko, nixpkgs, home-manager, hyprswitch, ... }:   
     # Variables
     let
       username = "egarcia";
@@ -38,7 +43,7 @@
           inherit (nixpkgs) lib;
            # Also inherit disko, home-manager and the rest of the variables so it does not need 
            # to be defined anymore.
-          inherit inputs nixpkgs disko home-manager username location;
+          inherit inputs nixpkgs disko home-manager hyprswitch username location;
         }
       );
     };

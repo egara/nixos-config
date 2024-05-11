@@ -11,7 +11,7 @@
 #            └─ ./home.nix 
 #
  
-{ lib, inputs, nixpkgs, disko, home-manager, username, location, ... }:
+{ lib, inputs, nixpkgs, disko, home-manager, hyprswitch, username, location, ... }:
  
 let
   # System architecture

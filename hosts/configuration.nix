@@ -75,6 +75,7 @@
       firefox
       google-chrome
       audacious
+      okular
       audacity
       carla
       #darkice
