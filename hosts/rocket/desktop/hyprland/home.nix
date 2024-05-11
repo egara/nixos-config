@@ -80,6 +80,10 @@
       name = "GoMonoNerdFontPropo-Bold";
       size = 10;
     };
+
+    gtk3 = {
+      extraConfig.gtk-application-prefer-dark-theme = true;
+    };    
   };
 
 }
