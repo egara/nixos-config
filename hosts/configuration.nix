@@ -108,6 +108,7 @@
       pciutils
       spotify
       bind
+      encfs
   ];
 
   # List of programs that must be enabled
