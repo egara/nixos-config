@@ -107,6 +107,7 @@
       filezilla
       pciutils
       spotify
+      bind
   ];
 
   # List of programs that must be enabled
