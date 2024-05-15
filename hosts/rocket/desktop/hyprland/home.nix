@@ -48,8 +48,19 @@
 
   };
 
+  # Virtual Manager special configuration (https://nixos.wiki/wiki/Virt-manager)
+  dconf.settings = {
+    "org/virt-manager/virt-manager/connections" = {
+      autoconnect = ["qemu:///system"];
+      uris = ["qemu:///system"];
+    };
+  };
+
   programs.home-manager.enable = true;
 
+
+
+  # Cursor theming
   home.pointerCursor = {
     gtk.enable = true;
     # x11.enable = true;

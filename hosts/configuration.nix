@@ -59,7 +59,7 @@
     password = "administrador";
     isNormalUser = true;
     description = "Eloy";
-    extraGroups = [ "wheel" "video" "audio" "networkmanager" "docker" "input" ];
+    extraGroups = [ "wheel" "video" "audio" "networkmanager" "docker" "input" "libvirtd" ];
     packages = with pkgs; [
       #firefox
     ];
@@ -109,12 +109,19 @@
       spotify
       bind
       encfs
+      quickemu
+      quickgui
   ];
 
   # List of programs that must be enabled
   programs = {
     # Partition manager
     partition-manager = {
+      enable = true;
+    };
+
+    # Virtual Manager
+    virt-manager = {
       enable = true;
     };
   };
@@ -130,8 +137,15 @@
   # Enabling Flatpak
   services.flatpak.enable = true;
 
-  # Docker
+  # Virtualisation
   virtualisation = {
+
+	# KVM-QUEMU and Virtual Manager
+    libvirtd = {
+      enable = true;
+    };
+
+	# Docker
     docker = {
       enable = true;
       storageDriver = "overlay2";
