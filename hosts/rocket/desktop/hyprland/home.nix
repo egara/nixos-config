@@ -87,4 +87,18 @@
     };    
   };
 
+  # QT configuration and theming
+  qt = {
+    enable = true;
+
+    platformTheme = {
+      name = "gtk";
+    };
+
+    style = {
+      name = "gtk2";
+      package = pkgs.catppuccin-kde;
+    };
+  };  
+
 }
