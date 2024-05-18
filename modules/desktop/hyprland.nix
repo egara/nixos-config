@@ -139,6 +139,7 @@
       udiskie # Automount USB devices
       swww # for wallpapers
       feh # Image viewer
-      grim # Screen capture for Wayland
+      grim # Screen capture for Wayland. It depends on slurp
+      slurp # Allows to select a region in Wayland
   ];
 }
