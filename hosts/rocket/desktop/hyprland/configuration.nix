@@ -40,18 +40,6 @@
   # Swaylock (for locking session)
   security.pam.services.swaylock = {};
 
-  # Enabling virtualization KVM-QUEMU and Virtual Manager
-  virtualisation = {
-    libvirtd = {
-      enable = true;
-    };
-  };
-  programs = {
-    virt-manager = {
-      enable = true;
-    };
-  };
-
   # Modules
   imports = [
     # Hyprland common module
