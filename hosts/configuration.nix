@@ -77,10 +77,9 @@
       okular
       audacity
       carla
-      #darkice
       nano
       #tailscale
-      #libreoffice
+      libreoffice
       ntfs3g
       fltk
       portaudio

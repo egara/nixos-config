@@ -133,15 +133,12 @@
       # Theming
       #########
       elegant-sddm
-      #rose-pine-gtk-theme
-      #moka-icon-theme
       #############
       # Other tools
       #############
       udiskie # Automount USB devices
       swww # for wallpapers
       feh # Image viewer
-      #kdePackages.dolphin
-
+      grim # Screen capture for Wayland
   ];
 }
