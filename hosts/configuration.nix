@@ -74,7 +74,6 @@
       nvd    # NixOS package version diff tool
       firefox
       google-chrome
-      audacious
       okular
       audacity
       carla
