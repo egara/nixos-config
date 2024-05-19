@@ -75,6 +75,7 @@
       firefox
       google-chrome
       okular
+      qmmp
       audacity
       carla
       nano
