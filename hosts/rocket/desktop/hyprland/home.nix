@@ -46,6 +46,9 @@
     # Dunst
     file.".config/dunst/dunstrc".source = ../../../../home-manager/dunst/config-files/dunstrc;
 
+    # QMMP
+    file.".config/qmmp/skins/winamp_classic.wsz".source = ../../../../home-manager/qmmp/skins/winamp_classic.wsz;    
+
   };
 
   # Virtual Manager special configuration (https://nixos.wiki/wiki/Virt-manager)
