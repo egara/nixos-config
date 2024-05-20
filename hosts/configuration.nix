@@ -110,6 +110,7 @@
       encfs
       quickemu
       quickgui
+      yt-dlp
   ];
 
   # List of programs that must be enabled
