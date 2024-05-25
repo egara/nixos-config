@@ -60,9 +60,7 @@
   };
 
   programs.home-manager.enable = true;
-
-
-
+  
   # Cursor theming
   home.pointerCursor = {
     gtk.enable = true;
@@ -81,7 +79,7 @@
       package = pkgs.catppuccin-gtk.override {
         accents = [ "pink" ];
         size = "compact";
-        tweaks = [ "rimless" "black" ];
+#        tweaks = [ "rimless" "black" ];
         variant = "macchiato";
       };
     };

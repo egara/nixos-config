@@ -3,6 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, inputs, username, ... }:
+#{ config, pkgs, inputs, username, stylix, ... }:
 
 {
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -182,7 +183,63 @@
   # Copying display manager avatars for every user
   system.activationScripts.script.text = ''
     cp /home/egarcia/Zero/nixos-config/modules/display-manager/avatars/egarcia.png /var/lib/AccountsService/icons/egarcia
-  '';  
+  '';
+
+########################################
+# Testing Stylix
+########################################
+#  # Global styling with Stylix
+#  stylix = {
+#  	# Dark theme
+#  	polarity = "dark";
+#
+#  	# Color scheme
+#	base16Scheme = "${pkgs.base16-schemes}/share/themes/material-darker.yaml";
+#
+#	# Is this mandatory?
+#	image = ../modules/display-manager/avatars/egarcia.png;
+#
+#	# Cursors
+#	cursor = {
+#	    package = pkgs.bibata-cursors;
+#	    name = "Bibata-Modern-Classic";
+#	    size = 10;
+#	};
+#
+#	# Targets
+#	targets = {
+#		grub = {
+#			enable = false;
+#		};
+#
+#		gtk = {
+#			enable = true;
+#		};
+#	};
+#
+#	# Fonts
+# 	fonts = {
+#    	monospace = {
+#      		package = pkgs.nerdfonts;
+#      		name = "GoMonoNerdFontPropo-Bold";
+#    	};
+#
+#    	serif = config.stylix.fonts.monospace;
+#    	sansSerif = config.stylix.fonts.monospace;
+#
+#
+#        emoji = {
+#      		package = pkgs.noto-fonts-emoji;
+#      		name = "Noto Color Emoji";
+#    	};
+#
+#    	sizes = {
+#    		applications = 10;
+#    		desktop = 10;
+#    	};
+#  	};
+#
+#  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

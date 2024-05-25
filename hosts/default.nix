@@ -1,16 +1,4 @@
-#
-#  These are the different profiles that can be used when building NixOS.
-#
-#  flake.nix 
-#   └─ ./hosts  
-#       ├─ default.nix *
-#       ├─ configuration.nix
-#       ├─ home.nix
-#       └─ ./desktop OR ./laptop OR ./work OR ./vm
-#            ├─ ./default.nix
-#            └─ ./home.nix 
-#
- 
+#{ lib, inputs, nixpkgs, disko, home-manager, hyprswitch, stylix, username, location, ... }:
 { lib, inputs, nixpkgs, disko, home-manager, hyprswitch, username, location, ... }:
  
 let
@@ -120,8 +108,12 @@ in
       # Execute specific configuration module for this profile
       #./rocket/rocket-plasma-configuration.nix
 
+#      # Stylix configuration module
+#      stylix.nixosModules.stylix
+
       # Execute home manager module
       home-manager.nixosModules.home-manager {
+        home-manager.backupFileExtension = "backup";
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = {
