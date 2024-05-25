@@ -24,14 +24,21 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Hyprswitch
+    # Hyprswitch (for windows switching in Hyprland)
     hyprswitch = {
       url = "github:h3rmt/hyprswitch/release";
     };
+
+#    # Stylix (for styling)
+#    stylix = {
+#      url = "github:danth/stylix";
+#    };
+
   };
 
   # Function that tells my flake which to use and what do what to do with the dependencies.
-  outputs = inputs @ { self, disko, nixpkgs, home-manager, hyprswitch, ... }:   
+#  outputs = inputs @ { self, disko, nixpkgs, home-manager, hyprswitch, stylix, ... }:
+  outputs = inputs @ { self, disko, nixpkgs, home-manager, hyprswitch, ... }:
     # Variables
     let
       username = "egarcia";
@@ -43,6 +50,7 @@
           inherit (nixpkgs) lib;
            # Also inherit disko, home-manager and the rest of the variables so it does not need 
            # to be defined anymore.
+#          inherit inputs nixpkgs disko home-manager hyprswitch stylix username location;
           inherit inputs nixpkgs disko home-manager hyprswitch username location;
         }
       );
