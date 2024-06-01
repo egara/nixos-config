@@ -111,6 +111,19 @@
       name = "gtk2";
       package = pkgs.catppuccin-kde;
     };
-  };  
+  };
 
+  # Kitty terminal emulator special configuration
+  programs.kitty = {
+    enable = true;
+    font = {
+      package = pkgs.nerdfonts;
+      name = "GoMonoNerdFontPropo-Bold";
+      size = 10;
+    };
+    theme = "Catppuccin-Mocha";
+    shellIntegration = {
+      enableBashIntegration = true;
+    };
+  };
 }
