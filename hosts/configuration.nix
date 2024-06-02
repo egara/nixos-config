@@ -116,6 +116,7 @@
       kubectl
       kubie
       kubecolor
+      fsdisk
   ];
 
   # List of programs that must be enabled
