@@ -112,6 +112,9 @@
       quickemu
       quickgui
       yt-dlp
+      openconnect
+      kubectl
+      kubie
   ];
 
   # List of programs that must be enabled
