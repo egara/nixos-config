@@ -115,6 +115,7 @@
       openconnect
       kubectl
       kubie
+      kubecolor
   ];
 
   # List of programs that must be enabled
