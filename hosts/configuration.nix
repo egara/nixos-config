@@ -27,7 +27,6 @@
 
   };
 
-
   # Set your time zone.
   time.timeZone = "Europe/Madrid";
 
@@ -66,6 +65,15 @@
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
     #media-session.enable = true;
+  };
+
+  # Enable OpenGL
+  hardware = {
+	  opengl = {
+	    enable = true;
+	    driSupport = true;
+	    driSupport32Bit = true;
+	  };
   };
 
   # Administrator account. Don't forget to set a password with ‘passwd’.
