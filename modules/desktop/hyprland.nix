@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, username, ... }:
+{ config, pkgs, inputs, username, lib, ... }:
 
 {
   ##########################################
@@ -19,7 +19,7 @@
   services.dbus.enable = true;
   xdg.portal = {
     enable = true;
-    wlr.enable = true;
+    wlr.enable = lib.mkForce true;  # Forcefully set wlr.enable to true
     extraPortals = [
       pkgs.xdg-desktop-portal-gtk
     ];
