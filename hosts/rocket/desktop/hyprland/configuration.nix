@@ -58,12 +58,13 @@
   # Swaylock (for locking session)
   security.pam.services.swaylock = {};
 
-#  # List of packages installed in system profile only for rocket host
-#  environment.systemPackages = with pkgs; [
+  # List of packages installed in system profile only for rocket host
+  environment.systemPackages = with pkgs; [
+    glxinfo
 #    protonup
 #    lutris
 #    heroic
-#  ];
+  ];
 
 #  # This is for installing Proton GE
 #  # Open a terminal and execute: protonup -d "~/.steam/root/compatibilitytools.d/"

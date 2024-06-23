@@ -104,6 +104,11 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Allow certain packages marked as insecure
+  nixpkgs.config.permittedInsecurePackages = [
+    "openssl-1.1.1w" # Needed for sublime4
+  ];  
+
   # List of packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -135,7 +140,7 @@
       partition-manager
       distrobox
       neofetch
-      sublime3
+      sublime4
       vlc
       telegram-desktop
       insync
