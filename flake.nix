@@ -5,9 +5,7 @@
   inputs = {
     # Unstable Nix packages (bleeding edge)
     nixpkgs = {
-      #url = "github:nixos/nixpkgs/nixos-unstable";
-      url = # revert to (2024-06-18 until fixed driSupport)
-      "github:NixOS/nixpkgs/c00d587b1a1afbf200b1d8f0b0e4ba9deb1c7f0e";
+      url = "github:nixos/nixpkgs/nixos-unstable";
     };
     
     # Disko packages (for automatic partitioning)

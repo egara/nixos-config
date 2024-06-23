@@ -68,12 +68,26 @@
   };
 
   # Enable OpenGL
+  # 20240623 - It seems hardware.opengl has been deprecated in unstable
+  #hardware = {
+	#  opengl = {
+	#    enable = true;
+	#    driSupport = true;
+	#    driSupport32Bit = true;
+	#  };
+  #};
+  # This is the new way to do it
+  # More info:
+  # https://github.com/NixOS/nixos-hardware/pull/997/commits/a3a9747e2846f92dad5b45b674af017f61f1408e
+  # https://github.com/NixOS/nixos-hardware/issues/996
+  # As it is said in the documentation, this options are not needed to be set to true because the graphics modules
+  # (amdgpu for example) should enabled them by default, but just in case...
+  # https://search.nixos.org/options?channel=unstable&show=hardware.graphics.enable&from=0&size=50&sort=relevance&type=packages&query=hardware.graphics
   hardware = {
-	  opengl = {
-	    enable = true;
-	    driSupport = true;
-	    driSupport32Bit = true;
-	  };
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
   };
 
   # Administrator account. Don't forget to set a password with ‘passwd’.
