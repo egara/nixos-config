@@ -74,14 +74,19 @@
   gtk = {
     enable = true;
 
+    # theme = {
+    #   name = "Catppuccin-Macchiato-Compact-Pink-Dark";
+    #   package = pkgs.catppuccin-gtk.override {
+    #     accents = [ "pink" ];
+    #     size = "compact";
+    #     tweaks = [ "rimless" "black" ];
+    #     variant = "macchiato";
+    #   };
+    # };
+
     theme = {
-      name = "Catppuccin-Macchiato-Compact-Pink-Dark";
-      package = pkgs.catppuccin-gtk.override {
-        accents = [ "pink" ];
-        size = "compact";
-        tweaks = [ "rimless" "black" ];
-        variant = "macchiato";
-      };
+      name = "Adwaita-dark";
+      package = pkgs.gnome.gnome-themes-extra;
     };
 
     iconTheme = {
@@ -97,19 +102,41 @@
     gtk3 = {
       extraConfig.gtk-application-prefer-dark-theme = true;
     };    
+
+    gtk4 = {
+      extraConfig.gtk-application-prefer-dark-theme = true;
+    };    
   };
+
+  # xdg.configFile = {
+  #   "gtk-4.0/assets".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/assets";
+  #   "gtk-4.0/gtk.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk.css";
+  #   "gtk-4.0/gtk-dark.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk-dark.css";
+  # };
+
+  # QT configuration and theming
+  # qt = {
+  #   enable = true;
+
+  #   platformTheme = {
+  #     name = "gtk";
+  #   };
+
+  #   style = {
+  #     name = "gtk2";
+  #     package = pkgs.catppuccin-kde;
+  #   };
+  # };
 
   # QT configuration and theming
   qt = {
     enable = true;
-
     platformTheme = {
       name = "gtk";
     };
-
     style = {
-      name = "gtk2";
-      package = pkgs.catppuccin-kde;
+      name = "adwaita-dark";
+      package = pkgs.adwaita-qt;
     };
   };
 
