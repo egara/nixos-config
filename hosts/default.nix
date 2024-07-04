@@ -140,5 +140,65 @@ in
 
   };
 
+  # Ironman profile
+  # Hyprland configurations by default
+  # Comment Hyprland lines and uncomment Plasma 6 lines in order to switch installations
+  ironman = lib.nixosSystem {
+
+    inherit system;
+    
+    specialArgs = {
+      inherit inputs username location;
+      host = {
+        hostName = "ironman";
+      };
+    };
+
+    modules = [
+      # Execute disko module
+      disko.nixosModules.disko {
+        _module.args.disks = [ "/dev/sda" ];
+        imports = [(import ./ironman/disko-config.nix)];
+      }
+
+      # Execute hardware configuration module
+      ./ironman/hardware-configuration.nix
+
+      # Execute common configuration for BIOS legacy systems
+      ./bios-configuration.nix
+      
+      # Execute common configuration module
+      ./configuration.nix
+
+      ########################
+      # Hyprland Configuration
+      ########################
+      # Execute specific configuration module for this profile (default)
+      ./ironman/desktop/hyprland/configuration.nix
+ 
+      # Execute home manager module
+      home-manager.nixosModules.home-manager {
+        home-manager.backupFileExtension = "backup";
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.extraSpecialArgs = {
+          inherit username;
+          host = {
+            hostName = "ironman";
+          };
+        };
+        home-manager.users.${username} = {
+          ########################
+          # Hyprland Configuration
+          ########################
+          # (default)
+          imports = [(import ./home.nix)] ++ [(import ./ironman/desktop/hyprland/home.nix)];
+        };
+      }
+
+    ];
+
+  };
+
   # Next profile if it is necessary
 }
