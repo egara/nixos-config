@@ -164,8 +164,8 @@ in
       # Execute hardware configuration module
       ./ironman/hardware-configuration.nix
 
-      # Execute common configuration for BIOS legacy systems
-      ./bios-configuration.nix
+      # Execute common configuration for EFI boot systems
+      ./efi-configuration.nix
       
       # Execute common configuration module
       ./configuration.nix
