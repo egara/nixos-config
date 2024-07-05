@@ -15,6 +15,13 @@
 #    };
 #  };
 
+  # Kernel parameters passed in GRUB
+  boot.kernelParams = [ 
+    "i915.enable_rc6=0" 
+    "pcie_port_pm=off" 
+    "acpi_osi=\"!Windows 2015\""
+  ];
+
   # Hybrid grafics configuration
   hardware.nvidia.prime = {
     offload = {
