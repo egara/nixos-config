@@ -23,6 +23,8 @@
   ];
 
   # Hybrid grafics configuration
+  hardware.nvidia.modesetting.enable = true;
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.production;
   hardware.nvidia.prime = {
     offload = {
       enable = true;
