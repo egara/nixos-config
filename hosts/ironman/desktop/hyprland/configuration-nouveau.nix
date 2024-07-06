@@ -11,11 +11,11 @@
   # Enabling NVIDIA driver
   boot = {
     initrd = {
-      kernelModules = [ "i915" ];
+      kernelModules = [ "nouveau" ];
     };
 
     # Blacklist the proprietary NVIDIA driver, if needed
-    blacklistedKernelModules = [ "nvidia" "nvidia_uvm" "nvidia_drm" "nvidia_modeset" "nouveau" ];
+    blacklistedKernelModules = [ "nvidia" "nvidia_uvm" "nvidia_drm" "nvidia_modeset" ];
   };
 
   # Kernel parameters passed in GRUB
@@ -23,9 +23,6 @@
     "i915.enable_rc6=0" 
     "pcie_port_pm=off" 
     "acpi_osi=\"!Windows 2015\""
-    "mem_sleep_default=deep"
-    "nvme.noacpi=1"
-    "i915.enable_psr=1"
   ];
 
   # Hybrid grafics configuration
@@ -44,16 +41,6 @@
 #    nvidiaBusId = "PCI:1:0:0";
 #  };
 
-  environment.variables = {
-      VDPAU_DRIVER = lib.mkIf config.hardware.opengl.enable (lib.mkDefault "va_gl");
-  };
-  
-  hardware.opengl.extraPackages = with pkgs; [
-    vaapiIntel
-    libvdpau-va-gl
-    intel-media-driver
-  ];
-
   # SDDM
   services = {
     displayManager = {
@@ -67,7 +54,7 @@
 
     xserver = {
       enable = true;
-      #videoDrivers = [ "nouveau" ];
+      videoDrivers = [ "nouveau" ];
 
       xkb = {
         layout = "es";
