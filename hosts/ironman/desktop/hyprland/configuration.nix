@@ -8,51 +8,65 @@
 
   networking.hostName = "ironman"; # Define your hostname.
 
-  # Enabling NVIDIA driver
-  boot = {
-    initrd = {
-      kernelModules = [ "i915" ];
-    };
-
-    # Blacklist the proprietary NVIDIA driver, if needed
-    blacklistedKernelModules = [ "nvidia" "nvidia_uvm" "nvidia_drm" "nvidia_modeset" "nouveau" ];
-  };
+#  # Enabling NVIDIA driver
+#  boot = {
+#    initrd = {
+#      kernelModules = [ "nvidia" ];
+#    };
+#  };
 
   # Kernel parameters passed in GRUB
   boot.kernelParams = [ 
     "i915.enable_rc6=0" 
     "pcie_port_pm=off" 
     "acpi_osi=\"!Windows 2015\""
-    "mem_sleep_default=deep"
-    "nvme.noacpi=1"
-    "i915.enable_psr=1"
   ];
 
   # Hybrid grafics configuration
-#  hardware.nvidia.modesetting.enable = true;
-#  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.production;
-#  hardware.nvidia.prime = {
-#    offload = {
-#      enable = true;
-#      enableOffloadCmd = true;
-#    };
+  hardware.nvidia = {
 
-#    # integrated
-#    intelBusId = "PCI:0:2:0";
-        
-#    # dedicated
-#    nvidiaBusId = "PCI:1:0:0";
-#  };
+    # Modesetting is required.
+    modesetting.enable = true;
 
-  environment.variables = {
-      VDPAU_DRIVER = lib.mkIf config.hardware.opengl.enable (lib.mkDefault "va_gl");
+    # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
+    # Enable this if you have graphical corruption issues or application crashes after waking
+    # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead 
+    # of just the bare essentials.
+    powerManagement.enable = false;
+
+    # Fine-grained power management. Turns off GPU when not in use.
+    # Experimental and only works on modern Nvidia GPUs (Turing or newer).
+    powerManagement.finegrained = false;
+
+    # Use the NVidia open source kernel module (not to be confused with the
+    # independent third-party "nouveau" open source driver).
+    # Support is limited to the Turing and later architectures. Full list of 
+    # supported GPUs is at: 
+    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
+    # Only available from driver 515.43.04+
+    # Currently alpha-quality/buggy, so false is currently the recommended setting.
+    open = false;
+
+    # Enable the Nvidia settings menu,
+  # accessible via `nvidia-settings`.
+    nvidiaSettings = true;
+
+    # Optionally, you may need to select the appropriate driver version for your specific GPU.
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
-  
-  hardware.opengl.extraPackages = with pkgs; [
-    vaapiIntel
-    libvdpau-va-gl
-    intel-media-driver
-  ];
+
+  hardware.nvidia.prime = {
+    offload = {
+      enable = true;
+      enableOffloadCmd = true;
+    };
+
+    # integrated
+    intelBusId = "PCI:0:2:0";
+        
+    # dedicated
+    nvidiaBusId = "PCI:1:0:0";
+  };
 
   # SDDM
   services = {
@@ -67,7 +81,7 @@
 
     xserver = {
       enable = true;
-      #videoDrivers = [ "nouveau" ];
+      videoDrivers = [ "nvidia" ];
 
       xkb = {
         layout = "es";
