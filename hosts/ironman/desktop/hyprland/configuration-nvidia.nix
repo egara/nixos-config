@@ -8,15 +8,12 @@
 
   networking.hostName = "ironman"; # Define your hostname.
 
-  # Enabling NVIDIA driver
-  boot = {
-    initrd = {
-      kernelModules = [ "nouveau" ];
-    };
-
-    # Blacklist the proprietary NVIDIA driver, if needed
-    blacklistedKernelModules = [ "nvidia" "nvidia_uvm" "nvidia_drm" "nvidia_modeset" ];
-  };
+#  # Enabling NVIDIA driver
+#  boot = {
+#    initrd = {
+#      kernelModules = [ "nvidia" ];
+#    };
+#  };
 
   # Kernel parameters passed in GRUB
   boot.kernelParams = [ 
@@ -28,18 +25,18 @@
   # Hybrid grafics configuration
 #  hardware.nvidia.modesetting.enable = true;
 #  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.production;
-#  hardware.nvidia.prime = {
-#    offload = {
-#      enable = true;
-#      enableOffloadCmd = true;
-#    };
+  hardware.nvidia.prime = {
+    offload = {
+      enable = true;
+      enableOffloadCmd = true;
+    };
 
-#    # integrated
-#    intelBusId = "PCI:0:2:0";
+    # integrated
+    intelBusId = "PCI:0:2:0";
         
-#    # dedicated
-#    nvidiaBusId = "PCI:1:0:0";
-#  };
+    # dedicated
+    nvidiaBusId = "PCI:1:0:0";
+  };
 
   # SDDM
   services = {
@@ -54,7 +51,7 @@
 
     xserver = {
       enable = true;
-      videoDrivers = [ "nouveau" ];
+      videoDrivers = [ "nvidia" ];
 
       xkb = {
         layout = "es";
