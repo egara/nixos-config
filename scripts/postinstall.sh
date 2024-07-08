@@ -24,27 +24,27 @@ fi
 
 sudo true
 
-# Refactoring BTRFS subvolumes if it is needed
-if command -v btrfs >/dev/null; then
-  pushd "/"
-  echo "Refactoring BTRFS subvolumens. Please wait..."
+## Refactoring BTRFS subvolumes if it is needed
+# if command -v btrfs >/dev/null; then
+#   pushd "/"
+#   echo "Refactoring BTRFS subvolumens. Please wait..."
 
-  sudo cp -ar ./srv ./srv2
-  sudo btrfs subvolume delete ./srv
-  sudo mv ./srv2 ./srv
+#   sudo cp -ar ./srv ./srv2
+#   sudo btrfs subvolume delete ./srv
+#   sudo mv ./srv2 ./srv
 
-  sudo cp -ar ./tmp ./tmp2
-  sudo btrfs subvolume delete ./tmp
-  sudo mv ./tmp2 ./tmp
+#   sudo cp -ar ./tmp ./tmp2
+#   sudo btrfs subvolume delete ./tmp
+#   sudo mv ./tmp2 ./tmp
 
-  sudo btrfs subvolume delete ./var/lib/machines
-  sudo mkdir -p ./var/lib/machines
+#   sudo btrfs subvolume delete ./var/lib/machines
+#   sudo mkdir -p ./var/lib/machines
 
-  sudo btrfs subvolume delete ./var/lib/portables
-  sudo mkdir -p ./var/lib/portables
-else
-  echo "BTRFS filesystem not detected. Skipping BTRFS refactoring."
-fi
+#   sudo btrfs subvolume delete ./var/lib/portables
+#   sudo mkdir -p ./var/lib/portables
+# else
+#   echo "BTRFS filesystem not detected. Skipping BTRFS refactoring."
+# fi
 
 pushd "$HOME"
 
