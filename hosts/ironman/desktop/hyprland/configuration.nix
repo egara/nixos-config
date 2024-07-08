@@ -8,28 +8,24 @@
 
   networking.hostName = "ironman"; # Define your hostname.
 
-  boot.kernelPackages = pkgs.linuxPackages_5_10;
+  # Important: There is a problem related to the hardware of this
+  # machine and the version of the kernel. Due to some incompatibilities
+  # related to the GPU and CPU of this machine
+  # CPU: Intel® Core™ i7 6700HQ - 4C/8T
+  # GPU: Nvidia GTX 960M 2GB GDDR5 + Intel i915 (Skylake)
+  # the highest version of the kernel supported is 6.4 so
+  # it is necessary to let the laptop booting normally, select
+  # a kernel lower than 6.4
+  boot.kernelPackages = pkgs.linuxPackages_6_1;
 
-#  # Enabling NVIDIA driver
-#  boot = {
-#    initrd = {
-#      kernelModules = [ "nvidia" ];
-#    };
-#  };
-
-  # Kernel parameters passed in GRUB
-  # boot.kernelParams = [ 
-  #   "i915.enable_rc6=0" 
-  #   "pcie_port_pm=off" 
-  #   "acpi_osi=\"!Windows 2015\""
-  # ];
-
-  # hardware.graphics = {
-  #   enable = true;
-  #   extraPackages = with pkgs; [
-  #     vpl-gpu-rt # or intel-media-sdk for QSV
-  #   ];
-  # };
+  # Kernel parameters passed in GRUB in order to
+  # allow the laptop starts normally due to the 
+  # hardware of this machine
+   boot.kernelParams = [ 
+     "i915.enable_rc6=0" 
+     "pcie_port_pm=off" 
+     "acpi_osi=\"!Windows 2015\""
+   ];
 
   # Hybrid grafics configuration
   hardware.nvidia = {
@@ -57,7 +53,7 @@
     open = false;
 
     # Enable the Nvidia settings menu,
-  # accessible via `nvidia-settings`.
+    # accessible via `nvidia-settings`.
     nvidiaSettings = true;
 
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
@@ -76,23 +72,6 @@
     # dedicated
     nvidiaBusId = "PCI:1:0:0";
   };
-
-  # boot.extraModprobeConfig = ''
-  #   blacklist nouveau
-  #   options nouveau modeset=0
-  # '';
-    
-  # services.udev.extraRules = ''
-  #   # Remove NVIDIA USB xHCI Host Controller devices, if present
-  #   ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
-  #   # Remove NVIDIA USB Type-C UCSI devices, if present
-  #   ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
-  #   # Remove NVIDIA Audio devices, if present
-  #   ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
-  #   # Remove NVIDIA VGA/3D controller devices
-  #   ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
-  # '';
-  # boot.blacklistedKernelModules = [ "nouveau" "nvidia" "nvidia_drm" "nvidia_modeset" ];
 
   # SDDM
   services = {
