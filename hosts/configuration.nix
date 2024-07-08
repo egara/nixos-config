@@ -226,6 +226,7 @@
 
   # Copying display manager avatars for every user
   system.activationScripts.script.text = ''
+    mkdir -p /var/lib/AccountsService/icons/
     cp /home/egarcia/Zero/nixos-config/modules/display-manager/avatars/egarcia.png /var/lib/AccountsService/icons/egarcia
   '';
 
