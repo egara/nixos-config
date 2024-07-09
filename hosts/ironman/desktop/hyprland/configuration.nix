@@ -8,6 +8,33 @@
 
   networking.hostName = "ironman"; # Define your hostname.
 
+  # Global power management for laptops
+  powerManagement.enable = true;
+
+  # TLP
+  services.tlp = {
+    enable = true;
+    settings = {
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+
+      CPU_MIN_PERF_ON_AC = 0;
+      CPU_MAX_PERF_ON_AC = 100;
+      CPU_MIN_PERF_ON_BAT = 0;
+      CPU_MAX_PERF_ON_BAT = 20;
+
+      # Optional helps save long term battery health
+      # START_CHARGE_THRESH_BAT0 = 40; # 40 and bellow it starts to charge
+      # STOP_CHARGE_THRESH_BAT0 = 90; # 90 and above it stops charging
+    };
+  }; 
+
+  # Thermald proactively prevents overheating on Intel CPUs and works well with other tools
+  services.thermald.enable = true;
+
   # Important: There is a problem related to the hardware of this
   # machine and the version of the kernel. Due to some incompatibilities
   # related to the GPU and CPU of this machine
@@ -101,6 +128,11 @@
   # List of packages installed in system profile only for this host
   environment.systemPackages = with pkgs; [
     glxinfo
+    buttermanager
+    jetbrains.pycharm-community-bin
+    eclipses.eclipse-jee
+    jdk8
+    jdk17
   ];
 
   # Modules
