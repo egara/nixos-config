@@ -139,7 +139,7 @@
       zip
       partition-manager
       distrobox
-      neofetch
+      #neofetch
       sublime4
       vlc
       telegram-desktop
@@ -149,8 +149,8 @@
       spotify
       bind
       encfs
-      quickemu
-      quickgui
+      #quickemu
+      #quickgui
       yt-dlp
       openconnect
       kubectl
