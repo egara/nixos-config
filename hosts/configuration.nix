@@ -139,7 +139,7 @@
       zip
       partition-manager
       distrobox
-      #neofetch
+      #fastfetch
       sublime4
       vlc
       telegram-desktop

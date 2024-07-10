@@ -138,6 +138,10 @@
       # Theming
       #########
       elegant-sddm
+      #####################
+      # clipboard
+      #####################
+      cliphist
       #############
       # Other tools
       #############
