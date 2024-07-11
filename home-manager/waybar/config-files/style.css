@@ -99,16 +99,17 @@ button:hover {
 */
 
 #clock {
-    background-color: transparent;    
+    background-color: transparent;
+    color: #ffffff;    
 }
 
 #battery {
     background-color: transparent;    
-    color: #000000;
+    color: #ffffff;
 }
 
 #battery.charging, #battery.plugged {
-    color: #000000;
+    color: #ffffff;
     background-color: transparent;    
 }
 
@@ -155,41 +156,48 @@ label:focus {
 
 #cpu {
     background-color: transparent;
+    color: #ffffff;
     padding: 5px 5px;
 }
 
 #memory {
-    background-color: transparent;        
+    background-color: transparent;
+    color: #ffffff;        
     padding: 5px 5px;
 }
 
 #disk {
-    background-color: transparent;        
+    background-color: transparent;
+    color: #ffffff;        
     padding: 5px 5px;
 }
 
 #backlight {
-    background-color: transparent;    
+    background-color: transparent;
+    color: #ffffff;    
     padding: 5px 5px;
 }
 
 #network {
-    background-color: transparent;    
+    background-color: transparent;
+    color: #ffffff;    
     padding: 5px 5px;
 }
 
 #network.disconnected {
     background-color: #f53c3c;
+    color: #ffb57a;
 }
 
 #pulseaudio {
-    background-color: transparent;        
+    background-color: transparent;
+    color: #ffffff;        
     padding: 5px 5px;
 }
 
 #pulseaudio.muted {
-    background-color: #90b1b1;
-    color: #2a5c45;
+    background-color: transparent;
+    color: #ffb57a;
 }
 
 #wireplumber {
@@ -198,7 +206,9 @@ label:focus {
 }
 
 #wireplumber.muted {
-    background-color: #f53c3c;
+    background-color: transparent;
+    color: #ffffff;
+    color: #ffb57a;
 }
 
 #custom-media {
@@ -275,8 +285,7 @@ label:focus {
 
 #keyboard-state {
     background-color: transparent;
-    /*background: #97e1ad;
-    color: #000000;*/
+    color: #ffffff;
     margin: 0 5px;
     min-width: 16px;
     padding: 5px 5px;
@@ -287,7 +296,7 @@ label:focus {
 }
 
 #keyboard-state > label.locked {
-    background: rgba(0, 0, 0, 0.2);
+    background: #ff99ff;
 }
 
 #scratchpad {

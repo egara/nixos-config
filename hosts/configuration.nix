@@ -95,7 +95,7 @@
     password = "administrador";
     isNormalUser = true;
     description = "Eloy";
-    extraGroups = [ "wheel" "video" "audio" "networkmanager" "docker" "input" "libvirtd" ];
+    extraGroups = [ "wheel" "video" "audio" "networkmanager" "docker" "input" "libvirtd" "bluetooth"];
     packages = with pkgs; [
       #firefox
     ];
@@ -156,6 +156,7 @@
       kubectl
       kubie
       kubecolor
+      usbutils
   ];
 
   # List of programs that must be enabled

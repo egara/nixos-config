@@ -122,6 +122,11 @@
     };
   };
 
+  # Bluetooth support and management
+  hardware.bluetooth.enable = true; # enables support for Bluetooth
+  hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
+  services.blueman.enable = true;
+  
   # Swaylock (for locking session)
   security.pam.services.swaylock = {};
 
@@ -133,6 +138,7 @@
     eclipses.eclipse-jee
     jdk8
     jdk17
+    bluez-tools
   ];
 
   # Modules
