@@ -175,6 +175,12 @@ in
       ########################
       # Execute specific configuration module for this profile (default)
       ./ironman/desktop/hyprland/configuration.nix
+
+      ########################
+      # Plasma 6 Configuration
+      ########################
+      # Execute specific configuration module for this profile
+      #./ironman/desktop/plasma/configuration.nix
  
       # Execute home manager module
       home-manager.nixosModules.home-manager {
@@ -193,6 +199,11 @@ in
           ########################
           # (default)
           imports = [(import ./home.nix)] ++ [(import ./ironman/desktop/hyprland/home.nix)];
+
+          ########################
+          # Plasma 6 Configuration
+          ########################
+          #imports = [(import ./home.nix)] ++ [(import ./ironman/desktop/plasma/home.nix)];
         };
       }
 
