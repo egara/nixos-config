@@ -152,11 +152,12 @@
       #quickemu
       #quickgui
       yt-dlp
-      openconnect
+      openconnect # For VPN extranet
       kubectl
       kubie
       kubecolor
       usbutils
+      transmission_4-gtk
   ];
 
   # List of programs that must be enabled
