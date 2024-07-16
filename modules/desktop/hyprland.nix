@@ -133,7 +133,6 @@
       #########################
       swaylock
       swayidle
-      sway-audio-idle-inhibit # Prevents swayidle to turn off the screen while any program is playing audio
       #########
       # Theming
       #########
@@ -152,5 +151,6 @@
       slurp # Allows to select a region in Wayland
       file-roller # Allows to extract files directly using Thunar
       brightnessctl # For incresing or decreasing the screen brightness
+      caffeine-ng
   ];
 }
