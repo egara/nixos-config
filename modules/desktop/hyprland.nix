@@ -151,6 +151,5 @@
       slurp # Allows to select a region in Wayland
       file-roller # Allows to extract files directly using Thunar
       brightnessctl # For incresing or decreasing the screen brightness
-      caffeine-ng
   ];
 }
