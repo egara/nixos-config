@@ -84,6 +84,16 @@
     };
   };
 
+  ##########
+  # Polkit #
+  ##########
+  # Enabling Polkit for user authentication using grpahical applications
+  security = {
+    polkit = {
+      enable = true;
+    };
+  };
+
   # Udev rules
   # USB plugin and eject notifications (actually this is not needed because udiskie always notifies)
   # For more information about it: https://askubuntu.com/questions/949331/how-to-set-rule-only-for-usb-flash-drives-in-rules-d
@@ -151,5 +161,6 @@
       slurp # Allows to select a region in Wayland
       file-roller # Allows to extract files directly using Thunar
       brightnessctl # For incresing or decreasing the screen brightness
+      lxqt.lxqt-policykit # For bring up dialogs to let the user authenticate
   ];
 }
