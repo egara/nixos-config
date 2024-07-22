@@ -18,6 +18,7 @@
     # Hyprland configuration
     file.".config/hypr/hyprland.conf".source = ../../../../home-manager/hyprland/config-files/hyprland.conf;
     file.".config/hypr/change-wallpaper.sh".source = ../../../../home-manager/hyprland/scripts/change-wallpaper.sh;
+    file.".config/hypr/disable-laptop-screen.sh".source = ../../../../home-manager/hyprland/scripts/disable-laptop-screen.sh;
 
     # Waybar configuration
     file.".config/waybar/config.jsonc".source = ../../../../home-manager/waybar/config-files/config.jsonc;
