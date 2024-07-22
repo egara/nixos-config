@@ -8,11 +8,28 @@
     "margin-top": 5,
     "spacing": 4,
 
-    // Choose the order of the modules
-
-    "modules-left": ["hyprland/workspaces"],
-    "modules-center": ["clock"],
-    "modules-right": ["keyboard-state", "cpu", "memory", "backlight", "pulseaudio", "network", "tray", "battery", "custom/power"],
+    // Modules order
+    "modules-left": [
+        "hyprland/workspaces",
+        "custom/playerctl#backward",
+        "custom/playerctl#play",
+        "custom/playerctl#foward",
+        "custom/playerlabel"
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "keyboard-state", 
+        "cpu", 
+        "memory", 
+        "backlight", 
+        "pulseaudio", 
+        "network", 
+        "tray", 
+        "battery", 
+        "custom/power"
+    ],
 
     // Modules configuration
     "hyprland/workspaces": {
@@ -93,7 +110,7 @@
         "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
+        "format-icons": [" ", " ", " ", " ", " "]
     },
     "battery#bat2": {
         "bat": "BAT2"
@@ -131,6 +148,38 @@
         "format": " ⏻ ",
         "tooltip": false,
         "on-click": "wlogout --protocol layer-shell"
+    },
+    "custom/playerctl#backward": {
+      "format": "󰙣 ",
+      "on-click": "playerctl previous",
+      "on-scroll-down": "playerctl volume .05-",
+      "on-scroll-up": "playerctl volume .05+"
+    },
+    "custom/playerctl#foward": {
+      "format": "󰙡 ",
+      "on-click": "playerctl next",
+      "on-scroll-down": "playerctl volume .05-",
+      "on-scroll-up": "playerctl volume .05+"
+    },
+    "custom/playerctl#play": {
+      "exec": "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
+      "format": "{icon}",
+      "format-icons": {
+        "Paused": "<span> </span>",
+        "Playing": "<span>󰏥 </span>",
+        "Stopped": "<span> </span>"
+      },
+      "on-click": "playerctl play-pause",
+      "on-scroll-down": "playerctl volume .05-",
+      "on-scroll-up": "playerctl volume .05+",
+      "return-type": "json"
+    },
+    "custom/playerlabel": {
+      "exec": "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
+      "format": "<span>󰎈 {} 󰎈</span>",
+      "max-length": 40,
+      "on-click": "",
+      "return-type": "json"
     }
 },
 
