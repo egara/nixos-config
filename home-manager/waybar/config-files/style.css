@@ -209,7 +209,7 @@ label:focus {
 /* playerctl for displaying and managing music in waybar */
 #custom-playerctl.backward, #custom-playerctl.play, #custom-playerctl.foward {
     background: #25253a;
-    font-size: 22px;
+    font-size: 18px;
 }
 
 #custom-playerctl.backward:hover, #custom-playerctl.play:hover, #custom-playerctl.foward:hover{
@@ -218,21 +218,23 @@ label:focus {
 
 #custom-playerctl.backward {
     color: #cba6f7;
-    border-radius: 24px 0px 0px 10px;
-    padding-left: 16px;
+    border-radius: 15px 0px 0px 15px;
+    padding-left: 12px;
     margin-left: 7px;
 }
 
 #custom-playerctl.play {
     color: #89b4fa;
-    padding: 0 5px;
+    padding-right: 3px;
+    padding-left: 10px;
 }
 
 #custom-playerctl.foward {
     color: #cba6f7;
-    border-radius: 0px 10px 24px 0px;
-    padding-right: 12px;
-    margin-right: 7px
+    border-radius: 0px 15px 15px 0px;
+    padding-right: 4px;
+    padding-left: 8px;
+    margin-right: 5px
 }
 
 #custom-playerlabel {
