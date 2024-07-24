@@ -193,7 +193,6 @@
     "spacing": 0,
 
     // Choose the order of the modules
-
     "modules-center": ["wlr/taskbar"],
   
     // Modules configuration
