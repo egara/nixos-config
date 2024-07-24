@@ -1,3 +1,4 @@
+// Inspired by https://github.com/justinlime/dotfiles
 [
 // Top waybar
 {
@@ -6,7 +7,6 @@
     "margin-left": 5,
     "margin-right": 5,
     "margin-top": 5,
-    "spacing": 4,
 
     // Modules order
     "modules-left": [
@@ -33,23 +33,19 @@
 
     // Modules configuration
     "hyprland/workspaces": {
-      "on-click": "activate",
-      "format": "{icon}",
+      "active-only": false,
+      "all-outputs": false,
+      "disable-scroll": false,
+      "format": "{name}",
       "format-icons": {
-        "1": "1",
-        "2": "2",
-        "3": "3",
-        "4": "4",
-        "default": "",
-        "urgent": " ",
-        "active": " ",
+        "active": "",
+        "default": "",
+        "sort-by-number": true,
+        "urgent": ""
       },
-      "persistent-workspaces": {
-        "1": [],
-        "2": [],
-        "3": [],
-        "4": [],
-      },
+      "on-click": "activate",
+      "on-scroll-down": "hyprctl dispatch workspace e+1",
+      "on-scroll-up": "hyprctl dispatch workspace e-1"
     },
     "keyboard-state": {
         "numlock": true,
@@ -187,13 +183,13 @@
 {
     "layer": "top",
     "position": "bottom",
-    "margin-left": 0,
-    "margin-right": 0,
-    "margin-top": 0,
-    "spacing": 0,
 
     // Choose the order of the modules
-    "modules-center": ["wlr/taskbar"],
+    "modules-center": [
+      "cava#left",
+      "wlr/taskbar",
+      "cava#right"
+    ],
   
     // Modules configuration
     "wlr/taskbar": {
@@ -203,4 +199,54 @@
         "on-click": "activate",
         "on-click-middle": "close",
     },
+    "cava#left": {
+      "autosens": 1,
+      "bar_delimiter": 0,
+      "bars": 18,
+      "format-icons": [
+        "<span foreground='#cba6f7'>▁</span>",
+        "<span foreground='#cba6f7'>▂</span>",
+        "<span foreground='#cba6f7'>▃</span>",
+        "<span foreground='#cba6f7'>▄</span>",
+        "<span foreground='#89b4fa'>▅</span>",
+        "<span foreground='#89b4fa'>▆</span>",
+        "<span foreground='#89b4fa'>▇</span>",
+        "<span foreground='#89b4fa'>█</span>"
+      ],
+      "framerate": 60,
+      "higher_cutoff_freq": 10000,
+      "input_delay": 2,
+      "lower_cutoff_freq": 50,
+      "method": "pipewire",
+      "monstercat": false,
+      "reverse": false,
+      "source": "auto",
+      "stereo": true,
+      "waves": false
+    },
+    "cava#right": {
+      "autosens": 1,
+      "bar_delimiter": 0,
+      "bars": 18,
+      "format-icons": [
+        "<span foreground='#cba6f7'>▁</span>",
+        "<span foreground='#cba6f7'>▂</span>",
+        "<span foreground='#cba6f7'>▃</span>",
+        "<span foreground='#cba6f7'>▄</span>",
+        "<span foreground='#89b4fa'>▅</span>",
+        "<span foreground='#89b4fa'>▆</span>",
+        "<span foreground='#89b4fa'>▇</span>",
+        "<span foreground='#89b4fa'>█</span>"
+      ],
+      "framerate": 60,
+      "higher_cutoff_freq": 10000,
+      "input_delay": 2,
+      "lower_cutoff_freq": 50,
+      "method": "pipewire",
+      "monstercat": false,
+      "reverse": false,
+      "source": "auto",
+      "stereo": true,
+      "waves": false
+    },    
 }]
