@@ -60,6 +60,11 @@
      "acpi_osi=\"!Windows 2015\""
    ];
 
+  # Enabling Nvidia driver for Docker
+  virtualisation.docker = {
+    enableNvidia = true;
+  };
+
   # Hybrid grafics configuration
   hardware.nvidia = {
 
