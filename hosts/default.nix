@@ -170,6 +170,9 @@ in
       # Execute common configuration module
       ./configuration.nix
 
+      # Execute common configuration module for ironman
+      ./ironman/configuration.nix
+
       ########################
       # Hyprland Configuration
       ########################
