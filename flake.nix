@@ -34,6 +34,11 @@
       url = "github:h3rmt/hyprswitch/release";
     };
 
+    # WallpaperDownloader flake
+    wallpaperdownloader = {
+      url = "github:egara/wallpaperdownloader-flake";
+    };
+
 #    # Stylix (for styling)
 #    stylix = {
 #      url = "github:danth/stylix";
@@ -43,7 +48,8 @@
 
   # Function that tells my flake which to use and what do what to do with the dependencies.
 #  outputs = inputs @ { self, disko, nixpkgs, home-manager, hyprswitch, stylix, ... }:
-  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, ... }:
+  #outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, ... }:
+  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, ... }:
     # Variables
     let
       username = "egarcia";
@@ -56,7 +62,7 @@
            # Also inherit disko, home-manager and the rest of the variables so it does not need 
            # to be defined anymore.
 #          inherit inputs nixpkgs disko home-manager hyprswitch stylix username location;
-          inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch username location;
+          inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader username location;
         }
       );
     };

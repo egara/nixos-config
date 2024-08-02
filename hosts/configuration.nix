@@ -158,6 +158,7 @@
       kubecolor
       usbutils
       transmission_4-gtk
+      inputs.wallpaperdownloader.packages.x86_64-linux.default
   ];
 
   # List of programs that must be enabled

@@ -1,5 +1,5 @@
 #{ lib, inputs, nixpkgs, disko, home-manager, hyprswitch, stylix, username, location, ... }:
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, hyprswitch, username, location, ... }:
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, hyprswitch, wallpaperdownloader, username, location, ... }:
  
 let
   # System architecture

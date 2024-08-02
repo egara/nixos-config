@@ -137,13 +137,48 @@
         "type": "github"
       }
     },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1722372011,
+        "narHash": "sha256-B2xRiC3NEJy/82ugtareBkRqEkPGpMyjaLxaR8LBxNs=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "cf05eeada35e122770c5c14add958790fcfcbef5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-24.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "disko": "disko",
         "home-manager": "home-manager",
         "hyprswitch": "hyprswitch",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-stable": "nixpkgs-stable"
+        "nixpkgs-stable": "nixpkgs-stable",
+        "wallpaperdownloader": "wallpaperdownloader"
+      }
+    },
+    "wallpaperdownloader": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1722598157,
+        "narHash": "sha256-jZFT7pO0DiQkC8fLyIfUc1x4qdGIaGEWhUOATpjMN8w=",
+        "owner": "egara",
+        "repo": "wallpaperdownloader-flake",
+        "rev": "c7fc10bab8cff8be3038726efbc184642f28c165",
+        "type": "github"
+      },
+      "original": {
+        "owner": "egara",
+        "repo": "wallpaperdownloader-flake",
+        "type": "github"
       }
     }
   },
