@@ -60,11 +60,11 @@
    ];
 
   # Enabling Nvidia driver for Docker
-  virtualisation.docker = {
-    enableNvidia = true;
+  hardware.nvidia-container-toolkit = {
+    enable = true;
   };
 
-  # Hybrid grafics configuration
+  # Nvidia hybrid grafics configuration
   hardware.nvidia = {
 
     # Modesetting is required.

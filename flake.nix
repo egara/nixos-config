@@ -7,6 +7,11 @@
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-unstable";
     };
+
+    # Stable Nix packages
+    nixpkgs-stable = {
+      url = "github:nixos/nixpkgs?ref=nixos-24.05";
+    };
     
     # Disko packages (for automatic partitioning)
     disko = {
@@ -38,7 +43,7 @@
 
   # Function that tells my flake which to use and what do what to do with the dependencies.
 #  outputs = inputs @ { self, disko, nixpkgs, home-manager, hyprswitch, stylix, ... }:
-  outputs = inputs @ { self, disko, nixpkgs, home-manager, hyprswitch, ... }:
+  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, ... }:
     # Variables
     let
       username = "egarcia";
@@ -51,7 +56,7 @@
            # Also inherit disko, home-manager and the rest of the variables so it does not need 
            # to be defined anymore.
 #          inherit inputs nixpkgs disko home-manager hyprswitch stylix username location;
-          inherit inputs nixpkgs disko home-manager hyprswitch username location;
+          inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch username location;
         }
       );
     };

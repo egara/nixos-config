@@ -1,11 +1,20 @@
 #{ lib, inputs, nixpkgs, disko, home-manager, hyprswitch, stylix, username, location, ... }:
-{ lib, inputs, nixpkgs, disko, home-manager, hyprswitch, username, location, ... }:
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, hyprswitch, username, location, ... }:
  
 let
   # System architecture
   system = "x86_64-linux";
  
+  # Unstable packages
   pkgs = import nixpkgs {
+    inherit system;
+
+    # Allow proprietary software
+    config.allowUnfree = true;
+  };
+
+  # Stable packages
+  pkgs-stable = import nixpkgs-stable {
     inherit system;
 
     # Allow proprietary software
@@ -23,7 +32,7 @@ in
     inherit system;
     
     specialArgs = {
-      inherit inputs username location;
+      inherit inputs username location pkgs-stable;
       host = {
         hostName = "experimental";
       };
@@ -74,7 +83,7 @@ in
     inherit system;
     
     specialArgs = {
-      inherit inputs username location;
+      inherit inputs username location pkgs-stable;
       host = {
         hostName = "rocket";
       };
@@ -148,7 +157,7 @@ in
     inherit system;
     
     specialArgs = {
-      inherit inputs username location;
+      inherit inputs username location pkgs-stable;
       host = {
         hostName = "ironman";
       };

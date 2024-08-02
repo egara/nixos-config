@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, username, ... }:
+{ config, pkgs, pkgs-stable, inputs, username, ... }:
 #{ config, pkgs, inputs, username, stylix, ... }:
 
 {
@@ -109,7 +109,7 @@
     "openssl-1.1.1w" # Needed for sublime4
   ];  
 
-  # List of packages installed in system profile. To search, run:
+  # List of unstable packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
       nvd    # NixOS package version diff tool
@@ -143,7 +143,7 @@
       sublime4
       vlc
       telegram-desktop
-      insync
+      pkgs-stable.insync
       filezilla
       pciutils
       spotify
