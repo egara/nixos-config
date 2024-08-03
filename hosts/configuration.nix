@@ -159,6 +159,7 @@
       usbutils
       transmission_4-gtk
       inputs.wallpaperdownloader.packages.x86_64-linux.default
+      zellij
   ];
 
   # List of programs that must be enabled
