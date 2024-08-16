@@ -149,8 +149,8 @@
       spotify
       bind
       encfs
-      quickemu
-      quickgui
+      pkgs-stable.quickemu
+      pkgs-stable.quickgui
       yt-dlp
       openconnect # For VPN extranet
       kubectl
