@@ -57,6 +57,7 @@
      "i915.enable_rc6=0" 
      "pcie_port_pm=off" 
      "acpi_osi=\"!Windows 2015\""
+     "i8042.nomux=1"
    ];
 
   # Enabling Nvidia driver for Docker
