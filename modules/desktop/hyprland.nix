@@ -141,7 +141,7 @@
       #########################
       # System locking and IDLE
       #########################
-      swaylock
+      swaylock-effects
       swayidle
       #########
       # Theming
