@@ -139,7 +139,7 @@
       name = "GoMonoNerdFontPropo-Bold";
       size = 10;
     };
-    theme = "Catppuccin-Mocha";
+    themeFile = "Catppuccin-Mocha";
     shellIntegration = {
       enableBashIntegration = true;
     };
