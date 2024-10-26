@@ -223,7 +223,7 @@
 
   # Enabling experimental Nix flakes and disabling 'Git tree ... is dirty' message
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.latest;
     extraOptions = ''
       experimental-features = nix-command flakes
       warn-dirty = false
