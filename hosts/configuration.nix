@@ -194,12 +194,17 @@
   # Virtualisation
   virtualisation = {
 
-	# KVM-QUEMU and Virtual Manager
+    # KVM-QUEMU and Virtual Manager
     libvirtd = {
       enable = true;
     };
 
-	# Docker
+    # Allow SPICE USB redirection for USB passthrough in QEMU
+    spiceUSBRedirection = {
+      enable = true;
+    };
+
+    # Docker
     docker = {
       enable = true;
       storageDriver = "overlay2";
