@@ -152,7 +152,7 @@
       #pkgs-stable.quickemu
       #pkgs-stable.quickgui
       quickemu
-      quickgui
+      #quickgui
       yt-dlp
       openconnect # For VPN extranet
       kubectl
