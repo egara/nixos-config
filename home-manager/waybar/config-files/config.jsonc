@@ -1,5 +1,5 @@
 // Inspired by https://github.com/justinlime/dotfiles
-[
+//[
 // Top waybar
 {
     "layer": "top",
@@ -11,10 +11,12 @@
     // Modules order
     "modules-left": [
         "hyprland/workspaces",
+        "wlr/taskbar",
         "custom/playerctl#backward",
         "custom/playerctl#play",
         "custom/playerctl#foward",
-        "custom/playerlabel"
+        "custom/playerlabel",
+        "cava#right"
     ],
     "modules-center": [
         "clock"
@@ -46,6 +48,13 @@
       "on-click": "activate",
       "on-scroll-down": "hyprctl dispatch workspace e+1",
       "on-scroll-up": "hyprctl dispatch workspace e-1"
+    },
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 18,
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-middle": "close",
     },
     "keyboard-state": {
         "numlock": true,
@@ -176,53 +185,6 @@
       "max-length": 40,
       "on-click": "",
       "return-type": "json"
-    }
-},
-
-// Bottom waybar
-{
-    "layer": "top",
-    "position": "bottom",
-
-    // Choose the order of the modules
-    "modules-center": [
-      "cava#left",
-      "wlr/taskbar",
-      "cava#right"
-    ],
-  
-    // Modules configuration
-    "wlr/taskbar": {
-        "format": "{icon}",
-        "icon-size": 18,
-        "tooltip-format": "{title}",
-        "on-click": "activate",
-        "on-click-middle": "close",
-    },
-    "cava#left": {
-      "autosens": 1,
-      "bar_delimiter": 0,
-      "bars": 18,
-      "format-icons": [
-        "<span foreground='#cba6f7'>▁</span>",
-        "<span foreground='#cba6f7'>▂</span>",
-        "<span foreground='#cba6f7'>▃</span>",
-        "<span foreground='#cba6f7'>▄</span>",
-        "<span foreground='#89b4fa'>▅</span>",
-        "<span foreground='#89b4fa'>▆</span>",
-        "<span foreground='#89b4fa'>▇</span>",
-        "<span foreground='#89b4fa'>█</span>"
-      ],
-      "framerate": 60,
-      "higher_cutoff_freq": 10000,
-      "input_delay": 2,
-      "lower_cutoff_freq": 50,
-      "method": "pipewire",
-      "monstercat": false,
-      "reverse": false,
-      "source": "auto",
-      "stereo": true,
-      "waves": false
     },
     "cava#right": {
       "autosens": 1,
@@ -248,5 +210,78 @@
       "source": "auto",
       "stereo": true,
       "waves": false
-    },    
-}]
+    }
+}//,
+
+// Bottom waybar
+//{
+//    "layer": "top",
+//    "position": "bottom",
+//
+//    // Choose the order of the modules
+//    "modules-center": [
+//      "cava#left",
+//      "wlr/taskbar",
+//      "cava#right"
+//    ],
+//  
+//    // Modules configuration
+//    "wlr/taskbar": {
+//        "format": "{icon}",
+//        "icon-size": 18,
+//        "tooltip-format": "{title}",
+//        "on-click": "activate",
+//        "on-click-middle": "close",
+//    },
+//    "cava#left": {
+//      "autosens": 1,
+//      "bar_delimiter": 0,
+//      "bars": 18,
+//      "format-icons": [
+//        "<span foreground='#cba6f7'>▁</span>",
+//        "<span foreground='#cba6f7'>▂</span>",
+//        "<span foreground='#cba6f7'>▃</span>",
+//        "<span foreground='#cba6f7'>▄</span>",
+//        "<span foreground='#89b4fa'>▅</span>",
+//        "<span foreground='#89b4fa'>▆</span>",
+//        "<span foreground='#89b4fa'>▇</span>",
+//        "<span foreground='#89b4fa'>█</span>"
+//      ],
+//      "framerate": 60,
+//      "higher_cutoff_freq": 10000,
+//      "input_delay": 2,
+//      "lower_cutoff_freq": 50,
+//      "method": "pipewire",
+//      "monstercat": false,
+//      "reverse": false,
+//      "source": "auto",
+//      "stereo": true,
+//      "waves": false
+//    },
+//    "cava#right": {
+//      "autosens": 1,
+//      "bar_delimiter": 0,
+//      "bars": 18,
+//      "format-icons": [
+//        "<span foreground='#cba6f7'>▁</span>",
+//        "<span foreground='#cba6f7'>▂</span>",
+//        "<span foreground='#cba6f7'>▃</span>",
+//        "<span foreground='#cba6f7'>▄</span>",
+//        "<span foreground='#89b4fa'>▅</span>",
+//        "<span foreground='#89b4fa'>▆</span>",
+//        "<span foreground='#89b4fa'>▇</span>",
+//        "<span foreground='#89b4fa'>█</span>"
+//      ],
+//      "framerate": 60,
+//      "higher_cutoff_freq": 10000,
+//      "input_delay": 2,
+//      "lower_cutoff_freq": 50,
+//      "method": "pipewire",
+//      "monstercat": false,
+//      "reverse": false,
+//      "source": "auto",
+//      "stereo": true,
+//      "waves": false
+//    },    
+//}
+//]
