@@ -86,6 +86,7 @@
     };
 
     font = {
+      package = pkgs.nerd-fonts.go-mono;
       name = "GoMonoNerdFontPropo-Bold";
       size = 10;
     };
@@ -135,7 +136,7 @@
   programs.kitty = {
     enable = true;
     font = {
-      package = pkgs.nerdfonts;
+      package = pkgs.nerd-fonts.go-mono;
       name = "GoMonoNerdFontPropo-Bold";
       size = 10;
     };
