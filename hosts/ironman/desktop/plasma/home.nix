@@ -12,7 +12,9 @@
 
   home = {
     # QMMP
-    file.".config/qmmp/skins/winamp_classic.wsz".source = ../../../../home-manager/qmmp/skins/winamp_classic.wsz;    
+    # If QMMP doesn't switch to Winamp skin automatically, go to Edit -> Settings -> Plugins and check
+    # Skinned User Interface within User Interfaces section. Then, restart QMMP
+        file.".config/qmmp/skins/winamp_classic.wsz".source = ../../../../home-manager/qmmp/skins/winamp_classic.wsz;    
 
   };
 
