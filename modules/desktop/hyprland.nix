@@ -108,6 +108,7 @@
       # Packages for supporting Hyprland
       ##################################
       hyprland
+      hyprland-qutils
       wlogout
       waybar
       xdg-desktop-portal-gtk
