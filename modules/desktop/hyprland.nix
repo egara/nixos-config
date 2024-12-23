@@ -108,7 +108,8 @@
       # Packages for supporting Hyprland
       ##################################
       hyprland
-      hyprland-qutils
+      #hyprland-qtutils This package doesn't exist on NixOS but it seems to be optionally needed according to the new version of Hyprland
+      hyprnome # Workspaces like in GNOME
       wlogout
       waybar
       xdg-desktop-portal-gtk
