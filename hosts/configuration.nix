@@ -149,9 +149,9 @@
       spotify
       bind
       encfs
-      #pkgs-stable.quickemu
+      pkgs-stable.quickemu
       #pkgs-stable.quickgui
-      quickemu
+      #quickemu
       #quickgui
       yt-dlp
       openconnect # For VPN extranet
