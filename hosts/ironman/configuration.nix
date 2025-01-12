@@ -61,24 +61,26 @@
    ];
 
   # Enabling Nvidia driver for Docker
-  #hardware.nvidia-container-toolkit = {
-  #  enable = true;
-  #};
+  hardware.nvidia-container-toolkit = {
+    enable = true;
+  };
 
+  # The current docker version is now working fine with Nvidia drivers
+  virtualisation.docker.package = pkgs.docker;
   #virtualisation.docker.package = pkgs.docker_25;
 
   # Above is the way to do this finally but meanwhile 
   # it will be used the deprecated way. In order to 
-  # activate the new way of doing this comment the lines
-  # above and uncomment the lines below. Docker version
+  # activate the new way of doing this uncomment the lines
+  # above and comment the lines below. Docker version
   # is pointing to 25 because currently, the last version 
   # 27 is not working properly with the NVIDIA drivers
   # More information:
   # https://www.reddit.com/r/NixOS/comments/16d94ut/using_containers_for_python_c/
   # https://github.com/NixOS/nixpkgs/issues/322400
-  virtualisation.docker = {
-    enableNvidia = true;
-  };
+  #virtualisation.docker = {
+  #  enableNvidia = true;
+  #};
 
   # Nvidia hybrid grafics configuration
   hardware.nvidia = {
