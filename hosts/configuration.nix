@@ -118,7 +118,7 @@
       okular
       qmmp
       audacity
-      carla
+      pkgs-stable.carla
       nano
       #tailscale
       libreoffice
@@ -150,7 +150,7 @@
       bind
       encfs
       pkgs-stable.quickemu
-      #pkgs-stable.quickgui
+      pkgs-stable.quickgui
       #quickemu
       #quickgui
       yt-dlp
