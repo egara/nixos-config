@@ -1,5 +1,5 @@
 #{ lib, inputs, nixpkgs, disko, home-manager, hyprswitch, stylix, username, location, ... }:
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, hyprswitch, wallpaperdownloader, username, location, ... }:
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, hyprswitch, wallpaperdownloader, hyprland, hyprland-plugins, username, location, ... }:
  
 let
   # System architecture
@@ -200,7 +200,7 @@ in
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = {
-          inherit username;
+          inherit username hyprland-plugins;
           host = {
             hostName = "ironman";
           };

@@ -9,6 +9,7 @@
   programs.hyprland = {
     enable = true; 
     xwayland.enable = true;
+    package = inputs.hyprland.packages."${pkgs.system}".hyprland;
   };
 
   # Hint Electron apps to use wayland
@@ -107,7 +108,7 @@
       ##################################
       # Packages for supporting Hyprland
       ##################################
-      hyprland
+      #hyprland
       hyprland-qtutils
       hyprnome # Workspaces like in GNOME
       wlogout

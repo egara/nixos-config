@@ -1,7 +1,7 @@
 #
 #  Home-manager configuration for desktop
 
-{ pkgs, config, ... }:
+{ pkgs, config, hyprland-plugins, ... }:
 
 {
   imports = [
@@ -16,7 +16,7 @@
     ];
 
     # Hyprland configuration
-    file.".config/hypr/hyprland.conf".source = ../../../../home-manager/hyprland/config-files/hyprland.conf;
+    #file.".config/hypr/hyprland.conf".source = ../../../../home-manager/hyprland/config-files/hyprland.conf;
     file.".config/hypr/change-wallpaper.sh".source = ../../../../home-manager/hyprland/scripts/change-wallpaper.sh;
     file.".config/hypr/disable-laptop-screen.sh".source = ../../../../home-manager/hyprland/scripts/disable-laptop-screen.sh;
 
@@ -102,11 +102,12 @@
     };    
   };
 
-  # xdg.configFile = {
+    xdg.configFile = {
+      "hypr/hyprland.conf".source = ../../../../home-manager/hyprland/config-files/hyprland.conf;
   #   "gtk-4.0/assets".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/assets";
   #   "gtk-4.0/gtk.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk.css";
   #   "gtk-4.0/gtk-dark.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk-dark.css";
-  # };
+    };
 
   # QT configuration and theming
   # qt = {
@@ -147,4 +148,33 @@
       enableBashIntegration = true;
     };
   };
+
+  # Hyprland special configuration for using plugins via Home Manager
+  wayland.windowManager.hyprland = {
+
+    enable = true;
+
+    plugins = [
+      hyprland-plugins.packages."${pkgs.system}".borders-plus-plus
+    ];
+
+    settings = {
+      "plugin:borders-plus-plus" = {
+        add_borders = 1; # 0 - 9
+
+        # you can add up to 9 borders
+        "col.border_1" = "rgb(ffffff)";
+        "col.border_2" = "rgb(2222ff)";
+
+        # -1 means "default" as in the one defined in general:border_size
+        border_size_1 = 10;
+        border_size_2 = -1;
+
+        # makes outer edges match rounding of the parent. Turn on / off to better understand. Default = on.
+        natural_rounding = "yes";
+      };
+    };
+  };
+
+
 }
