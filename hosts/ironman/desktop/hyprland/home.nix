@@ -102,6 +102,9 @@
     };    
   };
 
+    # These configuration files will be used instead of the configuration defined in settings for modules installed and managed via Home Manager
+    # such as hyprland. This way, settings within hyprland home manager configuration (see below) can be empty
+    # Be aware that the directory by default for storing all this configuration files will be ~/.config
     xdg.configFile = {
       "hypr/hyprland.conf".source = ../../../../home-manager/hyprland/config-files/hyprland.conf;
   #   "gtk-4.0/assets".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/assets";
@@ -159,20 +162,20 @@
     ];
 
     settings = {
-      "plugin:borders-plus-plus" = {
-        add_borders = 1; # 0 - 9
+      # "plugin:borders-plus-plus" = {
+      #   add_borders = 1; # 0 - 9
 
-        # you can add up to 9 borders
-        "col.border_1" = "rgb(ffffff)";
-        "col.border_2" = "rgb(2222ff)";
+      #   # you can add up to 9 borders
+      #   "col.border_1" = "rgb(ffffff)";
+      #   "col.border_2" = "rgb(2222ff)";
 
-        # -1 means "default" as in the one defined in general:border_size
-        border_size_1 = 10;
-        border_size_2 = -1;
+      #   # -1 means "default" as in the one defined in general:border_size
+      #   border_size_1 = 10;
+      #   border_size_2 = -1;
 
-        # makes outer edges match rounding of the parent. Turn on / off to better understand. Default = on.
-        natural_rounding = "yes";
-      };
+      #   # makes outer edges match rounding of the parent. Turn on / off to better understand. Default = on.
+      #   natural_rounding = "yes";
+      # };
     };
   };
 

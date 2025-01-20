@@ -9,6 +9,8 @@
   programs.hyprland = {
     enable = true; 
     xwayland.enable = true;
+    # Overwriting the default hyprland packages to the last version available on GitHub
+    # hyprland input is defined in flake.nix
     package = inputs.hyprland.packages."${pkgs.system}".hyprland;
   };
 
