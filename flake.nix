@@ -39,16 +39,16 @@
       url = "github:egara/wallpaperdownloader-flake";
     };
 
-    # Hyprland
-    hyprland = {
-      url = "github:hyprwm/Hyprland";
-    };
+    # # Hyprland
+    # hyprland = {
+    #   url = "github:hyprwm/Hyprland";
+    # };
 
-    # Hyprland plugins
-    hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins";
-      inputs.hyprland.follows = "hyprland";
-    };
+    # # Hyprland plugins
+    # hyprland-plugins = {
+    #   url = "github:hyprwm/hyprland-plugins";
+    #   inputs.hyprland.follows = "hyprland";
+    # };
 
 #    # Stylix (for styling)
 #    stylix = {
@@ -58,9 +58,8 @@
   };
 
   # Function that tells my flake which to use and what do what to do with the dependencies.
-#  outputs = inputs @ { self, disko, nixpkgs, home-manager, hyprswitch, stylix, ... }:
-  #outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, ... }:
-  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, hyprland, hyprland-plugins, ... }:
+  # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, hyprland, hyprland-plugins, ... }:
+  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, ... }:
     # Variables
     let
       username = "egarcia";
@@ -72,8 +71,8 @@
           inherit (nixpkgs) lib;
            # Also inherit disko, home-manager and the rest of the variables so it does not need 
            # to be defined anymore.
-#          inherit inputs nixpkgs disko home-manager hyprswitch stylix username location;
-          inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
+          # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
+          inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader username location;
         }
       );
     };

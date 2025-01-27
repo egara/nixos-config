@@ -1,7 +1,8 @@
 #
 #  Home-manager configuration for desktop
 
-{ pkgs, config, hyprland-plugins, ... }:
+# { pkgs, config, hyprland-plugins, ... }:
+{ pkgs, config, ... }:
 
 {
   imports = [
@@ -16,7 +17,7 @@
     ];
 
     # Hyprland configuration
-    #file.".config/hypr/hyprland.conf".source = ../../../../home-manager/hyprland/config-files/hyprland.conf;
+    file.".config/hypr/hyprland.conf".source = ../../../../home-manager/hyprland/config-files/hyprland.conf;
     file.".config/hypr/change-wallpaper.sh".source = ../../../../home-manager/hyprland/scripts/change-wallpaper.sh;
     file.".config/hypr/disable-laptop-screen.sh".source = ../../../../home-manager/hyprland/scripts/disable-laptop-screen.sh;
 
@@ -106,7 +107,7 @@
     # such as hyprland. This way, settings within hyprland home manager configuration (see below) can be empty
     # Be aware that the directory by default for storing all this configuration files will be ~/.config
     xdg.configFile = {
-      "hypr/hyprland.conf".source = ../../../../home-manager/hyprland/config-files/hyprland.conf;
+  #   "hypr/hyprland.conf".source = ../../../../home-manager/hyprland/config-files/hyprland.conf;
   #   "gtk-4.0/assets".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/assets";
   #   "gtk-4.0/gtk.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk.css";
   #   "gtk-4.0/gtk-dark.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk-dark.css";
@@ -152,20 +153,20 @@
     };
   };
 
-  # Hyprland special configuration for using plugins via Home Manager
-  wayland.windowManager.hyprland = {
+  # # Hyprland special configuration for using plugins via Home Manager
+  # wayland.windowManager.hyprland = {
 
-    enable = true;
+  #   enable = true;
 
-    plugins = [
-      hyprland-plugins.packages."${pkgs.system}".borders-plus-plus
-      hyprland-plugins.packages."${pkgs.system}".hyprexpo
-      hyprland-plugins.packages."${pkgs.system}".hyprbars
-    ];
+  #   plugins = [
+  #     hyprland-plugins.packages."${pkgs.system}".borders-plus-plus
+  #     hyprland-plugins.packages."${pkgs.system}".hyprexpo
+  #     hyprland-plugins.packages."${pkgs.system}".hyprbars
+  #   ];
 
-    settings = {
-    };
-  };
+  #   settings = {
+  #   };
+  # };
 
 
 }

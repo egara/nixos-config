@@ -11,7 +11,7 @@
     xwayland.enable = true;
     # Overwriting the default hyprland packages to the last version available on GitHub
     # hyprland input is defined in flake.nix
-    package = inputs.hyprland.packages."${pkgs.system}".hyprland;
+    # package = inputs.hyprland.packages."${pkgs.system}".hyprland;
   };
 
   # Hint Electron apps to use wayland
@@ -113,6 +113,8 @@
       #hyprland
       hyprland-qtutils
       hyprnome # Workspaces like in GNOME
+      #hyprlandPlugins.hyprbars
+      #hyprlandPlugins.hyprexpo
       wlogout
       waybar
       xdg-desktop-portal-gtk
