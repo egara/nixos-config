@@ -137,7 +137,7 @@
       unzip
       unrar
       zip
-      partition-manager
+      kdePackages.partitionmanager
       distrobox
       #fastfetch
       sublime4
