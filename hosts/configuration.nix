@@ -115,7 +115,7 @@
       nvd    # NixOS package version diff tool
       firefox
       google-chrome
-      okular
+      kdePackages.okular
       qmmp
       audacity
       pkgs-stable.carla
