@@ -165,6 +165,8 @@
       zellij
       nmap
       element-desktop
+      tcpdump
+      wireshark
   ];
 
   # List of programs that must be enabled
