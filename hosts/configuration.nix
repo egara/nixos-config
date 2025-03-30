@@ -167,6 +167,7 @@
       element-desktop
       tcpdump
       wireshark
+      killall
   ];
 
   # List of programs that must be enabled
