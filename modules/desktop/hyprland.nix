@@ -170,5 +170,6 @@
       brightnessctl # For incresing or decreasing the screen brightness
       playerctl # For managing media players via command line (it will be used to integrate these functionalities in waybar)
       lxqt.lxqt-policykit # For bring up dialogs to let the user authenticate
+      xfce.catfish # For searching files via GUI (Thunar doesn't provide anything like this)
   ];
 }
