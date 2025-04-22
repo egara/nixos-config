@@ -49,6 +49,9 @@
   # Configure console keymap
   console.keyMap = "es";
 
+  # Deleting /tmp directory every time the system boots
+  boot.tmp.cleanOnBoot = true;
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
