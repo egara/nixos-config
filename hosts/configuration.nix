@@ -119,7 +119,8 @@
       firefox
       google-chrome
       kdePackages.okular
-      qmmp
+      #qmmp
+      pkgs-stable.qmmp
       audacity
       pkgs-stable.carla
       nano
