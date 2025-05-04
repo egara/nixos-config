@@ -129,6 +129,13 @@
     nvidiaBusId = "PCI:1:0:0";
   };
 
+  # Special environment variables for allowing new GTK applications in
+  # a hybrid system (with two graphics cards like this laptop)
+  # https://github.com/NixOS/nixpkgs/issues/359069
+  environment.variables = {
+    GSK_RENDERER = "ngl";
+  };
+
   # Bluetooth support and management
   hardware.bluetooth.enable = true; # enables support for Bluetooth
   hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
