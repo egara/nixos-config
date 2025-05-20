@@ -1,5 +1,5 @@
 # { lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, hyprswitch, wallpaperdownloader, hyprland, hyprland-plugins, username, location, ... }:
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, hyprswitch, wallpaperdownloader, username, location, ... }:
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, hyprswitch, wallpaperdownloader, username, location, autofirma-nix, ... }:
  
 let
   # System architecture
@@ -181,6 +181,40 @@ in
 
       # Execute common configuration module for ironman
       ./ironman/configuration.nix
+
+      # Autofirma module
+      autofirma-nix.nixosModules.default
+      
+      ({ config, pkgs, ... }: {
+        # The autofirma command becomes available system-wide
+        programs.autofirma = {
+          enable = true;
+          firefoxIntegration.enable = true;
+        };
+
+        # # DNIeRemote integration for using phone as NFC reader
+        # programs.dnieremote = {
+        #   enable = true;
+        # };
+
+        # The FNMT certificate configurator
+        programs.configuradorfnmt = {
+          enable = true;
+          firefoxIntegration.enable = true;
+        };
+
+        # Firefox configured to work with AutoFirma
+        programs.firefox = {
+          enable = true;
+          policies.SecurityDevices = {
+            "OpenSC PKCS#11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
+            "DNIeRemote" = "${config.programs.dnieremote.finalPackage}/lib/libdnieremotepkcs11.so";
+          };
+        };
+
+        # Enable PC/SC smart card service
+        services.pcscd.enable = true;
+      })
 
       ########################
       # Hyprland Configuration

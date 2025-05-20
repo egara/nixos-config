@@ -39,6 +39,14 @@
       url = "github:egara/wallpaperdownloader-flake";
     };
 
+    # Autofirma flake
+    # For more information https://nix-community.github.io/autofirma-nix
+    autofirma-nix = {
+      url = "github:nix-community/autofirma-nix";  # For nixpkgs-unstable
+      # url = "github:nix-community/autofirma-nix/release-24.11";  # For NixOS 24.11
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # # Hyprland
     # hyprland = {
     #   url = "github:hyprwm/Hyprland";
@@ -57,9 +65,21 @@
 
   };
 
+  # The binary cache configuration is strongly recommended to avoid unnecessary local compilation.
+  # It is recommended in Autofirma flake tutorial https://nix-community.github.io/autofirma-nix
+  # See also https://nixos.wiki/wiki/Binary_Cache
+  nixConfig = {
+    extra-substituters = [
+      "https://nix-community.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+  };
+
   # Function that tells my flake which to use and what do what to do with the dependencies.
   # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, hyprland, hyprland-plugins, ... }:
-  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, ... }:
+  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, autofirma-nix, ... }:
     # Variables
     let
       username = "egarcia";
@@ -72,7 +92,7 @@
            # Also inherit disko, home-manager and the rest of the variables so it does not need 
            # to be defined anymore.
           # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
-          inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader username location;
+          inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader username location autofirma-nix;
         }
       );
     };
