@@ -166,7 +166,8 @@
       usbutils
       transmission_4-gtk
       inputs.wallpaperdownloader.packages.x86_64-linux.default
-      zellij
+      fd
+      yazi
       nmap
       element-desktop
       tcpdump
