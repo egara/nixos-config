@@ -4,7 +4,16 @@
 # { pkgs, config, hyprland-plugins, ... }:
 { pkgs, config, ... }:
 
-{
+let
+  # Github repository for yazi plugins https://github.com/yazi-rs/plugins
+  yazi-plugins = pkgs.fetchFromGitHub {
+    owner = "yazi-rs";
+    repo = "plugins";
+    rev = "main";
+    hash = "sha256-v/C+ZBrF1ghDt1SXpZcDELmHMVAqfr44iWxzUWynyRk=";
+  };
+
+in {
   imports = [
     # Wofi configuration via home-manager
     ../../../../home-manager/wofi
@@ -150,6 +159,59 @@
     themeFile = "Catppuccin-Mocha";
     shellIntegration = {
       enableBashIntegration = true;
+    };
+  };
+
+  # Yazi special configuration. This package won't be needed to be specifically installed
+  programs.yazi = {
+    enable = true;
+    enableZshIntegration = true;
+    shellWrapperName = "y";
+
+    # yazi.toml
+    settings = {
+      opener.play = [
+        { run = "qmmp \"$@\""; orphan= true; for = "unix"; }
+      ];      
+    };
+
+    plugins = {
+      chmod = "${yazi-plugins}/chmod.yazi";
+      full-border = "${yazi-plugins}/full-border.yazi";
+      toggle-pane = "${yazi-plugins}/toggle-pane.yazi";
+      mount = "${yazi-plugins}/mount.yazi";
+    };
+
+    # Some plugins need to be loaded before hand.
+    # Example: full-border https://github.com/yazi-rs/plugins/tree/main/full-border.yazi
+    initLua = ''
+      require("full-border"):setup()
+    '';
+
+    # keymap.toml
+    keymap = {
+      manager.prepend_keymap = [
+        {
+          on = "T";
+          run = "plugin toggle-pane max-preview";
+          desc = "Maximize or restore the preview pane";
+        }
+        {
+          on = ["c" "m"];
+          run = "plugin chmod";
+          desc = "Chmod on selected files";
+        }
+        {
+          on = ["M"];
+          run = "plugin mount";
+          desc = "Mount and manage USB devices";
+        }
+        {
+          on = [ "g" "u" ];
+          run = "cd /run/media/egarcia";
+          desc = "USB";
+        }
+      ];
     };
   };
 
