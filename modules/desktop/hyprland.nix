@@ -123,9 +123,7 @@
       meson
       wayland-protocols
       wayland-utils
-      wl-clipboard
       wlroots
-      pipewire
       inputs.hyprswitch.packages.x86_64-linux.default # Window switcher for Hyprland installed from a flake (see flake.nix configuration file for more information)
       ###############
       # app-launchers

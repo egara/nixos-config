@@ -13,7 +13,16 @@
 
 { config, lib, pkgs, username, ... }:
 
-{ 
+let
+  # Github repository for yazi plugins https://github.com/yazi-rs/plugins
+  yazi-plugins = pkgs.fetchFromGitHub {
+    owner = "yazi-rs";
+    repo = "plugins";
+    rev = "main";
+    hash = "sha256-v/C+ZBrF1ghDt1SXpZcDELmHMVAqfr44iWxzUWynyRk=";
+  };
+
+in {
   #imports =
     # Home Manager Modules
     #(import ../modules/programs) ++
@@ -148,4 +157,58 @@
   programs = {
     home-manager.enable = true;
   };
+
+  # Yazi special configuration. This package won't be needed to be specifically installed
+  programs.yazi = {
+    enable = true;
+    enableZshIntegration = true;
+    shellWrapperName = "y";
+
+    # yazi.toml
+    settings = {
+      opener.play = [
+        { run = "qmmp \"$@\""; orphan= true; for = "unix"; }
+      ];      
+    };
+
+    plugins = {
+      full-border = "${yazi-plugins}/full-border.yazi";
+      toggle-pane = "${yazi-plugins}/toggle-pane.yazi";
+      mount = "${yazi-plugins}/mount.yazi";
+    };
+
+    # Some plugins need to be loaded before hand.
+    # Example: full-border https://github.com/yazi-rs/plugins/tree/main/full-border.yazi
+    initLua = ''
+      require("full-border"):setup()
+    '';
+
+    # keymap.toml
+    keymap = {
+      manager.prepend_keymap = [
+        {
+          on = "T";
+          run = "plugin toggle-pane max-preview";
+          desc = "Maximize or restore the preview pane";
+        }
+        {
+          on = "M";
+          run = "plugin mount";
+          desc = "Mount and manage USB devices";
+        }
+        {
+          on = [ "g" "u" ];
+          run = "cd /run/media/egarcia";
+          desc = "USB";
+        }
+        {
+          on = "y";
+          for  = "unix";
+          run = ["shell -- for path in \"$@\"; do echo \"file://$path\"; done | wl-copy -t text/uri-list" "yank"];
+          desc = "Copy a file both in system and yazi clipboard";
+        }
+      ];
+    };
+  };
+  
 }
