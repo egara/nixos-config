@@ -29,10 +29,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Hyprswitch (for windows switching in Hyprland)
-    hyprswitch = {
-      url = "github:h3rmt/hyprswitch/release";
-    };
+#    # Hyprswitch (for windows switching in Hyprland)
+#    hyprswitch = {
+#      url = "github:h3rmt/hyprswitch/release";
+#    };
 
     # WallpaperDownloader flake
     wallpaperdownloader = {
@@ -92,7 +92,7 @@
            # Also inherit disko, home-manager and the rest of the variables so it does not need 
            # to be defined anymore.
           # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
-          inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader username location autofirma-nix;
+          inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix;
         }
       );
     };
