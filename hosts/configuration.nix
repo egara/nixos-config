@@ -6,6 +6,9 @@
 #{ config, pkgs, inputs, username, stylix, ... }:
 
 {
+  # Download Buffer
+  nix.settings.download-buffer-size = 524288000;
+
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
