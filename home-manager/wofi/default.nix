@@ -10,7 +10,7 @@
       prompt = "Apps";
       normal_window = true;
       layer = "top";
-      term = "foot";
+      term = "kitty";
       height = "305px";
       orientation = "vertical";
       halign = "fill";
