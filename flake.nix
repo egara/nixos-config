@@ -47,6 +47,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Walker
+    walker = {
+     url = "github:abenz1267/walker";
+    };
+
     # # Hyprland
     # hyprland = {
     #   url = "github:hyprwm/Hyprland";
@@ -65,22 +70,10 @@
 
   };
 
-  # The binary cache configuration is strongly recommended to avoid unnecessary local compilation.
-  # It is recommended in Autofirma flake tutorial https://nix-community.github.io/autofirma-nix
-  # See also https://nixos.wiki/wiki/Binary_Cache
-  nixConfig = {
-    extra-substituters = [
-      "https://nix-community.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    ];
-  };
-
   # Function that tells my flake which to use and what do what to do with the dependencies.
   # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, hyprland, hyprland-plugins, ... }:
   # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, autofirma-nix, ... }:
-  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, ... }:
+  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, walker, ... }:
     # Variables
     let
       username = "egarcia";
@@ -93,8 +86,26 @@
            # Also inherit disko, home-manager and the rest of the variables so it does not need 
            # to be defined anymore.
           # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
-          inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix;
+          inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix walker;
         }
       );
     };
+
+  # The binary cache configuration is strongly recommended to avoid unnecessary local compilation.
+  # See also https://nixos.wiki/wiki/Binary_Cache
+  nixConfig = {
+    substituters = [
+      "https://cache.nixos.org/"
+      "https://nix-community.cachix.org" # It is recommended in Autofirma flake tutorial https://nix-community.github.io/autofirma-nix
+      "https://walker-git.cachix.org" # It is recommended for walker application launcher
+    ];
+    
+    # Public keys that verify the integrity of binaries downloaded from the substituters.
+    # You need to include keys for all caches you trust.
+    trusted-public-keys = [
+      "cache.nixos.org-1:6NCHDQSYSSFVYAXPMVZWMCH3SGPQJFDMLXEVGGRGO4GLKSOCQAEIA"
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "walker-git.cachix.org-1:vmC0ocfPWh0S/vRAQGtChuiZBTAe4wiKDeyyXM0/7pM="
+    ];
+  };    
 }

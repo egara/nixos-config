@@ -1,6 +1,6 @@
 # { lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, hyprswitch, wallpaperdownloader, hyprland, hyprland-plugins, username, location, ... }:
 #{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, hyprswitch, wallpaperdownloader, username, location, autofirma-nix, ... }:
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, username, location, autofirma-nix, ... }: 
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, username, location, autofirma-nix, walker, ... }: 
 let
   # System architecture
   system = "x86_64-linux";
@@ -244,8 +244,8 @@ in
           ########################
           # Hyprland Configuration
           ########################
-          # (default)
-          imports = [(import ./home.nix)] ++ [(import ./ironman/desktop/hyprland/home.nix)];
+          #imports = [(import ./home.nix)] ++ [(import ./ironman/desktop/hyprland/home.nix)];
+          imports = [walker.homeManagerModules.default] ++ [(import ./home.nix)] ++ [(import ./ironman/desktop/hyprland/home.nix)];
 
           ########################
           # Plasma 6 Configuration

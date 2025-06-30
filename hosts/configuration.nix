@@ -107,6 +107,18 @@
     ];
   };
 
+  # Environment variables
+  environment.sessionVariables = {
+    EDITOR = "nano";
+    BROWSER = "firefox";
+    TERMINAL = "kitty";
+  };
+
+  # Configuring xdg-utils to use some default applications
+  xdg.mime.defaultApplications = {
+    "x-terminal-emulator" = "kitty.desktop";
+  };
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -202,6 +214,9 @@
 
   # Enabling Flatpak
   services.flatpak.enable = true;
+
+  # Preventing xterm emulator to be installed
+  services.xserver.excludePackages = [ pkgs.xterm ];
 
   # Virtualisation
   virtualisation = {

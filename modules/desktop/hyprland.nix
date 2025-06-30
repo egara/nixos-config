@@ -128,7 +128,9 @@
       ###############
       # app-launchers
       ###############
-      wofi
+      #wofi
+      walker
+      libqalculate
       ############
       # networking
       ############
