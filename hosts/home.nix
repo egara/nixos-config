@@ -207,6 +207,12 @@ in {
           run = ["shell -- for path in \"$@\"; do echo \"file://$path\"; done | wl-copy -t text/uri-list" "yank"];
           desc = "Copy a file both in system and yazi clipboard";
         }
+        {
+          on = "!";
+          for  = "unix";
+          run = ["shell \"$SHELL\" --block"];
+          desc = "Open $SHELL here";
+        }
       ];
     };
   };
