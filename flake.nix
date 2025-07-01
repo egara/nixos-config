@@ -93,8 +93,9 @@
 
   # The binary cache configuration is strongly recommended to avoid unnecessary local compilation.
   # See also https://nixos.wiki/wiki/Binary_Cache
+  # extra-* prefix is used to allow other users (like egarcia) to define binary caches
   nixConfig = {
-    substituters = [
+    extra-trusted-substituters = [
       "https://cache.nixos.org/"
       "https://nix-community.cachix.org" # It is recommended in Autofirma flake tutorial https://nix-community.github.io/autofirma-nix
       "https://walker-git.cachix.org" # It is recommended for walker application launcher
@@ -102,7 +103,7 @@
     
     # Public keys that verify the integrity of binaries downloaded from the substituters.
     # You need to include keys for all caches you trust.
-    trusted-public-keys = [
+    extra-trusted-public-keys = [
       "cache.nixos.org-1:6NCHDQSYSSFVYAXPMVZWMCH3SGPQJFDMLXEVGGRGO4GLKSOCQAEIA"
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "walker-git.cachix.org-1:vmC0ocfPWh0S/vRAQGtChuiZBTAe4wiKDeyyXM0/7pM="
