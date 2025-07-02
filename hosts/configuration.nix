@@ -189,6 +189,7 @@
       wireshark
       killall
       protonvpn-gui
+      gemini-cli
   ];
 
   # List of programs that must be enabled
