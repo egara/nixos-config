@@ -70,6 +70,25 @@
 
   };
 
+  # The binary cache configuration is strongly recommended to avoid unnecessary local compilation.
+  # See also https://nixos.wiki/wiki/Binary_Cache
+  # extra-* prefix is used to allow other users (like egarcia) to define binary caches
+  nixConfig = {
+    extra-substituters = [
+      "https://cache.nixos.org/"
+      "https://nix-community.cachix.org" # It is recommended in Autofirma flake tutorial https://nix-community.github.io/autofirma-nix
+      "https://walker-git.cachix.org" # It is recommended for walker application launcher
+    ];
+
+    # Public keys that verify the integrity of binaries downloaded from the substituters.
+    # You need to include keys for all caches you trust.
+    extra-trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "walker-git.cachix.org-1:vmC0ocfPWh0S/vRAQGtChuiZBTAe4wiKDeyyXM0/7pM="
+    ];
+  };
+
   # Function that tells my flake which to use and what do what to do with the dependencies.
   # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, hyprland, hyprland-plugins, ... }:
   # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, autofirma-nix, ... }:
@@ -90,23 +109,5 @@
         }
       );
     };
-
-  # The binary cache configuration is strongly recommended to avoid unnecessary local compilation.
-  # See also https://nixos.wiki/wiki/Binary_Cache
-  # extra-* prefix is used to allow other users (like egarcia) to define binary caches
-  nixConfig = {
-    extra-trusted-substituters = [
-      "https://cache.nixos.org/"
-      "https://nix-community.cachix.org" # It is recommended in Autofirma flake tutorial https://nix-community.github.io/autofirma-nix
-      "https://walker-git.cachix.org" # It is recommended for walker application launcher
-    ];
-    
-    # Public keys that verify the integrity of binaries downloaded from the substituters.
-    # You need to include keys for all caches you trust.
-    extra-trusted-public-keys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "walker-git.cachix.org-1:vmC0ocfPWh0S/vRAQGtChuiZBTAe4wiKDeyyXM0/7pM="
-    ];
-  };    
+   
 }
