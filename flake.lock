@@ -13,11 +13,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1752529522,
-        "narHash": "sha256-MgIpXuOsSI6eANPuPR3by08jb1t0Cxp9H02mlXlUe+M=",
+        "lastModified": 1752646862,
+        "narHash": "sha256-R6JYOp7hf2saGVv8fBljVtKfJSM8sCIb3NjWdg2yljU=",
         "owner": "nix-community",
         "repo": "autofirma-nix",
-        "rev": "2b94035de1a57a4f505aecf1e37ea73cbec7739b",
+        "rev": "18ff82cd57e0cff4c1e3e2d082909df094248efd",
         "type": "github"
       },
       "original": {

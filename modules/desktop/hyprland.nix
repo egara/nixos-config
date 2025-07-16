@@ -112,7 +112,7 @@
       ##################################
       #hyprland
       hyprland-qtutils
-      #hyprnome # Workspaces like in GNOME
+      hyprnome # Workspaces like in GNOME
       #hyprlandPlugins.hyprbars
       #hyprlandPlugins.hyprexpo
       wlogout
