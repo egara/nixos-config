@@ -5,14 +5,7 @@
 { pkgs, config, ... }:
 
 let
-  # Github repository for yazi plugins https://github.com/yazi-rs/plugins
-  yazi-plugins = pkgs.fetchFromGitHub {
-    owner = "yazi-rs";
-    repo = "plugins";
-    rev = "main";
-    hash = "sha256-v/C+ZBrF1ghDt1SXpZcDELmHMVAqfr44iWxzUWynyRk=";
-  };
-
+  # Variables can be defined here
 in {
   imports = [
     # Wofi configuration via home-manager
@@ -53,16 +46,6 @@ in {
     file.".config/qmmp/skins/winamp_classic.wsz".source = ../../../../home-manager/qmmp/skins/winamp_classic.wsz;    
 
   };
-
-  # Virtual Manager special configuration (https://nixos.wiki/wiki/Virt-manager)
-  dconf.settings = {
-    "org/virt-manager/virt-manager/connections" = {
-      autoconnect = ["qemu:///system"];
-      uris = ["qemu:///system"];
-    };
-  };
-
-  programs.home-manager.enable = true;
   
   # Cursor theming
   home.pointerCursor = {
