@@ -10,7 +10,6 @@ in {
   imports = [
     # Wofi configuration via home-manager
     #../../../../home-manager/wofi
-
   ];
 
   home = {
@@ -44,7 +43,6 @@ in {
   # Cursor theming
   home.pointerCursor = {
     gtk.enable = true;
-    # x11.enable = true;
     package = pkgs.bibata-cursors;
     name = "Bibata-Modern-Classic";
     size = 10;
@@ -53,16 +51,6 @@ in {
   # GTK configuration and theming
   gtk = {
     enable = true;
-
-    # theme = {
-    #   name = "Catppuccin-Macchiato-Compact-Pink-Dark";
-    #   package = pkgs.catppuccin-gtk.override {
-    #     accents = [ "pink" ];
-    #     size = "compact";
-    #     tweaks = [ "rimless" "black" ];
-    #     variant = "macchiato";
-    #   };
-    # };
 
     theme = {
       name = "Adwaita-dark";
@@ -100,20 +88,6 @@ in {
     };
 
   # QT configuration and theming
-  # qt = {
-  #   enable = true;
-
-  #   platformTheme = {
-  #     name = "gtk";
-  #   };
-
-  #   style = {
-  #     name = "gtk2";
-  #     package = pkgs.catppuccin-kde;
-  #   };
-  # };
-
-  # QT configuration and theming
   qt = {
     enable = true;
     platformTheme = {
@@ -138,43 +112,5 @@ in {
       enableBashIntegration = true;
     };
   };
-
-  programs.walker = {
-    enable = true;
-    runAsService = true;
-
-    # All options from the config.json can be used here.
-    config = {
-      search.placeholder = "Search...";
-      ui.fullscreen = true;
-      list = {
-        height = 200;
-      };
-      websearch.prefix = "?";
-      switcher.prefix = "/";
-    };
-
-    # If this is not set the default styling is used.
-    #style = ''
-    #  * {
-    #    color: #dcd7ba;
-    #  }
-    #'';
-  };
-
-  # # Hyprland special configuration for using plugins via Home Manager
-  # wayland.windowManager.hyprland = {
-
-  #   enable = true;
-
-  #   plugins = [
-  #     hyprland-plugins.packages."${pkgs.system}".borders-plus-plus
-  #     hyprland-plugins.packages."${pkgs.system}".hyprexpo
-  #     hyprland-plugins.packages."${pkgs.system}".hyprbars
-  #   ];
-
-  #   settings = {
-  #   };
-  # };
 
 }

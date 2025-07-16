@@ -47,10 +47,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Walker
-    walker = {
-     url = "github:abenz1267/walker";
-    };
+    # # Walker
+    # walker = {
+    #  url = "github:abenz1267/walker";
+    # };
 
     # # Hyprland
     # hyprland = {
@@ -91,8 +91,8 @@
 
   # Function that tells my flake which to use and what do what to do with the dependencies.
   # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, hyprland, hyprland-plugins, ... }:
-  # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, autofirma-nix, ... }:
-  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, walker, ... }:
+  # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, walker, ... }:
+  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, ... }:
     # Variables
     let
       username = "egarcia";
@@ -102,10 +102,11 @@
         # Imports ./hosts/default.nix module
         import ./hosts {
           inherit (nixpkgs) lib;
-           # Also inherit disko, home-manager and the rest of the variables so it does not need 
-           # to be defined anymore.
+          # Also inherit disko, home-manager and the rest of the variables so it does not need 
+          # to be defined anymore.
           # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
-          inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix walker;
+          # inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix walker;
+          inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix;
         }
       );
     };
