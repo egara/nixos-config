@@ -125,6 +125,7 @@
   # Allow certain packages marked as insecure
   nixpkgs.config.permittedInsecurePackages = [
     "openssl-1.1.1w" # Needed for sublime4
+    "ventoy"
   ];  
 
   # List of unstable packages installed in system profile. To search, run:
@@ -190,7 +191,6 @@
       killall
       protonvpn-gui
       gemini-cli
-      ventoy
   ];
 
   # List of programs that must be enabled
