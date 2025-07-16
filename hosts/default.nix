@@ -142,7 +142,7 @@ in
           ########################
           # Plasma 6 Configuration
           ########################
-          #imports = [(import ./home.nix)] ++ [(import ./rocket/rocket-plasma-home.nix)];
+          #imports = [(import ./home.nix)];
         };
       }
 
@@ -251,7 +251,7 @@ in
           ########################
           # Plasma 6 Configuration
           ########################
-          #imports = [(import ./home.nix)] ++ [(import ./ironman/desktop/plasma/home.nix)];
+          #imports = [(import ./home.nix)];
         };
       }
 
