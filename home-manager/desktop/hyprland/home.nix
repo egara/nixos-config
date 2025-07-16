@@ -9,7 +9,7 @@ let
 in {
   imports = [
     # Wofi configuration via home-manager
-    #../../../../home-manager/wofi
+    #../../wofi
   ];
 
   home = {
@@ -18,26 +18,26 @@ in {
     ];
 
     # Hyprland configuration
-    file.".config/hypr/hyprland.conf".source = ../../../../home-manager/desktop/hyprland/config-files/hyprland.conf;
-    file.".config/hypr/change-wallpaper.sh".source = ../../../../home-manager/desktop/hyprland/scripts/change-wallpaper.sh;
-    file.".config/hypr/disable-laptop-screen.sh".source = ../../../../home-manager/desktop/hyprland/scripts/disable-laptop-screen.sh;
+    file.".config/hypr/hyprland.conf".source = ./config-files/hyprland.conf;
+    file.".config/hypr/change-wallpaper.sh".source = ./scripts/change-wallpaper.sh;
+    file.".config/hypr/disable-laptop-screen.sh".source = ./scripts/disable-laptop-screen.sh;
 
     # Waybar configuration
-    file.".config/waybar/config.jsonc".source = ../../../../home-manager/waybar/config-files/config.jsonc;
-    file.".config/waybar/style.css".source = ../../../../home-manager/waybar/config-files/style.css;
+    file.".config/waybar/config.jsonc".source = ../../waybar/config-files/config.jsonc;
+    file.".config/waybar/style.css".source = ../../waybar/config-files/style.css;
 
     # Wlogout configuration
-    file.".config/wlogout/layout".source = ../../../../home-manager/wlogout/config-files/layout;
-    file.".config/wlogout/style.css".source = ../../../../home-manager/wlogout/config-files/style.css;
-    file.".config/wlogout/icons/hibernate.png".source = ../../../../home-manager/wlogout/icons/hibernate.png;
-    file.".config/wlogout/icons/lock.png".source = ../../../../home-manager/wlogout/icons/lock.png;
-    file.".config/wlogout/icons/logout.png".source = ../../../../home-manager/wlogout/icons/logout.png;
-    file.".config/wlogout/icons/reboot.png".source = ../../../../home-manager/wlogout/icons/reboot.png;
-    file.".config/wlogout/icons/shutdown.png".source = ../../../../home-manager/wlogout/icons/shutdown.png;
-    file.".config/wlogout/icons/suspend.png".source = ../../../../home-manager/wlogout/icons/suspend.png;
+    file.".config/wlogout/layout".source = ../../wlogout/config-files/layout;
+    file.".config/wlogout/style.css".source = ../../wlogout/config-files/style.css;
+    file.".config/wlogout/icons/hibernate.png".source = ../../wlogout/icons/hibernate.png;
+    file.".config/wlogout/icons/lock.png".source = ../../wlogout/icons/lock.png;
+    file.".config/wlogout/icons/logout.png".source = ../../wlogout/icons/logout.png;
+    file.".config/wlogout/icons/reboot.png".source = ../../wlogout/icons/reboot.png;
+    file.".config/wlogout/icons/shutdown.png".source = ../../wlogout/icons/shutdown.png;
+    file.".config/wlogout/icons/suspend.png".source = ../../wlogout/icons/suspend.png;
 
     # Dunst
-    file.".config/dunst/dunstrc".source = ../../../../home-manager/dunst/config-files/dunstrc;
+    file.".config/dunst/dunstrc".source = ../../dunst/config-files/dunstrc;
   };
   
   # Cursor theming
@@ -81,7 +81,7 @@ in {
     # such as hyprland. This way, settings within hyprland home manager configuration (see below) can be empty
     # Be aware that the directory by default for storing all this configuration files will be ~/.config
     xdg.configFile = {
-  #   "hypr/hyprland.conf".source = ../../../../home-manager/hyprland/config-files/hyprland.conf;
+  #   "hypr/hyprland.conf".source = ../../hyprland/config-files/hyprland.conf;
   #   "gtk-4.0/assets".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/assets";
   #   "gtk-4.0/gtk.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk.css";
   #   "gtk-4.0/gtk-dark.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk-dark.css";

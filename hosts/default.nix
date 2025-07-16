@@ -246,7 +246,7 @@ in
           # Hyprland Configuration
           ########################
           #imports = [walker.homeManagerModules.default] ++ [(import ./home.nix)] ++ [(import ./ironman/desktop/hyprland/home.nix)];
-          imports = [(import ./home.nix)] ++ [(import ./ironman/desktop/hyprland/home.nix)];
+          imports = [(import ./home.nix)] ++ [(import ../home-manager/desktop/hyprland/home.nix)];
 
           ########################
           # Plasma 6 Configuration
