@@ -190,6 +190,7 @@
       killall
       protonvpn-gui
       gemini-cli
+      gradia
   ];
 
   # List of programs that must be enabled
