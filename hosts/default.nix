@@ -116,7 +116,7 @@ in
       # Plasma 6 Configuration
       ########################
       # Execute specific configuration module for this profile
-      #./rocket/rocket-plasma-configuration.nix
+      #./rocket/desktop/plasma/configuration.nix
 
 #      # Stylix configuration module
 #      stylix.nixosModules.stylix
