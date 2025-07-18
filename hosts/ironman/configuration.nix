@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, username, lib, ... }:
+{ config, pkgs, pkgs-stable, inputs, username, lib, ... }:
 
 {
   ###########################################
@@ -146,7 +146,7 @@
     bluez-tools
     glxinfo
     buttermanager
-    #jetbrains.pycharm-community-bin
+    pkgs-stable.jetbrains.pycharm-community-bin
     #python312Packages.pyqt5
     #python312Packages.pyyaml
     #python312Packages.sip
