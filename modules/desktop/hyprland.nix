@@ -5,6 +5,28 @@
   # Hyprland                               #
   ##########################################
 
+  # SDDM
+  services = {
+    displayManager = {
+      sddm = {
+        enable = true;
+        wayland = {
+          enable = true;
+        };
+        theme = "Elegant";
+      };
+    };
+
+    xserver = {
+      enable = true;
+
+      xkb = {
+        layout = "es";
+        variant = "";
+      };
+    };
+  };
+
   # Hyprland
   programs.hyprland = {
     enable = true; 
@@ -51,9 +73,6 @@
     dina-font
     proggyfonts
   ];
-
-  # SDDM theming
-  services.displayManager.sddm.theme = "Elegant";
 
   # Udisks2 to automount USB devices
   services.udisks2.enable = true;
