@@ -222,8 +222,10 @@ in
       ########################
       # Hyprland Configuration
       ########################
-      # Execute specific configuration module for this profile (default)
+      # Execute specific configuration module for this profile
       ./ironman/desktop/hyprland/configuration.nix
+      # Execute configuration module for hyprland
+      ../modules/desktop/hyprland.nix
 
       ########################
       # Plasma 6 Configuration

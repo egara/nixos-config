@@ -6,34 +6,10 @@
   # Hyprland                                #
   ###########################################
 
-  # SDDM
+  # Video drivers for xserver
   services = {
-    displayManager = {
-      sddm = {
-        enable = true;
-        wayland = {
-          enable = true;
-        };
-      };
-    };
-
     xserver = {
-      enable = true;
       videoDrivers = [ "nvidia" ];
-
-      xkb = {
-        layout = "es";
-        variant = "";
-      };
     };
   };
-  
-  # Swaylock (for locking session)
-  security.pam.services.swaylock = {};
-
-  # Modules
-  imports = [
-    # Hyprland common module
-    ../../../../modules/desktop/hyprland.nix
-  ];
 }
