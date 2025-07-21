@@ -13,7 +13,8 @@
         wayland = {
           enable = true;
         };
-        theme = "Elegant";
+        #theme = "Elegant";
+        theme = "breeze";
       };
     };
 
