@@ -29,7 +29,13 @@
 
   # Hyprland
   programs.hyprland = {
-    enable = true; 
+    enable = true;
+    # Using uwsm for initializing Hyprland using systemd and allowing to
+    # run every long term application (walker, waybar...) wraping them
+    # within systemd units automatically
+    # More info: https://www.reddit.com/r/hyprland/comments/1k9vwfy/what_is_this_uwsm_with_hyprland/?tl=es-es
+    # https://www.youtube.com/watch?v=XmwC9qV7lKs
+    withUWSM = true; 
     xwayland.enable = true;
     # Overwriting the default hyprland packages to the last version available on GitHub
     # hyprland input is defined in flake.nix
