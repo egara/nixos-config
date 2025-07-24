@@ -38,6 +38,9 @@ in {
 
     # Dunst
     file.".config/dunst/dunstrc".source = ../../dunst/config-files/dunstrc;
+
+    # Walker
+    file.".config/walker/config.toml".source = ../../walker/config.toml;
   };
   
   # Cursor theming
