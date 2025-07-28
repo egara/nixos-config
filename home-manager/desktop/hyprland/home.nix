@@ -19,6 +19,10 @@ in {
 
     # Hyprland configuration
     file.".config/hypr/hyprland.conf".source = ./config-files/hyprland.conf;
+    file.".config/hypr/monitors.conf".source = ./config-files/monitors.conf;
+    file.".config/hypr/bindings.conf".source = ./config-files/bindings.conf;
+    file.".config/hypr/env.conf".source = ./config-files/env.conf;    
+    file.".config/hypr/init.conf".source = ./config-files/init.conf; 
     file.".config/hypr/change-wallpaper.sh".source = ./scripts/change-wallpaper.sh;
     file.".config/hypr/disable-laptop-screen.sh".source = ./scripts/disable-laptop-screen.sh;
 
