@@ -118,9 +118,9 @@ in
       # Plasma 6 Configuration
       ########################
       # Execute specific configuration module for this profile
-      ./rocket/desktop/plasma/configuration.nix
+      #./rocket/desktop/plasma/configuration.nix
       # Execute configuration module for plasma
-      ../modules/desktop/plasma.nix
+      #../modules/desktop/plasma.nix
 
 #      # Stylix configuration module
 #      stylix.nixosModules.stylix
@@ -233,9 +233,9 @@ in
       # Plasma 6 Configuration
       ########################
       # Execute specific configuration module for this profile
-      ./ironman/desktop/plasma/configuration.nix
+      #./ironman/desktop/plasma/configuration.nix
       # Execute configuration module for plasma
-      ../modules/desktop/plasma.nix
+      #../modules/desktop/plasma.nix
  
       # Execute home manager module
       home-manager.nixosModules.home-manager {
