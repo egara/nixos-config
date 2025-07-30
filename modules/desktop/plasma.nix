@@ -40,9 +40,15 @@
     };
   };
 
-  # Packages excluded
+  # Packages excluded from Plasma 6 metapackage
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
     elisa
     kate
   ];  
+
+  # Extra packages useful for Plasma 6
+  environment.systemPackages = with pkgs; [
+    konsave
+    bash-completion
+  ];
 }
