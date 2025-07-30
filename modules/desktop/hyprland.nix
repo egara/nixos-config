@@ -5,8 +5,8 @@
   # Hyprland                               #
   ##########################################
 
-  # SDDM
   services = {
+    # SDDM
     displayManager = {
       sddm = {
         enable = true;
@@ -17,6 +17,7 @@
       };
     };
 
+    # Xserver
     xserver = {
       enable = true;
 

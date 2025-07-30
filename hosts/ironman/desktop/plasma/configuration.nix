@@ -2,14 +2,14 @@
 
 {
   ###########################################
-  # Special configurations only for Ironman #
+  # Special configurations only for Rocket  #
   # Plasma 6                                #
   ###########################################
 
-  services.xserver.enable = true; # optional
-  services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.wayland.enable = true;
-  services.desktopManager.plasma6.enable = true;
-  services.xserver.videoDrivers = ["nvidia"];
-  services.power-profiles-daemon.enable = false;
+  # Video drivers for xserver
+  services = {
+    xserver = {
+      videoDrivers = [ "nvidia" ];
+    };
+  };
 }

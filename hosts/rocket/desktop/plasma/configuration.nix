@@ -1,36 +1,22 @@
 { config, pkgs, inputs, username, lib, ... }:
 
 {
-  ###########################################
-  # Special configurations only for Rocket  #
-  # Plasma 6                                #
-  ###########################################
+  ##########################################
+  # Special configurations only for Rocket #
+  # Hyprland                               #
+  ##########################################
 
-  # SDDM
+  # Enabling AMD-ATI driver
+  boot = {
+    initrd = {
+      kernelModules = [ "amdgpu" ];
+    };
+  };
+
+  # Video drivers for xserver
   services = {
-    displayManager = {
-      defaultSession = "plasma";
-      sddm = {
-        enable = true;
-        wayland = {
-          enable = true;
-        };
-      };
-    };
-
     xserver = {
-      enable = true;
-
-      xkb = {
-        layout = "es";
-        variant = "";
-      };
-    };
-
-    desktopManager = {
-      plasma6 = {
-        enable = true;
-      };
+      videoDrivers = [ "amdgpu" ];
     };
   };
 }
