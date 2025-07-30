@@ -136,7 +136,7 @@
       kdePackages.okular
       #qmmp
       pkgs-stable.qmmp
-      audacity
+      pkgs-stable.audacity
       pkgs-stable.carla
       nano
       #tailscale
