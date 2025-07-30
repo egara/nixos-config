@@ -191,6 +191,7 @@
       protonvpn-gui
       gemini-cli
       gradia
+      posting
   ];
 
   # List of programs that must be enabled
