@@ -46,6 +46,15 @@ sudo true
 #   echo "BTRFS filesystem not detected. Skipping BTRFS refactoring."
 # fi
 
+# Restoring KDE Plasma settings if it is needed
+if command -v konsave >/dev/null; then
+  echo "KDE Plasma desktop detected. Restoring settings. Please wait..."
+
+  konsave -a plasma6-tiling
+else
+  echo "KDE Plasma desktop doesn't detected. Skipping settings restoration."
+fi
+
 pushd "$HOME"
 
 # Executing yadm in order to get all personal configurations for different applications
