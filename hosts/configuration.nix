@@ -192,6 +192,7 @@
       gemini-cli
       gradia
       posting
+      k9s
   ];
 
   # List of programs that must be enabled
