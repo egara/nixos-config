@@ -106,21 +106,24 @@ in
       # Execute common configuration module
       ./configuration.nix
 
+      # Execute common configuration module for rocket
+      ./rocket/configuration.nix
+
       ########################
       # Hyprland Configuration
       ########################
       # Execute specific configuration module for this profile
-      ./rocket/desktop/hyprland/configuration.nix
+      #./rocket/desktop/hyprland/configuration.nix
       # Execute configuration module for hyprland
-      ../modules/desktop/hyprland.nix
+      #../modules/desktop/hyprland.nix
  
       ########################
       # Plasma 6 Configuration
       ########################
       # Execute specific configuration module for this profile
-      #./rocket/desktop/plasma/configuration.nix
+      ./rocket/desktop/plasma/configuration.nix
       # Execute configuration module for plasma
-      #../modules/desktop/plasma.nix
+      ../modules/desktop/plasma.nix
 
 #      # Stylix configuration module
 #      stylix.nixosModules.stylix
@@ -141,12 +144,12 @@ in
           # Hyprland Configuration
           ########################
           # (default)
-          imports = [(import ./home.nix)] ++ [(import ../home-manager/desktop/hyprland/home.nix)];
+          #imports = [(import ./home.nix)] ++ [(import ../home-manager/desktop/hyprland/home.nix)];
 
           ########################
           # Plasma 6 Configuration
           ########################
-          #imports = [(import ./home.nix)];
+          imports = [(import ./home.nix)];
         };
       }
 
