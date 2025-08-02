@@ -14,10 +14,10 @@
     };
   };
 
+  # Use the latest kernel
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   # List of packages installed in system profile only for this host
   environment.systemPackages = with pkgs; [
-    bluez-tools
-    glxinfo
-    buttermanager
   ];
 }

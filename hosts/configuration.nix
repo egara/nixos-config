@@ -193,6 +193,8 @@
       gradia
       posting
       k9s
+      glxinfo
+      buttermanager
   ];
 
   # List of programs that must be enabled

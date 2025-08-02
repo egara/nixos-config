@@ -144,8 +144,6 @@
   # List of packages installed in system profile only for this host
   environment.systemPackages = with pkgs; [
     bluez-tools
-    glxinfo
-    buttermanager
     pkgs-stable.jetbrains.pycharm-community-bin
     #python312Packages.pyqt5
     #python312Packages.pyyaml
