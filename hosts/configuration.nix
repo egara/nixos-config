@@ -101,7 +101,18 @@
     password = "administrador";
     isNormalUser = true;
     description = "Eloy";
-    extraGroups = [ "wheel" "video" "audio" "networkmanager" "docker" "input" "libvirtd" "bluetooth"];
+    extraGroups = [ 
+      "wheel" 
+      "video" 
+      "audio" 
+      "networkmanager" 
+      "docker" 
+      "input" 
+      "libvirtd" 
+      "bluetooth" 
+      "kvm" 
+      "adbusers"
+    ];
     packages = with pkgs; [
       #firefox
     ];
@@ -208,6 +219,11 @@
     virt-manager = {
       enable = true;
     };
+
+    # ADB Tools
+    adb = {
+      enable = true;
+    };    
   };
 
   # Enabling SSH
