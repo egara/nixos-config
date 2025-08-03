@@ -111,7 +111,6 @@
       "libvirtd" 
       "bluetooth" 
       "kvm" 
-      "adbusers"
     ];
     packages = with pkgs; [
       #firefox
@@ -219,11 +218,6 @@
     virt-manager = {
       enable = true;
     };
-
-    # ADB Tools
-    adb = {
-      enable = true;
-    };    
   };
 
   # Enabling SSH
