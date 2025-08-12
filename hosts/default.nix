@@ -62,105 +62,101 @@ let
         }
       ];
     };
+
+  # Modules for VM
+  vmModules = [
+    disko.nixosModules.disko {
+      _module.args.disks = [ "/dev/vda" ];
+      imports = [(import ./vm/disko-config.nix)];
+    }
+    ./vm/hardware-configuration.nix
+    ./efi-configuration.nix
+    ./vm/configuration.nix
+  ];
+  vmHomeManagerExtraImports = [ (import ./vm/home.nix) ];
+
+  # Modules for Rocket
+  rocketModules = [
+    disko.nixosModules.disko {
+      _module.args.disks = [ "/dev/sda" ];
+      imports = [(import ./rocket/disko-config.nix)];
+    }
+    ./rocket/hardware-configuration.nix
+    ./bios-configuration.nix
+    ./rocket/configuration.nix
+    ./rocket/desktop.nix
+  ];
+
+  # Modules for Ironman
+  ironmanModules = [
+    disko.nixosModules.disko {
+      _module.args.disks = [ "/dev/sda" ];
+      imports = [(import ./ironman/disko-config.nix)];
+    }
+    ./ironman/hardware-configuration.nix
+    ./efi-configuration.nix
+    ./ironman/configuration.nix
+    ./ironman/desktop.nix
+    autofirma-nix.nixosModules.default
+    # It is a module itself!
+    ({ config, pkgs, ... }: {
+      # The autofirma command becomes available system-wide
+      programs.autofirma = {
+        enable = true;
+        firefoxIntegration.enable = true;
+      };
+      # # DNIeRemote integration for using phone as NFC reader
+      # programs.dnieremote = {
+      #   enable = true;
+      # };
+      # The FNMT certificate configurator
+      programs.configuradorfnmt = {
+        enable = true;
+        firefoxIntegration.enable = true;
+      };
+      # Firefox configured to work with AutoFirma
+      programs.firefox = {
+        enable = true;
+        policies.SecurityDevices = {
+          "OpenSC PKCS#11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
+          "DNIeRemote" = "${config.programs.dnieremote.finalPackage}/lib/libdnieremotepkcs11.so";
+        };
+      };
+      # Enable PC/SC smart card service
+      services.pcscd.enable = true;
+    })
+  ];
 in
 {
   # VM profile
   vm = mkHost {
-
     hostName = "experimental";
-
     desktop = "plasma";
-
-    extraModules = [
-
-      disko.nixosModules.disko {
-        _module.args.disks = [ "/dev/vda" ];
-        imports = [(import ./vm/disko-config.nix)];
-      }
-
-      ./vm/hardware-configuration.nix
-      ./efi-configuration.nix
-      ./vm/configuration.nix
-    ];
-
-    homeManagerExtraImports = [ (import ./vm/home.nix) ];
+    extraModules = vmModules;
+    homeManagerExtraImports = vmHomeManagerExtraImports;
   };
 
-  # Rocket profile
-  rocket = mkHost {
-    
+  # Rocket profiles
+  "rocket-plasma" = mkHost {
     hostName = "rocket";
-    
     desktop = "plasma";
-    
-    extraModules = [
-
-      disko.nixosModules.disko {
-        _module.args.disks = [ "/dev/sda" ];
-        imports = [(import ./rocket/disko-config.nix)];
-      }
-    
-      ./rocket/hardware-configuration.nix
-      ./bios-configuration.nix
-      ./rocket/configuration.nix
-      ./rocket/desktop.nix
-    ];
-
+    extraModules = rocketModules;
+  };
+  "rocket-hyprland" = mkHost {
+    hostName = "rocket";
+    desktop = "hyprland";
+    extraModules = rocketModules;
   };
 
-  # Ironman profile
-  ironman = mkHost {
-    
+  # Ironman profiles
+  "ironman-plasma" = mkHost {
     hostName = "ironman";
-    
+    desktop = "plasma";
+    extraModules = ironmanModules;
+  };
+  "ironman-hyprland" = mkHost {
+    hostName = "ironman";
     desktop = "hyprland";
-    
-    extraModules = [
-
-      disko.nixosModules.disko {
-        _module.args.disks = [ "/dev/sda" ];
-        imports = [(import ./ironman/disko-config.nix)];
-      }
-
-      ./ironman/hardware-configuration.nix
-      ./efi-configuration.nix
-      ./ironman/configuration.nix
-      ./ironman/desktop.nix
-      
-      autofirma-nix.nixosModules.default
-      
-      # It is a module itself!
-      ({ config, pkgs, ... }: {
-
-        # The autofirma command becomes available system-wide
-        programs.autofirma = {
-          enable = true;
-          firefoxIntegration.enable = true;
-        };
-
-        # # DNIeRemote integration for using phone as NFC reader
-        # programs.dnieremote = {
-        #   enable = true;
-        # };
-
-        # The FNMT certificate configurator
-        programs.configuradorfnmt = {
-          enable = true;
-          firefoxIntegration.enable = true;
-        };
-
-        # Firefox configured to work with AutoFirma
-        programs.firefox = {
-          enable = true;
-          policies.SecurityDevices = {
-            "OpenSC PKCS#11" = "${pkgs.opensc}/lib/opensc-pkgs11.so";
-            "DNIeRemote" = "${config.programs.dnieremote.finalPackage}/lib/libdnieremotepkcs11.so";
-          };
-        };
-
-        # Enable PC/SC smart card service
-        services.pcscd.enable = true;
-      })
-    ];
+    extraModules = ironmanModules;
   };
 }
