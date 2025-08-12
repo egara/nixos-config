@@ -111,14 +111,15 @@ in
         # Execute common configuration module for rocket
         ./rocket/configuration.nix
 
+        # Common desktop configuration for the host
+        ./rocket/desktop.nix
+
         # Desktop Environment modules
         ({ config, lib, host, ... }: {
           imports =
             lib.optionals (host.desktop == "hyprland") [
-              ./rocket/desktop/hyprland/configuration.nix
               ../modules/desktop/hyprland.nix
             ] ++ lib.optionals (host.desktop == "plasma") [
-              ./rocket/desktop/plasma/configuration.nix
               ../modules/desktop/plasma.nix
             ];
         })
@@ -181,6 +182,9 @@ in
         # Execute common configuration module for ironman
         ./ironman/configuration.nix
 
+        # Common desktop configuration for the host
+        ./ironman/desktop.nix
+
         # Autofirma module (it is a module itself!)
         autofirma-nix.nixosModules.default
 
@@ -220,10 +224,8 @@ in
           # Depending on the desktop, some modules are imported
           imports =
             lib.optionals (host.desktop == "hyprland") [
-              ./ironman/desktop/hyprland/configuration.nix
               ../modules/desktop/hyprland.nix
             ] ++ lib.optionals (host.desktop == "plasma") [
-              ./ironman/desktop/plasma/configuration.nix
               ../modules/desktop/plasma.nix
             ];
         })
