@@ -84,7 +84,6 @@ let
     ./rocket/hardware-configuration.nix
     ./bios-configuration.nix
     ./rocket/configuration.nix
-    ./rocket/desktop.nix
   ];
 
   # Modules for Ironman
@@ -96,7 +95,6 @@ let
     ./ironman/hardware-configuration.nix
     ./efi-configuration.nix
     ./ironman/configuration.nix
-    ./ironman/desktop.nix
     autofirma-nix.nixosModules.default
     # It is a module itself!
     ({ config, pkgs, ... }: {

@@ -5,7 +5,15 @@
   # Special configurations only for Ironman #
   ###########################################
 
-  networking.hostName = "ironman"; # Define your hostname.
+  # Hostname
+  networking.hostName = "ironman";
+
+  # Video drivers for xserver
+  services = {
+    xserver = {
+      videoDrivers = [ "nvidia" ];
+    };
+  };
 
   # Global power management for laptops
   powerManagement.enable = true;

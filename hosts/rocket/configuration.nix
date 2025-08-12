@@ -5,7 +5,8 @@
   # Special configurations only for Rocket  #
   ###########################################
   
-  networking.hostName = "rocket"; # Define your hostname.
+  # Hostname
+  networking.hostName = "rocket";
 
   # Enabling AMD-ATI driver
   boot = {
@@ -14,6 +15,13 @@
     };
   };
 
+  # Video drivers for xserver
+  services = {
+    xserver = {
+      videoDrivers = [ "amdgpu" ];
+    };
+  };
+  
   # Use the latest kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
