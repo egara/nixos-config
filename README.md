@@ -12,7 +12,7 @@ I'm really new at NixOS and I want to experiment and learn about it step by step
 
 Please, change **hostname** and **username** by one of their accepted values:
 
-- hostname: vm
+- hostname: [vm, rocket-hyprland, rocket-plasma, ironman-hyprland, ironman-plasma]
 - username: egarcia
 
 This script will:
@@ -21,6 +21,70 @@ This script will:
 1. Format and create all the needed partitions using [Disko](https://github.com/nix-community/disko)
 1. Install NixOS
 1. Copy this repo into the new installed system
+
+## Systems
+
+There are three different systems defined in this flake. Each system can have one or multiple outputs (NixOS configurations).
+
+### VM
+
+This is intended to be installed on a virtual machine for testing purposes (a virtual machine created using KVM, QEMU, libvirt). 
+
+It will give you:
+
+- A NixOS installation
+
+- Desktop environment: **KDE Plasma Desktop**
+
+- Spice guest additions for QEMU installed by default so you will have batteries included ready to go.
+
+### Rocket
+
+This is intended to be installed on a my old PC. Please, bear in mind that the configuration created here is very specific and depends on the hardware of this computer. You can see this hardware depending configuration here [https://github.com/egara/nixos-config/blob/main/hosts/rocket/configuration.nix](https://github.com/egara/nixos-config/blob/main/hosts/rocket/configuration.nix)
+
+There are two different profiles:
+
+- **rocket-plasma**
+
+      It will give you:
+
+            - A NixOS installation
+
+            - Desktop environment: **KDE Plasma Desktop**
+
+- **rocket-hyprland**
+
+      It will give you:
+
+            - A very advanced NixOS installation customized for Hyprland. Check all the extra packages installed here [https://github.com/egara/nixos-config/blob/main/modules/desktop/hyprland.nix](https://github.com/egara/nixos-config/blob/main/modules/desktop/hyprland.nix) to get a flawless experience with Hyprland
+
+            - All the configuration files for the different pieces of software that contribute with this flawless experience via Home-Manager
+
+            - Desktop environment: **Hyprland**
+
+### Ironman
+
+This is intended to be installed on a my current laptop. Please, bear in mind that the configuration created here is very specific and depends on the hardware of this computer. You can see this hardware depending configuration here [https://github.com/egara/nixos-config/blob/main/hosts/ironman/configuration.nix](https://github.com/egara/nixos-config/blob/main/hosts/ironman/configuration.nix)
+
+There are two different profiles:
+
+- **ironman-plasma**
+
+      It will give you:
+
+            - A NixOS installation
+
+            - Desktop environment: **KDE Plasma Desktop**
+
+- **ironman-hyprland**
+
+      It will give you:
+
+            - A very advanced NixOS installation customized for Hyprland. Check all the extra packages installed here [https://github.com/egara/nixos-config/blob/main/modules/desktop/hyprland.nix](https://github.com/egara/nixos-config/blob/main/modules/desktop/hyprland.nix) to get a flawless experience with Hyprland
+
+            - All the configuration files for the different pieces of software that contribute with this flawless experience via Home-Manager
+
+            - Desktop environment: **Hyprland**
 
 # Partitioning
 This stage will be created automatically by **Disko**.
