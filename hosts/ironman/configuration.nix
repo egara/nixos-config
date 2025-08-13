@@ -1,4 +1,4 @@
-{ config, pkgs, pkgs-stable, inputs, username, lib, ... }:
+{ config, pkgs, pkgs-stable, ... }:
 
 {
   ###########################################
