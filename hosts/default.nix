@@ -1,4 +1,4 @@
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, username, location, autofirma-nix, ... }:
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, username, autofirma-nix, ... }:
 let
   # System architecture
   system = "x86_64-linux";
@@ -28,7 +28,7 @@ let
       inherit system;
 
       specialArgs = {
-        inherit inputs username location pkgs-stable;
+        inherit inputs username pkgs-stable;
         host = hostArg;
       };
 
