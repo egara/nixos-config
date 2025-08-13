@@ -2,7 +2,7 @@
 #  Home-manager configuration for desktop
 
 # { pkgs, config, hyprland-plugins, ... }:
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 
 let
   # Variables can be defined here
