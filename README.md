@@ -28,7 +28,7 @@ There are three different systems defined in this flake. Each system can have on
 
 ### VM
 
-This is intended to be installed on a virtual machine for testing purposes (a virtual machine created using KVM, QEMU, libvirt). 
+This is intended to be installed on a virtual machine for testing purposes (a virtual machine created using KVM, QEMU, libvirt). This is the specific profile that **anyone will be able to use in order to provision a totally functional NixOS system without any modification**. So it is perfect to twinker. 
 
 It will give you:
 
@@ -40,7 +40,7 @@ It will give you:
 
 ### Rocket
 
-This is intended to be installed on a my old PC. Please, bear in mind that the configuration created here is very specific and depends on the hardware of this computer. You can see this hardware depending configuration here [https://github.com/egara/nixos-config/blob/main/hosts/rocket/configuration.nix](https://github.com/egara/nixos-config/blob/main/hosts/rocket/configuration.nix)
+This is intended to be installed on a my old PC. Please, bear in mind that the configuration created here is very specific and depends on the hardware of this computer. You can see this hardware dependent configurations here [https://github.com/egara/nixos-config/blob/main/hosts/rocket/configuration.nix](https://github.com/egara/nixos-config/blob/main/hosts/rocket/configuration.nix) and here [https://github.com/egara/nixos-config/blob/main/hosts/rocket/hardware-configuration.nix](https://github.com/egara/nixos-config/blob/main/hosts/rocket/hardware-configuration.nix)
 
 There are two different profiles:
 
@@ -64,7 +64,7 @@ There are two different profiles:
 
 ### Ironman
 
-This is intended to be installed on a my current laptop. Please, bear in mind that the configuration created here is very specific and depends on the hardware of this computer. You can see this hardware depending configuration here [https://github.com/egara/nixos-config/blob/main/hosts/ironman/configuration.nix](https://github.com/egara/nixos-config/blob/main/hosts/ironman/configuration.nix)
+This is intended to be installed on my current laptop. Please, bear in mind that the configuration created here is very specific and depends on the hardware of this computer. You can see this hardware dependent configurations here [https://github.com/egara/nixos-config/blob/main/hosts/ironman/configuration.nix](https://github.com/egara/nixos-config/blob/main/hosts/ironman/configuration.nix) and here [https://github.com/egara/nixos-config/blob/main/hosts/ironman/hardware-configuration.nix](https://github.com/egara/nixos-config/blob/main/hosts/ironman/hardware-configuration.nix)
 
 There are two different profiles:
 
@@ -94,13 +94,34 @@ This stage will be created automatically by **Disko**.
 This is the selected layout for the UEFI/GPT system:
 
 | Mount point | Partition | Partition type      | FS Type | Label | Bootable flag | Size |
-|-------------|-----------|---------------------|---------|--------|------|--|
-| /boot/efi   | /dev/vda1 | EFI System Partition| FAT32   | UEFI   | Yes | 512 MiB   |
+|-------------|-----------|---------------------|---------|--------|------|------------|
+| /boot/efi   | /dev/vda1 | EFI System Partition| FAT32   | UEFI   | Yes | 512 MiB     |
 | [SWAP]      | /dev/vda2 | Linux swap 		  | SWAP    | swap   | No  | 1 GiB     |
 | /           | /dev/vda3 | Linux 			  | BTRFS   | system | No  | Available |
 
+## Rocket
+
+This is the selected layout for the BIOS/MBR system:
+
+| Mount point | Partition | Partition type      | FS Type | Label | Bootable flag | Size |
+|-------------|-----------|---------------------|---------|--------|------|--------------|
+| --          | /dev/sda1 | MBR                 | EF02    | --     | Yes   | 1 MiB       |
+| /boot/      | /dev/sda2 | EF00                | VFAT    | --     | Yes   | 512 MiB     |
+| /           | /dev/sda3 | Linux               | ext4    | system | No    | Available   |
+| [SWAP]      | /dev/sda4 | Linux swap          | SWAP    | swap   | No    | 8 GiB       |
+
+## Ironman
+
+This is the selected layout for the UEFI/GPT system:
+
+| Mount point | Partition | Partition type      | FS Type | Label | Bootable flag | Size |
+|-------------|-----------|---------------------|---------|--------|------|-------------|
+| /boot/efi   | /dev/sda1 | EFI System Partition| FAT32   | UEFI   | Yes  | 512 MiB     |
+| [SWAP]      | /dev/sda2 | Linux swap            | SWAP    | swap   | No  | 16 GiB     |
+| /           | /dev/sda3 | Linux                 | BTRFS   | system | No  | Available  |
+
 # BTRFS Layout
-This is the layout defined:
+This is the layout only defined all over my different machines which use BTRFS:
 
 ```
 (Volume)
