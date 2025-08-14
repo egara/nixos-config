@@ -315,7 +315,7 @@
     # * context_all: Open context menu for all notifications.
     # These values can be strung together for each mouse event, and
     # will be executed in sequence.
-    mouse_left_click = close_current
+    mouse_left_click = do_action, close_current
     mouse_middle_click = do_action, close_current
     mouse_right_click = close_all
 
@@ -335,7 +335,7 @@
     # Otherwise the "#" and following would be interpreted as a comment.
     background = "#2b2b2b"
     foreground = "#ffffff"
-    timeout = 10
+    timeout = 4
     highlight = "#a158ff" # Hint color (progress bar, for example)
     # Icon for notifications with low urgency, uncomment to enable
     #default_icon = /path/to/icon
@@ -343,7 +343,7 @@
 [urgency_normal]
     background = "#2b2b2b"
     foreground = "#ffffff"
-    timeout = 10
+    timeout = 4
     override_pause_level = 30
     highlight = "#a158ff" # Hint color (progress bar, for example)
     # Icon for notifications with normal urgency, uncomment to enable
@@ -353,7 +353,7 @@
     background = "#900000"
     foreground = "#ffffff"
     frame_color = "#ff0000"
-    timeout = 0
+    timeout = 4
     override_pause_level = 60
     # Icon for notifications with critical urgency, uncomment to enable
     #default_icon = /path/to/icon
