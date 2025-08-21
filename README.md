@@ -7,12 +7,13 @@ I'm really new at NixOS and I want to experiment and learn about it step by step
 - Boot the system using NixOS live USB
 - Execute the installation script which is located in **scripts/install.sh**
 
-      curl -sL https://raw.githubusercontent.com/egara/nixos-config/main/scripts/install.sh | bash -s <hostname> <username>
+      curl -sL https://raw.githubusercontent.com/egara/nixos-config/main/scripts/install.sh | bash -s <host> <profile> <username>
       
 
-Please, change **hostname** and **username** by one of their accepted values:
+Please, change **host**, **profile** and **username** by one of their accepted values:
 
-- hostname: [vm, rocket-hyprland, rocket-plasma, ironman-hyprland, ironman-plasma]
+- host: [vm, rocket, ironman]
+- profile: [vm, rocket-hyprland, rocket-plasma, ironman-hyprland, ironman-plasma]
 - username: egarcia
 
 This script will:

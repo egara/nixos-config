@@ -12,7 +12,8 @@
 set -euo pipefail
 
 TARGET_HOST="${1:-}"
-TARGET_USER="${2:-egarcia}"
+TARGET_PROFILE="${2:-}"
+TARGET_USER="${3:-egarcia}"
 
 if [ "$(id -u)" -eq 0 ]; then
   echo "ERROR! $(basename "$0") should be run as a regular user"
@@ -27,15 +28,20 @@ pushd "$HOME/Zero/nixos-config"
 
 if [[ -z "$TARGET_HOST" ]]; then
   echo "ERROR! $(basename "$0") requires a hostname as the first argument"
-  echo "       The following hosts are available"
-  ls -1 nixos/*/boot.nix | cut -d'/' -f2 | grep -v iso
+  echo "The following hosts are available"
+  ls -l hosts | grep "^d" | awk '{print $9}'
+  exit 1
+fi
+
+if [[ -z "$TARGET_PROFILE" ]]; then
+  echo "ERROR! $(basename "$0") requires a profile as the second argument"
+  echo "Check hosts/default.nix to see all the profiles available"
   exit 1
 fi
 
 if [[ -z "$TARGET_USER" ]]; then
-  echo "ERROR! $(basename "$0") requires a username as the second argument"
-  echo "       The following users are available"
-  ls -1 nixos/_mixins/users/ | grep -v -E "nixos|root"
+  echo "ERROR! $(basename "$0") requires a username as the third argument"
+  echo "The following users are available: egarcia (password: administrador)"
   exit 1
 fi
 
@@ -60,7 +66,7 @@ pushd "$HOME/Zero/nixos-config"
 # Creating mounting point for BTRFS full volume
 sudo mkdir -p /mnt/mnt/defvol
 
-sudo nixos-install --no-root-password --flake ".#$TARGET_HOST"
+sudo nixos-install --no-root-password --flake ".#$TARGET_PROFILE"
 
 # Rsync nix-config to the target install and set the remote origin to SSH.
 rsync -a --delete "$HOME/Zero/" "/mnt/home/$TARGET_USER/Zero/"
