@@ -31,6 +31,7 @@
         "pulseaudio", 
         "network", 
         "tray", 
+        "custom/clipboard",
         "battery", 
         "custom/power"
     ],
@@ -38,7 +39,6 @@
     // Modules configuration
      "custom/walker": {
         "format": "  ",
-        "icon-size": 25,
         "tooltip": true,
         "tooltip-format": "Applications",
         "on-click": "walker"
@@ -84,11 +84,11 @@
         "format": "  {:%a %b %d  %H:%M %p}", // %b %d %Y  --Date formatting
         "rotate": 0,
         "format-alt": "{:%Y-%m-%d}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "tooltip-format": "<span>{calendar}</span>",
         "calendar": {
                 "mode": "month",
                 "format": {
-                    "months": "<span color='#ff6699'><b>{}</b></span>",
+                    "months": "<span color='#A158FF'><b>{}</b></span>",
                     "days": "<span color='#cdd6f4'><b>{}</b></span>",
                     "weekdays": "<span color='#7CD37C'><b>{}</b></span>",
                     "today": "<span color='#ffcc66'><b>{}</b></span>"
@@ -222,6 +222,12 @@
       "on-click": "",
       "return-type": "json"
     },
+    "custom/clipboard": {
+      "format": "  ",
+      "tooltip": true,
+      "tooltip-format": "Clipboard",
+      "on-click": "walker -m clipboard"
+    },    
     "cava#right": {
       "autosens": 1,
       "bar_delimiter": 0,

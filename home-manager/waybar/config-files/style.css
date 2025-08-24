@@ -425,5 +425,14 @@ label:focus {
 }
 
 #custom-walker {
-  font-size: 18px;
+  font-size: 16px;
+}
+
+#custom-clipboard {
+  background: #25253a;
+  margin: 5px 5px;
+  padding: 8px;
+  border-radius: 15px;
+  color: #ffffff;     
+  font-size: 16px;
 }
