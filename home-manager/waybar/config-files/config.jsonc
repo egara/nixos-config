@@ -1,4 +1,5 @@
 // Inspired by https://github.com/justinlime/dotfiles
+// URL to search new Nerd Font Icons (Copy Icon and paste it here): https://www.nerdfonts.com/cheat-sheet
 //[
 // Top waybar
 {
@@ -10,6 +11,7 @@
 
     // Modules order
     "modules-left": [
+        "custom/walker",
         "hyprland/workspaces",
         "wlr/taskbar",
         "custom/playerctl#backward",
@@ -34,6 +36,13 @@
     ],
 
     // Modules configuration
+     "custom/walker": {
+        "format": "  ",
+        "icon-size": 25,
+        "tooltip": true,
+        "tooltip-format": "Applications",
+        "on-click": "walker"
+    },
     "hyprland/workspaces": {
       "active-only": false,
       "all-outputs": false,
@@ -72,10 +81,37 @@
     },
     "clock": {
         "interval": 60,
-        "format": "  {:%a %b %d  %I:%M %p}", // %b %d %Y  --Date formatting
+        "format": "  {:%a %b %d  %H:%M %p}", // %b %d %Y  --Date formatting
+        "rotate": 0,
+        "format-alt": "{:%Y-%m-%d}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
+        "calendar": {
+                "mode": "month",
+                "format": {
+                    "months": "<span color='#ff6699'><b>{}</b></span>",
+                    "days": "<span color='#cdd6f4'><b>{}</b></span>",
+                    "weekdays": "<span color='#7CD37C'><b>{}</b></span>",
+                    "today": "<span color='#ffcc66'><b>{}</b></span>"
+                }
+        }
     },
+    // "clock": {
+    //         "format": "{:%I:%M %p}",
+    //         "rotate": 0,
+    //         "format-alt": "{  %d·%m·%y}",
+    //         "tooltip-format": "<span>{calendar}</span>",
+    //         "calendar": {
+    //                 "mode": "month",
+    //                 "format": {
+    //                     "months": "<span color='#ff6699'><b>{}</b></span>",
+    //                     "days": "<span color='#cdd6f4'><b>{}</b></span>",
+    //                     "weekdays": "<span color='#7CD37C'><b>{}</b></span>",
+    //                     "today": "<span color='#ffcc66'><b>{}</b></span>"
+    //                 }
+    //         }
+    // },
+
+
    "temperature": {
         // "thermal-zone": 2,
         // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
