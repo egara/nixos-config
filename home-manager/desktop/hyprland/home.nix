@@ -23,6 +23,7 @@ in {
     file.".config/hypr/bindings.conf".source = ./config-files/bindings.conf;
     file.".config/hypr/env.conf".source = ./config-files/env.conf;    
     file.".config/hypr/init.conf".source = ./config-files/init.conf; 
+    file.".config/hypr/hyprlock.conf".source = ./config-files/hyprlock.conf;
     file.".config/hypr/change-wallpaper.sh".source = ./scripts/change-wallpaper.sh;
     file.".config/hypr/nixos-update.sh".source = ./scripts/nixos-update.sh;
     file.".config/hypr/nixos-clean.sh".source = ./scripts/nixos-clean.sh;
