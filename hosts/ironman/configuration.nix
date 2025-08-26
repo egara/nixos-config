@@ -42,11 +42,17 @@
   # Thermald proactively prevents overheating on Intel CPUs and works well with other tools
   services.thermald.enable = true;
 
-  # Special behaviour when laptop lid is closed
+  # Special behaviours
   services.logind = {
-    extraConfig = "HandlePowerKey=suspend";
-    lidSwitch = "suspend";
-  };  
+    settings = {
+      Login = {
+        # When laptop lid is closed
+        HandleLidSwitch = "suspend";
+        # When power button is pushed
+        HandlePowerKey = "suspend";
+      };
+    };    
+  }; 
 
   # Important: There is a problem related to the hardware of this
   # machine and the version of the kernel. Due to some incompatibilities
