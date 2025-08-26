@@ -159,7 +159,6 @@
       # System locking and IDLE
       #########################
       hyprlock
-      swaylock-effects
       swayidle
       #########
       # Theming
