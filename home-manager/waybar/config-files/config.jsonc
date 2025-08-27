@@ -79,39 +79,29 @@
         "spacing": 5,
         "show-passive-items": true,
     },
+    // More clock configuration options:
+    // https://github.com/Alexays/Waybar/wiki/Module:-Clock
     "clock": {
         "interval": 60,
         "format": "  {:%a %b %d  %H:%M %p}", // %b %d %Y  --Date formatting
         "rotate": 0,
-        "format-alt": "{:%Y-%m-%d}",
         "tooltip-format": "<span>{calendar}</span>",
         "calendar": {
-                "mode": "month",
-                "format": {
-                    "months": "<span color='#A158FF'><b>{}</b></span>",
-                    "days": "<span color='#cdd6f4'><b>{}</b></span>",
-                    "weekdays": "<span color='#7CD37C'><b>{}</b></span>",
-                    "today": "<span color='#ffcc66'><b>{}</b></span>"
-                }
-        }
+            "mode": "month",
+            "on-scroll": 1,
+            "format": {
+                "months": "<span color='#A158FF'><b>{}</b></span>",
+                "days": "<span color='#cdd6f4' font_family='monospace'><b>{}</b></span>",
+                "weekdays": "<span color='#7CD37C'><b>{}</b></span>",
+                "today": "<span color='#ffcc66'><b>{}</b></span>"
+            }
+        },
+        "actions":  {
+            "on-click": "shift_down",
+            "on-click-right": "shift_up",
+            "on-click-middle": "shift_reset",
+        }                
     },
-    // "clock": {
-    //         "format": "{:%I:%M %p}",
-    //         "rotate": 0,
-    //         "format-alt": "{  %d·%m·%y}",
-    //         "tooltip-format": "<span>{calendar}</span>",
-    //         "calendar": {
-    //                 "mode": "month",
-    //                 "format": {
-    //                     "months": "<span color='#ff6699'><b>{}</b></span>",
-    //                     "days": "<span color='#cdd6f4'><b>{}</b></span>",
-    //                     "weekdays": "<span color='#7CD37C'><b>{}</b></span>",
-    //                     "today": "<span color='#ffcc66'><b>{}</b></span>"
-    //                 }
-    //         }
-    // },
-
-
    "temperature": {
         // "thermal-zone": 2,
         // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
