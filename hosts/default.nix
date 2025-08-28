@@ -124,6 +124,46 @@ let
       services.pcscd.enable = true;
     })
   ];
+
+  # Modules for Taskmaster
+  taskmasterModules = [
+    disko.nixosModules.disko {
+      _module.args.disks = [ "/dev/nvme0n1" ];
+      imports = [(import ./taskmaster/disko-config.nix)];
+    }
+    ./taskmaster/hardware-configuration.nix
+    ./efi-configuration.nix
+    ./taskmaster/configuration.nix
+    autofirma-nix.nixosModules.default
+    # It is a module itself!
+    ({ config, pkgs, ... }: {
+      # The autofirma command becomes available system-wide
+      programs.autofirma = {
+        enable = true;
+        firefoxIntegration.enable = true;
+      };
+      # # DNIeRemote integration for using phone as NFC reader
+      # programs.dnieremote = {
+      #   enable = true;
+      # };
+      # The FNMT certificate configurator
+      programs.configuradorfnmt = {
+        enable = true;
+        firefoxIntegration.enable = true;
+      };
+      # Firefox configured to work with AutoFirma
+      programs.firefox = {
+        enable = true;
+        policies.SecurityDevices = {
+          "OpenSC PKCS#11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
+          "DNIeRemote" = "${config.programs.dnieremote.finalPackage}/lib/libdnieremotepkcs11.so";
+        };
+      };
+      # Enable PC/SC smart card service
+      services.pcscd.enable = true;
+    })
+  ];
+
 in
 {
   # VM profile
@@ -156,5 +196,17 @@ in
     hostName = "ironman";
     desktop = "hyprland";
     extraModules = ironmanModules;
+  };
+
+  # Taskmaster profiles
+  "taskmaster-plasma" = mkHost {
+    hostName = "taskmaster";
+    desktop = "plasma";
+    extraModules = taskmasterModules;
+  };
+  "taskmaster-hyprland" = mkHost {
+    hostName = "taskmaster";
+    desktop = "hyprland";
+    extraModules = taskmasterModules;
   };
 }

@@ -209,6 +209,12 @@
 
   # List of programs that must be enabled
   programs = {
+    # AppImage (this configuration allows to execute an AppImage directly)
+    appimage = {
+      enable = true;
+      binfmt = true;
+    };
+
     # Partition manager
     partition-manager = {
       enable = true;
