@@ -185,6 +185,20 @@ in {
           ];
         };
       }
+      {
+        profile = {
+          name = "undocked";
+          outputs = [
+            {
+              criteria = "eDP-1";
+              scale = 1.0;
+              status = "enable";
+              mode = "highres";
+              position = "1920,0";
+            }
+          ];
+        };
+      }
     ];
   };
 }
