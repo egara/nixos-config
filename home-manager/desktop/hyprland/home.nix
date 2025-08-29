@@ -131,28 +131,46 @@ in {
     enable = true;
     systemdTarget = "hyprland-session.target";
 
-    profiles = {
-      home = {
-        outputs = [
-          {
-            criteria = "eDP-1";
-            scale = 1.0;
-            status = "enable";
-            mode = "1920x1080";
-            position = "1920,0";
-          }
-          {
-            criteria = "HDMI-A-2";
-            scale = 1.0;
-            status = "enable";
-            mode = "1920x1080";
-            position = "0,0";
-          }
-        ];
-      };
-
-      office = {
-        outputs = [
+    settings = [
+      {
+        profile = {
+          name = "home";
+          outputs = [
+            {
+              criteria = "eDP-1";
+              scale = 1.0;
+              status = "enable";
+              mode = "1920x1080";
+              position = "1920,0";
+            }
+            {
+              criteria = "HDMI-A-2";
+              scale = 1.0;
+              status = "enable";
+              mode = "1920x1080";
+              position = "0,0";
+            }
+          ];
+        };
+      }
+      {
+        profile = {
+          name = "office";
+          outputs = [
+            {
+              criteria = "DP-2";
+              scale = 1.0;
+              status = "enable";
+              mode = "1920x1080";
+              position = "0,0";
+            }
+            {
+              criteria = "DP-1";
+              scale = 1.0;
+              status = "enable";
+              mode = "1920x1080";
+              position = "1920,0";
+            }
           # {
           #   criteria = "eDP-1";
           #   scale = 1.0;
@@ -160,26 +178,13 @@ in {
           #   mode = "1920x1080";
           #   position = "1920,0";
           # }
-          {
-            criteria = "DP-2";
-            scale = 1.0;
-            status = "enable";
-            mode = "1920x1080";
-            position = "0,0";
-          }          
-          {
-            criteria = "DP-1";
-            scale = 1.0;
-            status = "enable";
-            mode = "1920x1080";
-            position = "1920,0";
-          }          
-          {
-            criteria = "eDP-1";
-            status = "disable";
-          }
-        ];
-      };
-    };
-  };  
+            {
+              criteria = "eDP-1";
+              status = "disable";
+            }
+          ];
+        };
+      }
+    ];
+  };
 }
