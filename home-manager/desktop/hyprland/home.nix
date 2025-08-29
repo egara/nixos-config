@@ -126,4 +126,60 @@ in {
     };
   };
 
+  # Kanshi (multi monitoring layout management)
+  services.kanshi = {
+    enable = true;
+    systemdTarget = "hyprland-session.target";
+
+    profiles = {
+      home = {
+        outputs = [
+          {
+            criteria = "eDP-1";
+            scale = 1.0;
+            status = "enable";
+            mode = "1920x1080";
+            position = "1920,0";
+          }
+          {
+            criteria = "HDMI-A-2";
+            scale = 1.0;
+            status = "enable";
+            mode = "1920x1080";
+            position = "0,0";
+          }
+        ];
+      };
+
+      office = {
+        outputs = [
+          # {
+          #   criteria = "eDP-1";
+          #   scale = 1.0;
+          #   status = "enable";
+          #   mode = "1920x1080";
+          #   position = "1920,0";
+          # }
+          {
+            criteria = "DP-2";
+            scale = 1.0;
+            status = "enable";
+            mode = "1920x1080";
+            position = "0,0";
+          }          
+          {
+            criteria = "DP-1";
+            scale = 1.0;
+            status = "enable";
+            mode = "1920x1080";
+            position = "1920,0";
+          }          
+          {
+            criteria = "eDP-1";
+            status = "disable";
+          }
+        ];
+      };
+    };
+  };  
 }
