@@ -193,8 +193,8 @@ in {
               criteria = "eDP-1";
               scale = 1.0;
               status = "enable";
-              mode = "highres";
-              position = "1920,0";
+              mode = "1920x1080";
+              position = "0,0";
             }
           ];
         };
