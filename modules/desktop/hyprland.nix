@@ -175,7 +175,8 @@
       swww # for wallpapers
       feh # Image viewer
       grim # Screen capture for Wayland. It depends on slurp
-      slurp # Allows to select a region in Wayland
+      slurp # Allows to select a region of the screen on Wayland
+      swappy # Allows to edit a screenshot on the fly
       file-roller # Allows to extract files directly using Thunar
       brightnessctl # For incresing or decreasing the screen brightness
       playerctl # For managing media players via command line (it will be used to integrate these functionalities in waybar)

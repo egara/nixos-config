@@ -51,6 +51,9 @@ in {
 
     # Walker
     file.".config/walker/config.toml".source = ../../walker/config.toml;
+
+    # Swappy
+    file.".config/swappy/config".source = ../../swappy/config;
   };
   
   # Cursor theming
