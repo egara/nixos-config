@@ -152,7 +152,8 @@
       #####################
       # notification daemon
       #####################
-      dunst
+      #dunst
+      swaynotificationcenter
       libnotify
       pamixer # For getting the volume via command line and integrate it with dunst and hyprland
       #########################
