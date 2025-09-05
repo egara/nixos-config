@@ -188,6 +188,7 @@
       kubie
       kubecolor
       minikube
+      kubernetes-helm
       usbutils
       transmission_4-gtk
       inputs.wallpaperdownloader.packages.x86_64-linux.default
