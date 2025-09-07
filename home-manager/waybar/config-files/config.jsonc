@@ -13,25 +13,26 @@
     "modules-left": [
         "custom/walker",
         "hyprland/workspaces",
-        "wlr/taskbar",
-        "custom/playerctl#backward",
+        "cpu", 
+        "memory",
+        "wlr/taskbar"
+        /*"custom/playerctl#backward",inhibitors
         "custom/playerctl#play",
         "custom/playerctl#foward",
         "custom/playerlabel",
-        "cava#right"
+        "cava#right"*/
     ],
     "modules-center": [
+        "custom/notification",
         "clock"
     ],
     "modules-right": [
         "keyboard-state", 
-        "cpu", 
-        "memory", 
         "backlight", 
         "pulseaudio", 
         "network", 
         "tray", 
-        "custom/clipboard",
+        /*"custom/clipboard",*/
         "battery", 
         "custom/power"
     ],
@@ -79,6 +80,26 @@
         "spacing": 5,
         "show-passive-items": true,
     },
+    "custom/notification": {
+      "tooltip": false,
+      "format": "{icon}",
+      "format-icons": {
+        "notification": "<span foreground='red'><sup></sup></span>",
+        "none": "",
+        "dnd-notification": "<span foreground='red'><sup></sup></span>",
+        "dnd-none": "",
+        "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+        "inhibited-none": "",
+        "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+        "dnd-inhibited-none": ""
+      },
+      "return-type": "json",
+      "exec-if": "which swaync-client",
+      "exec": "swaync-client -swb",
+      "on-click": "swaync-client -t -sw",
+      "on-click-right": "swaync-client -d -sw",
+      "escape": true
+    },    
     // More clock configuration options:
     // https://github.com/Alexays/Waybar/wiki/Module:-Clock
     "clock": {

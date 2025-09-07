@@ -4,7 +4,8 @@
     min-height: 0;
     /* `otf-font-awesome` is required to be installed for icons */
     /*font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;*/
-    font-family: JetBrainsMono Nerd Font, Roboto, Helvetica, Arial, sans-serif;
+    /*font-family: JetBrainsMono Nerd Font, Roboto, Helvetica, Arial, sans-serif;*/
+    font-family: GoMonoNerdFontPropo, Roboto, Helvetica, Arial, sans-serif;
     font-size: 13px;
 }
 
@@ -435,4 +436,13 @@ label:focus {
   border-radius: 15px;
   color: #ffffff;     
   font-size: 16px;
+}
+
+#custom-notification {
+  background: #25253a;
+  margin: 5px 5px;
+  padding: 8px;
+  border-radius: 15px;
+  color: #ffffff;     
+  font-family: "GoMonoNerdFontPropo";
 }
