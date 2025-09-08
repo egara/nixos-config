@@ -54,6 +54,10 @@ in {
 
     # Swappy
     file.".config/swappy/config".source = ../../swappy/config;
+
+    # Swaync
+    file.".config/swaync/config.json".source = ../../swanc/config.json;
+    file.".config/swaync/style.css".source = ../../swanc/style.css;
   };
   
   # Cursor theming

@@ -1,6 +1,6 @@
 {
   "$schema": "/etc/xdg/swaync/configSchema.json",
-  "positionX": "right",
+  "positionX": "center",
   "positionY": "top",
   "control-center-margin-top": 2,
   "control-center-margin-bottom": 2,
@@ -28,16 +28,19 @@
     }
   },
   "notification-visibility": {
+    /*
     "example-name": {
       "state": "muted",
       "urgency": "Low",
       "app-name": "Spotify"
     }
+    */
   },
   "widgets": [
     "label",
     "menubar",
     "buttons-grid",
+    "backlight",
     "volume",
     "mpris",
     "title",
@@ -55,22 +58,24 @@
     },
     "label": {
       "max-lines": 1,
-      "text": "Controll Center"
+      "text": "Control Center"
     },
     "mpris": {
       "image-size": 96,
       "image-radius": 6
     },
     "backlight": {
-      "label": "",
-      "device": "intel_backlight",
-      "min": 10
-    },
+      "label": "󰃠",
+      /*"device": "intel_backlight",
+      "min": 10*/
+      "show-percentage": true,
+      "show-icons": true
+    },/*
     "backlight#KB": {
       "label": " ",
       "device": "asus::kbd_backlight",
       "subsystem": "leds"
-    },
+    },*/
     "volume": {
       "label": ""
     },
@@ -85,11 +90,11 @@
           },
           {
             "label": "   Lock",
-            "command": "swaylock.sh"
+            "command": "hyprlock"
           },
           {
             "label": "   Logout",
-            "command": "loginctl terminate-session ${XDG_SESSION_ID-}"
+            "command": "hyprctl dispatch exit 0"
           },
           {
             "label": "   Shut down",
@@ -99,7 +104,7 @@
       },
       "menu#powermode-buttons": {
         "label": "", 
-        "position": "right",
+        "position": "left",
         "actions": [ 
           {
             "label": "Performance",
@@ -114,7 +119,7 @@
             "command": "powerprofilesctl set power-saver"
           }
         ]
-      },
+      }/*,
       "menu#screenshot-buttons": {
         "label": "",
         "position": "left",
@@ -158,42 +163,30 @@
             "command": "$XDG_VIDEOS_DIR/Screencasts"
           }
         ]
-      }
+      }*/
     },
     "buttons-grid": {
       "actions": [
         {
           "label": "",
-          "command": "nm-connection-editor"
+          "command": "swaync-client -t && nm-connection-editor"
         },
         {
           "label": "",
-          "command": "blueman"
+          "command": "swaync-client -t && blueman-manager"
         },
         {
-          "label": "",
-          "command": "nwg-look"
+          "label": "",
+          "command": "swaync-client -t && walker -m finder"
         },
         {
-          "label": "",
-          "command": "exo-open ~/ConfigHub"
+          "label": "󰘥",
+          "command": "swaync-client -t && walker -m hyprland_keybinds"
         },
         {
-          "label": "",
-          "command": "ymuse"
-        },
-        {
-          "label": "",
-          "command": "orage"
-        },
-        {
-          "label": "",
-          "command": "pamac-manager"
-        },
-        {
-          "label": "",
-          "command": "firefox"
-        }
+          "label": "",
+          "command": "swaync-client -t && walker -m clipboard"
+        }        
       ]
     }
   }
