@@ -8,7 +8,7 @@
 @define-color noti-close-bg rgba(255, 255, 255, 0.1);
 @define-color noti-close-bg-hover rgba(255, 255, 255, 0.15);
 @define-color noti-urgent rgba(255,0,80,0.8);
-@define-color bg-selected #26A69A;
+@define-color bg-selected #2e71e6;
 
 *{
   font-family: "GoMonoNerdFontPropo", "Noto Sans", sans-serif;
@@ -216,10 +216,11 @@
   background: @bg-selected;
 }
 
+/*
 .widget-dnd>switch slider {
   background: @noti-bg-hover;
   border-radius: 4px;
-}
+}*/
 
 /* Label widget */
 .widget-label {
