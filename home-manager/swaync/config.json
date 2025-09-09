@@ -77,7 +77,12 @@
       "subsystem": "leds"
     },*/
     "volume": {
-      "label": ""
+      "label": "",
+              "expand-button-label": "",
+              "collapse-button-label": "",
+              "show-per-app": true,
+              "show-per-app-icon": true,
+              "show-per-app-label":true
     },
     "menubar": {
       "menu#power-buttons": {

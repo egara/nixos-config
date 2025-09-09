@@ -12,6 +12,7 @@
 
 *{
   font-family: "GoMonoNerdFontPropo", "Noto Sans", sans-serif;
+  font-size: 12px;
   color: @noti-fg;
 }
 
@@ -115,7 +116,10 @@
   border-right: 1px solid @noti-border-color;
 }
 
-.image {}
+.image {
+    border-radius: 6px;
+    margin-right: 10px;
+}
 
 .body-image {
   margin-top: 6px;
@@ -124,7 +128,6 @@
 }
 
 .summary {
-  font-size: 14px;
   font-weight: bold;
   background: transparent;
   color: white;
@@ -132,7 +135,7 @@
 }
 
 .time {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: bold;
   background: transparent;
   color: white;
@@ -178,7 +181,7 @@
 /* Title widget */
 .widget-title {
   margin: 8px;
-  font-size: 16px;
+  font-size: 12px;
 }
 
 .widget-title>button {
@@ -255,6 +258,33 @@
   border-radius: 4px;
   font-size: 14px;
 }
+.widget-volume > box > button {
+  max-width: 5px;
+  background: transparent;
+}
+
+.widget-volume > box > button:hover {
+  background: transparent;
+}
+.widget-volume > revealer > list {
+  background-color: @noti-bg;
+  border-radius: 4px;
+  margin-top: 5px;
+  padding: 0px;
+  font-size: 11px;
+}
+.widget-volume > revealer > list > row {
+  padding-left: 10px;
+  min-height: 40px;
+  background: transparent;
+  font-size: 11px;
+}
+.widget-volume > revealer > list > row:hover {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 4px;
+  font-size: 11px;
+}
 
 .widget-backlight {
   /*
@@ -330,4 +360,9 @@
 .powermode-buttons>button:hover,
 .power-buttons>button:hover{
   background: @noti-bg-hover;
+}
+
+/* Notifications title */
+.control-center .widget-title > label {
+  font-size: 16px;
 }
