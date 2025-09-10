@@ -53,6 +53,7 @@ delay = 0
 resume_last_query = false
 
 [activation_mode]
+#labels = "jkl;asdf"
 labels = ""
 
 [builtins.hyprland_keybinds]
@@ -230,7 +231,8 @@ url = "https://www.google.com/search?q=%TERM%"
 [[builtins.websearch.entries]]
 name = "DuckDuckGo"
 url = "https://duckduckgo.com/?q=%TERM%"
-switcher_only = true
+# Enabling this search engine
+#switcher_only = true
 
 [[builtins.websearch.entries]]
 name = "Ecosia"
