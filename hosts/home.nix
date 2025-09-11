@@ -14,12 +14,20 @@
 { config, lib, pkgs, username, ... }:
 
 let
-  # Github repository for yazi plugins https://github.com/yazi-rs/plugins
+  # GitHub repository for yazi plugins https://github.com/yazi-rs/plugins
   yazi-plugins = pkgs.fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";
     rev = "main";
     hash = "sha256-ixZKOtLOwLHLeSoEkk07TB3N57DXoVEyImR3qzGUzxQ=";
+  };
+
+  # GitHub repository for tokyo night yazi theme https://github.com/BennyOe/tokyo-night.yazi
+  yazi-theme-tokyo-night = pkgs.fetchFromGitHub {
+      owner = "BennyOe";
+      repo = "tokyo-night.yazi";
+      rev = "main";
+      sha256 = "sha256-4aNPlO5aXP8c7vks6bTlLCuyUQZ4Hx3GWtGlRmbhdto=";
   };
 
 in {
@@ -169,6 +177,21 @@ in {
     enable = true;
     enableZshIntegration = true;
     shellWrapperName = "y";
+
+    # Recommended for RAR files
+    package = pkgs.yazi.override {
+      _7zz = pkgs._7zz-rar;  # Support for RAR extraction
+    };
+
+    # Theme
+    theme = {
+      flavor = {
+        dark = "tokyo-night";
+      };
+    };
+    flavors = {
+      tokyo-night = "${yazi-theme-tokyo-night}";
+    };
 
     # yazi.toml
     settings = {
