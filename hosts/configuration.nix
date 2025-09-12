@@ -206,6 +206,7 @@
       k9s
       glxinfo
       buttermanager
+      gnome-calculator
   ];
 
   # List of programs that must be enabled
