@@ -311,60 +311,61 @@
     proggyfonts
   ];
 
-########################################
-# Testing Stylix
-########################################
+# ########################################
+# # Testing Stylix
+# ########################################
 #  # Global styling with Stylix
 #  stylix = {
 #  	# Dark theme
 #  	polarity = "dark";
-#
+
 #  	# Color scheme
-#	base16Scheme = "${pkgs.base16-schemes}/share/themes/material-darker.yaml";
-#
-#	# Is this mandatory?
-#	image = ../modules/display-manager/avatars/egarcia.png;
-#
-#	# Cursors
-#	cursor = {
-#	    package = pkgs.bibata-cursors;
-#	    name = "Bibata-Modern-Classic";
-#	    size = 10;
-#	};
-#
-#	# Targets
-#	targets = {
-#		grub = {
-#			enable = false;
-#		};
-#
-#		gtk = {
-#			enable = true;
-#		};
-#	};
-#
-#	# Fonts
+# 	base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
+
+# 	# Is this mandatory?
+# 	image = ../modules/display-manager/avatars/egarcia.png;
+
+# 	# Cursors
+# 	cursor = {
+# 	    package = pkgs.bibata-cursors;
+# 	    name = "Bibata-Modern-Classic";
+# 	    size = 10;
+# 	};
+
+# 	# Fonts
 # 	fonts = {
 #    	monospace = {
 #      		package = pkgs.nerdfonts;
 #      		name = "GoMonoNerdFontPropo-Bold";
 #    	};
-#
+
 #    	serif = config.stylix.fonts.monospace;
 #    	sansSerif = config.stylix.fonts.monospace;
-#
-#
-#        emoji = {
+
+#     emoji = {
 #      		package = pkgs.noto-fonts-emoji;
 #      		name = "Noto Color Emoji";
 #    	};
-#
+
 #    	sizes = {
 #    		applications = 10;
 #    		desktop = 10;
+#       popups = 10;
+#       terminal = 10;
 #    	};
 #  	};
-#
+
+#   # Targets
+#   targets = {
+#     grub = {
+#       enable = false;
+#     };
+
+#     gtk = {
+#       enable = true;
+#     };
+#   };
+
 #  };
 
   # This value determines the NixOS release from which the default

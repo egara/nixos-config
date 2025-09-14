@@ -1,4 +1,4 @@
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, username, autofirma-nix, ... }:
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, username, autofirma-nix, stylix, ... }:
 let
   # System architecture
   system = "x86_64-linux";
@@ -33,6 +33,9 @@ let
       };
 
       modules = extraModules ++ [
+        # Stylix module
+        #stylix.nixosModules.stylix
+
         # Common configuration for all hosts
         ./configuration.nix
 
@@ -55,8 +58,14 @@ let
             host = hostArg;
           };
           home-manager.users.${username} = {
-            imports = [ (import ./home.nix) ]
-              ++ lib.optionals (desktop == "hyprland") [ (import ../home-manager/desktop/hyprland/home.nix) ]
+            imports = [ 
+              stylix.homeModules.stylix
+              (import ./home.nix) 
+            ]
+              ++ lib.optionals (desktop == "hyprland") [ 
+                (import ../home-manager/desktop/hyprland/home.nix)
+                (import ../home-manager/stylix/home.nix)
+              ]
               ++ homeManagerExtraImports;
           };
         }

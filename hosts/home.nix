@@ -31,12 +31,12 @@ let
   #};
 
   # GitHub repository for catppuccin mocha yazi theme https://github.com/yazi-rs/flavors/catppuccin-mocha.yazi
-  yazi-theme-catppuccin-mocha = pkgs.fetchFromGitHub {
-      owner = "yazi-rs";
-      repo = "flavors";
-      rev = "main";
-      sha256 = "sha256-KNpr7eYHm2dPky1L6EixoD956bsYZZO3bCyKIyAlIEw=";
-  };
+  # yazi-theme-catppuccin-mocha = pkgs.fetchFromGitHub {
+  #     owner = "yazi-rs";
+  #     repo = "flavors";
+  #     rev = "main";
+  #     sha256 = "sha256-KNpr7eYHm2dPky1L6EixoD956bsYZZO3bCyKIyAlIEw=";
+  # };
 
 in {
   #imports =
@@ -201,15 +201,16 @@ in {
     #  tokyo-night = "${yazi-theme-catppuccin-mocha}";
     #};
 
+    # Theme will be managed by stylix
     # Theme (Catppuccin Mocha)
-    theme = {
-      flavor = {
-        dark = "catppuccin-mocha";
-      };
-    };
-    flavors = {
-      catppuccin-mocha = "${yazi-theme-catppuccin-mocha}/catppuccin-mocha.yazi";
-    };
+    # theme = {
+    #   flavor = {
+    #     dark = "catppuccin-mocha";
+    #   };
+    # };
+    # flavors = {
+    #   catppuccin-mocha = "${yazi-theme-catppuccin-mocha}/catppuccin-mocha.yazi";
+    # };
 
     # yazi.toml
     settings = {

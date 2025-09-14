@@ -2,7 +2,7 @@
 #  Home-manager configuration for desktop
 
 # { pkgs, config, hyprland-plugins, ... }:
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 let
   # Variables can be defined here
@@ -60,13 +60,13 @@ in {
     file.".config/swaync/style.css".source = ../../swaync/style.css;
   };
   
-  # Cursor theming
-  home.pointerCursor = {
-    gtk.enable = true;
-    package = pkgs.bibata-cursors;
-    name = "Bibata-Modern-Classic";
-    size = 10;
-  };
+  # Cursor theming is managed by stylix
+  #home.pointerCursor = {
+  #  gtk.enable = true;
+  #  package = pkgs.bibata-cursors;
+  #  name = "Bibata-Modern-Classic";
+  #  size = 10;
+  #};
 
   # GTK configuration and theming
   gtk = {
@@ -108,26 +108,27 @@ in {
     };
 
   # QT configuration and theming
-  qt = {
-    enable = true;
-    platformTheme = {
-      name = "gtk";
-    };
-    style = {
-      name = "adwaita-dark";
-      package = pkgs.adwaita-qt;
-    };
-  };
+  # qt = {
+  #   enable = true;
+  #   platformTheme = {
+  #     name = "gtk";
+  #   };
+  #   style = {
+  #     name = "adwaita-dark";
+  #     package = pkgs.adwaita-qt;
+  #   };
+  # };
 
   # Kitty terminal emulator special configuration
   programs.kitty = {
     enable = true;
-    font = {
-      package = pkgs.nerd-fonts.go-mono;
-      name = "GoMonoNerdFontPropo-Bold";
-      size = 10;
-    };
-    themeFile = "Catppuccin-Mocha";
+    # Fonts and theming will be managed by stylix
+    #font = {
+    #  package = pkgs.nerd-fonts.go-mono;
+    #  name = "GoMonoNerdFontPropo-Bold";
+    #  size = 10;
+    #};
+    #themeFile = "Catppuccin-Mocha";
     shellIntegration = {
       enableBashIntegration = true;
     };
