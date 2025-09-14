@@ -23,11 +23,19 @@ let
   };
 
   # GitHub repository for tokyo night yazi theme https://github.com/BennyOe/tokyo-night.yazi
-  yazi-theme-tokyo-night = pkgs.fetchFromGitHub {
-      owner = "BennyOe";
-      repo = "tokyo-night.yazi";
+  #yazi-theme-tokyo-night = pkgs.fetchFromGitHub {
+  #    owner = "BennyOe";
+  #    repo = "tokyo-night.yazi";
+  #    rev = "main";
+  #    sha256 = "sha256-4aNPlO5aXP8c7vks6bTlLCuyUQZ4Hx3GWtGlRmbhdto=";
+  #};
+
+  # GitHub repository for catppuccin mocha yazi theme https://github.com/yazi-rs/flavors/catppuccin-mocha.yazi
+  yazi-theme-catppuccin-mocha = pkgs.fetchFromGitHub {
+      owner = "yazi-rs";
+      repo = "flavors";
       rev = "main";
-      sha256 = "sha256-4aNPlO5aXP8c7vks6bTlLCuyUQZ4Hx3GWtGlRmbhdto=";
+      sha256 = "sha256-KNpr7eYHm2dPky1L6EixoD956bsYZZO3bCyKIyAlIEw=";
   };
 
 in {
@@ -183,14 +191,24 @@ in {
       _7zz = pkgs._7zz-rar;  # Support for RAR extraction
     };
 
-    # Theme
+    # Theme (Tokyo Night)
+    #theme = {
+    #  flavor = {
+    #    dark = "tokyo-night";
+    #  };
+    #};
+    #flavors = {
+    #  tokyo-night = "${yazi-theme-catppuccin-mocha}";
+    #};
+
+    # Theme (Catppuccin Mocha)
     theme = {
       flavor = {
-        dark = "tokyo-night";
+        dark = "catppuccin-mocha";
       };
     };
     flavors = {
-      tokyo-night = "${yazi-theme-tokyo-night}";
+      catppuccin-mocha = "${yazi-theme-catppuccin-mocha}/catppuccin-mocha.yazi";
     };
 
     # yazi.toml
