@@ -108,16 +108,16 @@ in {
     };
 
   # QT configuration and theming
-  # qt = {
-  #   enable = true;
-  #   platformTheme = {
-  #     name = "gtk";
-  #   };
-  #   style = {
-  #     name = "adwaita-dark";
-  #     package = pkgs.adwaita-qt;
-  #   };
-  # };
+  qt = {
+    enable = true;
+    platformTheme = {
+      name = "gtk";
+    };
+    style = {
+      name = "adwaita-dark";
+      package = pkgs.adwaita-qt;
+    };
+  };
 
   # Kitty terminal emulator special configuration
   programs.kitty = {
