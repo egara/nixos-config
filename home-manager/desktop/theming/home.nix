@@ -5,7 +5,7 @@
   #############################
   # Theming with Home Manager #
   #############################
-  # Cursor theming is managed now by stylix
+  # Cursor theming will be globally managed by stylix (see below)
   #home.pointerCursor = {
   #  gtk.enable = true;
   #  package = pkgs.bibata-cursors;
@@ -22,10 +22,11 @@
       package = pkgs.gnome-themes-extra;
     };
 
-    iconTheme = {
-      package = pkgs.papirus-icon-theme;
-      name = "Papirus-Dark";
-    };
+    # Icon theming will be globally managed by Stylix (see below)
+    #iconTheme = {
+    #  package = pkgs.papirus-icon-theme;
+    #  name = "Papirus-Dark";
+    #};
 
     font = {
       package = pkgs.nerd-fonts.go-mono;
@@ -77,6 +78,14 @@
         size = 10;
     };
 
+    # Icons
+    icons = {
+      enable = true;
+      package = pkgs.papirus-icon-theme;
+      dark = "Papirus-Dark";
+      light = "Papirus-Dark";
+    };
+
     # Fonts
     fonts = {
       monospace = {
@@ -107,7 +116,7 @@
         enable = true;
       };
 
-      # GTK and QT styling settings will be done manually
+      # GTK and QT theming will be managed by Home Manger (see above)
       gtk = {
         enable = false;     
       };
