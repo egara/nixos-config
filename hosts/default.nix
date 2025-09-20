@@ -47,7 +47,7 @@ let
             lib.optionals (host.desktop == "plasma") [ ../modules/desktop/plasma.nix ];
         })
 
-        # Home Manager module
+        # Home Manager module and configurations
         home-manager.nixosModules.home-manager {
           # Module configuration
           home-manager.backupFileExtension = "backup";
@@ -60,11 +60,11 @@ let
           home-manager.users.${username} = {
             imports = [ 
               stylix.homeModules.stylix
-              (import ./home.nix) 
+              (import ./home.nix)
+              (import ../home-manager/desktop/theming/home.nix)
             ]
               ++ lib.optionals (desktop == "hyprland") [ 
                 (import ../home-manager/desktop/hyprland/home.nix)
-                (import ../home-manager/stylix/home.nix)
               ]
               ++ homeManagerExtraImports;
           };
