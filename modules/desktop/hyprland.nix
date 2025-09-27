@@ -13,7 +13,7 @@
         wayland = {
           enable = true;
         };
-        theme = "Elegant";
+        theme = "catppuccin-mocha-mauve";
       };
     };
 
@@ -161,10 +161,10 @@
       #########################
       hyprlock
       hypridle
-      #########
-      # Theming
-      #########
-      elegant-sddm
+      ##############
+      # SDDM Theming
+      ##############
+      catppuccin-sddm
       #####################
       # clipboard (Now it is integrated with Walker so it is not needed anymore)
       #####################
