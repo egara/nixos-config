@@ -1,7 +1,7 @@
 app_launch_prefix = ""
 terminal_title_flag = ""
 locale = ""
-close_when_open = false
+close_when_open = true # Allows using SUPER key f.i. to toggling Walker
 theme = "default"
 monitor = ""
 hotreload_theme = false
