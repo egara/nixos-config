@@ -69,7 +69,7 @@
     base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
 
     # Is this mandatory?
-    image = ../../../modules/display-manager/avatars/egarcia.png;
+    image = ../../../../modules/display-manager/avatars/egarcia.png;
 
     # Cursors
     cursor = {
