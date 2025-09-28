@@ -61,10 +61,10 @@ let
             imports = [ 
               stylix.homeModules.stylix
               (import ./home.nix)
-              (import ../home-manager/desktop/theming/home.nix)
             ]
               ++ lib.optionals (desktop == "hyprland") [ 
                 (import ../home-manager/desktop/hyprland/home.nix)
+                (import ../home-manager/desktop/hyrpland/theming/home.nix)
               ]
               ++ homeManagerExtraImports;
           };
