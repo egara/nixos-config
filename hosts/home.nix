@@ -261,6 +261,16 @@ in {
           run = ["shell \"$SHELL\" --block"];
           desc = "Open $SHELL here";
         }
+        {
+          on = "<F2>";
+          run = "rename";
+          desc = "Rename a file";
+        }
+        {
+          on = "<C-f>";
+          run = "search";
+          desc = "Search files (fd)";
+        }
       ];
     };
   };
