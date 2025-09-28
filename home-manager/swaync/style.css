@@ -86,7 +86,6 @@
 
 .notification-default-action:hover,
 .notification-action:hover {
-  -gtk-icon-effect: none;
   background: @noti-bg-alt;
 }
 
@@ -260,7 +259,6 @@
   font-size: 14px;
 }
 .widget-volume > box > button {
-  max-width: 5px;
   background: transparent;
 }
 
@@ -319,11 +317,11 @@
   border: 1px solid @noti-border-color;
   background: @noti-bg;
   border-radius: 4px;
-  margin: 4px 12px;
+  margin: 4px 8px;
 }
 
 .widget-buttons-grid{
-  padding: 0px 8px 8px;
+  padding: 0 8px 8px;
   margin: 0px 8px 8px;
   border-radius: 0px 0px 4px 4px;
   background-color: @noti-bg;
@@ -333,6 +331,7 @@
 .widget-buttons-grid>flowbox>flowboxchild>button{
   background: @noti-bg;
   border-radius: 4px;
+  margin: 5px;
 }
 
 .widget-buttons-grid>flowbox>flowboxchild>button:hover {
@@ -367,3 +366,4 @@
 .control-center .widget-title > label {
   font-size: 16px;
 }
+
