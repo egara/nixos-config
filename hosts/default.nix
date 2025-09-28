@@ -64,7 +64,7 @@ let
             ]
               ++ lib.optionals (desktop == "hyprland") [ 
                 (import ../home-manager/desktop/hyprland/home.nix)
-                (import ../home-manager/desktop/hyrpland/theming/home.nix)
+                (import ../home-manager/desktop/hyprland/theming/home.nix)
               ]
               ++ homeManagerExtraImports;
           };
