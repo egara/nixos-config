@@ -51,10 +51,10 @@ let
         home-manager.nixosModules.home-manager {
           # Module configuration
           home-manager.backupFileExtension = "backup";
-          home-manager.useGlobalPkgs = true;
+          home-manager.useGlobalPkgs = false;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {
-            inherit username;
+            inherit username pkgs;
             host = hostArg;
           };
           home-manager.users.${username} = {
