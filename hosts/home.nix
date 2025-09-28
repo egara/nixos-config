@@ -283,4 +283,18 @@ in {
     };
   };
 
+  # Configuring xdg-utils to use some default applications
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = "firefox.desktop";
+      "x-scheme-handler/http" = "firefox.desktop";
+      "x-scheme-handler/https" = "firefox.desktop";
+      "application/pdf" = "org.kde.okular.desktop";
+      "application/x-pdf" = "org.kde.okular.desktop";
+      "x-terminal-emulator" = "kitty.desktop";
+      "inode/directory" = "thunar.desktop";
+      "x-scheme-handler/file" = "thunar.desktop";
+    };  
+  };
 }
