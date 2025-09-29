@@ -147,6 +147,27 @@ in {
       }
       {
         profile = {
+          name = "meeting-room";
+          outputs = [
+            {
+              criteria = "DP-2";
+              scale = 1.0;
+              status = "enable";
+              mode = "1920x1080";
+              position = "0,0";
+            }
+            {
+              criteria = "eDP-1";
+              scale = 1.0;
+              status = "enable";
+              mode = "1920x1080";
+              position = "1920,0";
+            }
+          ];
+        };
+      }
+      {
+        profile = {
           name = "undocked";
           outputs = [
             {
