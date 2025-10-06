@@ -166,5 +166,6 @@
     eclipses.eclipse-jee
     #jdk8
     #jdk17
+    teams-for-linux
   ];
 }
