@@ -201,8 +201,6 @@
       k9s
       glxinfo
       buttermanager
-      gnome-calculator
-      system-config-printer
   ];
 
   # List of programs that must be enabled
