@@ -236,6 +236,11 @@ in {
     keymap = {
       manager.prepend_keymap = [
         {
+          on = "<C-t>";
+          run = ''shell 'kitty --directory "$PWD"' --orphan'';
+          desc = "Open kitty terminal here";
+        }
+        {
           on = "T";
           run = "plugin toggle-pane max-preview";
           desc = "Maximize or restore the preview pane";
