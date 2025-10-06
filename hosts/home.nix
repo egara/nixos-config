@@ -223,6 +223,7 @@ in {
       full-border = "${yazi-plugins}/full-border.yazi";
       toggle-pane = "${yazi-plugins}/toggle-pane.yazi";
       mount = "${yazi-plugins}/mount.yazi";
+      smart-enter = "${yazi-plugins}/smart-enter.yazi";
     };
 
     # Some plugins need to be loaded before hand.
@@ -270,6 +271,21 @@ in {
           on = "<C-f>";
           run = "search";
           desc = "Search files (fd)";
+        }
+        {
+          on = "<Enter>";
+          run = "plugin smart-enter";
+          desc = "Enter the child directory, or open the file";
+        }
+        {
+          on = "<Delete>";
+          run = "trash";
+          desc = "Move to trash";
+        }
+        {
+          on = "<S-Delete>";
+          run = "remove";
+          desc = "Delete permanently";
         }
       ];
     };
