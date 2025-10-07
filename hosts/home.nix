@@ -236,8 +236,13 @@ in {
     keymap = {
       manager.prepend_keymap = [
         {
+          on = "<C-e>";
+          run = ''shell 'thunar "$YAZI_CWD"' --orphan'';
+          desc = "Open Thunar in the current directory";
+        }
+        {
           on = "<C-t>";
-          run = ''shell 'kitty --directory "$PWD"' --orphan'';
+          run = ''shell 'kitty --directory "$YAZI_CWD"' --orphan'';
           desc = "Open kitty terminal here";
         }
         {
