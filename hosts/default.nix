@@ -67,6 +67,14 @@ let
                 (import ../home-manager/desktop/hyprland/theming/home.nix)
               ]
               ++ homeManagerExtraImports;
+
+            # Activation script to clean up leftover backup files
+            # This prevents errors on rebuild if a previous one failed
+            home.activation = {
+              cleanup-hm-backups = home-manager.lib.hm.dag.entryAfter ["writeBoundary"] ''
+                $DRY_RUN_CMD find "$HOME" -name "*.backup" -delete
+              '';
+            };
           };
         }
       ];
