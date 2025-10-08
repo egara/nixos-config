@@ -19,15 +19,43 @@
   networking = {
   	networkmanager = {
   		enable = true;
+      # Enabling some NetworkManager plugins for managing VPNs
+      plugins = with pkgs; [
+        networkmanager-fortisslvpn
+        networkmanager-l2tp
+        networkmanager-openvpn
+        networkmanager_strongswan
+      ];
   	};
 
-	extraHosts =
-	''
-	# StandarStripesUleApplication
-	127.0.0.1	uleapp	uleapp
-	127.0.0.1   uleapp-ldap-test	uleapp-ldap-test
-	'';
+	 extraHosts =
+	 ''
+	 # StandarStripesUleApplication
+	 127.0.0.1	uleapp	uleapp
+	 127.0.0.1   uleapp-ldap-test	uleapp-ldap-test
+	 '';
+  };
 
+  # Services for managing VPNs via NetworkManager
+  services = {
+    mullvad-vpn = {
+      enable = true;
+    };
+    softether = {
+      enable = true;
+    };
+    strongswan = {
+      enable = true;
+    };
+    #tailscale = {
+    #  enable = true;
+    #};
+    wg-netmanager = {
+      enable = true;
+    };
+    xl2tpd = {
+      enable = true;
+    };
   };
 
   # Set your time zone.
@@ -369,5 +397,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.11"; # Did you read the comment?
-
 }
