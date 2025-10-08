@@ -196,7 +196,6 @@
       vlc
       telegram-desktop
       pkgs-stable.insync
-      filezilla
       pciutils
       spotify
       bind
