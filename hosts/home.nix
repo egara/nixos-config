@@ -261,10 +261,20 @@ in {
           desc = "USB";
         }
         {
-          on = "y";
+          on = "<C-c>";
           for  = "unix";
           run = ["shell -- for path in \"$@\"; do echo \"file://$path\"; done | wl-copy -t text/uri-list" "yank"];
           desc = "Copy a file both in system and yazi clipboard";
+        }
+        {
+          on = "<C-x>";
+          run = "yank --cut";
+          desc = "Cut a file";
+        }
+        {
+          on = "<C-v>";
+          run = "paste";
+          desc = "Paste a file";
         }
         {
           on = "!";
