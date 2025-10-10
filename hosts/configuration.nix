@@ -148,6 +148,7 @@
   # Environment variables
   environment.sessionVariables = {
     EDITOR = "nano";
+    KUBE_EDITOR= "nano";
     BROWSER = "firefox";
     TERMINAL = "kitty";
   };
