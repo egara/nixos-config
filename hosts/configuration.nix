@@ -228,6 +228,7 @@
       k9s
       glxinfo
       buttermanager
+      openssl
   ];
 
   # List of programs that must be enabled
