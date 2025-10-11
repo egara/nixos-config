@@ -1,4 +1,4 @@
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, username, autofirma-nix, stylix, ... }:
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, username, autofirma-nix, stylix, walker, ... }:
 let
   # System architecture
   system = "x86_64-linux";
@@ -35,6 +35,9 @@ let
       modules = extraModules ++ [
         # Stylix module
         #stylix.nixosModules.stylix
+
+        # Walker module
+        walker.nixosModules.default
 
         # Common configuration for all hosts
         ./configuration.nix

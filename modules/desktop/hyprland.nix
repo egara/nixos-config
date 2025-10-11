@@ -97,6 +97,9 @@
     };
   };
 
+  # Walker (Launcher)
+  programs.walker.enable = true;
+
   ##########
   # Polkit #
   ##########
@@ -139,7 +142,7 @@
       # app-launchers
       ###############
       #wofi
-      walker
+      #walker
       libqalculate
       ############
       # networking
