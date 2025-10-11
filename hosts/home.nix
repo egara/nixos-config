@@ -318,40 +318,4 @@ in {
       uris = ["qemu:///system"];
     };
   };
-
-  # Configuring xdg-utils to use some default applications
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications = {
-      # Setting Sublime Text for text files, nix files
-      # and markdown files
-      "text/x-nix" = "sublime_text.desktop";
-      "text/plain" = "sublime_text.desktop";
-      "text/markdown" = "sublime_text.desktop";
-
-      # Setting Firefox for html files http and https
-      "text/html" = "firefox.desktop";
-      "x-scheme-handler/http" = "firefox.desktop";
-      "x-scheme-handler/https" = "firefox.desktop";
-
-      # Setting Okular for PDF files
-      "application/pdf" = "org.kde.okular.desktop";
-      "application/x-pdf" = "org.kde.okular.desktop";
-
-      # Setting kitty for terminal emulator
-      "x-terminal-emulator" = "kitty.desktop";
-
-      # Setting Thunar for File Browising
-      "inode/directory" = "thunar.desktop";
-      "x-scheme-handler/file" = "thunar.desktop";
-
-      # Setting VLC for common video file types
-      "video/mp4" = "vlc.desktop";
-      "video/webm" = "vlc.desktop";
-      "video/x-matroska" = "vlc.desktop"; # For .mkv files
-
-      # Setting Qmmp for mp3 files
-      "audio/mpeg" = "qmmp.desktop";
-    };  
-  };
 }
