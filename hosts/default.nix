@@ -111,6 +111,7 @@ let
     }
     ./ironman/hardware-configuration.nix
     ./efi-configuration.nix
+    ./ironman/configuration.nix
     ../modules/custom/autofirma.nix
   ];
 
