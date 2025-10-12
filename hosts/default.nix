@@ -1,5 +1,9 @@
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, username, autofirma-nix, stylix, walker, ... }:
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, ... }:
+#Variables
 let
+  # Main user
+  username = "egarcia";
+  
   # System architecture
   system = "x86_64-linux";
 

@@ -97,21 +97,18 @@
   # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, hyprland, hyprland-plugins, ... }:
   # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, walker, ... }:
   outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, ... }:
-    # Variables
-    let
-      username = "egarcia";
-    in {
-      nixosConfigurations = (
-        # Imports ./hosts/default.nix module
-        import ./hosts {
-          inherit (nixpkgs) lib;
-          # Also inherit disko, home-manager and the rest of the variables so it does not need 
-          # to be defined anymore.
-          # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
-          # inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix walker;
-          inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username autofirma-nix stylix walker;
-        }
-      );
-    };
+  {
+    nixosConfigurations = (
+      # Imports ./hosts/default.nix module
+      import ./hosts {
+        inherit (nixpkgs) lib;
+        # Also inherit disko, home-manager and the rest of the variables so it does not need 
+        # to be defined anymore.
+        # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
+        # inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix walker;
+        inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader autofirma-nix stylix walker;
+      }
+    );
+  };
    
 }
