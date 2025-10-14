@@ -131,7 +131,7 @@ let
     ./taskmaster/hardware-configuration.nix
     ./efi-configuration.nix
     ./taskmaster/configuration.nix
-    ../modules/autofirma.nix
+    ../modules/custom/autofirma.nix
   ];
 
 in
