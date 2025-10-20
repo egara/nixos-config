@@ -289,8 +289,13 @@ in {
         }
         {
           on = "<C-f>";
-          run = "search";
+          run = "search --via=fd";
           desc = "Search files (fd)";
+        }
+        {
+          on = "<C-S-f>";
+          run = "search --via=rg";
+          desc = "Search files by content (ripgrep)";
         }
         {
           on = "<Enter>";
