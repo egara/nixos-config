@@ -236,6 +236,11 @@ in {
     keymap = {
       manager.prepend_keymap = [
         {
+          on = "<C-w>";
+          run = "close";
+          desc = "Close the current tab or quit it it's last";
+        }
+        {
           on = "<S-e>";
           run = ''shell 'thunar "$YAZI_CWD"' --orphan'';
           desc = "Open Thunar in the current directory";
