@@ -221,7 +221,7 @@ in {
 
     plugins = {
       full-border = "${yazi-plugins}/full-border.yazi";
-      toggle-pane = "${yazi-plugins}/toggle-pane.yazi";
+      #toggle-pane = "${yazi-plugins}/toggle-pane.yazi";
       mount = "${yazi-plugins}/mount.yazi";
       smart-enter = "${yazi-plugins}/smart-enter.yazi";
     };
@@ -236,12 +236,12 @@ in {
     keymap = {
       manager.prepend_keymap = [
         {
-          on = "<C-e>";
+          on = "<S-e>";
           run = ''shell 'thunar "$YAZI_CWD"' --orphan'';
           desc = "Open Thunar in the current directory";
         }
         {
-          on = "<C-t>";
+          on = "<S-t>";
           run = ''shell 'kitty --directory "$YAZI_CWD"' --orphan'';
           desc = "Open kitty terminal here";
         }
