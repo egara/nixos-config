@@ -293,7 +293,7 @@ in {
           desc = "Search files (fd)";
         }
         {
-          on = "<C-S-f>";
+          on = "<S-f>";
           run = "search --via=rg";
           desc = "Search files by content (ripgrep)";
         }
