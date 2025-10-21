@@ -230,6 +230,7 @@
       glxinfo
       buttermanager
       openssl
+      lazyssh # For SSH management
   ];
 
   # List of programs that must be enabled
