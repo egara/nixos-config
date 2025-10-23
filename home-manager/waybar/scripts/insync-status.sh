@@ -5,7 +5,7 @@
 INS_LOGS_DB="$HOME/.config/Insync/logs.db"
 # KEYWORDS: The definitive list of log phrases indicating active syncing (Upload or Download)
 # 'download' for active download; 'AddCloudGDItem' and 'ADD' for active upload processing.
-SYNCING_KEYWORDS="AddCloudGDItem|ADD|download|processing|queue"
+SYNCING_KEYWORDS="AddCloudGDItem|ADD|download|processing|queue|RemoveCloudGDItem|DELETE"
 
 # The path to 'find' and 'wc' are usually correct on NixOS, 
 # but if Waybar is running in a very minimal shell, you might need to 
@@ -21,9 +21,9 @@ if ! pgrep -x insync > /dev/null; then
 fi
 
 # Check for active syncing using log messages
-# Query the last 50 log messages and check if any contain the SYNCING_KEYWORDS.
+# Query the last 10 log messages and check if any contain the SYNCING_KEYWORDS.
 # This is the most reliable method, as it uses Insync's internal status records.
-SYNCING_COUNT=$(sqlite3 "$INS_LOGS_DB" "SELECT message FROM logs ORDER BY created DESC LIMIT 25;" \
+SYNCING_COUNT=$(sqlite3 "$INS_LOGS_DB" "SELECT message FROM logs ORDER BY created DESC LIMIT 10;" \
     | grep -E -i "$SYNCING_KEYWORDS" \
     | wc -l)
                 
