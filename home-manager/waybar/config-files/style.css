@@ -454,4 +454,9 @@ label:focus {
   border-radius: 15px;
   color: #ffffff;     
   font-family: "GoMonoNerdFontPropo";
+  font-size: 16px;
+}
+
+#custom-insync.error {
+  color: #f53c3c;
 }

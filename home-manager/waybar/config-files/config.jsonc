@@ -41,7 +41,7 @@
     "custom/insync": {
         "format": "{text}",
         "exec-if": "which insync",
-        "exec": "~/.config/scripts/insync-status.sh",
+        "exec": "~/.config/waybar/scripts/insync-status.sh",
         "return-type": "json",
         "interval": 2,
         "tooltip": true,
