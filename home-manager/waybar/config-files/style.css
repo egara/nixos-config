@@ -460,3 +460,7 @@ label:focus {
 #custom-insync.error {
   color: #f53c3c;
 }
+
+#custom-insync.syncing {
+  color: #8A69DB;
+}
