@@ -231,6 +231,7 @@
       buttermanager
       openssl
       lazyssh # For SSH management
+      sqlite
   ];
 
   # List of programs that must be enabled

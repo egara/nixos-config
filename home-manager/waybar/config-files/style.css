@@ -446,3 +446,12 @@ label:focus {
   color: #ffffff;     
   font-family: "GoMonoNerdFontPropo";
 }
+
+#custom-insync {
+  background: #25253a;
+  margin: 5px 5px;
+  padding: 8px;
+  border-radius: 15px;
+  color: #ffffff;     
+  font-family: "GoMonoNerdFontPropo";
+}

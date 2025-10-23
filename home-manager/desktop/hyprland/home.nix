@@ -35,6 +35,7 @@ in {
     # Waybar configuration
     file.".config/waybar/config.jsonc".source = ../../waybar/config-files/config.jsonc;
     file.".config/waybar/style.css".source = ../../waybar/config-files/style.css;
+    file.".config/waybar/scripts/insync-status.sh".source = ../../waybar/scripts/insync-status.sh;
 
     # Wlogout configuration
     file.".config/wlogout/layout".source = ../../wlogout/config-files/layout;
