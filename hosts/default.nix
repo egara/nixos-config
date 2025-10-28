@@ -51,7 +51,8 @@ let
         ({ config, lib, host, ... }: {
           imports =
             lib.optionals (host.desktop == "hyprland") [ ../modules/desktop/hyprland.nix ] ++
-            lib.optionals (host.desktop == "plasma") [ ../modules/desktop/plasma.nix ];
+            lib.optionals (host.desktop == "plasma") [ ../modules/desktop/plasma.nix ] ++
+            lib.optionals (host.desktop == "cosmic") [ ../modules/desktop/cosmic.nix ];
         })
 
         # Home Manager module and configurations
@@ -153,6 +154,11 @@ in
   "rocket-hyprland" = mkHost {
     hostName = "rocket";
     desktop = "hyprland";
+    extraModules = rocketModules;
+  };
+  "rocket-cosmic" = mkHost {
+    hostName = "rocket";
+    desktop = "cosmic";
     extraModules = rocketModules;
   };
 

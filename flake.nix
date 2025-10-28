@@ -71,7 +71,6 @@
     stylix = {
       url = "github:danth/stylix";
     };
-
   };
 
   # The binary cache configuration is strongly recommended to avoid unnecessary local compilation.
