@@ -227,7 +227,7 @@
       #gradia
       posting
       k9s
-      glxinfo
+      mesa-demos
       buttermanager
       openssl
       lazyssh # For SSH management
