@@ -224,7 +224,7 @@
       killall
       protonvpn-gui
       gemini-cli
-      gradia
+      #gradia
       posting
       k9s
       glxinfo
