@@ -76,11 +76,15 @@ in {
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      # Setting Sublime Text for text files, nix files
+      # Setting Sublime Text for several kind of files
       # and markdown files
       "text/x-nix" = "sublime_text.desktop";
       "text/plain" = "sublime_text.desktop";
       "text/markdown" = "sublime_text.desktop";
+      "application/javascript" = "sublime_text.desktop";
+      "application/json" = "sublime_text.desktop";
+      "application/x-yaml" = "sublime_text.desktop";
+      "text/css" = "sublime_text.desktop";
 
       # Setting Firefox for html files http and https
       "text/html" = "firefox.desktop";
@@ -105,6 +109,10 @@ in {
 
       # Setting Qmmp for mp3 files
       "audio/mpeg" = "qmmp.desktop";
+
+      # Setting feh for jpg and png files
+      "image/jpeg" = "feh.desktop";
+      "image/png" = "feh.desktop";
     };  
   };
 
