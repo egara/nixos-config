@@ -214,35 +214,43 @@ in {
 
     # yazi.toml
     settings = {
-      # By default, yazi uses its own internal rules for opening files, which
-      # may not align with the system's mime type associations (xdg-open).
-      # The following rule overrides the default behavior and forces yazi to
-      # use xdg-open for all file types, thus respecting the system's default
-      # applications.
-      opener.open = [
-        { run = "xdg-open \"$@\""; orphan = true; for = "unix"; desc = "Open"; }
-      ];
-      # The default player for music will be QMMP
-      opener.play = [
-        { run = "qmmp \"$@\""; orphan= true; for = "unix"; }
-      ];
-      # The default player for video will be VLC
-      opener.video = [
-        { run = "vlc \"$@\""; orphan = true; for = "unix"; }
-      ];
-      # The default editor will be sublime text
-      opener.edit = [
-        { run = "subl \"$@\""; orphan = true; for = "unix"; }
-      ];
-      # Setting default behaviours for some kind of files
-      open.prepend_rules = [
-        # Video
-        { name = "*.mkv"; use = "video";}
-        { name = "*.mp4"; use = "video";}
-        { name = "*.mov"; use = "video";}
-        { name = "*.wmv"; use = "video";}
-        { name = "*.webm"; use = "video";}
-      ];
+      opener = {
+        # By default, yazi uses its own internal rules for opening files, which
+        # may not align with the system's mime type associations (xdg-open).
+        # The following rule overrides the default behavior and forces yazi to
+        # use xdg-open for all file types, thus respecting the system's default
+        # applications.
+        open = [
+          { run = "xdg-open \"$@\""; orphan = true; for = "unix"; desc = "Open"; }
+        ];
+
+        # The default player for music will be QMMP
+        play = [
+          { run = "qmmp \"$@\""; orphan= true; for = "unix"; }
+        ];
+
+        # The default player for video will be VLC
+        video = [
+          { run = "vlc \"$@\""; orphan = true; for = "unix"; }
+        ];
+
+        # The default editor will be sublime text
+        edit = [
+          { run = "subl \"$@\""; orphan = true; for = "unix"; }
+        ];
+      };
+
+      open = {
+        # Setting default behaviours for some kind of files
+        prepend_rules = [
+          # Video
+          { name = "*.mkv"; use = "video"; }
+          { name = "*.mp4"; use = "video"; }
+          { name = "*.mov"; use = "video"; }
+          { name = "*.wmv"; use = "video"; }
+          { name = "*.webm"; use = "video"; }
+        ];  
+      };
     };
 
     plugins = {
