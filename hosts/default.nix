@@ -50,9 +50,15 @@ let
         # It is a module itself!
         ({ config, lib, host, ... }: {
           imports =
-            lib.optionals (host.desktop == "hyprland") [ ../modules/desktop/hyprland.nix ] ++
             lib.optionals (host.desktop == "plasma") [ ../modules/desktop/plasma.nix ] ++
-            lib.optionals (host.desktop == "cosmic") [ ../modules/desktop/cosmic.nix ];
+            lib.optionals (host.desktop == "cosmic") [ ../modules/desktop/cosmic.nix ] ++
+            # Import the new sicos hyprland module
+            lib.optionals (host.desktop == "hyprland") [ ../modules/sicos/hyprland ];
+          
+          # Enable the sicos module if desktop is hyprland
+          config = lib.mkIf (host.desktop == "hyprland") {
+            programs.sicos.hyprland.enable = true;
+          };
         })
 
         # Home Manager module and configurations
@@ -71,7 +77,7 @@ let
               (import ./home.nix)
             ]
               ++ lib.optionals (desktop == "hyprland") [ 
-                (import ../home-manager/desktop/hyprland/home.nix)
+                (import ../modules/sicos/hyprland/hm-module.nix)
                 (import ../home-manager/desktop/hyprland/theming/home.nix)
               ]
               ++ homeManagerExtraImports;
