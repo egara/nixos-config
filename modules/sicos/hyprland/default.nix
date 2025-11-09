@@ -89,12 +89,12 @@ in
         default = ./config-files/wlogout/style.css;
         description = "Path to the wlogout style.css file.";
       };
-      hibernateIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/hibernate.png; };
-      lockIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/lock.png; };
-      logoutIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/logout.png; };
-      rebootIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/reboot.png; };
-      shutdownIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/shutdown.png; };
-      suspendIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/suspend.png; };
+      hibernateIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/hibernate.png; description = "Path to the hibernate icon for the logout screen."; };
+      lockIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/lock.png; description = "Path to the lock icon for the logout screen."; };
+      logoutIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/logout.png; description = "Path to the logout icon for the logout screen."; };
+      rebootIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/reboot.png; description = "Path to the reboot icon for the logout screen."; };
+      shutdownIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/shutdown.png; description = "Path to the shutdown icon for the logout screen."; };
+      suspendIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/suspend.png; description = "Path to the suspend icon for the logout screen."; };
     };
 
     # Swaync
@@ -131,11 +131,11 @@ in
 
     # Group custom scripts
     scripts = {
-      changeWallpaper = lib.mkOption { type = lib.types.path; default = ./scripts/change-wallpaper.sh; };
-      disableLaptopScreen = lib.mkOption { type = lib.types.path; default = ./scripts/disable-laptop-screen.sh; };
-      nixosClean = lib.mkOption { type = lib.types.path; default = ./scripts/nixos-clean.sh; };
-      nixosScripts = lib.mkOption { type = lib.types.path; default = ./scripts/nixos-scripts.sh; };
-      nixosUpdate = lib.mkOption { type = lib.types.path; default = ./scripts/nixos-update.sh; };
+      changeWallpaper = lib.mkOption { type = lib.types.path; default = ./scripts/change-wallpaper.sh; description = "Path to the script that changes the wallpaper."; };
+      disableLaptopScreen = lib.mkOption { type = lib.types.path; default = ./scripts/disable-laptop-screen.sh; description = "Path to the script that disables the laptop screen."; };
+      nixosClean = lib.mkOption { type = lib.types.path; default = ./scripts/nixos-clean.sh; description = "Path to the script that cleans the NixOS system."; };
+      nixosScripts = lib.mkOption { type = lib.types.path; default = ./scripts/nixos-scripts.sh; description = "Path to a helper script that shows available nixos scripts."; };
+      nixosUpdate = lib.mkOption { type = lib.types.path; default = ./scripts/nixos-update.sh; description = "Path to the script that updates the NixOS system."; };
     };
   };
 
