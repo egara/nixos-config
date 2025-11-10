@@ -137,6 +137,11 @@ in
       nixosScripts = lib.mkOption { type = lib.types.path; default = ./scripts/nixos-scripts.sh; description = "Path to a helper script that shows available nixos scripts."; };
       nixosUpdate = lib.mkOption { type = lib.types.path; default = ./scripts/nixos-update.sh; description = "Path to the script that updates the NixOS system."; };
     };
+
+    # Theming
+    theming = {
+      enable = lib.mkEnableOption "Enable sicos theming";
+    };
   };
 
   # 2. CONFIGURATION (USING THE OPTIONS)

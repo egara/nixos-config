@@ -58,6 +58,7 @@ let
           # Enable the sicos module if desktop is hyprland
           config = lib.mkIf (host.desktop == "hyprland") {
             programs.sicos.hyprland.enable = true;
+            programs.sicos.hyprland.theming.enable = true;
           };
         })
 
@@ -78,7 +79,6 @@ let
             ]
               ++ lib.optionals (desktop == "hyprland") [ 
                 (import ../modules/sicos/hyprland/hm-module.nix)
-                (import ../home-manager/desktop/hyprland/theming/home.nix)
               ]
               ++ homeManagerExtraImports;
 
