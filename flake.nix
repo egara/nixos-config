@@ -107,7 +107,12 @@
     };
 
     homeManagerModules = {
-      sicos-hyprland = import ./modules/sicos/hyprland/hm-module.nix;
+      sicos-hyprland = {
+        imports = [
+          stylix.homeModules.stylix
+          (import ./modules/sicos/hyprland/hm-module.nix)
+        ];
+      };
     };
 
     nixosConfigurations = (

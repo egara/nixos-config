@@ -218,14 +218,15 @@ in
         };
 
         # Fonts
-        fonts = {
-          monospace = {
+        fonts = let
+          monospaceFont = {
             package = pkgs.nerd-fonts.go-mono;
             name = "GoMonoNerdFontPropo-Bold";
           };
-
-          serif = config.stylix.fonts.monospace;
-          sansSerif = config.stylix.fonts.monospace;
+        in {
+          monospace = monospaceFont;
+          serif = monospaceFont;
+          sansSerif = monospaceFont;
 
           emoji = {
             package = pkgs.noto-fonts-color-emoji;
