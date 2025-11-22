@@ -98,7 +98,12 @@
   outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, ... }:
   {
     nixosModules = {
-      sicos-hyprland = import ./modules/sicos/hyprland;
+      sicos-hyprland = {
+        imports = [
+          walker.nixosModules.default
+          (import ./modules/sicos/hyprland)
+        ];
+      };
     };
 
     homeManagerModules = {
