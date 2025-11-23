@@ -61,7 +61,7 @@ let
             programs.sicos.hyprland.theming.enable = true;
 
             # Custom config files
-            programs.sicos.hyprland.kanshi.configFile = "../home-manager/desktop/hyprland/programs/kanshi/config";
+            programs.sicos.hyprland.kanshi.configFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/kanshi/config; };
           };
         })
 
