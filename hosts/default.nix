@@ -59,6 +59,9 @@ let
           config = lib.mkIf (host.desktop == "hyprland") {
             programs.sicos.hyprland.enable = true;
             programs.sicos.hyprland.theming.enable = true;
+
+            # Custom config files
+            programs.sicos.hyprland.kanshi.configFile = "../home-manager/desktop/hyprland/programs/kanshi/config";
           };
         })
 

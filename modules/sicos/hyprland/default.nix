@@ -120,6 +120,15 @@ in
       };
     };
 
+    # Kanshi
+    kanshi = {
+      configFile = lib.mkOption {
+        type = lib.types.path;
+        default = ./config-files/kanshi/config;
+        description = "Path to the kanshi config file.";
+      };
+    };
+
     # Walker
     walker = {
       configFile = lib.mkOption {

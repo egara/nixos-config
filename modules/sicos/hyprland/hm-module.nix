@@ -45,6 +45,9 @@ in
         # Swappy file
         ".config/swappy/config".source = cfg.swappy.configFile;
 
+        # Kanshi file
+        ".config/kanshi/config".source = cfg.kanshi.configFile;
+
         # Walker file
         ".config/walker/config.toml".source = cfg.walker.configFile;
 
@@ -94,42 +97,43 @@ in
       services.kanshi = {
         enable = true;
         systemdTarget = "hyprland-session.target";
-        settings = [
-          {
-            profile = {
-              name = "home";
-              outputs = [
-                { criteria = "eDP-1"; scale = 1.0; status = "enable"; mode = "1920x1080"; position = "1920,0"; }
-                { criteria = "HDMI-A-2"; scale = 1.0; status = "enable"; mode = "1920x1080"; position = "0,0"; }
-              ];
-            };
-          }
-          {
-            profile = {
-              name = "office";
-              outputs = [
-                { criteria = "DP-2"; scale = 1.0; status = "enable"; mode = "1920x1080"; position = "0,0"; }
-                { criteria = "DP-1"; scale = 1.0; status = "enable"; mode = "1920x1080"; position = "1920,0"; }
-                { criteria = "eDP-1"; status = "disable"; }
-              ];
-            };
-          }
-          {
-            profile = {
-              name = "meeting-room";
-              outputs = [
-                { criteria = "DP-2"; scale = 1.0; status = "enable"; mode = "1920x1080"; position = "0,0"; }
-                { criteria = "eDP-1"; scale = 1.0; status = "enable"; mode = "1920x1080"; position = "1920,0"; }
-              ];
-            };
-          }
-          {
-            profile = {
-              name = "undocked";
-              outputs = [ { criteria = "eDP-1"; scale = 1.0; status = "enable"; mode = "1920x1080"; position = "0,0"; } ];
-            };
-          }
-        ];
+        # Settings will be set using a file
+        # settings = [
+        #   {
+        #     profile = {
+        #       name = "home";
+        #       outputs = [
+        #         { criteria = "eDP-1"; scale = 1.0; status = "enable"; mode = "1920x1080"; position = "1920,0"; }
+        #         { criteria = "HDMI-A-2"; scale = 1.0; status = "enable"; mode = "1920x1080"; position = "0,0"; }
+        #       ];
+        #     };
+        #   }
+        #   {
+        #     profile = {
+        #       name = "office";
+        #       outputs = [
+        #         { criteria = "DP-2"; scale = 1.0; status = "enable"; mode = "1920x1080"; position = "0,0"; }
+        #         { criteria = "DP-1"; scale = 1.0; status = "enable"; mode = "1920x1080"; position = "1920,0"; }
+        #         { criteria = "eDP-1"; status = "disable"; }
+        #       ];
+        #     };
+        #   }
+        #   {
+        #     profile = {
+        #       name = "meeting-room";
+        #       outputs = [
+        #         { criteria = "DP-2"; scale = 1.0; status = "enable"; mode = "1920x1080"; position = "0,0"; }
+        #         { criteria = "eDP-1"; scale = 1.0; status = "enable"; mode = "1920x1080"; position = "1920,0"; }
+        #       ];
+        #     };
+        #   }
+        #   {
+        #     profile = {
+        #       name = "undocked";
+        #       outputs = [ { criteria = "eDP-1"; scale = 1.0; status = "enable"; mode = "1920x1080"; position = "0,0"; } ];
+        #     };
+        #   }
+        # ];
       };
     })
     (lib.mkIf cfg.theming.enable {

@@ -1,0 +1,19 @@
+profile home {
+  output "eDP-1" enable mode 1920x1080 position 1920,0 scale 1.000000
+  output "HDMI-A-2" enable mode 1920x1080 position 0,0 scale 1.000000
+}
+
+profile office {
+  output "DP-2" enable mode 1920x1080 position 0,0 scale 1.000000
+  output "DP-1" enable mode 1920x1080 position 1920,0 scale 1.000000
+  output "eDP-1" disable
+}
+
+profile meeting-room {
+  output "DP-2" enable mode 1920x1080 position 0,0 scale 1.000000
+  output "eDP-1" enable mode 1920x1080 position 1920,0 scale 1.000000
+}
+
+profile undocked {
+  output "eDP-1" enable mode 1920x1080 position 0,0 scale 1.000000
+}
