@@ -77,9 +77,6 @@
     };
   };
 
-  # Configure console keymap
-  console.keyMap = "es";
-
   # Deleting /tmp directory every time the system boots
   boot.tmp.cleanOnBoot = true;
 
@@ -101,8 +98,22 @@
     #media-session.enable = true;
   };
 
+  # Keyboard layouts
+
+  # Configure console layout
+  console.keyMap = "es";
+
+  # Configure keyboard layout for graphical environment
+  services.xserver = {
+    enable = true;
+    xkb = {
+      layout = "es";
+      variant = "";
+    };
+  };
+
   # Enable OpenGL
-  # 20240623 - It seems hardware.opengl has been deprecated in unstable
+  # 20240623 - It seems hardware.opengl has...
   #hardware = {
 	#  opengl = {
 	#    enable = true;

@@ -164,21 +164,12 @@ in
       # SDDM
       displayManager = {
         sddm = {
-          enable = true;
+          enable = lib.mkForce true;
           wayland.enable = true;
           theme = "catppuccin-mocha-mauve";
         };
       };
 
-      # Xserver
-      xserver = {
-        enable = true;
-        xkb = {
-          layout = "es";
-          variant = "";
-        };
-      };
-      
       # Mount, trash, and other functionalities for Thunar
       gvfs.enable = true;
 
