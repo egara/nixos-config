@@ -1,5 +1,10 @@
-profile home {
-  output "eDP-1" enable mode 1920x1080 position 1920,0 scale 1.000000
+profile home-ironman {
+  # According to this information https://www.reddit.com/r/hyprland/comments/1dfvmss/how_to_address_monitor_in_kanshi/
+  # Using hyprctl monitors to list all the monitors attached and using description
+  # instead of ID "eDP-1" is allowd but you need to add a suffix "Unknown" as you
+  # can see here
+
+  output "BOE 0x0687 Unknown" disable
   output "HDMI-A-2" enable mode 1920x1080 position 0,0 scale 1.000000
 }
 
@@ -14,6 +19,7 @@ profile meeting-room {
   output "eDP-1" enable mode 1920x1080 position 1920,0 scale 1.000000
 }
 
-profile undocked {
-  output "eDP-1" enable mode 1920x1080 position 0,0 scale 1.000000
+profile undocked-ironman {
+  output "BOE 0x0687 Unknown" enable mode 1920x1080 position 0,0 scale 1.000000
+  #output "eDP-1" enable mode 1920x1080 position 0,0 scale 1.000000
 }

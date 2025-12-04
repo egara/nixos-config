@@ -70,7 +70,6 @@ let
             programs.sicos.hyprland.hyprland.envFile = builtins.path { path = ../home-manager/desktop/hyprland/config/env.conf; };
             programs.sicos.hyprland.hyprland.initFile = builtins.path { path = ../home-manager/desktop/hyprland/config/init.conf; };
 
-
           };
         })
 
