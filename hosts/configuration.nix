@@ -173,7 +173,7 @@
     "jitsi-meet-1.0.8792" # Needed for element-desktop
   ];  
 
-  # List of unstable packages installed in system profile. To search, run:
+  # List of stable and unstable packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
       nvd    # NixOS package version diff tool
@@ -347,63 +347,6 @@
     dina-font
     proggyfonts
   ];
-
-# ########################################
-# # Testing Stylix
-# ########################################
-#  # Global styling with Stylix
-#  stylix = {
-#  	# Dark theme
-#  	polarity = "dark";
-
-#  	# Color scheme
-# 	base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
-
-# 	# Is this mandatory?
-# 	image = ../modules/display-manager/avatars/egarcia.png;
-
-# 	# Cursors
-# 	cursor = {
-# 	    package = pkgs.bibata-cursors;
-# 	    name = "Bibata-Modern-Classic";
-# 	    size = 10;
-# 	};
-
-# 	# Fonts
-# 	fonts = {
-#    	monospace = {
-#      		package = pkgs.nerdfonts;
-#      		name = "GoMonoNerdFontPropo-Bold";
-#    	};
-
-#    	serif = config.stylix.fonts.monospace;
-#    	sansSerif = config.stylix.fonts.monospace;
-
-#     emoji = {
-#      		package = pkgs.noto-fonts-emoji;
-#      		name = "Noto Color Emoji";
-#    	};
-
-#    	sizes = {
-#    		applications = 10;
-#    		desktop = 10;
-#       popups = 10;
-#       terminal = 10;
-#    	};
-#  	};
-
-#   # Targets
-#   targets = {
-#     grub = {
-#       enable = false;
-#     };
-
-#     gtk = {
-#       enable = true;
-#     };
-#   };
-
-#  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

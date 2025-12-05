@@ -17,7 +17,7 @@
               };
             };
             root = {
-              end = "-32G";
+              end = "-16G";
               content = {
                 type = "btrfs";
                 extraArgs = [ "-f --label system" ]; # Override existing partition and set a label called system

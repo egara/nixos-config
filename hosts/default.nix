@@ -152,6 +152,18 @@ let
     ../modules/custom/autofirma.nix
   ];
 
+  # Modules for Strange
+  strangeModules = [
+    disko.nixosModules.disko {
+      _module.args.disks = [ "/dev/nvme0n1" ];
+      imports = [(import ./strange/disko-config.nix)];
+    }
+    ./strange/hardware-configuration.nix
+    ./efi-configuration.nix
+    ./strange/configuration.nix
+    ../modules/custom/autofirma.nix
+  ];
+
 in
 {
   # VM profile
@@ -201,5 +213,10 @@ in
     hostName = "taskmaster";
     desktop = "hyprland";
     extraModules = taskmasterModules;
+  };
+  "strange-hyprland" = mkHost {
+    hostName = "strange";
+    desktop = "hyprland";
+    extraModules = strangeModules;
   };
 }
