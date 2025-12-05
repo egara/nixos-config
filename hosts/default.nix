@@ -1,4 +1,4 @@
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, ... }:
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, ... }:
 #Variables
 let
   # Main user
@@ -158,6 +158,7 @@ let
       _module.args.disks = [ "/dev/nvme0n1" ];
       imports = [(import ./strange/disko-config.nix)];
     }
+    nixos-hardware.nixosModules.framework-amd-ai-300-series
     ./strange/hardware-configuration.nix
     ./efi-configuration.nix
     ./strange/configuration.nix

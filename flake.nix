@@ -72,6 +72,11 @@
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # NixOs Hardware project for supporting different systems
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware/master";
+    };
   };
 
   # The binary cache configuration is strongly recommended to avoid unnecessary local compilation.
@@ -96,7 +101,7 @@
   # Function that tells my flake which to use and what do what to do with the dependencies.
   # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, hyprland, hyprland-plugins, ... }:
   # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, walker, ... }:
-  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, ... }:
+  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, ... }:
   {
     nixosModules = {
       sicos-hyprland = {
@@ -124,7 +129,7 @@
         # to be defined anymore.
         # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
         # inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix walker;
-        inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader autofirma-nix stylix walker;
+        inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader autofirma-nix stylix walker nixos-hardware;
       }
     );
   };

@@ -11,6 +11,9 @@
     hostName = "strange";
   };
   
+  # Enabling BIOS updates for Framework Laptop 13
+  services.fwupd.enable = true;
+
   # Global power management for laptops
   powerManagement.enable = true;
 
