@@ -23,3 +23,8 @@ profile undocked-ironman {
   output "BOE 0x0687 Unknown" enable mode 1920x1080 position 0,0 scale 1.000000
   #output "eDP-1" enable mode 1920x1080 position 0,0 scale 1.000000
 }
+
+profile undocked-strange {
+  output "BOE 0x0BCA Unknown" enable mode 2256x1504 position 0,0 scale 1.175
+  #output "eDP-1" enable mode 1920x1080 position 0,0 scale 1.000000
+}
