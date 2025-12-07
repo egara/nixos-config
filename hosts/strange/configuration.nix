@@ -51,8 +51,15 @@
 
   # List of packages installed in system profile only for this host
   environment.systemPackages = with pkgs; [
-      #apache-directory-studio
-      #eclipses.eclipse-jee
-      #pkgs-stable.jdk8  
+    bluez-tools
+    pkgs-stable.jetbrains.pycharm-community-bin
+    #python312Packages.pyqt5
+    #python312Packages.pyyaml
+    #python312Packages.sip
+    #python312Packages.tkinter
+    eclipses.eclipse-jee
+    #jdk8
+    #jdk17
+    teams-for-linux
   ];
 }
