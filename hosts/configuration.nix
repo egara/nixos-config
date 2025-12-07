@@ -244,6 +244,7 @@
       openssl
       lazyssh # For SSH management
       sqlite
+      pkgs-stable.stremio
   ];
 
   # List of programs that must be enabled
