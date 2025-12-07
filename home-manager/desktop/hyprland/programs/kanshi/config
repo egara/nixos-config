@@ -5,10 +5,10 @@ profile office-taskmaster {
   output "eDP-1" disable
 }
 
-profile meeting-room-taskmaster {
-  output "DP-2" enable mode 1920x1080 position 0,0 scale 1.000000
-  output "eDP-1" enable mode 1920x1080 position 1920,0 scale 1.000000
-}
+#profile meeting-room-taskmaster {
+#  output "DP-2" enable mode 1920x1080 position 0,0 scale 1.000000
+#  output "eDP-1" enable mode 1920x1080 position 1920,0 scale 1.000000
+#}
 
 # Ironman
 profile home-ironman {
@@ -32,6 +32,6 @@ profile undocked-strange {
 }
 
 profile home-strange {
-  output "BOE 0x0BCA Unknown" disable
+  output "eDP-1" disable
   output "DP-2" enable mode 1920x1080 position 0,0 scale 1.000000
 }
