@@ -34,7 +34,7 @@ profile home-strange {
   # can see here
 
   output "BOE 0x0BCA Unknown" disable
-  output "HDMI-A-2" enable mode 1920x1080 position 0,0 scale 1.000000
+  output "DP-2" enable mode 1920x1080 position 0,0 scale 1.000000
 }
 
 profile undocked-strange {
