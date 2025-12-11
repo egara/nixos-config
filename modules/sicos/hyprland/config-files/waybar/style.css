@@ -468,3 +468,42 @@ label:focus {
 #custom-insync.syncing {
   color: #8A69DB;
 }
+
+/* Make backlight and pulseaudio modules look like a single block */
+#backlight {
+    margin: 5px 0 5px 5px;
+    border-radius: 15px 0 0 15px;
+    padding-right: 4px;
+}
+
+#pulseaudio {
+    margin: 5px 5px 5px 0;
+    border-radius: 0 15px 15px 0;
+    padding-left: 4px;
+}
+
+/* Make cpu and memory modules look like a single block */
+#cpu {
+    margin: 5px 0 5px 5px;
+    border-radius: 15px 0 0 15px;
+    padding-right: 4px;
+}
+
+#memory {
+    margin: 5px 5px 5px 0;
+    border-radius: 0 15px 15px 0;
+    padding-left: 4px;
+}
+
+/* Make battery and power-profiles-daemon modules look like a single block */
+#battery {
+    margin: 5px 0 5px 5px;
+    border-radius: 15px 0 0 15px;
+    padding-right: 4px;
+}
+
+#power-profiles-daemon {
+    margin: 5px 5px 5px 0;
+    border-radius: 0 15px 15px 0;
+    padding-left: 4px;
+}
