@@ -142,22 +142,26 @@ button:hover {
 }
 
 #power-profiles-daemon {
-    padding-right: 15px;
+    background: #25253a;
+    margin: 5px 5px;
+    padding: 8px;
+    border-radius: 15px;
+    color: #ffffff; 
 }
 
 #power-profiles-daemon.performance {
-    background-color: #f53c3c;
-    color: #ffffff;
+    background-color: #25253a;
+    color: #EB3F3F;
 }
 
 #power-profiles-daemon.balanced {
-    background-color: #2980b9;
-    color: #ffffff;
+    background-color: #25253a;
+    color: #6AC5FC;
 }
 
 #power-profiles-daemon.power-saver {
-    background-color: #2ecc71;
-    color: #000000;
+    background-color: #25253a;
+    color: #80E8AD;
 }
 
 label:focus {

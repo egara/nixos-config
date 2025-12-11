@@ -34,7 +34,8 @@
         "network", 
         "tray",
         /*"custom/clipboard",*/
-        "battery", 
+        "battery",
+        "power-profiles-daemon",
         "custom/power"
     ],
 
@@ -180,12 +181,12 @@
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "  {ipaddr}", //({essid} {signalStrength}%)
-        "format-ethernet": "{ipaddr}/{cidr} ",
+        "format-wifi": "{ipaddr}", //({essid} {signalStrength}%)
+        "format-ethernet": "{ipaddr}/{cidr}",
         "tooltip-format-wifi": "{essid} ({signalStrength}%)  ",
-        "tooltip-format": "{ifname} via {gwaddr} ",
-        "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
+        "tooltip-format": "{ifname} via {gwaddr} 󰈀",
+        "format-linked": "{ifname} (No IP)",
+        "format-disconnected": "Disconnected ",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
     "pulseaudio": {
@@ -207,10 +208,21 @@
         },
         "on-click": "pavucontrol"
     },
-     "custom/power": {
+    "custom/power": {
         "format": " ⏻ ",
         "tooltip": false,
         "on-click": "wlogout --protocol layer-shell"
+    },
+    "power-profiles-daemon": {
+        "format": "{icon}",
+        "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+        "tooltip": true,
+        "format-icons": {
+        "default": "",
+        "performance": "",
+        "balanced": "",
+        "power-saver": ""
+      }
     },
     "custom/playerctl#backward": {
       "format": "󰙣 ",
