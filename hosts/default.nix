@@ -138,6 +138,8 @@ let
     ./efi-configuration.nix
     ./ironman/configuration.nix
     ../modules/custom/autofirma.nix
+    ../modules/custom/power-management.nix
+    { sicos.power-management.enable = true; }
   ];
 
   # Modules for Taskmaster
@@ -150,6 +152,8 @@ let
     ./efi-configuration.nix
     ./taskmaster/configuration.nix
     ../modules/custom/autofirma.nix
+    ../modules/custom/power-management.nix
+    { sicos.power-management.enable = true; }
   ];
 
   # Modules for Strange
@@ -163,6 +167,8 @@ let
     ./efi-configuration.nix
     ./strange/configuration.nix
     ../modules/custom/autofirma.nix
+    ../modules/custom/power-management.nix
+    { sicos.power-management.enable = true; }
   ];
 
 in
