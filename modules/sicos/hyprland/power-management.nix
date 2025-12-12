@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.sicos.power-management;
+  cfg = config.programs.sicos.hyprland.powerManagement;
 
   # Helper script to send notifications as the logged-in graphical user.
   # This is necessary because udev rules run as root in a session-less environment,
@@ -72,25 +72,22 @@ let
   '';
 in
 {
-  options.sicos.power-management = {
-    enable = mkEnableOption "Enable automatic power management on AC plug/unplug.";
-  };
-
   config = mkIf cfg.enable {
     # Ensure necessary packages and our custom scripts are available in the system PATH
-    environment.systemPackages = with pkgs; [
-      # External dependencies
-      power-profiles-daemon
-      brightnessctl
-      bc # for floating point arithmetic in script
-      libnotify # for on-screen notifications
-      sudo # needed by notifyAsUser script
+    environment.systemPackages = with pkgs;
+      [
+        # External dependencies
+        power-profiles-daemon
+        brightnessctl
+        bc # for floating point arithmetic in script
+        libnotify # for on-screen notifications
+        sudo # needed by notifyAsUser script
 
-      # Add our custom scripts to the system PATH
-      powerSaverScript
-      balancedModeScript
-      notifyAsUser
-    ];
+        # Add our custom scripts to the system PATH
+        powerSaverScript
+        balancedModeScript
+        notifyAsUser
+      ];
 
 
     # Enable power-profiles-daemon service

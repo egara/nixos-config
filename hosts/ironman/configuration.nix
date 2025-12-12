@@ -20,8 +20,9 @@
 
   # Changing TLP to power profiles daemon for adjusting the
   # laptop performance
-  # This service is enabled in its own module
-  # nixos-config/modules/custom/power-management.nix
+  # Changing TLP to power profiles daemon for adjusting the
+  # laptop performance
+  # This service is enabled via sicos module if it's desired
   # services.power-profiles-daemon.enable = true;
 
   # # TLP

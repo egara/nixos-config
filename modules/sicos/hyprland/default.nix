@@ -151,132 +151,139 @@ in
     theming = {
       enable = lib.mkEnableOption "Enable sicos theming";
     };
+
+    # Power Management using power profiles daemon
+    powerManagement = {
+      enable = lib.mkEnableOption "Enable sicos's power management configuration";
+    };
   };
+
+  imports = [ ./power-management.nix ];
 
   # 2. CONFIGURATION (USING THE OPTIONS)
   config = lib.mkIf cfg.enable {
     
-    ##########################################
-    # Hyprland Environment
-    ##########################################
+      ##########################################
+      # Hyprland Environment
+      ##########################################
 
-    services = {
-      # SDDM
-      displayManager = {
-        sddm = {
-          enable = lib.mkForce true;
-          wayland.enable = true;
-          theme = "catppuccin-mocha-mauve";
+      services = {
+        # SDDM
+        displayManager = {
+          sddm = {
+            enable = lib.mkForce true;
+            wayland.enable = true;
+            theme = "catppuccin-mocha-mauve";
+          };
         };
+
+        # Mount, trash, and other functionalities for Thunar
+        gvfs.enable = true;
+
+        # Thumbnail support for images
+        tumbler.enable = true;
+
+        # Udisks2 to automount USB devices
+        udisks2.enable = true;
+
+        dbus.enable = true;
       };
 
-      # Mount, trash, and other functionalities for Thunar
-      gvfs.enable = true;
+      # Hyprland
+      programs.hyprland = {
+        enable = true;
+        # Using uwsm for initializing Hyprland using systemd
+        withUWSM = true; 
+        xwayland.enable = true;
+      };
 
-      # Thumbnail support for images
-      tumbler.enable = true;
+      # Thunar File Manager
+      programs.thunar = {
+        enable = true;
+        plugins = with pkgs.xfce; [
+          thunar-archive-plugin
+          thunar-volman
+        ];
+      };
 
-      # Udisks2 to automount USB devices
-      udisks2.enable = true;
+      programs.xfconf.enable = true;
 
-      dbus.enable = true;
-    };
+      # Walker (Launcher)
+      programs.walker.enable = true;
 
-    # Hyprland
-    programs.hyprland = {
-      enable = true;
-      # Using uwsm for initializing Hyprland using systemd
-      withUWSM = true; 
-      xwayland.enable = true;
-    };
+      # Polkit for user authentication
+      security.polkit.enable = true;
 
-    # Thunar File Manager
-    programs.thunar = {
-      enable = true;
-      plugins = with pkgs.xfce; [
-        thunar-archive-plugin
-        thunar-volman
+      # XDG Portal
+      xdg.portal = {
+        enable = true;
+        wlr.enable = lib.mkForce true;
+        extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      };
+
+      # Waybar overlay for experimental features
+      nixpkgs.overlays = [
+        (self: super: {
+          waybar = super.waybar.overrideAttrs (oldAttrs: {
+            mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+          });
+        })
+      ];
+
+      # Hint Electron apps to use wayland
+      environment.sessionVariables = {
+        NIXOS_OZONE_WL = "1";
+      };
+
+      # Add packages required for the Hyprland setup
+      environment.systemPackages = with pkgs; [
+        # Hyprland and related tools
+        hyprland
+        hyprlock
+        hypridle
+        waybar
+        hyprland-qtutils
+        hyprnome # Workspaces like in GNOME
+        wlogout
+        xdg-desktop-portal-gtk
+        xdg-desktop-portal-hyprland
+        xwayland
+        meson
+        wayland-protocols
+        wayland-utils
+        wlroots
+
+        # App launchers
+        libqalculate # For walker
+
+        # Networking
+        networkmanagerapplet # GUI for networkmanager
+
+        # Terminal emulator
+        kitty
+
+        # Notification daemon
+        swaynotificationcenter
+        libnotify
+        pamixer # For volume control
+
+        # SDDM Theming
+        catppuccin-sddm
+
+        # Other tools
+        udiskie # Automount USB devices
+        swww # for wallpapers
+        feh # Image viewer
+        grim # Screen capture for Wayland
+        slurp # Region selection for grim
+        swappy # Screenshot editor
+        file-roller # Archive manager for Thunar
+        brightnessctl # Screen brightness control
+        playerctl # Media player control
+        lxqt.lxqt-policykit # Polkit agent
+        xfce.catfish # File search GUI
+        gnome-calculator # Calculator
+        system-config-printer # CUPs GUI
       ];
     };
-
-    programs.xfconf.enable = true;
-
-    # Walker (Launcher)
-    programs.walker.enable = true;
-
-    # Polkit for user authentication
-    security.polkit.enable = true;
-
-    # XDG Portal
-    xdg.portal = {
-      enable = true;
-      wlr.enable = lib.mkForce true;
-      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    };
-
-    # Waybar overlay for experimental features
-    nixpkgs.overlays = [
-      (self: super: {
-        waybar = super.waybar.overrideAttrs (oldAttrs: {
-          mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-        });
-      })
-    ];
-
-    # Hint Electron apps to use wayland
-    environment.sessionVariables = {
-      NIXOS_OZONE_WL = "1";
-    };
-
-    # Add packages required for the Hyprland setup
-    environment.systemPackages = with pkgs; [
-      # Hyprland and related tools
-      hyprland
-      hyprlock
-      hypridle
-      waybar
-      hyprland-qtutils
-      hyprnome # Workspaces like in GNOME
-      wlogout
-      xdg-desktop-portal-gtk
-      xdg-desktop-portal-hyprland
-      xwayland
-      meson
-      wayland-protocols
-      wayland-utils
-      wlroots
-
-      # App launchers
-      libqalculate # For walker
-
-      # Networking
-      networkmanagerapplet # GUI for networkmanager
-
-      # Terminal emulator
-      kitty
-
-      # Notification daemon
-      swaynotificationcenter
-      libnotify
-      pamixer # For volume control
-
-      # SDDM Theming
-      catppuccin-sddm
-
-      # Other tools
-      udiskie # Automount USB devices
-      swww # for wallpapers
-      feh # Image viewer
-      grim # Screen capture for Wayland
-      slurp # Region selection for grim
-      swappy # Screenshot editor
-      file-roller # Archive manager for Thunar
-      brightnessctl # Screen brightness control
-      playerctl # Media player control
-      lxqt.lxqt-policykit # Polkit agent
-      xfce.catfish # File search GUI
-      gnome-calculator # Calculator
-      system-config-printer # CUPs GUI
-    ];
-  };
 }

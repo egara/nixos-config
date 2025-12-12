@@ -59,6 +59,7 @@ let
           config = lib.mkIf (host.desktop == "hyprland") {
             programs.sicos.hyprland.enable = true;
             programs.sicos.hyprland.theming.enable = true;
+            programs.sicos.hyprland.powerManagement.enable = true;
 
             # Custom config files
 
@@ -138,8 +139,6 @@ let
     ./efi-configuration.nix
     ./ironman/configuration.nix
     ../modules/custom/autofirma.nix
-    ../modules/custom/power-management.nix
-    { sicos.power-management.enable = true; }
   ];
 
   # Modules for Taskmaster
@@ -152,8 +151,6 @@ let
     ./efi-configuration.nix
     ./taskmaster/configuration.nix
     ../modules/custom/autofirma.nix
-    ../modules/custom/power-management.nix
-    { sicos.power-management.enable = true; }
   ];
 
   # Modules for Strange
@@ -167,8 +164,6 @@ let
     ./efi-configuration.nix
     ./strange/configuration.nix
     ../modules/custom/autofirma.nix
-    ../modules/custom/power-management.nix
-    { sicos.power-management.enable = true; }
   ];
 
 in
