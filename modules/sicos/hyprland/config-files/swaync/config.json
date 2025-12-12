@@ -118,11 +118,11 @@
           },
           {
             "label": "Balanced",
-            "command": "powerprofilesctl set balanced"
+            "command": "balanced-mode"
           },
           {
             "label": "Power-saver",
-            "command": "powerprofilesctl set power-saver"
+            "command": "power-saver-mode"
           }
         ]
       }/*,

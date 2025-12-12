@@ -77,12 +77,19 @@ in
   };
 
   config = mkIf cfg.enable {
-    # Ensure power-profiles-daemon, brightnessctl, and libnotify are available
+    # Ensure necessary packages and our custom scripts are available in the system PATH
     environment.systemPackages = with pkgs; [
+      # External dependencies
       power-profiles-daemon
       brightnessctl
       bc # for floating point arithmetic in script
       libnotify # for on-screen notifications
+      sudo # needed by notifyAsUser script
+
+      # Add our custom scripts to the system PATH
+      powerSaverScript
+      balancedModeScript
+      notifyAsUser
     ];
 
 
