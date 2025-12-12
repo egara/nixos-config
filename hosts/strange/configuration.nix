@@ -14,6 +14,12 @@
   # Enabling BIOS updates for Framework Laptop 13
   services.fwupd.enable = true;
 
+  # Changing TLP to power profiles daemon for adjusting the
+  # laptop performance
+  # It is commented because the Framework flake enabled includes this
+  # configuration and TLP is not recommended for AMD AI processors
+  # services.power-profiles-daemon.enable = true;
+
   # Global power management for laptops
   powerManagement.enable = true;
 
