@@ -62,12 +62,16 @@ in
     waybar = {
       configFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/waybar/config.jsonc;
+        # Default config file will depend on if powerManagement is
+        # enabled or disabled by the user
+        #default = ./config-files/waybar/config.jsonc;
         description = "Path to the Waybar config.jsonc file.";
       };
       styleFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/waybar/style.css;
+        # Default style config file will depend on if powerManagement is
+        # enabled or disabled by the user
+        #default = ./config-files/waybar/style.css;
         description = "Path to the Waybar style.css file.";
       };
       insyncScript = lib.mkOption {
@@ -164,6 +168,25 @@ in
 
   # 2. CONFIGURATION (USING THE OPTIONS)
   config = lib.mkIf cfg.enable {
+
+      ###################
+      # Waybar defaults #
+      ###################
+
+      # Default waybar configFile will depend on if powerManagement
+      # option is enabled or disabled by the user
+      programs.sicos.hyprland.waybar.configFile = lib.mkDefault (
+        if config.programs.sicos.hyprland.powerManagement.enable
+        then ./config-files/waybar/powermanagement/config.jsonc
+        else ./config-files/waybar/no-powermanagement/config.jsonc
+      );
+      # Default waybar styleFile will depend on if powerManagement
+      # option is enabled or disabled by the user
+      programs.sicos.hyprland.waybar.styleFile = lib.mkDefault (
+        if config.programs.sicos.hyprland.powerManagement.enable
+        then ./config-files/waybar/powermanagement/style.css
+        else ./config-files/waybar/no-powermanagement/style.css
+      );
     
       ##########################################
       # Hyprland Environment

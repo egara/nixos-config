@@ -64,13 +64,18 @@ let
             # Custom config files
 
             # Hyprland
-            programs.sicos.hyprland.kanshi.configFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/kanshi/config; };
             programs.sicos.hyprland.hyprland.configFile = builtins.path { path = ../home-manager/desktop/hyprland/config/hyprland.conf; };
             programs.sicos.hyprland.hyprland.bindingsFile = builtins.path { path = ../home-manager/desktop/hyprland/config/bindings.conf; };
             programs.sicos.hyprland.hyprland.monitorsFile = builtins.path { path = ../home-manager/desktop/hyprland/config/monitors.conf; };
             programs.sicos.hyprland.hyprland.envFile = builtins.path { path = ../home-manager/desktop/hyprland/config/env.conf; };
             programs.sicos.hyprland.hyprland.initFile = builtins.path { path = ../home-manager/desktop/hyprland/config/init.conf; };
 
+            # Kanshi
+            programs.sicos.hyprland.kanshi.configFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/kanshi/config; };
+
+            # Waybar
+            programs.sicos.hyprland.waybar.configFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/config.jsonc; };
+            programs.sicos.hyprland.waybar.styleFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/style.css; };
           };
         })
 
