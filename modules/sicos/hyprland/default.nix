@@ -150,11 +150,13 @@ in
     # Theming
     theming = {
       enable = lib.mkEnableOption "Enable sicos theming";
+      default = true;
     };
 
     # Power Management using power profiles daemon
     powerManagement = {
       enable = lib.mkEnableOption "Enable sicos's power management configuration";
+      default = true;
     };
   };
 
