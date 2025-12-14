@@ -162,9 +162,22 @@ in
       enable = lib.mkEnableOption "Enable sicos's power management configuration";
       default = true;
     };
+
+    # Insync integration
+    insync = {
+      enable = lib.mkEnableOption "Enable Insync and its Waybar integration.";
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.insync;
+        description = "The Insync package to use.";
+      };
+    };
   };
 
-  imports = [ ./power-management.nix ];
+  imports = [ 
+    ./power-management.nix
+    ./insync-integration.nix
+  ];
 
   # 2. CONFIGURATION (USING THE OPTIONS)
   config = lib.mkIf cfg.enable {

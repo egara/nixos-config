@@ -60,6 +60,8 @@ let
             programs.sicos.hyprland.enable = true;
             programs.sicos.hyprland.theming.enable = true;
             programs.sicos.hyprland.powerManagement.enable = true;
+            programs.sicos.hyprland.insync.enable = true;
+            programs.sicos.hyprland.insync.package = pkgs-stable.insync;
 
             # Custom config files
 
