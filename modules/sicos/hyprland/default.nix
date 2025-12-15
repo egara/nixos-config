@@ -189,9 +189,16 @@ in
       # Default waybar configFile will depend on if powerManagement
       # option is enabled or disabled by the user
       programs.sicos.hyprland.waybar.configFile = lib.mkDefault (
-        if config.programs.sicos.hyprland.powerManagement.enable
-        then ./config-files/waybar/powermanagement/config.jsonc
-        else ./config-files/waybar/no-powermanagement/config.jsonc
+        if config.programs.sicos.hyprland.powerManagement.enable then
+          if config.programs.sicos.hyprland.insync.enable then
+            ./config-files/waybar/powermanagement/with-insync/config.jsonc
+          else
+            ./config-files/waybar/powermanagement/without-insync/config.jsonc
+        else
+          if config.programs.sicos.hyprland.insync.enable then
+            ./config-files/waybar/no-powermanagement/with-insync/config.jsonc
+          else
+            ./config-files/waybar/no-powermanagement/without-insync/config.jsonc
       );
       # Default waybar styleFile will depend on if powerManagement
       # option is enabled or disabled by the user

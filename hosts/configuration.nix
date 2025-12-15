@@ -243,7 +243,6 @@
       buttermanager
       openssl
       lazyssh # For SSH management
-      sqlite
       pkgs-stable.stremio
   ];
 

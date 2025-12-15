@@ -34,7 +34,7 @@
     "custom/insync": {
         "format": "{text}",
         "exec-if": "which insync",
-        "exec": "~/.config/waybar/scripts/insync-status.sh",
+        "exec": "insync-integration",
         "return-type": "json",
         "interval": 2,
         "tooltip": true,
@@ -204,11 +204,5 @@
         "format": " ⏻ ",
         "tooltip": false,
         "on-click": "wlogout --protocol layer-shell"
-    },
-    "custom/clipboard": {
-      "format": "  ",
-      "tooltip": true,
-      "tooltip-format": "Clipboard",
-      "on-click": "walker -m clipboard"
     }
 }

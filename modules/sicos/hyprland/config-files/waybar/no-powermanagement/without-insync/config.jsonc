@@ -15,16 +15,11 @@
         "cpu", 
         "memory",
         "wlr/taskbar"
-        /*"custom/playerctl#backward",inhibitors
-        "custom/playerctl#play",
-        "custom/playerctl#foward",
-        "custom/playerlabel",
-        "cava#right"*/
     ],
     "modules-center": [
         "custom/notification",
         "clock",
-        "custom/insync"
+        "custom/clipboard"
     ],
     "modules-right": [
         "keyboard-state", 
@@ -32,21 +27,9 @@
         "pulseaudio", 
         "network", 
         "tray",
-        /*"custom/clipboard",*/
         "battery",
-        "power-profiles-daemon",
         "custom/power"
     ],
-
-    "custom/insync": {
-        "format": "{text}",
-        "exec-if": "which insync",
-        "exec": "~/.config/waybar/scripts/insync-status.sh",
-        "return-type": "json",
-        "interval": 2,
-        "tooltip": true,
-        "on-click": "insync show"
-    },
 
     // Modules configuration
      "custom/walker": {
@@ -211,17 +194,6 @@
         "format": " ⏻ ",
         "tooltip": false,
         "on-click": "wlogout --protocol layer-shell"
-    },
-    "power-profiles-daemon": {
-        "format": "{icon}",
-        "tooltip-format": "Power profile: {profile}",
-        "tooltip": true,
-        "format-icons": {
-        "default": "",
-        "performance": "",
-        "balanced": "",
-        "power-saver": ""
-      }
     },
     "custom/clipboard": {
       "format": "  ",

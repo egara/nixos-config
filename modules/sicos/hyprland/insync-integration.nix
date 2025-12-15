@@ -9,9 +9,8 @@ let
   # It checks if Insync is running and if there are active sync operations
   # by querying Insync's internal logs database.
   # This script does not send notifications; its purpose is to provide Waybar status.
-  insyncIntegrationScript = pkgs.writeShellScriptBin "insync-integration" ''
+  insyncIntegrationScript = pkgs.writeShellScriptBin "insync-integration.sh" ''
     #!${pkgs.bash}/bin/bash
-    set -euo pipefail
     
     # Path to the Insync logs database (standard Linux location)
     INS_LOGS_DB="$HOME/.config/Insync/logs.db"
