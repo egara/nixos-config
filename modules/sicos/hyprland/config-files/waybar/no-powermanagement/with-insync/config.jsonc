@@ -34,7 +34,7 @@
     "custom/insync": {
         "format": "{text}",
         "exec-if": "which insync",
-        "exec": "insync-integration",
+        "exec": "insync-integration.sh",
         "return-type": "json",
         "interval": 2,
         "tooltip": true,
