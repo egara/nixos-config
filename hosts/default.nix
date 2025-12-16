@@ -1,4 +1,4 @@
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, ... }:
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, self, ... }:
 #Variables
 let
   # Main user
@@ -40,9 +40,6 @@ let
         # Stylix module
         #stylix.nixosModules.stylix
 
-        # Walker module
-        walker.nixosModules.default
-
         # Common configuration for all hosts
         ./configuration.nix
 
@@ -53,7 +50,7 @@ let
             lib.optionals (host.desktop == "plasma") [ ../modules/desktop/plasma.nix ] ++
             lib.optionals (host.desktop == "cosmic") [ ../modules/desktop/cosmic.nix ] ++
             # Import the new sicos hyprland module
-            lib.optionals (host.desktop == "hyprland") [ ../modules/sicos/hyprland ];
+            lib.optionals (host.desktop == "hyprland") [ self.nixosModules.sicos-hyprland ];
           
           # Enable the sicos module if desktop is hyprland
           config = lib.mkIf (host.desktop == "hyprland") {

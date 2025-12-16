@@ -105,6 +105,7 @@
   {
     nixosModules = {
       sicos-hyprland = {
+        _module.args.sicos-source-path = self;
         imports = [
           walker.nixosModules.default
           (import ./modules/sicos/hyprland)
@@ -129,7 +130,7 @@
         # to be defined anymore.
         # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
         # inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix walker;
-        inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader autofirma-nix stylix walker nixos-hardware;
+        inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader autofirma-nix stylix walker nixos-hardware self;
       }
     );
   };

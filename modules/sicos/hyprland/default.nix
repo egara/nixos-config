@@ -1,5 +1,5 @@
 # /home/egarcia/Zero/nixos-config/modules/sicos/hyprland/default.nix
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, sicos-source-path, ... }:
 
 let
   cfg = config.programs.sicos.hyprland;
@@ -13,27 +13,27 @@ in
     hyprland = {
       configFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/hyprland.conf;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/hyprland.conf";
         description = "Path to the main hyprland.conf file.";
       };
       bindingsFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/bindings.conf;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/bindings.conf";
         description = "Path to the key bindings configuration file for Hyprland.";
       };
       monitorsFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/monitors.conf;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/monitors.conf";
         description = "Path to the monitors.conf file.";
       };
       envFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/env.conf;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/env.conf";
         description = "Path to the env.conf file for environment variables.";
       };
       initFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/init.conf;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/init.conf";
         description = "Path to the init.conf file for startup applications.";
       };
     };
@@ -42,19 +42,19 @@ in
     hyprlock = {
       configFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/hyprlock.conf;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/hyprlock.conf";
         description = "Path to the hyprlock.conf file.";
       };
       profilePicture = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/egarcia.jpg;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/egarcia.jpg";
         description = "Path to the profile picture used in the lockscreen.";
       };
     };
 
     hypridle.configFile = lib.mkOption {
       type = lib.types.path;
-      default = ./config-files/hypridle.conf;
+      default = "${sicos-source-path}/modules/sicos/hyprland/config-files/hypridle.conf";
       description = "Path to the hypridle.conf file.";
     };
 
@@ -76,7 +76,7 @@ in
       };
       insyncScript = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/waybar/scripts/insync-status.sh;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/scripts/insync-status.sh";
         description = "Path to the Waybar insync-status.sh script.";
       };
     };
@@ -85,32 +85,32 @@ in
     wlogout = {
       layoutFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/wlogout/layout;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/layout";
         description = "Path to the wlogout layout file.";
       };
       styleFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/wlogout/style.css;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/style.css";
         description = "Path to the wlogout style.css file.";
       };
-      hibernateIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/hibernate.png; description = "Path to the hibernate icon for the logout screen."; };
-      lockIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/lock.png; description = "Path to the lock icon for the logout screen."; };
-      logoutIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/logout.png; description = "Path to the logout icon for the logout screen."; };
-      rebootIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/reboot.png; description = "Path to the reboot icon for the logout screen."; };
-      shutdownIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/shutdown.png; description = "Path to the shutdown icon for the logout screen."; };
-      suspendIcon = lib.mkOption { type = lib.types.path; default = ./config-files/wlogout/icons/suspend.png; description = "Path to the suspend icon for the logout screen."; };
+      hibernateIcon = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/icons/hibernate.png"; description = "Path to the hibernate icon for the logout screen."; };
+      lockIcon = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/icons/lock.png"; description = "Path to the lock icon for the logout screen."; };
+      logoutIcon = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/icons/logout.png"; description = "Path to the logout icon for the logout screen."; };
+      rebootIcon = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/icons/reboot.png"; description = "Path to the reboot icon for the logout screen."; };
+      shutdownIcon = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/icons/shutdown.png"; description = "Path to the shutdown icon for the logout screen."; };
+      suspendIcon = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/icons/suspend.png"; description = "Path to the suspend icon for the logout screen."; };
     };
 
     # Swaync
     swaync = {
       configFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/swaync/config.json;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/swaync/config.json";
         description = "Path to the swaync config.json file.";
       };
       styleFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/swaync/style.css;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/swaync/style.css";
         description = "Path to the swaync style.css file.";
       };
     };
@@ -119,7 +119,7 @@ in
     swappy = {
       configFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/swappy/config;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/swappy/config";
         description = "Path to the swappy config file.";
       };
     };
@@ -128,7 +128,7 @@ in
     kanshi = {
       configFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/kanshi/config;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/kanshi/config";
         description = "Path to the kanshi config file.";
       };
     };
@@ -137,18 +137,18 @@ in
     walker = {
       configFile = lib.mkOption {
         type = lib.types.path;
-        default = ./config-files/walker/config.toml;
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/walker/config.toml";
         description = "Path to the walker config.toml file.";
       };
     };
 
     # Group custom scripts
     scripts = {
-      changeWallpaper = lib.mkOption { type = lib.types.path; default = ./scripts/change-wallpaper.sh; description = "Path to the script that changes the wallpaper."; };
-      disableLaptopScreen = lib.mkOption { type = lib.types.path; default = ./scripts/disable-laptop-screen.sh; description = "Path to the script that disables the laptop screen."; };
-      nixosClean = lib.mkOption { type = lib.types.path; default = ./scripts/nixos-clean.sh; description = "Path to the script that cleans the NixOS system."; };
-      nixosScripts = lib.mkOption { type = lib.types.path; default = ./scripts/nixos-scripts.sh; description = "Path to a helper script that shows available nixos scripts."; };
-      nixosUpdate = lib.mkOption { type = lib.types.path; default = ./scripts/nixos-update.sh; description = "Path to the script that updates the NixOS system."; };
+      changeWallpaper = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/scripts/change-wallpaper.sh"; description = "Path to the script that changes the wallpaper."; };
+      disableLaptopScreen = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/scripts/disable-laptop-screen.sh"; description = "Path to the script that disables the laptop screen."; };
+      nixosClean = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/scripts/nixos-clean.sh"; description = "Path to the script that cleans the NixOS system."; };
+      nixosScripts = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/scripts/nixos-scripts.sh"; description = "Path to a helper script that shows available nixos scripts."; };
+      nixosUpdate = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/scripts/nixos-update.sh"; description = "Path to the script that updates the NixOS system."; };
     };
 
     # Theming
@@ -191,21 +191,21 @@ in
       programs.sicos.hyprland.waybar.configFile = lib.mkDefault (
         if config.programs.sicos.hyprland.powerManagement.enable then
           if config.programs.sicos.hyprland.insync.enable then
-            ./config-files/waybar/powermanagement/with-insync/config.jsonc
+            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/powermanagement/with-insync/config.jsonc"
           else
-            ./config-files/waybar/powermanagement/without-insync/config.jsonc
+            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/powermanagement/without-insync/config.jsonc"
         else
           if config.programs.sicos.hyprland.insync.enable then
-            ./config-files/waybar/no-powermanagement/with-insync/config.jsonc
+            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/no-powermanagement/with-insync/config.jsonc"
           else
-            ./config-files/waybar/no-powermanagement/without-insync/config.jsonc
+            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/no-powermanagement/without-insync/config.jsonc"
       );
       # Default waybar styleFile will depend on if powerManagement
       # option is enabled or disabled by the user
       programs.sicos.hyprland.waybar.styleFile = lib.mkDefault (
         if config.programs.sicos.hyprland.powerManagement.enable
-        then ./config-files/waybar/powermanagement/style.css
-        else ./config-files/waybar/no-powermanagement/style.css
+        then "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/powermanagement/style.css"
+        else "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/no-powermanagement/style.css"
       );
     
       ##########################################
