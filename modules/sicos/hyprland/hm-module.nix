@@ -11,10 +11,6 @@ in
       home.file = {
         # Hyprland files
         ".config/hypr/hyprland.conf".source = cfg.hyprland.configFile;
-        ".config/hypr/bindings.conf".source = cfg.hyprland.bindingsFile;
-        ".config/hypr/monitors.conf".source = cfg.hyprland.monitorsFile;
-        ".config/hypr/env.conf".source = cfg.hyprland.envFile;
-        ".config/hypr/init.conf".source = cfg.hyprland.initFile;
 
         # Hyprlock files
         ".config/hypr/hyprlock.conf".source = cfg.hyprlock.configFile;

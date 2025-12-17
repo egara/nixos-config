@@ -13,28 +13,10 @@ in
     hyprland = {
       configFile = lib.mkOption {
         type = lib.types.path;
-        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/hyprland.conf";
-        description = "Path to the main hyprland.conf file.";
-      };
-      bindingsFile = lib.mkOption {
-        type = lib.types.path;
-        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/bindings.conf";
-        description = "Path to the key bindings configuration file for Hyprland.";
-      };
-      monitorsFile = lib.mkOption {
-        type = lib.types.path;
-        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/monitors.conf";
-        description = "Path to the monitors.conf file.";
-      };
-      envFile = lib.mkOption {
-        type = lib.types.path;
-        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/env.conf";
-        description = "Path to the env.conf file for environment variables.";
-      };
-      initFile = lib.mkOption {
-        type = lib.types.path;
-        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/init.conf";
-        description = "Path to the init.conf file for startup applications.";
+        # Default config file will depend on if kanshi is
+        # enabled or disabled by the user
+        # default = "${sicos-source-path}/modules/sicos/hyprland/config-files/hyprland.conf";
+        description = "Path to hyprland.conf file.";
       };
     };
 
@@ -178,6 +160,16 @@ in
 
   # 2. CONFIGURATION (USING THE OPTIONS)
   config = lib.mkIf cfg.enable {
+
+      #####################
+      # Hyprland defaults #
+      #####################
+      programs.sicos.hyprland.hyprland.configFile = lib.mkDefault (
+        if config.programs.sicos.hyprland.kanshi.enable then
+            "${sicos-source-path}/modules/sicos/hyprland/config-files/hyprland-with-kanshi.conf"
+        else
+            "${sicos-source-path}/modules/sicos/hyprland/config-files/hyprland-without-kanshi.conf"
+      );
 
       ###################
       # Waybar defaults #
