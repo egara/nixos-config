@@ -74,11 +74,6 @@ in
         #default = ./config-files/waybar/style.css;
         description = "Path to the Waybar style.css file.";
       };
-      insyncScript = lib.mkOption {
-        type = lib.types.path;
-        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/scripts/insync-status.sh";
-        description = "Path to the Waybar insync-status.sh script.";
-      };
     };
 
     # Wlogout

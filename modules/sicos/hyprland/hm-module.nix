@@ -26,7 +26,6 @@ in
         # Waybar files
         ".config/waybar/config.jsonc".source = cfg.waybar.configFile;
         ".config/waybar/style.css".source = cfg.waybar.styleFile;
-        ".config/waybar/scripts/insync-status.sh".source = cfg.waybar.insyncScript;
 
         # Wlogout files
         ".config/wlogout/layout".source = cfg.wlogout.layoutFile;
