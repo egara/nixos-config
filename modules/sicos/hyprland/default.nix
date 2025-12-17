@@ -318,6 +318,7 @@ in
         xfce.catfish # File search GUI
         gnome-calculator # Calculator
         system-config-printer # CUPs GUI
+        vlc # For volume up/down popping sound
       ];
     };
 }

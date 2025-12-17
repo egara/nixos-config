@@ -11,6 +11,7 @@ in
       home.file = {
         # Hyprland files
         ".config/hypr/hyprland.conf".source = cfg.hyprland.configFile;
+        ".config/hypr/pop-sound.mp3".source = ./config-files/pop-sound.mp3;
 
         # Hyprlock files
         ".config/hypr/hyprlock.conf".source = cfg.hyprlock.configFile;
