@@ -121,13 +121,13 @@ in
       };
     };
 
-    # Group custom scripts
+    # Custom scripts
     scripts = {
-      changeWallpaper = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/scripts/change-wallpaper.sh"; description = "Path to the script that changes the wallpaper."; };
-      disableLaptopScreen = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/scripts/disable-laptop-screen.sh"; description = "Path to the script that disables the laptop screen."; };
-      nixosClean = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/scripts/nixos-clean.sh"; description = "Path to the script that cleans the NixOS system."; };
-      nixosScripts = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/scripts/nixos-scripts.sh"; description = "Path to a helper script that shows available nixos scripts."; };
-      nixosUpdate = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/scripts/nixos-update.sh"; description = "Path to the script that updates the NixOS system."; };
+      path = lib.mkOption { 
+        type = lib.types.path; 
+        default = "${sicos-source-path}/modules/sicos/hyprland/scripts/"; 
+        description = "Path where all the scripts are located."; 
+      };
     };
 
     # Theming
