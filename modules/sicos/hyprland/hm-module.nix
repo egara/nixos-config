@@ -50,13 +50,14 @@ in
             source = cfg.scripts.path;
             recursive = true;
             executable = true;
-          };
+        };
 
-        # ".config/hypr/change-wallpaper.sh" = { source = cfg.scripts.changeWallpaper; executable = true; };
-        # ".config/hypr/disable-laptop-screen.sh" = { source = cfg.scripts.disableLaptopScreen; executable = true; };
-        # ".config/hypr/nixos-clean.sh" = { source = cfg.scripts.nixosClean; executable = true; };
-        # ".config/hypr/nixos-scripts.sh" = { source = cfg.scripts.nixosScripts; executable = true; };
-        # ".config/hypr/nixos-update.sh" = { source = cfg.scripts.nixosUpdate; executable = true; };
+        # Wallpapers
+        ".config/hypr/wallpapers" = { 
+            source = ./wallpapers;
+            recursive = true;
+        };
+
       };
 
       # Configuring xdg-utils to use some default applications in Hyprland
