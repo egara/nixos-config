@@ -15,7 +15,7 @@ in
 
         # Hyprlock files
         ".config/hypr/hyprlock.conf".source = cfg.hyprlock.configFile;
-        ".config/hypr/egarcia.jpg".source = cfg.hyprlock.profilePicture;
+        ".config/hypr/user.jpg".source = cfg.hyprlock.profilePicture;
 
         # Hypridle file
         ".config/hypr/hypridle.conf".source = cfg.hypridle.configFile;
@@ -162,7 +162,7 @@ in
         base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
 
         # Is this mandatory?
-        image = ../../display-manager/avatars/egarcia.png;
+        image = ./wallpapers/fwd-wallhaven-wallhaven-mprye8.jpg;
 
         # Cursors
         cursor = {

@@ -29,7 +29,7 @@ in
       };
       profilePicture = lib.mkOption {
         type = lib.types.path;
-        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/egarcia.jpg";
+        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/user.jpg";
         description = "Path to the profile picture used in the lockscreen.";
       };
     };
