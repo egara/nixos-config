@@ -7,6 +7,29 @@ SicOS is a complete desktop environment based on [Wayland](https://wayland.freed
 
 This module handles the installation and configuration of all necessary components, including the status bar (Waybar), application launcher (Walker), notification manager (swaync), screen locker (hyprlock), and much more.
 
+## Features
+
+- **Power Management**: If activated, this option is ideal for laptops. It provides three power profiles (`performance`, `balanced`, and `power-saver`). The system automatically switches to `power-saver` mode when the AC adapter is disconnected and returns to `balanced` mode when reconnected.
+
+- **Default Hyprland Keybindings**: A sensible set of default keybindings for common actions is included:
+  - `Mod + Q`: Close the active window.
+  - `Mod + E`: Launch the file manager.
+  - `Mod + F`: Toggle floating mode for a window.
+  - `Ctrl + Alt + T`: Launch a terminal.
+  - `Mod + Arrow Keys`: Move focus between windows.
+
+- **Audible and Visual Feedback**: Get instant feedback when adjusting system settings:
+  - **Volume Control**: A notification and a sound effect are triggered when you raise or lower the volume.
+  - **Brightness Control**: A notification visually indicates the new screen brightness level.
+
+- **Custom Script Launcher**: Press `Mod + S` to open a menu with custom scripts. By default, it includes a script to clean the system by removing old NixOS generations and garbage-collecting unused store paths.
+
+- **Wallpaper Management**: A collection of wallpapers is included in `modules/sicos/hyprland/wallpapers/`. You can press `Mod + 1` to randomly switch between them.
+
+- **Insync Integration**: Due to rendering issues with the official Insync tray icon in some Wayland environments, this module provides a custom Waybar integration that displays the current sync status.
+
+- **Dark Mode Theming**: For users who prefer a darker aesthetic, the module offers full system integration with a dark theme via **Stylix**.
+
 ## Prerequisites
 
 - **Flake-based System**: Your NixOS system must be configured to use **flakes**.
