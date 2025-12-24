@@ -243,7 +243,6 @@
       buttermanager
       openssl
       lazyssh # For SSH management
-      pkgs-stable.stremio
   ];
 
   # List of programs that must be enabled
