@@ -1,5 +1,5 @@
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, self, ... }:
 #Variables
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, self, ... }:
 let
   # Main user
   username = "egarcia";
@@ -39,6 +39,9 @@ let
       modules = extraModules ++ [
         # Stylix module
         #stylix.nixosModules.stylix
+
+        # Nix-flatpak module
+        nix-flatpak.nixosModules.nix-flatpak
 
         # Common configuration for all hosts
         ./configuration.nix
