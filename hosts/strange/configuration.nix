@@ -58,7 +58,7 @@
   # List of packages installed in system profile only for this host
   environment.systemPackages = with pkgs; [
     bluez-tools
-    pkgs-stable.jetbrains.pycharm-community-bin
+    pkgs-stable.jetbrains.pycharm
     #python312Packages.pyqt5
     #python312Packages.pyyaml
     #python312Packages.sip
