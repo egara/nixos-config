@@ -210,6 +210,17 @@ in
             enable = true;
           };
 
+          # Yazi theming is not currently working using Stylix so
+          # it is disabled and it will only take into account user's
+          # configurations
+          yazi = {
+            enable = false;
+            # boldDirectory = true;
+            # colors = {
+            #   enable = true;
+            # };
+          };
+
           # GTK and QT theming will be managed by Home Manger (see above)
           gtk = {
             enable = false;

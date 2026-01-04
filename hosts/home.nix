@@ -31,12 +31,12 @@ let
   #};
 
   # GitHub repository for catppuccin mocha yazi theme https://github.com/yazi-rs/flavors/catppuccin-mocha.yazi
-  # yazi-theme-catppuccin-mocha = pkgs.fetchFromGitHub {
-  #     owner = "yazi-rs";
-  #     repo = "flavors";
-  #     rev = "main";
-  #     sha256 = "sha256-KNpr7eYHm2dPky1L6EixoD956bsYZZO3bCyKIyAlIEw=";
-  # };
+  yazi-theme-catppuccin-mocha = pkgs.fetchFromGitHub {
+      owner = "yazi-rs";
+      repo = "flavors";
+      rev = "main";
+      sha256 = "sha256-ZLShP2yTzu2C5jddBqGKRypWPLbS41KLsBFTkTTsv2U=";
+  };
 
 in {
   #imports =
@@ -189,16 +189,17 @@ in {
     #  tokyo-night = "${yazi-theme-catppuccin-mocha}";
     #};
 
-    # Theme will be managed by stylix
+    # Theme was managed by stylix but stopped working
+    # Enabling theming via home manager again
     # Theme (Catppuccin Mocha)
-    # theme = {
-    #   flavor = {
-    #     dark = "catppuccin-mocha";
-    #   };
-    # };
-    # flavors = {
-    #   catppuccin-mocha = "${yazi-theme-catppuccin-mocha}/catppuccin-mocha.yazi";
-    # };
+    theme = {
+      flavor = {
+        dark = "catppuccin-mocha";
+      };
+    };
+    flavors = {
+      catppuccin-mocha = "${yazi-theme-catppuccin-mocha}/catppuccin-mocha.yazi";
+    };
 
     # yazi.toml
     settings = {
@@ -242,7 +243,7 @@ in {
     };
 
     plugins = {
-      full-border = "${yazi-plugins}/full-border.yazi";
+      #full-border = "${yazi-plugins}/full-border.yazi";
       #toggle-pane = "${yazi-plugins}/toggle-pane.yazi";
       mount = "${yazi-plugins}/mount.yazi";
       smart-enter = "${yazi-plugins}/smart-enter.yazi";
@@ -250,13 +251,13 @@ in {
 
     # Some plugins need to be loaded before hand.
     # Example: full-border https://github.com/yazi-rs/plugins/tree/main/full-border.yazi
-    initLua = ''
-      require("full-border"):setup()
-    '';
+    #initLua = ''
+    #  require("full-border"):setup()
+    #'';
 
     # keymap.toml
     keymap = {
-      manager.prepend_keymap = [
+      mgr.prepend_keymap = [
         {
           on = "<C-w>";
           run = "close";
