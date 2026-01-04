@@ -223,6 +223,11 @@ in {
           { run = "vlc \"$@\""; orphan = true; for = "unix"; }
         ];
 
+        # The default PDF reader will be Okular
+        pdf = [
+          { run = "okular \"$@\""; orphan = true; for = "unix"; }
+        ];
+
         # The default editor will be sublime text
         edit = [
           { run = "subl \"$@\""; orphan = true; for = "unix"; }
@@ -230,16 +235,22 @@ in {
       };
 
       open = {
-        # Setting default behaviours for some kind of files
-        prepend_rules = [
-          # Video
-          { name = "*.mkv"; use = "video"; }
-          { name = "*.mp4"; use = "video"; }
-          { name = "*.mov"; use = "video"; }
-          { name = "*.wmv"; use = "video"; }
-          { name = "*.webm"; use = "video"; }
+        # Setting default applications for some kind of files
+        rules = [
+          { mime = "text/*"; use = "edit"; }
+          { mime = "video/*"; use = "video"; }
+          { mime = "application/json"; use = "edit"; }
+          { mime = "application/pdf"; use = "pdf"; }
+          { mime = "audio/aac"; use = "play"; }
+          { mime = "audio/midi"; use = "play"; }
+          { mime = "audio/x-midi"; use = "play"; }
+          { mime = "audio/mpeg"; use = "play"; }
+          { mime = "audio/ogg"; use = "play"; }
+          { mime = "audio/wav"; use = "play"; }
+          { mime = "audio/webm"; use = "play"; }
+          { mime = "audio/3gpp"; use = "play"; }
         ];  
-      };
+      }; 
     };
 
     plugins = {
