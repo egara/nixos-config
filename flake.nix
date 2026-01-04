@@ -10,7 +10,7 @@
 
     # Stable Nix packages
     nixpkgs-stable = {
-      url = "github:nixos/nixpkgs?ref=nixos-25.05";
+      url = "github:nixos/nixpkgs?ref=nixos-25.11";
     };
     
     # Disko packages (for automatic partitioning)
@@ -44,7 +44,7 @@
     autofirma-nix = {
       url = "github:nix-community/autofirma-nix";  # For nixpkgs-unstable
       # url = "github:nix-community/autofirma-nix/release-24.11";  # For NixOS 24.11
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
     # Walker and Elephant
@@ -77,6 +77,12 @@
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware/master";
     };
+
+  # Nix Flatpak. Install and manage flatpaks programatically using Nix
+    # https://github.com/gmodena/nix-flatpak
+    nix-flatpak = {
+      url = "github:gmodena/nix-flatpak";
+    };
   };
 
   # The binary cache configuration is strongly recommended to avoid unnecessary local compilation.
@@ -101,7 +107,7 @@
   # Function that tells my flake which to use and what do what to do with the dependencies.
   # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, hyprland, hyprland-plugins, ... }:
   # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, walker, ... }:
-  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, ... }:
+  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, ... }:
   {
     nixosModules = {
       sicos-hyprland = {
@@ -130,7 +136,7 @@
         # to be defined anymore.
         # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
         # inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix walker;
-        inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader autofirma-nix stylix walker nixos-hardware self;
+        inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader autofirma-nix stylix walker nixos-hardware nix-flatpak self;
       }
     );
   };
