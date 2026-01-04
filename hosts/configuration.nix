@@ -22,7 +22,7 @@
       # Enabling some NetworkManager plugins for managing VPNs
       plugins = with pkgs; [
         networkmanager-fortisslvpn
-        networkmanager-l2tp
+        #networkmanager-l2tp
         networkmanager-openvpn
         networkmanager_strongswan
       ];
@@ -41,9 +41,9 @@
     mullvad-vpn = {
       enable = true;
     };
-    softether = {
-      enable = true;
-    };
+    #softether = {
+    #  enable = true;
+    #};
     strongswan = {
       enable = true;
     };
@@ -53,9 +53,9 @@
     wg-netmanager = {
       enable = true;
     };
-    xl2tpd = {
-      enable = true;
-    };
+    #xl2tpd = {
+    #  enable = true;
+    #};
   };
 
   # Set your time zone.
@@ -173,6 +173,15 @@
     "jitsi-meet-1.0.8792" # Needed for element-desktop
   ];  
 
+  # Enabling flatpaks and installing some of them
+  # via nix-flatpak module
+  services.flatpak = {
+    enable = true;
+    packages = [
+      "com.stremio.Stremio"
+    ];
+  };
+
   # List of stable and unstable packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -235,7 +244,7 @@
       wireshark
       killall
       protonvpn-gui
-      gemini-cli
+      gemini-cli-bin
       #gradia
       posting
       k9s
@@ -271,9 +280,6 @@
       enable = true;
     };
   };
-
-  # Enabling Flatpak
-  services.flatpak.enable = true;
 
   # Preventing xterm emulator to be installed
   services.xserver.excludePackages = [ pkgs.xterm ];
