@@ -234,7 +234,7 @@ in
       # Thunar File Manager
       programs.thunar = {
         enable = true;
-        plugins = with pkgs.xfce; [
+        plugins = with pkgs; [
           thunar-archive-plugin
           thunar-volman
         ];
@@ -315,7 +315,7 @@ in
         brightnessctl # Screen brightness control
         playerctl # Media player control
         lxqt.lxqt-policykit # Polkit agent
-        xfce.catfish # File search GUI
+        catfish # File search GUI
         gnome-calculator # Calculator
         system-config-printer # CUPs GUI
         vlc # For volume up/down popping sound
