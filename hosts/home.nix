@@ -127,6 +127,11 @@ in {
           { run = "vlc \"$@\""; orphan = true; for = "unix"; }
         ];
 
+        # The default image viewer will be feh
+        image = [
+          { run = "feh \"$@\""; orphan= true; for = "unix"; }
+        ];
+
         # The default PDF reader will be Okular
         pdf = [
           { run = "okular \"$@\""; orphan = true; for = "unix"; }
@@ -153,6 +158,8 @@ in {
           { mime = "audio/wav"; use = "play"; }
           { mime = "audio/webm"; use = "play"; }
           { mime = "audio/3gpp"; use = "play"; }
+          { mime = "image/jpeg"; use = "image"; }
+          { mime = "image/png"; use = "image"; }
         ];  
       }; 
     };
