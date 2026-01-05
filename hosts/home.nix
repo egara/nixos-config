@@ -34,8 +34,9 @@ let
   yazi-theme-catppuccin-mocha = pkgs.fetchFromGitHub {
       owner = "yazi-rs";
       repo = "flavors";
-      rev = "main";
-      sha256 = "sha256-ZLShP2yTzu2C5jddBqGKRypWPLbS41KLsBFTkTTsv2U=";
+      #rev = "main";
+      rev = "4a1802a5add0f867b08d5890780c10dd1f051c36";
+      sha256 = "sha256-RrF97Lg9v0LV+XseJw4RrdbXlv+LJzfooOgqHD+LGcw=";
   };
 
 in {
