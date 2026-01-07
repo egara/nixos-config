@@ -98,4 +98,11 @@
       eclipses.eclipse-jee
       pkgs-stable.jdk8  
   ];
+
+  # Creating a symlink for openjdk8 in order to configure Eclipse properly
+  system.activationScripts.openjdk8-symlink = ''
+    mkdir -p /var/lib/jvm
+    chmod 777 -R /var/lib/jvm
+    ln -sf ${pkgs-stable.jdk8}/lib/openjdk /var/lib/jvm/openjdk8
+  '';
 }
