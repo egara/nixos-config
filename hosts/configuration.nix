@@ -22,7 +22,7 @@
       # Enabling some NetworkManager plugins for managing VPNs
       plugins = with pkgs; [
         networkmanager-fortisslvpn
-        #networkmanager-l2tp
+        networkmanager-l2tp
         networkmanager-openvpn
         networkmanager_strongswan
       ];
@@ -41,21 +41,21 @@
     mullvad-vpn = {
       enable = true;
     };
-    #softether = {
+    # softether = {
     #  enable = true;
-    #};
+    # };
     strongswan = {
       enable = true;
     };
-    #tailscale = {
-    #  enable = true;
-    #};
+    tailscale = {
+     enable = true;
+    };
     wg-netmanager = {
       enable = true;
     };
-    #xl2tpd = {
-    #  enable = true;
-    #};
+    xl2tpd = {
+     enable = true;
+    };
   };
 
   # Set your time zone.
