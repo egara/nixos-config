@@ -141,6 +141,11 @@ in {
         edit = [
           { run = "subl \"$@\""; orphan = true; for = "unix"; }
         ];
+
+        # A generic opener for Firefox
+        firefox = [
+          { run = "firefox \"$@\""; orphan = true; for = "unix"; }
+        ];
       };
 
       open = {
@@ -149,7 +154,7 @@ in {
           { mime = "text/*"; use = "edit"; }
           { mime = "video/*"; use = "video"; }
           { mime = "application/json"; use = "edit"; }
-          { mime = "application/pdf"; use = "pdf"; }
+          { mime = "application/pdf"; use = ["pdf" "firefox"]; }
           { mime = "audio/aac"; use = "play"; }
           { mime = "audio/midi"; use = "play"; }
           { mime = "audio/x-midi"; use = "play"; }
@@ -160,6 +165,7 @@ in {
           { mime = "audio/3gpp"; use = "play"; }
           { mime = "image/jpeg"; use = "image"; }
           { mime = "image/png"; use = "image"; }
+          { mime = "*"; use = "open"; } # Fallback to xdg-open for all other mimetypes
         ];  
       }; 
     };
