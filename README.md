@@ -102,6 +102,7 @@ Below is a complete example of a `flake.nix` file:
             programs.sicos.hyprland = {
               enable = true; # Enable SicOS
               theming.enable = true; # Enable default theming (recommended)
+              theming.mode = "dark"; # Set theme mode to dark or light
               powerManagement.enable = true; # Enable power management for laptops
               insync.enable = true; # Enable Insync integration
               kanshi.enable = true; # Enable monitor profile management
@@ -136,6 +137,7 @@ The SicOS module offers several options to customize your environment. All optio
 | --- | --- | --- | --- |
 | `enable` | boolean | `false` | Enables or disables the SicOS module entirely. |
 | `theming.enable` | boolean | `true` | Enables theme configuration (GTK, Qt, icons, cursors) through Home Manager and Stylix. |
+| `theming.mode` | string | `"dark"` | Sets the theme to either `"dark"` or `"light"`. |
 | `powerManagement.enable` | boolean | `true` | Enables power management for laptops, using `power-profiles-daemon` and automatically adjusting brightness and power profiles when plugging/unplugging the AC adapter. |
 | `insync.enable` | boolean | `false` | Enables integration with Insync, including a Waybar status indicator. |
 | `insync.package` | package | `pkgs.insync` | Allows specifying a different Insync package version (e.g., from `pkgs-stable`). |

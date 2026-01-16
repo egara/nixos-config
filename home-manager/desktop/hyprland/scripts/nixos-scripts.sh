@@ -7,7 +7,7 @@
 # @email: eloy.garcia.pca@gmail.com
 # ------------------------------------------
 
-items="󰚰\u00A0\u00A0\u00A0\u00A0Update\n\u00A0\u00A0\u00A0\u00A0Clean\n󰱦\u00A0\u00A0\u00A0\u00A0Extranet\n\u00A0\u00A0\u00A0\u00A0Eclipse\n\u00A0\u00A0\u00A0\u00A0Hibernate"
+items="󰚰\u00A0\u00A0\u00A0\u00A0Update\n\u00A0\u00A0\u00A0\u00A0Clean\n󰌶\u00A0\u00A0\u00A0\u00A0Light Theme\n󰽥\u00A0\u00A0\u00A0\u00A0Dark Theme\n󰱦\u00A0\u00A0\u00A0\u00A0Extranet\n\u00A0\u00A0\u00A0\u00A0Eclipse\n\u00A0\u00A0\u00A0\u00A0Hibernate"
 
 output=$(echo -e $items | walker --dmenu -H)
 
@@ -15,6 +15,10 @@ if [[ "$output" == *"Update"* ]]; then
   kitty --hold sh -c "~/.config/hypr/nixos-update.sh"
 elif [[ "$output" == *"Clean"* ]]; then
   kitty --hold sh -c "~/.config/hypr/nixos-clean.sh"
+elif [[ "$output" == *"Light Theme"* ]]; then
+  kitty --hold sh -c "~/.config/hypr/theme-switcher.sh light"
+elif [[ "$output" == *"Dark Theme"* ]]; then
+  kitty --hold sh -c "~/.config/hypr/theme-switcher.sh dark"
 elif [[ "$output" == *"Extranet"* ]]; then
   kitty --hold sh -c "~/scripts/nixos/extranet.sh"
 elif [[ "$output" == *"Eclipse"* ]]; then

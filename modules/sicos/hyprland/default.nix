@@ -134,6 +134,12 @@ in
     theming = {
       enable = lib.mkEnableOption "Enable sicos theming";
       default = true;
+
+      mode = lib.mkOption {
+        type = lib.types.enum [ "dark" "light" ];
+        default = "dark";
+        description = "Set the theme mode for the system.";
+      };
     };
 
     # Power Management using power profiles daemon

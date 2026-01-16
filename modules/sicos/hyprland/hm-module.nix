@@ -95,6 +95,87 @@ in
       };
     })
     (lib.mkIf cfg.theming.enable {
+      ########################################
+      # Theming with Stylix
+      ########################################
+      stylix =
+        let
+          # Base configuration
+          commonConfig = {
+            enable = true;
+            cursor = {
+              package = pkgs.bibata-cursors;
+              name = "Bibata-Modern-Classic";
+              size = 10;
+            };
+            icons = {
+              package = pkgs.papirus-icon-theme;
+              dark = "Papirus-Dark";
+              light = "Papirus";
+            };
+            fonts = let
+              monospaceFont = {
+                package = pkgs.nerd-fonts.go-mono;
+                name = "GoMonoNerdFontPropo-Bold";
+              };
+            in {
+              monospace = monospaceFont;
+              serif = monospaceFont;
+              sansSerif = monospaceFont;
+              emoji = {
+                package = pkgs.noto-fonts-color-emoji;
+                name = "Noto Color Emoji";
+              };
+              sizes = {
+                applications = 10;
+                desktop = 10;
+                popups = 10;
+                terminal = 10;
+              };
+            };
+            targets = {
+              kitty.enable = true;
+
+              # Yazi theming is not currently working using Stylix so
+              # it is disabled and it will only take into account user's
+              # configurations
+              yazi = {
+                enable = false;
+                # boldDirectory = true;
+                # colors = {
+                #   enable = true;
+                # };
+              };
+
+              # GTK and QT theming will be managed by Home Manger (see above)
+              gtk = {
+                enable = false;
+              };
+
+              qt = {
+                enable = false;
+              };
+
+            };
+          };
+
+          # Dark theme
+          darkTheme = commonConfig // {
+            polarity = "dark";
+            base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
+            image = ./wallpapers/fwd-wallhaven-wallhaven-mprye8.jpg;
+          };
+
+          # Light Theme
+          lightTheme = commonConfig // {
+            polarity = "light";
+            base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-latte.yaml";
+            image = ./wallpapers/fwd-wallhaven-wallhaven-v9v3r5.jpg; # Un fondo de pantalla claro
+          };
+
+        # Selecting stylix theming depending on the theme selected by the user
+        in if cfg.theming.mode == "light" then lightTheme else darkTheme;
+
       #############################
       # Theming with Home Manager #
       #############################
@@ -109,129 +190,30 @@ in
       # GTK configuration and theming
       gtk = {
         enable = true;
-
         theme = {
-          name = "Adwaita-dark";
+          name = if config.stylix.polarity == "dark" then "Adwaita-dark" else "Adwaita";
           package = pkgs.gnome-themes-extra;
         };
-
-        # Icon theming will be globally managed by Stylix (see below)
-        #iconTheme = {
-        #  package = pkgs.papirus-icon-theme;
-        #  name = "Papirus-Dark";
-        #};
-
+        iconTheme = {
+          name = config.stylix.icons.${config.stylix.polarity};
+          package = config.stylix.icons.package;
+        };
         font = {
-          package = pkgs.nerd-fonts.go-mono;
-          name = "GoMonoNerdFontPropo-Bold";
-          size = 10;
+          name = config.stylix.fonts.sansSerif.name;
+          size = config.stylix.fonts.sizes.applications;
         };
-
-        gtk3 = {
-          extraConfig.gtk-application-prefer-dark-theme = true;
-        };
-
-        gtk4 = {
-          extraConfig.gtk-application-prefer-dark-theme = true;
-        };
+        gtk3.extraConfig.gtk-application-prefer-dark-theme = config.stylix.polarity == "dark";
+        gtk4.extraConfig.gtk-application-prefer-dark-theme = config.stylix.polarity == "dark";
       };
 
       # QT configuration and theming
       qt = {
         enable = true;
-        platformTheme = {
-          name = "gtk";
-        };
+        platformTheme.name = "gtk";
         style = {
-          name = "adwaita-dark";
+          name = if config.stylix.polarity == "dark" then "adwaita-dark" else "adwaita";
           package = pkgs.adwaita-qt;
         };
-      };
-
-      ########################################
-      # Theming with Stylix
-      ########################################
-      # Global styling with Stylix
-      stylix = {
-        enable = true;
-
-        # Dark theme
-        polarity = "dark";
-
-        # Color scheme
-        base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
-
-        # Is this mandatory?
-        image = ./wallpapers/fwd-wallhaven-wallhaven-mprye8.jpg;
-
-        # Cursors
-        cursor = {
-          package = pkgs.bibata-cursors;
-          name = "Bibata-Modern-Classic";
-          size = 10;
-        };
-
-        # Icons
-        icons = {
-          enable = true;
-          package = pkgs.papirus-icon-theme;
-          dark = "Papirus-Dark";
-          light = "Papirus-Dark";
-        };
-
-        # Fonts
-        fonts = let
-          monospaceFont = {
-            package = pkgs.nerd-fonts.go-mono;
-            name = "GoMonoNerdFontPropo-Bold";
-          };
-        in {
-          monospace = monospaceFont;
-          serif = monospaceFont;
-          sansSerif = monospaceFont;
-
-          emoji = {
-            package = pkgs.noto-fonts-color-emoji;
-            name = "Noto Color Emoji";
-          };
-
-          sizes = {
-            applications = 10;
-            desktop = 10;
-            popups = 10;
-            terminal = 10;
-          };
-        };
-
-        # Targets
-        targets = {
-
-          kitty = {
-            enable = true;
-          };
-
-          # Yazi theming is not currently working using Stylix so
-          # it is disabled and it will only take into account user's
-          # configurations
-          yazi = {
-            enable = false;
-            # boldDirectory = true;
-            # colors = {
-            #   enable = true;
-            # };
-          };
-
-          # GTK and QT theming will be managed by Home Manger (see above)
-          gtk = {
-            enable = false;
-          };
-
-          qt = {
-            enable = false;
-          };
-
-        };
-
       };
     })
     (lib.mkIf cfg.kanshi.enable {
