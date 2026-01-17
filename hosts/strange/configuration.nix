@@ -68,6 +68,7 @@
     #jdk8
     #jdk17
     teams-for-linux
+    opencode
     #pkgs-stable.jdk8
   ];
 
