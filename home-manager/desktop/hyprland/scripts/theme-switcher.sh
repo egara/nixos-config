@@ -67,4 +67,10 @@ pushd "$CONFIG_PATH"
 # Rebuild the NixOS system with the new theme
 sudo nixos-rebuild switch --flake .#$HOST-$DESKTOP
 
+# Restart Waybar to apply theme changes
+echo "Restarting Waybar to apply new theme..."
+pkill waybar
+sleep 1
+uwsm app -- waybar &
+
 echo "Theme changed successfully to '$THEME'!"
