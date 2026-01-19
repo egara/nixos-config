@@ -1,0 +1,362 @@
+* {
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+    /* `otf-font-awesome` is required to be installed for icons */
+    /*font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;*/
+    /*font-family: JetBrainsMono Nerd Font, Roboto, Helvetica, Arial, sans-serif;*/
+    font-family: GoMonoNerdFontPropo, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 13px;
+}
+
+window#waybar {
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 5px;
+    font-size: 13px;
+    transition-property: background-color;
+    transition-duration: 0.5s;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+window#waybar.empty {
+    background-color: transparent;
+}
+
+button {
+    /* Use box-shadow instead of border so the text isn't offset */
+    box-shadow: inset 0 -3px transparent;
+    /* Avoid rounded borders under each button name */
+    border: none;
+    border-radius: 0;
+}
+
+
+/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
+button:hover {
+    background: inherit;
+    box-shadow: inset 0 -3px #2E3440;
+}
+
+.modules-left, .modules-center, .modules-right {
+    border-radius: 5px;
+    background-color: rgba(250, 250, 250, 0.7);
+    padding: 2px 6px;
+}
+
+#mode {
+    background-color: #A6D1E6;
+    box-shadow: inset 0 -3px #2E3440;
+}
+
+#workspaces {
+    background: #B3B3B3;
+    margin: 5px 5px;
+    padding: 8px 5px;
+    border-radius: 15px;
+    color: #ffffff;
+}
+#workspaces button {
+    padding: 0px 5px;
+    margin: 0px 3px;
+    border-radius: 16px;
+    color: transparent;
+    background: #D8DEE9;
+    transition: all 0.3s ease-in-out;
+}
+
+#workspaces button.active {
+    background-color: #5E81AC;
+    color: #ECEFF4;
+    border-radius: 16px;
+    min-width: 50px;
+    background-size: 400% 400%;
+    transition: all 0.3s ease-in-out;
+}
+
+#workspaces button:hover {
+    background-color: #E5E9F0;
+    color: #2E3440;
+    border-radius: 16px;
+    min-width: 50px;
+    background-size: 400% 400%;
+}
+
+#wireplumber,
+#tray,
+#taskbar,
+#custom-clipboard,
+#custom-notification,
+#custom-insync {
+    background: #B3B3B3;
+    margin: 5px 5px;
+    padding: 8px;
+    border-radius: 15px;
+    color: #ffffff; 
+}
+
+
+@keyframes blink {
+    to {
+        background-color: #F4F6F8;
+        color: #BF616A;
+    }
+}
+
+/* Using steps() instead of linear as a timing function to limit cpu usage */
+#battery.critical:not(.charging) {
+    background-color: transparent;
+    color: #D08770;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#power-profiles-daemon.performance {
+    color: #BF616A;
+}
+
+#power-profiles-daemon.balanced {
+    color: #5E81AC;
+}
+
+#power-profiles-daemon.power-saver {
+    color: #A3BE8C;
+}
+
+label:focus {
+    background-color: #E5E9F0;
+}
+
+#network.disconnected {
+    background-color: #BF616A;
+    color: #ECEFF4;
+}
+
+#pulseaudio.muted,
+#wireplumber.muted {
+    color: #D08770;
+}
+
+/* playerctl for displaying and managing music in waybar */
+#custom-playerctl.backward, #custom-playerctl.play, #custom-playerctl.foward {
+    background: #F4F6F8;
+    font-size: 18px;
+    margin: 5px 0px;
+}
+
+#custom-playerctl.backward:hover, #custom-playerctl.play:hover, #custom-playerctl.foward:hover{
+    color: #5E81AC;
+}
+
+#custom-playerctl.backward {
+    color: #B48EAD;
+    border-radius: 15px 0px 0px 15px;
+    padding-left: 12px;
+    margin-left: 7px;
+}
+
+#custom-playerctl.play {
+    color: #81A1C1;
+    padding-right: 3px;
+    padding-left: 10px;
+}
+
+#custom-playerctl.foward {
+    color: #B48EAD;
+    border-radius: 0px 15px 15px 0px;
+    padding-right: 4px;
+    padding-left: 8px;
+    margin-right: 5px
+}
+
+#custom-playerlabel {
+    background: #F4F6F8;
+    color: #2E3440;
+    padding: 0 20px;
+    border-radius: 24px 10px 24px 10px;
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+#custom-media {
+    background-color: #A3BE8C;
+    color: #2E3440;
+    min-width: 100px;
+}
+
+#custom-media.custom-spotify {
+    background-color: #A3BE8C;
+}
+
+#custom-media.custom-vlc {
+    background-color: #EBCB8B;
+}
+
+#temperature {
+    background-color: #EBCB8B;
+    padding: 5px 5px;
+}
+
+#temperature.critical {
+    background-color: #BF616A;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: #BF616A;
+}
+
+#idle_inhibitor {
+    background-color: #ECEFF4;
+}
+
+#idle_inhibitor.activated {
+    background-color: #A3BE8C;
+    color: #2E3440;
+}
+
+#mpd {
+    background-color: #A3BE8C;
+    color: #2E3440;
+}
+
+#mpd.disconnected {
+    background-color: #BF616A;
+}
+
+#mpd.stopped {
+    background-color: #D8DEE9;
+}
+
+#mpd.paused {
+    background-color: #81A1C1;
+}
+
+#language {
+    background: #88C0D0;
+    color: #2E3440;
+    padding: 0 5px;
+    margin: 0 5px;
+    min-width: 16px;
+    padding: 5px 5px;
+}
+
+#keyboard-state {
+    background-color: transparent;
+    color: #2E3440;
+    margin: 0 5px;
+    min-width: 16px;
+    padding: 5px 5px;
+}
+
+#keyboard-state > label {
+    padding: 0 5px;
+}
+
+#keyboard-state > label.locked {
+    background: #EBCB8B;
+}
+
+#scratchpad {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+#scratchpad.empty {
+	background-color: transparent;
+}
+
+#privacy {
+    padding: 0;
+}
+
+#privacy-item {
+    padding: 0 5px;
+    color: #ECEFF4;
+}
+
+#privacy-item.screenshare {
+    background-color: #D08770;
+}
+
+#privacy-item.audio-in {
+    background-color: #A3BE8C;
+}
+
+#privacy-item.audio-out {
+    background-color: #5E81AC;
+}
+
+#cava.left, #cava.right {
+    background: #F4F6F8;
+    margin: 5px; 
+    padding: 8px 16px;
+    color: #B48EAD;
+}
+
+#cava.left {
+    border-radius: 24px 10px 24px 10px;
+}
+
+#cava.right {
+    border-radius: 10px 24px 10px 24px;
+}
+
+#custom-walker {
+  font-size: 16px;
+}
+
+#custom-insync.error {
+  color: #BF616A;
+}
+
+#custom-insync.syncing {
+  color: #81A1C1;
+}
+
+/* Make backlight and pulseaudio modules look like a single block */
+#backlight {
+    margin: 5px 0 5px 5px;
+    border-radius: 15px 0 0 15px;
+    padding-right: 4px;
+}
+
+#pulseaudio {
+    margin: 5px 5px 5px 0;
+    border-radius: 0 15px 15px 0;
+    padding-left: 4px;
+}
+
+/* Make cpu and memory modules look like a single block */
+#cpu {
+    margin: 5px 0 5px 5px;
+    border-radius: 15px 0 0 15px;
+    padding-right: 4px;
+}
+
+#memory {
+    margin: 5px 5px 5px 0;
+    border-radius: 0 15px 15px 0;
+    padding-left: 4px;
+}
+
+/* Make battery and power-profiles-daemon modules look like a single block */
+#battery {
+    margin: 5px 0 5px 5px;
+    border-radius: 15px 0 0 15px;
+    padding-right: 4px;
+}
+
+#power-profiles-daemon {
+    margin: 5px 5px 5px 0;
+    border-radius: 0 15px 15px 0;
+    padding-left: 4px;
+}

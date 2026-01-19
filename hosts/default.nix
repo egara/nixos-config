@@ -78,7 +78,7 @@ let
 
             # Waybar
             programs.sicos.hyprland.waybar.configFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/config.jsonc; };
-            programs.sicos.hyprland.waybar.styleFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/style.css; };
+            programs.sicos.hyprland.waybar.styleFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/style-light.css; };
 
             # Scripts
             programs.sicos.hyprland.scripts.path = builtins.path { path = ../home-manager/desktop/hyprland/scripts; };            
