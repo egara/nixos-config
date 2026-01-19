@@ -71,6 +71,6 @@ sudo nixos-rebuild switch --flake .#$HOST-$DESKTOP
 echo "Restarting Waybar to apply new theme..."
 pkill waybar
 sleep 1
-uwsm app -- waybar &
+nohup uwsm app -- waybar > /dev/null 2>&1 &
 
 echo "Theme changed successfully to '$THEME'!"
