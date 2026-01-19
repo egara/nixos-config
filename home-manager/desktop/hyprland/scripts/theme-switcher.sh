@@ -82,4 +82,19 @@ pkill swaync
 sleep 1
 nohup uwsm app -- swaync > /dev/null 2>&1 &
 
+# Restart Walker to apply theme changes
+echo "Restarting Walker to apply new theme..."
+pkill walker
+sleep 1
+nohup uwsm app -- walker --gapplication-service > /dev/null 2>&1 &
+
+# Restart Elephant
+echo "Restarting Elephant..."
+pkill elephant
+sleep 1
+nohup uwsm app -- elephant > /dev/null 2>&1 &
+
 echo "Theme changed successfully to '$THEME'!"
+echo "Terminal will close in 3 seconds..."
+sleep 3
+kill $PPID
