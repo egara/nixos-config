@@ -73,4 +73,10 @@ pkill waybar
 sleep 1
 nohup uwsm app -- waybar > /dev/null 2>&1 &
 
+# Restart swaync to apply theme changes
+echo "Restarting swaync to apply new theme..."
+pkill swaync
+sleep 1
+nohup uwsm app -- swaync > /dev/null 2>&1 &
+
 echo "Theme changed successfully to '$THEME'!"

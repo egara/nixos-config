@@ -87,7 +87,6 @@ in
       };
       styleFile = lib.mkOption {
         type = lib.types.path;
-        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/swaync/style.css";
         description = "Path to the swaync style.css file.";
       };
     };
@@ -215,6 +214,18 @@ in
             "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/no-powermanagement/style-light.css"
           else
             "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/no-powermanagement/style.css"
+      );
+
+      ####################
+      # Swaync defaults #
+      ####################
+      programs.sicos.hyprland.swaync.configFile = lib.mkDefault (
+        "${sicos-source-path}/modules/sicos/hyprland/config-files/swaync/config.json"
+      );
+      programs.sicos.hyprland.swaync.styleFile = lib.mkDefault (
+        if cfg.theming.mode == "light"
+        then "${sicos-source-path}/modules/sicos/hyprland/config-files/swaync/style-light.css"
+        else "${sicos-source-path}/modules/sicos/hyprland/config-files/swaync/style.css"
       );
     
       ##########################################
