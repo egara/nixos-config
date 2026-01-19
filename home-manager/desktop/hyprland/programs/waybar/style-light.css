@@ -84,6 +84,15 @@ button:hover {
     background-size: 400% 400%;
 }
 
+#clock,
+#battery,
+#power-profiles-daemon,
+#cpu,
+#memory,
+#disk,
+#backlight,
+#network,
+#pulseaudio,
 #wireplumber,
 #tray,
 #taskbar,
@@ -94,7 +103,7 @@ button:hover {
     margin: 5px 5px;
     padding: 8px;
     border-radius: 15px;
-    color: #ffffff; 
+    color: #2E3440; 
 }
 
 

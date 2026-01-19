@@ -31,21 +31,21 @@ fi
 
 echo "Searching for the theming configuration file in $CONFIG_PATH..."
 
-# Find the file containing the 'theming.mode' setting, excluding the README and the script itself.
+# Find the file containing the 'themeMode' setting, excluding the README and the script itself.
 # -r: recursive search
 # -l: print only file names of matching files
 # --exclude: pattern for files to exclude
-FILE_TO_EDIT=$(grep -r -l --exclude="README.md" --exclude="theme-switcher.sh" 'theming.mode = "' "$CONFIG_PATH")
+FILE_TO_EDIT=$(grep -r -l --exclude="README.md" --exclude="theme-switcher.sh" 'themeMode = "' "$CONFIG_PATH")
 
 # Error handling if no file is found
 if [ -z "$FILE_TO_EDIT" ]; then
-    echo "Error: Could not find any configuration file with 'theming.mode'."
+    echo "Error: Could not find any configuration file with 'themeMode'."
     exit 1
 fi
 
 # Error handling if multiple files are found
 if [ $(echo "$FILE_TO_EDIT" | wc -l) -gt 1 ]; then
-    echo "Error: Found multiple configuration files with 'theming.mode'. Aborting to prevent unintended changes."
+    echo "Error: Found multiple configuration files with 'themeMode'. Aborting to prevent unintended changes."
     echo "Files found:"
     echo "$FILE_TO_EDIT"
     exit 1
@@ -55,9 +55,9 @@ echo "Found configuration file: $FILE_TO_EDIT"
 echo "Setting SicOS theme to '$THEME'..."
 
 # Use sed to replace the theme value in the identified file.
-# This command finds the line starting with optional whitespace followed by 'theming.mode = "'
+# This command finds the line starting with optional whitespace followed by 'themeMode = "'
 # and replaces only the value inside the quotes, preserving indentation and the attribute path.
-sed -i "s/\(theming\.mode = \s*\"\).*\(\"\s*;\)/\1$THEME\2/" "$FILE_TO_EDIT"
+sed -i "s/\(themeMode = \s*\"\).*\(\"\s*;\)/\1$THEME\2/" "$FILE_TO_EDIT"
 
 echo "Configuration file updated. Rebuilding the system..."
 

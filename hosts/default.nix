@@ -56,33 +56,40 @@ let
             lib.optionals (host.desktop == "hyprland") [ self.nixosModules.sicos-hyprland ];
           
           # Enable the sicos module if desktop is hyprland
-          config = lib.mkIf (host.desktop == "hyprland") {
-            programs.sicos.hyprland.enable = true;
-            programs.sicos.hyprland.theming.enable = true;
-            programs.sicos.hyprland.theming.mode = "light";
-            programs.sicos.hyprland.powerManagement.enable = true;
-            programs.sicos.hyprland.insync.enable = true;
-            programs.sicos.hyprland.insync.package = pkgs-stable.insync;
-            programs.sicos.hyprland.kanshi.enable = true;
+          config = lib.mkIf (host.desktop == "hyprland") (
+            let
+              themeMode = "dark";
+            in
+            {
+              programs.sicos.hyprland.enable = true;
+              programs.sicos.hyprland.theming.enable = true;
+              programs.sicos.hyprland.theming.mode = themeMode;
+              programs.sicos.hyprland.powerManagement.enable = true;
+              programs.sicos.hyprland.insync.enable = true;
+              programs.sicos.hyprland.insync.package = pkgs-stable.insync;
+              programs.sicos.hyprland.kanshi.enable = true;
 
-            # Custom config files
+              # Custom config files
 
-            # Hyprland
-            programs.sicos.hyprland.hyprland.configFile = builtins.path { path = ../home-manager/desktop/hyprland/config/hyprland.conf; };
+              # Hyprland
+              programs.sicos.hyprland.hyprland.configFile = builtins.path { path = ../home-manager/desktop/hyprland/config/hyprland.conf; };
 
-            # Hyprlock
-            programs.sicos.hyprland.hyprlock.profilePicture = builtins.path { path = ../home-manager/desktop/hyprland/config/user.jpg; };
+              # Hyprlock
+              programs.sicos.hyprland.hyprlock.profilePicture = builtins.path { path = ../home-manager/desktop/hyprland/config/user.jpg; };
 
-            # Kanshi
-            programs.sicos.hyprland.kanshi.configFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/kanshi/config; };
+              # Kanshi
+              programs.sicos.hyprland.kanshi.configFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/kanshi/config; };
 
-            # Waybar
-            programs.sicos.hyprland.waybar.configFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/config.jsonc; };
-            programs.sicos.hyprland.waybar.styleFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/style-light.css; };
+              # Waybar
+              programs.sicos.hyprland.waybar.configFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/config.jsonc; };
+              programs.sicos.hyprland.waybar.styleFile = 
+                if themeMode == "light"
+                then builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/style-light.css; }
+                else builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/style.css; };
 
-            # Scripts
-            programs.sicos.hyprland.scripts.path = builtins.path { path = ../home-manager/desktop/hyprland/scripts; };            
-          };
+              # Scripts
+              programs.sicos.hyprland.scripts.path = builtins.path { path = ../home-manager/desktop/hyprland/scripts; };            
+            });
         })
 
         # Home Manager module and configurations
