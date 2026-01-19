@@ -205,9 +205,16 @@ in
       # Default waybar styleFile will depend on if powerManagement
       # option is enabled or disabled by the user
       programs.sicos.hyprland.waybar.styleFile = lib.mkDefault (
-        if config.programs.sicos.hyprland.powerManagement.enable
-        then "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/powermanagement/style.css"
-        else "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/no-powermanagement/style.css"
+        if config.programs.sicos.hyprland.powerManagement.enable then
+          if cfg.theming.mode == "light" then
+            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/powermanagement/style-light.css"
+          else
+            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/powermanagement/style.css"
+        else
+          if cfg.theming.mode == "light" then
+            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/no-powermanagement/style-light.css"
+          else
+            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/no-powermanagement/style.css"
       );
     
       ##########################################
