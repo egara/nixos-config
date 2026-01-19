@@ -6,6 +6,7 @@ This document outlines the agents designed to understand and modify the `nixos-c
 
 - All generated code and comments must be in English.
 - Do not delete existing comments in the code.
+- All comments must be placed on the line immediately preceding the code they describe.
 
 ## 1. Core Agents
 
