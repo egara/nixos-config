@@ -9,7 +9,7 @@
         "jmulticard-src": "jmulticard-src",
         "nix-unit": "nix-unit",
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ]
       },
       "locked": {
