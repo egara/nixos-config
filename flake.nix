@@ -41,10 +41,15 @@
 
     # Autofirma flake
     # For more information https://nix-community.github.io/autofirma-nix
-    autofirma-nix = {
-      url = "github:nix-community/autofirma-nix";  # For nixpkgs-unstable
+#    autofirma-nix = {
+#      url = "github:nix-community/autofirma-nix";  # For nixpkgs-unstable
       # url = "github:nix-community/autofirma-nix/release-24.11";  # For NixOS 24.11
       # inputs.nixpkgs.follows = "nixpkgs-unstable";
+#      inputs.nixpkgs.follows = "nixpkgs";
+#    };
+
+    autofirma-nix = {
+      url = "git+https://github.com/nix-community/autofirma-nix.git?rev=75770f68709e764659712ff152193d7986db2530";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
