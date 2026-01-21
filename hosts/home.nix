@@ -30,14 +30,15 @@ let
   #    sha256 = "sha256-4aNPlO5aXP8c7vks6bTlLCuyUQZ4Hx3GWtGlRmbhdto=";
   #};
 
+  # Yazi theming is done via Stylix
   # GitHub repository for catppuccin mocha yazi theme https://github.com/yazi-rs/flavors/catppuccin-mocha.yazi
-  yazi-theme-catppuccin-mocha = pkgs.fetchFromGitHub {
-      owner = "yazi-rs";
-      repo = "flavors";
-      #rev = "main";
-      rev = "4a1802a5add0f867b08d5890780c10dd1f051c36";
-      sha256 = "sha256-RrF97Lg9v0LV+XseJw4RrdbXlv+LJzfooOgqHD+LGcw=";
-  };
+  # yazi-theme-catppuccin-mocha = pkgs.fetchFromGitHub {
+  #     owner = "yazi-rs";
+  #     repo = "flavors";
+  #     #rev = "main";
+  #     rev = "4a1802a5add0f867b08d5890780c10dd1f051c36";
+  #     sha256 = "sha256-RrF97Lg9v0LV+XseJw4RrdbXlv+LJzfooOgqHD+LGcw=";
+  # };
 
 in {
   #imports =
@@ -96,14 +97,14 @@ in {
     # Theme was managed by stylix but stopped working
     # Enabling theming via home manager again
     # Theme (Catppuccin Mocha)
-    theme = {
-      flavor = {
-        dark = "catppuccin-mocha";
-      };
-    };
-    flavors = {
-      catppuccin-mocha = "${yazi-theme-catppuccin-mocha}/catppuccin-mocha.yazi";
-    };
+    # theme = {
+    #   flavor = {
+    #     dark = "catppuccin-mocha";
+    #   };
+    # };
+    # flavors = {
+    #   catppuccin-mocha = "${yazi-theme-catppuccin-mocha}/catppuccin-mocha.yazi";
+    # };
 
     # yazi.toml
     settings = {

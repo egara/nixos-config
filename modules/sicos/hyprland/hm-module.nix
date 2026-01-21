@@ -142,15 +142,17 @@ in
             targets = {
               kitty.enable = true;
 
-              # Yazi theming is not currently working using Stylix so
+              # Yazi is working again with stylix. The custom theming
+              # configuration within /hosts/home.nix is disabled
+              # [Yazi theming is not currently working using Stylix so
               # it is disabled and it will only take into account user's
-              # configurations
+              # configurations]
               yazi = {
-                enable = false;
-                # boldDirectory = true;
-                # colors = {
-                #   enable = true;
-                # };
+                enable = true;
+                 boldDirectory = true;
+                 colors = {
+                   enable = true;
+                 };
               };
 
               # GTK and QT theming will be managed by Home Manger (see above)
@@ -175,7 +177,7 @@ in
           # Light Theme
           lightTheme = commonConfig // {
             polarity = "light";
-            base16Scheme = "${pkgs.base24-schemes}/share/themes/flexoki-light.yaml";
+            base16Scheme = "${pkgs.base16-schemes}/share/themes/atelier-seaside-light.yaml";
             image = ./wallpapers/fwd-wallhaven-wallhaven-v9v3r5.jpg; # Un fondo de pantalla claro
           };
 
