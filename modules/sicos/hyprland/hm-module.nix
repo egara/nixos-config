@@ -175,7 +175,7 @@ in
           # Light Theme
           lightTheme = commonConfig // {
             polarity = "light";
-            base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-latte.yaml";
+            base16Scheme = "${pkgs.base24-schemes}/share/themes/flexoki-light.yaml";
             image = ./wallpapers/fwd-wallhaven-wallhaven-v9v3r5.jpg; # Un fondo de pantalla claro
           };
 

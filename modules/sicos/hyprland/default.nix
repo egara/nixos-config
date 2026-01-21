@@ -67,7 +67,6 @@ in
       };
       styleFile = lib.mkOption {
         type = lib.types.path;
-        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/style.css";
         description = "Path to the wlogout style.css file.";
       };
       hibernateIcon = lib.mkOption { type = lib.types.path; default = "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/icons/hibernate.png"; description = "Path to the hibernate icon for the logout screen."; };
@@ -214,6 +213,15 @@ in
             "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/no-powermanagement/style-light.css"
           else
             "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/no-powermanagement/style.css"
+      );
+
+      ####################
+      # Wlogout defaults #
+      ####################
+      programs.sicos.hyprland.wlogout.styleFile = lib.mkDefault (
+        if cfg.theming.mode == "light"
+        then "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/style-light.css"
+        else "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/style.css"
       );
 
       ####################
