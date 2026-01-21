@@ -40,6 +40,14 @@ in
           ".config/wlogout/icons/reboot.png".source = cfg.wlogout.rebootIcon;
           ".config/wlogout/icons/shutdown.png".source = cfg.wlogout.shutdownIcon;
           ".config/wlogout/icons/suspend.png".source = cfg.wlogout.suspendIcon;
+          
+          # Black icons for light theme
+          ".config/wlogout/icons/hibernate-black.png".source = ./config-files/wlogout/icons/hibernate-black.png;
+          ".config/wlogout/icons/lock-black.png".source = ./config-files/wlogout/icons/lock-black.png;
+          ".config/wlogout/icons/logout-black.png".source = ./config-files/wlogout/icons/logout-black.png;
+          ".config/wlogout/icons/reboot-black.png".source = ./config-files/wlogout/icons/reboot-black.png;
+          ".config/wlogout/icons/shutdown-black.png".source = ./config-files/wlogout/icons/shutdown-black.png;
+          ".config/wlogout/icons/suspend-black.png".source = ./config-files/wlogout/icons/suspend-black.png;
 
           # Swaync files
           ".config/swaync/config.json".source = cfg.swaync.configFile;
@@ -177,7 +185,7 @@ in
           # Light Theme
           lightTheme = commonConfig // {
             polarity = "light";
-            base16Scheme = "${pkgs.base16-schemes}/share/themes/atelier-seaside-light.yaml";
+            base16Scheme = "${pkgs.base16-schemes}/share/themes/equilibrium-light.yaml";
             image = ./wallpapers/fwd-wallhaven-wallhaven-v9v3r5.jpg; # Un fondo de pantalla claro
           };
 
