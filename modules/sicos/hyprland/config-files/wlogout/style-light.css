@@ -4,15 +4,15 @@
 }
 
 window {
-	background-color: rgba(245, 240, 231, 0.9); /* Equilibrium Light Base00 */
+	background-color: rgba(245, 242, 237, 0.9); /* Equilibrium Light Base00 */
 }
 
 button {
     border-radius: 15px;
-    border-color: #d8d3cb; /* Base02 */
-	text-decoration-color: #433b32; /* Base05 */
-    color: #433b32; /* Base05 */
-	background-color: #e7e2da; /* Equilibrium Light Base01 */
+    border-color: #d8d4cb; /* Base02 */
+	text-decoration-color: #434138; /* Base05 */
+    color: #434138; /* Base05 */
+	background-color: #e7e2d9; /* Equilibrium Light Base01 */
 	border-style: solid;
 	border-width: 2px;
 	background-repeat: no-repeat;
@@ -22,7 +22,7 @@ button {
 }
 
 button:focus, button:active, button:hover {
-	background-color: #d8d3cb; /* Equilibrium Light Base02 */
+	background-color: #d8d4cb; /* Equilibrium Light Base02 */
 	outline-style: none;
 }
 

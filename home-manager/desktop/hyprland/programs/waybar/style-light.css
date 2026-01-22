@@ -37,39 +37,39 @@ button {
 /* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 button:hover {
     background: inherit;
-    box-shadow: inset 0 -3px #2E3440;
+    box-shadow: inset 0 -3px #16150f;
 }
 
 .modules-left, .modules-center, .modules-right {
     border-radius: 5px;
-    background-color: rgba(250, 250, 250, 0.7);
+    background-color: rgba(245, 242, 237, 0.7);
     padding: 2px 6px;
 }
 
 #mode {
-    background-color: #A6D1E6;
-    box-shadow: inset 0 -3px #2E3440;
+    background-color: #0073b5;
+    box-shadow: inset 0 -3px #16150f;
 }
 
 #workspaces {
-    background: #B3B3B3;
+    background: #d8d4cb;
     margin: 5px 5px;
     padding: 8px 5px;
     border-radius: 15px;
-    color: #ffffff;
+    color: #f5f2ed;
 }
 #workspaces button {
     padding: 0px 5px;
     margin: 0px 3px;
     border-radius: 16px;
     color: transparent;
-    background: #D8DEE9;
+    background: #e7e2d9;
     transition: all 0.3s ease-in-out;
 }
 
 #workspaces button.active {
-    background-color: #5E81AC;
-    color: #ECEFF4;
+    background-color: #007a7e;
+    color: #f5f2ed;
     border-radius: 16px;
     min-width: 50px;
     background-size: 400% 400%;
@@ -77,8 +77,8 @@ button:hover {
 }
 
 #workspaces button:hover {
-    background-color: #E5E9F0;
-    color: #2E3440;
+    background-color: #c9c4b9;
+    color: #16150f;
     border-radius: 16px;
     min-width: 50px;
     background-size: 400% 400%;
@@ -94,11 +94,18 @@ button:hover {
 #network,
 #pulseaudio,
 #wireplumber,
-#tray,
 #taskbar,
 #custom-clipboard,
 #custom-notification,
 #custom-insync {
+    background: #d8d4cb;
+    margin: 5px 5px;
+    padding: 8px;
+    border-radius: 15px;
+    color: #434138; 
+}
+
+#tray {
     background: #B3B3B3;
     margin: 5px 5px;
     padding: 8px;
@@ -106,18 +113,17 @@ button:hover {
     color: #2E3440; 
 }
 
-
 @keyframes blink {
     to {
-        background-color: #F4F6F8;
-        color: #BF616A;
+        background-color: #e7e2d9;
+        color: #d02023;
     }
 }
 
 /* Using steps() instead of linear as a timing function to limit cpu usage */
 #battery.critical:not(.charging) {
     background-color: transparent;
-    color: #D08770;
+    color: #bf3e0d;
     animation-name: blink;
     animation-duration: 0.5s;
     animation-timing-function: steps(12);
@@ -126,57 +132,57 @@ button:hover {
 }
 
 #power-profiles-daemon.performance {
-    color: #BF616A;
+    color: #d02023;
 }
 
 #power-profiles-daemon.balanced {
-    color: #5E81AC;
+    color: #007a7e;
 }
 
 #power-profiles-daemon.power-saver {
-    color: #A3BE8C;
+    color: #637200;
 }
 
 label:focus {
-    background-color: #E5E9F0;
+    background-color: #c9c4b9;
 }
 
 #network.disconnected {
-    background-color: #BF616A;
-    color: #ECEFF4;
+    background-color: #d02023;
+    color: #f5f2ed;
 }
 
 #pulseaudio.muted,
 #wireplumber.muted {
-    color: #D08770;
+    color: #bf3e0d;
 }
 
 /* playerctl for displaying and managing music in waybar */
 #custom-playerctl.backward, #custom-playerctl.play, #custom-playerctl.foward {
-    background: #F4F6F8;
+    background: #e7e2d9;
     font-size: 18px;
     margin: 5px 0px;
 }
 
 #custom-playerctl.backward:hover, #custom-playerctl.play:hover, #custom-playerctl.foward:hover{
-    color: #5E81AC;
+    color: #007a7e;
 }
 
 #custom-playerctl.backward {
-    color: #B48EAD;
+    color: #6e5af7;
     border-radius: 15px 0px 0px 15px;
     padding-left: 12px;
     margin-left: 7px;
 }
 
 #custom-playerctl.play {
-    color: #81A1C1;
+    color: #0073b5;
     padding-right: 3px;
     padding-left: 10px;
 }
 
 #custom-playerctl.foward {
-    color: #B48EAD;
+    color: #6e5af7;
     border-radius: 0px 15px 15px 0px;
     padding-right: 4px;
     padding-left: 8px;
@@ -184,8 +190,8 @@ label:focus {
 }
 
 #custom-playerlabel {
-    background: #F4F6F8;
-    color: #2E3440;
+    background: #e7e2d9;
+    color: #434138;
     padding: 0 20px;
     border-radius: 24px 10px 24px 10px;
     margin: 5px 0;
@@ -193,66 +199,62 @@ label:focus {
 }
 
 #custom-media {
-    background-color: #A3BE8C;
-    color: #2E3440;
+    background-color: #637200;
+    color: #f5f2ed;
     min-width: 100px;
 }
 
 #custom-media.custom-spotify {
-    background-color: #A3BE8C;
+    background-color: #637200;
 }
 
 #custom-media.custom-vlc {
-    background-color: #EBCB8B;
+    background-color: #9d6f00;
 }
 
 #temperature {
-    background-color: #EBCB8B;
+    background-color: #9d6f00;
     padding: 5px 5px;
 }
 
 #temperature.critical {
-    background-color: #BF616A;
-}
-
-#tray > .passive {
-    -gtk-icon-effect: dim;
+    background-color: #d02023;
 }
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
-    background-color: #BF616A;
+    background-color: #d02023;
 }
 
 #idle_inhibitor {
-    background-color: #ECEFF4;
+    background-color: #e7e2d9;
 }
 
 #idle_inhibitor.activated {
-    background-color: #A3BE8C;
-    color: #2E3440;
+    background-color: #637200;
+    color: #f5f2ed;
 }
 
 #mpd {
-    background-color: #A3BE8C;
-    color: #2E3440;
+    background-color: #637200;
+    color: #f5f2ed;
 }
 
 #mpd.disconnected {
-    background-color: #BF616A;
+    background-color: #d02023;
 }
 
 #mpd.stopped {
-    background-color: #D8DEE9;
+    background-color: #d8d4cb;
 }
 
 #mpd.paused {
-    background-color: #81A1C1;
+    background-color: #0073b5;
 }
 
 #language {
-    background: #88C0D0;
-    color: #2E3440;
+    background: #0073b5;
+    color: #f5f2ed;
     padding: 0 5px;
     margin: 0 5px;
     min-width: 16px;
@@ -261,7 +263,7 @@ label:focus {
 
 #keyboard-state {
     background-color: transparent;
-    color: #2E3440;
+    color: #434138;
     margin: 0 5px;
     min-width: 16px;
     padding: 5px 5px;
@@ -272,7 +274,7 @@ label:focus {
 }
 
 #keyboard-state > label.locked {
-    background: #EBCB8B;
+    background: #9d6f00;
 }
 
 #scratchpad {
@@ -289,26 +291,26 @@ label:focus {
 
 #privacy-item {
     padding: 0 5px;
-    color: #ECEFF4;
+    color: #f5f2ed;
 }
 
 #privacy-item.screenshare {
-    background-color: #D08770;
+    background-color: #bf3e0d;
 }
 
 #privacy-item.audio-in {
-    background-color: #A3BE8C;
+    background-color: #637200;
 }
 
 #privacy-item.audio-out {
-    background-color: #5E81AC;
+    background-color: #007a7e;
 }
 
 #cava.left, #cava.right {
-    background: #F4F6F8;
+    background: #e7e2d9;
     margin: 5px; 
     padding: 8px 16px;
-    color: #B48EAD;
+    color: #6e5af7;
 }
 
 #cava.left {
@@ -324,11 +326,11 @@ label:focus {
 }
 
 #custom-insync.error {
-  color: #BF616A;
+  color: #d02023;
 }
 
 #custom-insync.syncing {
-  color: #81A1C1;
+  color: #0073b5;
 }
 
 /* Make backlight and pulseaudio modules look like a single block */

@@ -1,14 +1,14 @@
-@define-color noti-fg #2E3440;
-@define-color noti-bg rgba(236, 239, 244, 0.9);
-@define-color noti-bg-hover-alt #E5E9F0;
-@define-color noti-bg-alt rgba(229, 233, 240, 0.85);
-@define-color noti-border-color rgba(46, 52, 64, 0.2);
-@define-color noti-bg-hover rgba(46, 52, 64, 0.05);
-@define-color noti-bg-focus rgba(46, 52, 64, 0.1);
-@define-color noti-close-bg rgba(46, 52, 64, 0.1);
-@define-color noti-close-bg-hover rgba(46, 52, 64, 0.15);
-@define-color noti-urgent #BF616A;
-@define-color bg-selected #5E81AC;
+@define-color noti-fg #434138;
+@define-color noti-bg rgba(245, 242, 237, 0.9);
+@define-color noti-bg-hover-alt #e7e2d9;
+@define-color noti-bg-alt rgba(231, 226, 217, 0.85);
+@define-color noti-border-color rgba(67, 65, 56, 0.2);
+@define-color noti-bg-hover rgba(67, 65, 56, 0.05);
+@define-color noti-bg-focus rgba(67, 65, 56, 0.1);
+@define-color noti-close-bg rgba(67, 65, 56, 0.1);
+@define-color noti-close-bg-hover rgba(67, 65, 56, 0.15);
+@define-color noti-urgent #d02023;
+@define-color bg-selected #007a7e;
 
 *{
   font-family: "GoMonoNerdFontPropo", "Noto Sans", sans-serif;
