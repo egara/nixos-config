@@ -58,7 +58,7 @@ let
           # Enable the sicos module if desktop is hyprland
           config = lib.mkIf (host.desktop == "hyprland") (
             let
-              themeMode = "light";
+              themeMode = "dark";
             in
             {
               programs.sicos.hyprland.enable = true;

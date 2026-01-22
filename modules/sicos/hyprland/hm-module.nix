@@ -150,6 +150,8 @@ in
             targets = {
               kitty.enable = true;
 
+              zed.enable = true;
+
               # Yazi is working again with stylix. The custom theming
               # configuration within /hosts/home.nix is disabled
               # [Yazi theming is not currently working using Stylix so

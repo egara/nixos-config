@@ -273,6 +273,15 @@ in {
     };
   };
 
+  programs.zed-editor = {
+    enable = true;
+    extensions = [ "nix" "toml" "yaml" "java" "html" "javascript-snippets" ];
+    userSettings = {
+      hour_format = "hour24";
+      vim_mode = false;
+    };
+  };
+
   # Virtual Manager special configuration (https://nixos.wiki/wiki/Virt-manager)
   dconf.settings = {
     "org/virt-manager/virt-manager/connections" = {
