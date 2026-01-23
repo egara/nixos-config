@@ -169,7 +169,7 @@
 
   # Allow certain packages marked as insecure
   nixpkgs.config.permittedInsecurePackages = [
-    "openssl-1.1.1w" # Needed for sublime4
+    #"openssl-1.1.1w" # Needed for sublime4
     "jitsi-meet-1.0.8792" # Needed for element-desktop
   ];  
 
@@ -214,7 +214,7 @@
       kdePackages.partitionmanager
       distrobox
       #fastfetch
-      sublime4
+      #sublime4
       vlc
       telegram-desktop
       pkgs-stable.insync

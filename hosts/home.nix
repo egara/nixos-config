@@ -66,7 +66,7 @@ in {
     # QMMP winamp skin
     # If QMMP doesn't switch to Winamp skin automatically, go to Edit -> Settings -> Plugins and check
     # Skinned User Interface within User Interfaces section. Then, restart QMMP
-    file.".config/qmmp/skins/winamp_classic.wsz".source = ../home-manager/qmmp/skins/winamp_classic.wsz;    
+    file.".config/qmmp/skins/winamp_classic.wsz".source = ../home-manager/qmmp/skins/winamp_classic.wsz;
   };
 
   programs = {
@@ -139,8 +139,13 @@ in {
         ];
 
         # The default editor will be sublime text
+        #edit = [
+        #  { run = "subl \"$@\""; orphan = true; for = "unix"; }
+        #];
+
+        # The default editor will be Zed
         edit = [
-          { run = "subl \"$@\""; orphan = true; for = "unix"; }
+          { run = "zeditor \"$@\""; orphan = true; for = "unix"; }
         ];
 
         # A generic opener for Firefox
@@ -167,8 +172,8 @@ in {
           { mime = "image/jpeg"; use = "image"; }
           { mime = "image/png"; use = "image"; }
           { mime = "*"; use = "open"; } # Fallback to xdg-open for all other mimetypes
-        ];  
-      }; 
+        ];
+      };
     };
 
     plugins = {
@@ -275,7 +280,26 @@ in {
 
   programs.zed-editor = {
     enable = true;
-    extensions = [ "nix" "toml" "yaml" "java" "html" "javascript-snippets" ];
+    # For more extensions, go to https://github.com/DuskSystems/nix-zed-extensions/tree/main/generated/extensions
+    extensions = [
+      "nix"
+      "toml"
+      "yaml"
+      "java"
+      "html"
+      "javascript-snippets"
+      "css-modules-kit"
+      "css-variables"
+      "csv"
+      "markdown-oxide"
+      "markdownlint"
+      "pylsp"
+      "python-requirements"
+      "python-snippets"
+      "python-refactoring"
+      "python-language-server"
+      "basher"
+    ];
     userSettings = {
       hour_format = "hour24";
       vim_mode = false;
