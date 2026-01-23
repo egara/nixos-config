@@ -40,7 +40,7 @@ in
           ".config/wlogout/icons/reboot.png".source = cfg.wlogout.rebootIcon;
           ".config/wlogout/icons/shutdown.png".source = cfg.wlogout.shutdownIcon;
           ".config/wlogout/icons/suspend.png".source = cfg.wlogout.suspendIcon;
-          
+
           # Black icons for light theme
           ".config/wlogout/icons/hibernate-black.png".source = ./config-files/wlogout/icons/hibernate-black.png;
           ".config/wlogout/icons/lock-black.png".source = ./config-files/wlogout/icons/lock-black.png;
@@ -83,7 +83,7 @@ in
             "application/javascript" = "dev.zed.Zed.desktop";
             "application/json" = "dev.zed.Zed.desktop";
             "application/x-yaml" = "dev.zed.Zed.desktop";
-            "text/css" = "dev.zed.Zed.desktop";            
+            "text/css" = "dev.zed.Zed.desktop";
             #"text/x-nix" = "sublime_text.desktop";
             #"text/plain" = "sublime_text.desktop";
             #"text/markdown" = "sublime_text.desktop";
@@ -127,7 +127,7 @@ in
             cursor = {
               package = pkgs.bibata-cursors;
               name = "Bibata-Modern-Classic";
-              size = 10;
+              size = 24;
             };
             icons = {
               package = pkgs.papirus-icon-theme;
@@ -243,7 +243,7 @@ in
     })
     (lib.mkIf cfg.kanshi.enable {
       ##########################################
-      # Kanshi configuration with Home Manager 
+      # Kanshi configuration with Home Manager
       ##########################################
 
       home.file = {
@@ -292,7 +292,7 @@ in
         #     };
         #   }
         # ];
-      };      
+      };
     })
   ];
 }
