@@ -12,7 +12,7 @@
     nixpkgs-stable = {
       url = "github:nixos/nixpkgs?ref=nixos-25.11";
     };
-    
+
     # Disko packages (for automatic partitioning)
     disko = {
       url = "github:nix-community/disko";
@@ -41,17 +41,18 @@
 
     # Autofirma flake
     # For more information https://nix-community.github.io/autofirma-nix
-#    autofirma-nix = {
-#      url = "github:nix-community/autofirma-nix";  # For nixpkgs-unstable
-      # url = "github:nix-community/autofirma-nix/release-24.11";  # For NixOS 24.11
-      # inputs.nixpkgs.follows = "nixpkgs-unstable";
-#      inputs.nixpkgs.follows = "nixpkgs";
-#    };
+   autofirma-nix = {
+     # url = "github:nix-community/autofirma-nix";  # For nixpkgs-unstable
+     # inputs.nixpkgs.follows = "nixpkgs-unstable";
+     # Stable release
+     url = "github:nix-community/autofirma-nix/release-25.11";  # For NixOS 24.11
+     inputs.nixpkgs.follows = "nixpkgs";
+   };
 
-    autofirma-nix = {
-      url = "git+https://github.com/nix-community/autofirma-nix.git?rev=75770f68709e764659712ff152193d7986db2530";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # autofirma-nix = {
+    #   url = "git+https://github.com/nix-community/autofirma-nix.git?rev=75770f68709e764659712ff152193d7986db2530";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     # Walker and Elephant
     elephant = {
@@ -138,7 +139,7 @@
       # Imports ./hosts/default.nix module
       import ./hosts {
         inherit (nixpkgs) lib;
-        # Also inherit disko, home-manager and the rest of the variables so it does not need 
+        # Also inherit disko, home-manager and the rest of the variables so it does not need
         # to be defined anymore.
         # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
         # inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix walker;
@@ -146,5 +147,5 @@
       }
     );
   };
-   
+
 }
