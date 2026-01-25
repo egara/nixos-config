@@ -306,7 +306,20 @@ in {
     userSettings = {
       hour_format = "hour24";
       vim_mode = false;
+      restore_on_startup = "last_workspace";
+      session = {
+        trust_all_worktrees = true;
+      };
     };
+
+    # userKeymaps = [
+    #   {
+    #     context = "Workspace";
+    #     bindings = {
+    #       "ctrl-alt-t" = "terminal_panel::ToggleFocus";
+    #     };
+    #   }
+    # ];
   };
 
   # Virtual Manager special configuration (https://nixos.wiki/wiki/Virt-manager)
