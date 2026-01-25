@@ -1,117 +1,107 @@
-# OpenCode Agents for nixos-config
+# Gemini Agent Context for nixos-config
 
-This document outlines the agents designed to understand and modify the `nixos-config` repository. This repository manages NixOS configurations for multiple machines using flakes and includes a custom desktop environment module called SicOS.
+This document serves as the primary context and knowledge base for the Gemini CLI agent operating within the `nixos-config` repository. It outlines the project's architecture, key components, and operational workflows.
 
-## General Rules
+## 1. Project Philosophy & Goal
 
-- All generated code and comments must be in English.
-- Do not delete existing comments in the code.
-- All comments must be placed on the line immediately preceding the code they describe.
+This repository is a **NixOS Flake** configuration that manages multiple machines (hosts). The primary goal is to provide a reproducible, declarative system configuration with a focus on a custom, polished desktop environment named **SicOS**.
 
-## 1. Core Agents
+**Core Principles:**
+- **Pure Flakes:** All configurations are driven by `flake.nix`.
+- **Modularity:** Configuration is split into `hosts`, `modules` (system-level), and `home-manager` (user-level).
+- **SicOS:** A custom Hyprland-based desktop environment module that can be imported by any NixOS system.
+- **Theming:** Integrated Light/Dark mode switching using `Stylix`.
 
-### 1.1. `nixos_expert`
+## 2. Architecture & Directory Structure
 
-**Expertise:** General knowledge of the NixOS ecosystem, including flakes, modules, `nixpkgs`, and the Nix language.
+- **`flake.nix`**: The entry point. Defines inputs (NixOS, Home Manager, Stylix, etc.) and outputs (`nixosConfigurations`, `nixosModules`, `homeManagerModules`).
+- **`hosts/`**: Contains machine-specific configurations.
+    - `default.nix`: Logic to generate `nixosConfigurations` for all hosts.
+    - `<hostname>/`: Directory for each machine (e.g., `ironman`, `rocket`, `strange`, `vm`).
+        - `configuration.nix`: Main system configuration for the host.
+        - `hardware-configuration.nix`: Hardware-specific settings.
+        - `disko-config.nix`: Disk partitioning layout (managed by Disko).
+- **`modules/`**: Custom NixOS modules.
+    - `sicos/hyprland/`: **The core SicOS module.**
+        - `default.nix`: Defines module options (`programs.sicos.hyprland.*`) and system-level config.
+        - `hm-module.nix`: The Home Manager companion module, handling user-specific config and Stylix integration.
+        - `config-files/`: Raw configuration files for Hyprland, Waybar, etc.
+        - `scripts/`: Helper scripts deployed to the system.
+- **`home-manager/`**: User-specific configurations (dotfiles) not strictly tied to the SicOS module but used in the broader configuration.
+    - `desktop/hyprland/scripts/theme-switcher.sh`: The master script for toggling themes.
 
-**Chain of thought:**
+## 3. Key Components
 
-1.  **Analyze the `flake.nix` file:** Identify the main inputs (e.g., `nixpkgs`, `home-manager`, `disko`, `stylix`), outputs (`nixosConfigurations`, `nixosModules`, `homeManagerModules`), and the overall structure.
-2.  **Examine the `hosts` directory:** Understand how different machine configurations are defined and organized. Note the use of `default.nix` to generate configurations and the pattern of having specific directories for each host (e.g., `vm`, `rocket`, `ironman`).
-3.  **Inspect the `modules` directory:** Identify the different custom modules being used, with a special focus on the `sicos` module.
-4.  **Review the `home-manager` directory:** Understand how user-specific configurations (dotfiles) are managed and structured.
+### 3.1. SicOS Module
+**Location:** `modules/sicos/hyprland/`
 
-**File Paths:**
+SicOS provides a complete desktop experience. It is split into two parts:
+1.  **NixOS Module (`default.nix`)**: Installs packages (Hyprland, Waybar, SDDM), enables system services (power profiles, polkit), and defines the `programs.sicos.hyprland` options.
+2.  **Home Manager Module (`hm-module.nix`)**: Manages dotfiles (`.config/hypr/...`, `.config/waybar/...`) and integrates with **Stylix** for theming.
 
--   `nixos-config/flake.nix`
--   `nixos-config/hosts/`
--   `nixos-config/modules/`
--   `nixos-config/home-manager/`
+**Key Options:**
+- `enable`: Activate the module.
+- `theming.mode`: `"light"` or `"dark"`.
+- `powerManagement.enable`: Optimizations for laptops (affects Waybar config).
+- `insync.enable`: Custom tray integration for Insync.
 
-### 1.2. `sicos_desktop_expert`
+### 3.2. Theming & Stylix
+Theming is handled by **Stylix** (via `hm-module.nix`) and a custom switcher script.
+- **Stylix**: Sets the global color scheme (Base16), fonts, and cursor. It automatically themes applications like Kitty, GTK, and builds the color palette.
+- **Switching Mechanism**:
+    1.  User runs `theme-switcher.sh [light|dark]`.
+    2.  Script finds the file defining `theming.mode` (usually in `hosts/<host>/configuration.nix` or similar).
+    3.  Script updates the Nix file using `sed`.
+    4.  Script runs `nixos-rebuild switch`.
+    5.  Script reloads UI components (Waybar, SwayNC, Walker) to apply changes immediately without logout.
 
-**Expertise:** Deep understanding of the SicOS module, a custom Hyprland-based desktop environment. This agent knows about the components, features, and configuration options of SicOS.
+### 3.3. Hosts
+- **VM (`vm`)**: QEMU virtual machine for testing.
+- **Rocket (`rocket`)**: Desktop PC (custom build).
+- **Ironman (`ironman`)**: Laptop (Intel/Nvidia).
+- **Taskmaster (`taskmaster`)**: Work Laptop.
+- **Strange (`strange`)**: Framework Laptop 13 (AMD Ryzen AI 300).
 
-**Chain of thought:**
+## 4. Operational Workflows for the Agent
 
-1.  **Start with the SicOS module definition:** Analyze `modules/sicos/hyprland/default.nix` to understand the main options (`enable`, `theming`, `powerManagement`, `insync`, `kanshi`, etc.) and how they are implemented.
-2.  **Analyze the Home Manager module:** Review `modules/sicos/hyprland/hm-module.nix` to see how user-level configurations (dotfiles, services) are deployed.
-3.  **Map the components:**
-    *   **Hyprland (WM):** Check the configuration files in `modules/sicos/hyprland/config-files/`, such as `hyprland-with-kanshi.conf`.
-    *   **Waybar (Status Bar):** Examine the different `config.jsonc` and `style.css` files under `modules/sicos/hyprland/config-files/waybar/`. Note the conditional configurations based on `powerManagement` and `insync`.
-    *   **Stylix (Theming):** Look at `modules/sicos/hyprland/hm-module.nix` to see how `stylix` is used for theming and how `light` and `dark` modes are configured.
-    *   **Power Management:** Analyze `modules/sicos/hyprland/power-management.nix` and the associated scripts to understand the automatic power profile switching.
-    *   **Application Launcher (Walker):** Check the `walker` configurations in `modules/sicos/hyprland/config-files/walker/`.
-    *   **Other tools:** Review configurations for `hyprlock`, `hypridle`, `wlogout`, `swaync`, `swappy`, etc.
-4.  **Understand the scripts:** Analyze the scripts in `modules/sicos/hyprland/scripts/` to understand their functionality (e.g., `nixos-clean.sh`, `nixos-scripts.sh`).
+### 4.1. Modifying the Desktop Environment (SicOS)
+**Goal:** Change how the desktop looks or behaves (e.g., Waybar, Hyprland).
+1.  **Identify Component:** Is it a system package (edit `default.nix`) or a user config/dotfile (edit `hm-module.nix` or `config-files/`)?
+2.  **Edit Config:**
+    - If modifying `waybar/config.jsonc`, check if you need to edit the `powermanagement` or `no-powermanagement` version.
+    - If adding a new keybinding, edit `hyprland-with-kanshi.conf` (or `without`).
+3.  **Apply:** Run `nixos-rebuild switch --flake .#<hostname>`.
 
-**File Paths:**
+### 4.2. Adding a New Package
+- **System-wide:** Edit `hosts/<host>/configuration.nix` (or `modules/sicos/hyprland/default.nix` if it should be in SicOS) and add to `environment.systemPackages`.
+- **User-specific:** Edit `home-manager/users/<user>.nix` (or `hosts/home.nix` if shared) and add to `home.packages`.
 
--   `nixos-config/modules/sicos/hyprland/default.nix` (Main module)
--   `nixos-config/modules/sicos/hyprland/hm-module.nix` (Home Manager module)
--   `nixos-config/modules/sicos/hyprland/config-files/` (Component configurations)
--   `nixos-config/modules/sicos/hyprland/scripts/` (Helper scripts)
--   `nixos-config/modules/sicos/hyprland/power-management.nix`
--   `nixos-config/modules/sicos/hyprland/insync-integration.nix`
+### 4.3. Creating a New Host
+1.  Create `hosts/<new-host>/`.
+2.  Add `hardware-configuration.nix` (usually generated by `nixos-generate-config`).
+3.  Add `configuration.nix` (importing SicOS and hardware config).
+4.  Add `disko-config.nix` (if managing disks).
+5.  Update `hosts/default.nix` to include the new host in `flake.nix` outputs.
 
-### 1.3. `theme_switcher_expert`
+## 5. File Map
 
-**Expertise:** Specialized knowledge of the theme switching mechanism within the `nixos-config` repository, particularly for the SicOS module.
+| Path | Description |
+| :--- | :--- |
+| `flake.nix` | Project root, dependencies, outputs. |
+| `modules/sicos/hyprland/default.nix` | SicOS System Module (Packages, Services, Options). |
+| `modules/sicos/hyprland/hm-module.nix` | SicOS Home Manager Module (Dotfiles, Stylix). |
+| `modules/sicos/hyprland/config-files/` | Raw config files for Hyprland, Waybar, etc. |
+| `home-manager/desktop/hyprland/scripts/theme-switcher.sh` | Theme switching logic. |
+| `hosts/` | Machine definitions. |
 
-**Chain of thought:**
+## 6. General Rules & Style Guide
 
-1.  **Locate the theme switching script:** The primary entry point is `home-manager/desktop/hyprland/scripts/theme-switcher.sh`.
-2.  **Analyze the script's logic:**
-    *   It takes `light` or `dark` as an argument.
-    *   It searches for the NixOS configuration file that defines `theming.mode`.
-    *   It uses `sed` to replace the value of `theming.mode`.
-    *   It triggers a `nixos-rebuild switch` to apply the changes.
-3.  **Trace the theme application:**
-    *   Follow the `theming.mode` option in `modules/sicos/hyprland/default.nix`.
-    *   See how it conditionally selects configurations, especially for `stylix` in `modules/sicos/hyprland/hm-module.nix`.
-    *   Note how `stylix` applies the theme to different targets like `kitty` and `gtk`.
-    *   Investigate how `walker`'s theme is switched in `modules/sicos/hyprland/default.nix` based on `theming.mode`.
+### 6.1. General Rules
+- **Language:** All generated code and comments must be in English.
+- **Existing Comments:** Do not delete existing comments in the code.
+- **Comment Placement:** All comments must be placed on the line immediately preceding the code they describe.
 
-**File Paths:**
-
--   `nixos-config/home-manager/desktop/hyprland/scripts/theme-switcher.sh` (Primary script)
--   `nixos-config/modules/sicos/hyprland/hm-module.nix` (Stylix theme application)
--   `nixos-config/modules/sicos/hyprland/default.nix` (Option definition and conditional logic)
--   `nixos-config/hosts/default.nix` (Where `theming.mode` is ultimately set)
-
-## 2. Orchestrator Agent
-
-### `nixos_config_orchestrator`
-
-This agent coordinates the other agents to fulfill complex tasks.
-
-**Chain of thought (Example Task: "Add a new color to the light theme"):**
-
-1.  **Goal:** Add a new color definition to be used in the light theme.
-2.  **Consult `theme_switcher_expert`:** Ask for the primary file that defines the light theme colors. The expert should identify that `stylix` is used and the base scheme is defined in `modules/sicos/hyprland/hm-module.nix` pointing to a `base16-schemes` file.
-3.  **Consult `sicos_desktop_expert`:** Ask where this new color should be applied. For instance, if the user wants to change the Waybar background, this agent knows to look in `modules/sicos/hyprland/config-files/waybar/powermanagement/style.css` (or the `no-powermanagement` variant) and can suggest how to use the new `stylix` variable.
-4.  **Consult `nixos_expert`:** Once the changes are made, this agent knows that a `nixos-rebuild switch --flake .#<host-profile>` is required to apply the changes system-wide.
-5.  **Synthesize and Execute:**
-    *   Modify the `stylix` configuration in `modules/sicos/hyprland/hm-module.nix` if a new base16 color is needed.
-    *   Modify the component's CSS or config file (e.g., `waybar/style.css`) to use the new color variable.
-    *   Execute the rebuild command to apply the theme.
-
-## 3. Personas
-
-### Persona: NixOS System Administrator
-
--   **Description:** A user who is comfortable with the Nix language and the structure of this repository. They want to make changes to system configurations, manage packages, or update modules.
--   **Example Prompt:** "Add the `htop` package to the `ironman-hyprland` host configuration."
--   **Agent to use:** `nixos_expert` would be the primary agent. It would know to edit `hosts/ironman/configuration.nix` or the shared `hosts/configuration.nix` to add `pkgs.htop` to the `environment.systemPackages` list.
-
-### Persona: Desktop Customizer
-
--   **Description:** A user who wants to tweak the look and feel of the SicOS desktop environment. They are likely less concerned with the underlying NixOS structure and more with theming, keybindings, and application appearance.
--   **Example Prompt:** "Change the keybinding for opening the terminal to `Super + Enter`."
--   **Agent to use:** `sicos_desktop_expert` is the perfect agent. It would identify that keybindings are managed in `modules/sicos/hyprland/config-files/hyprland-with-kanshi.conf` and modify the corresponding `bindd` line.
-
-### Persona: Theme Developer
-
--   **Description:** A user focused specifically on the color schemes and overall aesthetic of the light and dark themes.
--   **Example Prompt:** "The text in the light theme for Walker is hard to read. Make it darker."
--   **Agent to use:** `theme_switcher_expert` would be the main agent. It would identify that `walker`'s light theme is configured in `modules/sicos/hyprland/config-files/walker/themes/sicos-light/style.css` and would adjust the `color` property for the appropriate CSS selector.
+### 6.2. Style Guidelines
+- **Nix Formatting:** Use standard formatting (2 spaces indentation).
+- **Comments Content:** Explain *why* something is done, not just *what* is done.
+- **Commit Messages:** Use clear, concise messages describing the change.
