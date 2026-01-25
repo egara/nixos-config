@@ -155,7 +155,23 @@ The SicOS module offers several options to customize your environment. All optio
 | `swappy.configFile` | path | Internal file | Path to the configuration file for the `swappy` screenshot editor. |
 | `kanshi.configFile` | path | Internal (empty) file | Path to the `kanshi` configuration file. **You must override this with your own monitor setup.** |
 | `walker.configFile` | path | Internal file | Path to the `config.toml` file for the `walker` application launcher. |
-| `scripts.path` | path | Internal directory | Path to the folder containing custom scripts. |
+| Scripts | `programs.sicos.hyprland.scripts.path` | [scripts/](https://github.com/egara/nixos-config/tree/main/modules/sicos/hyprland/scripts) |
+
+## Theme Switching Script
+
+Included in this repository is a script named [`theme-switcher.sh`](https://github.com/egara/nixos-config/blob/main/home-manager/desktop/hyprland/scripts/theme-switcher.sh), located in `home-manager/desktop/hyprland/scripts/`.
+
+**Note:** This script is **not** part of the core SicOS module because it relies on specific paths and configurations unique to my personal setup (e.g., the location of the flake configuration). However, it is provided here as a reference and inspiration for users who wish to implement similar functionality in their own environments.
+
+The script automates the process of switching between "light" and "dark" themes by performing the following steps:
+
+1.  **Locates the Configuration:** Finds the relevant NixOS configuration file containing the `themeMode` setting.
+2.  **Updates the Theme:** Modifies the configuration file to set the desired theme (`light` or `dark`).
+3.  **Rebuilds the System:** Executes `nixos-rebuild switch` to apply the changes system-wide.
+4.  **Restarts Services:** Refreshes UI components like Waybar, SwayNC, and Walker to reflect the new theme immediately.
+5.  **Updates Wallpaper:** Changes the desktop wallpaper to match the selected theme.
+
+Feel free to adapt this script to fit your own configuration structure!
 
 ## Customization
 
