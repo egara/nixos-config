@@ -299,6 +299,9 @@ in {
       "python-refactoring"
       "python-language-server"
       "basher"
+      "docker-compose"
+      "dockerfile"
+
     ];
     userSettings = {
       hour_format = "hour24";
