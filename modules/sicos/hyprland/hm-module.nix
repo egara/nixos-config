@@ -124,11 +124,6 @@ in
           # Base configuration
           commonConfig = {
             enable = true;
-            cursor = {
-              package = pkgs.bibata-cursors;
-              name = "Bibata-Modern-Classic";
-              size = 24;
-            };
             icons = {
               package = pkgs.papirus-icon-theme;
               dark = "Papirus-Dark";
@@ -189,6 +184,11 @@ in
             polarity = "dark";
             base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
             image = ./wallpapers/fwd-wallhaven-wallhaven-mprye8.jpg;
+            cursor = {
+              package = pkgs.bibata-cursors;
+              name = "Bibata-Modern-Classic";
+              size = 24;
+            };
           };
 
           # Light Theme
@@ -196,6 +196,11 @@ in
             polarity = "light";
             base16Scheme = "${pkgs.base16-schemes}/share/themes/equilibrium-light.yaml";
             image = ./wallpapers/fwd-wallhaven-wallhaven-v9v3r5.jpg; # Un fondo de pantalla claro
+            cursor = {
+              package = pkgs.bibata-cursors;
+              name = "Bibata-Modern-Ice";
+              size = 24;
+            };
           };
 
         # Selecting stylix theming depending on the theme selected by the user
