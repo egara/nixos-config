@@ -28,7 +28,7 @@ This module handles the installation and configuration of all necessary componen
 
 - **Insync Integration**: Due to rendering issues with the official Insync tray icon in some Wayland environments, this module provides a custom Waybar integration that displays the current sync status.
 
-- **Dark Mode Theming**: For users who prefer a darker aesthetic, the module offers full system integration with a dark theme via **Stylix**.
+- **Light & Dark Mode Theming**: The module offers full system integration for both light and dark themes via **Stylix**. It automatically switches wallpapers, icons, cursors, and configuration files for all components (Waybar, Walker, Wlogout, Swaync, etc.) to ensure a consistent and beautiful look in either mode.
 
 ## Prerequisites
 
