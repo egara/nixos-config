@@ -3,6 +3,20 @@
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
+echo "   ___ _       ___  ___  "
+echo "  / __(_)__   / _ \/ __| "
+echo "  \__ \ / _| | (_) \__ \ "
+echo "  |___/_\__|  \___/|___/ "
+echo "    Theme Switcher       "
+echo "                         "
+echo "Steps to perform:"
+echo " 1. Locate configuration file"
+echo " 2. Update theme in configuration"
+echo " 3. Rebuild NixOS system"
+echo " 4. Restart UI services (Waybar, SwayNC, Walker)"
+echo " 5. Update wallpaper"
+echo "                         "
+
 # Script for switching theme on SicOS
 # -----------------------------------
 #
@@ -90,11 +104,17 @@ pkill walker
 sleep 1
 nohup uwsm app -- walker --gapplication-service > /dev/null 2>&1 &
 
+echo "   ___                 "
+echo "  |   \ ___ _ _  ___   "
+echo "  | |) / _ \ ' \/ -_)  "
+echo "  |___/\___/_||_\___|  "
+echo "                       "
+
 echo "Theme changed successfully to '$THEME'!"
 echo "Terminal will close in 3 seconds..."
 sleep 3
 
 # Changing wallpaper
-swww img --transition-type grow --transition-pos 0,0 --transition-step 90 $WALLPAPERS_PATH/sicos-$THEME.jpg 
+swww img --transition-type grow --transition-pos 0,0 --transition-step 90 $WALLPAPERS_PATH/sicos-$THEME.jpg
 
 kill $PPID
