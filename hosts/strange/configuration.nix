@@ -10,7 +10,7 @@
     # Hostname
     hostName = "strange";
   };
-  
+
   # Enabling BIOS updates for Framework Laptop 13
   services.fwupd.enable = true;
 
@@ -35,16 +35,16 @@
         # When power button is pushed
         HandlePowerKey = "suspend";
       };
-    };    
-  }; 
+    };
+  };
 
   # Kernel
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
   # Kernel parameters passed in GRUB in order to
-  # allow the laptop starts normally due to the 
+  # allow the laptop starts normally due to the
   # hardware of this machine
-   boot.kernelParams = [ 
+   boot.kernelParams = [
    ];
 
   # Docker
