@@ -71,25 +71,25 @@
       "min": 10*/
       "show-percentage": true,
       "show-icons": true
-    },/*
+    } /*
     "backlight#KB": {
       "label": " ",
       "device": "asus::kbd_backlight",
       "subsystem": "leds"
-    },*/
+    },*/,
     "volume": {
       "label": "",
-              "expand-button-label": "",
-              "collapse-button-label": "",
-              "show-per-app": true,
-              "show-per-app-icon": true,
-              "show-per-app-label":true
+      "expand-button-label": "",
+      "collapse-button-label": "",
+      "show-per-app": true,
+      "show-per-app-icon": true,
+      "show-per-app-label": true
     },
     "menubar": {
       "menu#power-buttons": {
-        "label": "", 
+        "label": "",
         "position": "right",
-        "actions": [ 
+        "actions": [
           {
             "label": "   Reboot",
             "command": "systemctl reboot"
@@ -109,9 +109,9 @@
         ]
       },
       "menu#powermode-buttons": {
-        "label": "", 
+        "label": "",
         "position": "left",
-        "actions": [ 
+        "actions": [
           {
             "label": "Performance",
             "command": "powerprofilesctl set performance"
@@ -125,7 +125,7 @@
             "command": "power-saver-mode"
           }
         ]
-      }/*,
+      } /*,
       "menu#screenshot-buttons": {
         "label": "",
         "position": "left",
@@ -187,12 +187,12 @@
         },
         {
           "label": "󰘥",
-          "command": "swaync-client -t && walker -m hyprland_keybinds"
+          "command": "swaync-client -t && ~/.config/hypr/show-hyprland-keybindings.sh"
         },
         {
           "label": "",
           "command": "swaync-client -t && walker -m clipboard"
-        }        
+        }
       ]
     }
   }
