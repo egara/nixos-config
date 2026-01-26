@@ -113,6 +113,16 @@ in
           enable = true;
           shellIntegration.enableBashIntegration = true;
         };
+
+        # Btop installation and special configuration for
+        # system monitoring
+        # It's enable using home manager in order to let
+        # Stylix to do its magic and change the theme
+        # on the fly
+        programs.btop = {
+          enable = true;
+        };
+
       }
     ))
     (lib.mkIf cfg.theming.enable {
@@ -153,6 +163,8 @@ in
               kitty.enable = true;
 
               zed.enable = true;
+
+              btop.enable = true;
 
               # Yazi is working again with stylix. The custom theming
               # configuration within /hosts/home.nix is disabled

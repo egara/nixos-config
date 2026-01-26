@@ -128,10 +128,10 @@ in
 
     # Custom scripts
     scripts = {
-      path = lib.mkOption { 
-        type = lib.types.path; 
-        default = "${sicos-source-path}/modules/sicos/hyprland/scripts/"; 
-        description = "Path where all the scripts are located."; 
+      path = lib.mkOption {
+        type = lib.types.path;
+        default = "${sicos-source-path}/modules/sicos/hyprland/scripts/";
+        description = "Path where all the scripts are located.";
       };
     };
 
@@ -164,7 +164,7 @@ in
     };
   };
 
-  imports = [ 
+  imports = [
     ./power-management.nix
     ./insync-integration.nix
   ];
@@ -235,7 +235,7 @@ in
         then "${sicos-source-path}/modules/sicos/hyprland/config-files/swaync/style-light.css"
         else "${sicos-source-path}/modules/sicos/hyprland/config-files/swaync/style.css"
       );
-    
+
       ##########################################
       # Hyprland Environment
       ##########################################
@@ -266,7 +266,7 @@ in
       programs.hyprland = {
         enable = true;
         # Using uwsm for initializing Hyprland using systemd
-        withUWSM = true; 
+        withUWSM = true;
         xwayland.enable = true;
       };
 
