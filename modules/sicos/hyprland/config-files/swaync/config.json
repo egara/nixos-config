@@ -183,7 +183,7 @@
         },
         {
           "label": "",
-          "command": "swaync-client -t && walker -m finder"
+          "command": "swaync-client -t && walker -m files"
         },
         {
           "label": "󰘥",
