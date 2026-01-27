@@ -45,8 +45,8 @@
      # url = "github:nix-community/autofirma-nix";  # For nixpkgs-unstable
      # inputs.nixpkgs.follows = "nixpkgs-unstable";
      # Stable release
-     url = "github:nix-community/autofirma-nix/release-25.11";  # For NixOS 24.11
-     inputs.nixpkgs.follows = "nixpkgs";
+     url = "github:nix-community/autofirma-nix/release-25.11";  # For NixOS 25.11
+     inputs.nixpkgs.follows = "nixpkgs-stable";
    };
 
     # autofirma-nix = {
