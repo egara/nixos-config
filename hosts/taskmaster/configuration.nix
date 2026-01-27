@@ -76,7 +76,7 @@
   }; 
 
   # Kernel
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelPackages = pkgs-stable.linuxPackages_zen;
 
   # Kernel parameters passed in GRUB in order to
   # allow the laptop starts normally due to the 
