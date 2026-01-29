@@ -33,21 +33,22 @@ button {
     border-radius: 0;
 }
 
-
 /* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 button:hover {
     background: inherit;
     box-shadow: inset 0 -3px #ffffff;
 }
 
-.modules-left, .modules-center, .modules-right {
+.modules-left,
+.modules-center,
+.modules-right {
     border-radius: 5px;
     background-color: rgba(43, 48, 59, 0.5);
     padding: 2px 6px;
 }
 
 #mode {
-    background-color: #64727D;
+    background-color: #64727d;
     box-shadow: inset 0 -3px #ffffff;
 }
 
@@ -56,20 +57,20 @@ button:hover {
     margin: 5px 5px;
     padding: 8px 5px;
     border-radius: 15px;
-    color: #cba6f7
+    color: #cba6f7;
 }
 #workspaces button {
     padding: 0px 5px;
     margin: 0px 3px;
     border-radius: 16px;
     color: transparent;
-    background: rgba(17,17,27,1);
+    background: rgba(17, 17, 27, 1);
     transition: all 0.3s ease-in-out;
 }
 
 #workspaces button.active {
     background-color: #89b4fa;
-    color: #11111B;
+    color: #11111b;
     border-radius: 16px;
     min-width: 50px;
     background-size: 400% 400%;
@@ -78,7 +79,7 @@ button:hover {
 
 #workspaces button:hover {
     background-color: #f5f5f5;
-    color: #11111B;
+    color: #11111b;
     border-radius: 16px;
     min-width: 50px;
     background-size: 400% 400%;
@@ -89,7 +90,7 @@ button:hover {
     margin: 5px 5px;
     padding: 8px;
     border-radius: 15px;
-    color: #ffffff;        
+    color: #ffffff;
 }
 
 #battery {
@@ -97,7 +98,7 @@ button:hover {
     margin: 5px 5px;
     padding: 8px;
     border-radius: 15px;
-    color: #ffffff; 
+    color: #ffffff;
 }
 
 @keyframes blink {
@@ -109,7 +110,7 @@ button:hover {
 
 /* Using steps() instead of linear as a timing function to limit cpu usage */
 #battery.critical:not(.charging) {
-    background-color: transparent;    
+    background-color: transparent;
     color: #ffb57a;
     animation-name: blink;
     animation-duration: 0.5s;
@@ -127,7 +128,7 @@ label:focus {
     margin: 5px 5px;
     padding: 8px;
     border-radius: 15px;
-    color: #ffffff; 
+    color: #ffffff;
 }
 
 #memory {
@@ -135,7 +136,7 @@ label:focus {
     margin: 5px 5px;
     padding: 8px;
     border-radius: 15px;
-    color: #ffffff; 
+    color: #ffffff;
 }
 
 #disk {
@@ -143,7 +144,7 @@ label:focus {
     margin: 5px 5px;
     padding: 8px;
     border-radius: 15px;
-    color: #ffffff; 
+    color: #ffffff;
 }
 
 #backlight {
@@ -151,7 +152,7 @@ label:focus {
     margin: 5px 5px;
     padding: 8px;
     border-radius: 15px;
-    color: #ffffff; 
+    color: #ffffff;
 }
 
 #network {
@@ -159,7 +160,7 @@ label:focus {
     margin: 5px 5px;
     padding: 8px;
     border-radius: 15px;
-    color: #ffffff; 
+    color: #ffffff;
 }
 
 #network.disconnected {
@@ -172,7 +173,7 @@ label:focus {
     margin: 5px 5px;
     padding: 8px;
     border-radius: 15px;
-    color: #ffffff; 
+    color: #ffffff;
 }
 
 #pulseaudio.muted {
@@ -188,7 +189,7 @@ label:focus {
     margin: 5px 5px;
     padding: 8px;
     border-radius: 15px;
-    color: #ffffff; 
+    color: #ffffff;
 }
 
 #wireplumber.muted {
@@ -213,7 +214,7 @@ label:focus {
     margin: 5px 5px;
     padding: 8px;
     border-radius: 15px;
-    color: #ffffff; 
+    color: #ffffff;
 }
 
 #tray > .passive {
@@ -281,7 +282,7 @@ label:focus {
 }
 
 #scratchpad.empty {
-	background-color: transparent;
+    background-color: transparent;
 }
 
 #privacy {
@@ -310,47 +311,56 @@ label:focus {
     margin: 5px 5px;
     padding: 8px;
     border-radius: 15px;
-    color: #ffffff; 
+    color: #ffffff;
 }
 
+#taskbar button.active {
+    background-color: #89b4fa;
+    color: #11111b;
+    border-radius: 10px;
+}
+
+#taskbar.empty {
+    background-color: transparent;
+}
 #custom-walker {
-  font-size: 16px;
+    font-size: 16px;
 }
 
 #custom-clipboard {
-  background: #25253a;
-  margin: 5px 5px;
-  padding: 8px;
-  border-radius: 15px;
-  color: #ffffff;     
-  font-size: 16px;
+    background: #25253a;
+    margin: 5px 5px;
+    padding: 8px;
+    border-radius: 15px;
+    color: #ffffff;
+    font-size: 16px;
 }
 
 #custom-notification {
-  background: #25253a;
-  margin: 5px 5px;
-  padding: 8px;
-  border-radius: 15px;
-  color: #ffffff;     
-  font-family: "GoMonoNerdFontPropo";
+    background: #25253a;
+    margin: 5px 5px;
+    padding: 8px;
+    border-radius: 15px;
+    color: #ffffff;
+    font-family: "GoMonoNerdFontPropo";
 }
 
 #custom-insync {
-  background: #25253a;
-  margin: 5px 5px;
-  padding: 8px;
-  border-radius: 15px;
-  color: #ffffff;     
-  font-family: "GoMonoNerdFontPropo";
-  font-size: 16px;
+    background: #25253a;
+    margin: 5px 5px;
+    padding: 8px;
+    border-radius: 15px;
+    color: #ffffff;
+    font-family: "GoMonoNerdFontPropo";
+    font-size: 16px;
 }
 
 #custom-insync.error {
-  color: #f53c3c;
+    color: #f53c3c;
 }
 
 #custom-insync.syncing {
-  color: #8A69DB;
+    color: #8a69db;
 }
 
 /* Make backlight and pulseaudio modules look like a single block */
