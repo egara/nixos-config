@@ -3,7 +3,7 @@
 let
   # Main user
   username = "egarcia";
-  
+
   # System architecture
   system = "x86_64-linux";
 
@@ -54,7 +54,7 @@ let
             lib.optionals (host.desktop == "cosmic") [ ../modules/desktop/cosmic.nix ] ++
             # Import the new sicos hyprland module
             lib.optionals (host.desktop == "hyprland") [ self.nixosModules.sicos-hyprland ];
-          
+
           # Enable the sicos module if desktop is hyprland
           config = lib.mkIf (host.desktop == "hyprland") (
             let
@@ -82,13 +82,13 @@ let
 
               # Waybar
               programs.sicos.hyprland.waybar.configFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/config.jsonc; };
-              programs.sicos.hyprland.waybar.styleFile = 
+              programs.sicos.hyprland.waybar.styleFile =
                 if themeMode == "light"
                 then builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/style-light.css; }
                 else builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/style.css; };
 
               # Scripts
-              programs.sicos.hyprland.scripts.path = builtins.path { path = ../home-manager/desktop/hyprland/scripts; };            
+              programs.sicos.hyprland.scripts.path = builtins.path { path = ../home-manager/desktop/hyprland/scripts; };
             });
         })
 
@@ -103,11 +103,11 @@ let
             host = hostArg;
           };
           home-manager.users.${username} = {
-            imports = [ 
+            imports = [
               stylix.homeModules.stylix
               (import ./home.nix)
             ]
-              ++ lib.optionals (desktop == "hyprland") [ 
+              ++ lib.optionals (desktop == "hyprland") [
                 (import ../modules/sicos/hyprland/hm-module.nix)
               ]
               ++ homeManagerExtraImports;
@@ -181,7 +181,7 @@ let
     ./strange/hardware-configuration.nix
     ./efi-configuration.nix
     ./strange/configuration.nix
-    ../modules/custom/autofirma.nix
+    #../modules/custom/autofirma.nix
   ];
 
 in
