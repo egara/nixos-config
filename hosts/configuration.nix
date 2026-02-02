@@ -140,16 +140,16 @@
     password = "administrador";
     isNormalUser = true;
     description = "Eloy";
-    extraGroups = [ 
-      "wheel" 
-      "video" 
-      "audio" 
-      "networkmanager" 
-      "docker" 
-      "input" 
-      "libvirtd" 
-      "bluetooth" 
-      "kvm" 
+    extraGroups = [
+      "wheel"
+      "video"
+      "audio"
+      "networkmanager"
+      "docker"
+      "input"
+      "libvirtd"
+      "bluetooth"
+      "kvm"
     ];
     packages = with pkgs; [
       #firefox
@@ -171,7 +171,7 @@
   nixpkgs.config.permittedInsecurePackages = [
     #"openssl-1.1.1w" # Needed for sublime4
     "jitsi-meet-1.0.8792" # Needed for element-desktop
-  ];  
+  ];
 
   # Enabling flatpaks and installing some of them
   # via nix-flatpak module
@@ -252,6 +252,7 @@
       buttermanager
       openssl
       lazyssh # For SSH management
+      inetutils # Network utilities
   ];
 
   # List of programs that must be enabled
