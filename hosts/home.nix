@@ -287,11 +287,7 @@ in {
       "yaml"
       "java"
       "html"
-      "javascript-snippets"
-      "css-modules-kit"
-      "css-variables"
       "csv"
-      "markdown-oxide"
       "markdownlint"
       "python-requirements"
       "basher"
@@ -305,6 +301,26 @@ in {
       restore_on_startup = "last_workspace";
       session = {
         trust_all_worktrees = true;
+      };
+      # Show file type icons in the tab bar. Also color them according to the
+      # git status.
+      tabs = {
+        file_icons = true;
+        git_status = true;
+      };
+      # Decrease the horizontal indent size of files & folders in the project
+      # panel to avoid horizontal scrolling
+      project_panel = {
+        indent_size = 16;
+      };
+      # Set a preferred line lenth, showing a vertical gutter bar
+      preferred_line_length = 160;
+      # Languages special configurations
+      languages = {
+        Markdown = {
+          # Wrap text according to the previously defined preferred line length.
+          soft_wrap = "preferred_line_length";
+        };
       };
     };
 
