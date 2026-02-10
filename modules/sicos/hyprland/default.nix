@@ -169,6 +169,8 @@ in
     ./insync-integration.nix
   ];
 
+  disabledModules = [ "services/misc/elephant.nix" ];
+
   # 2. CONFIGURATION (USING THE OPTIONS)
   config = lib.mkIf cfg.enable {
 

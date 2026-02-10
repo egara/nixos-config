@@ -168,7 +168,7 @@ let
     ./taskmaster/hardware-configuration.nix
     ./efi-configuration.nix
     ./taskmaster/configuration.nix
-    ../modules/custom/autofirma.nix
+    #../modules/custom/autofirma.nix
   ];
 
   # Modules for Strange
