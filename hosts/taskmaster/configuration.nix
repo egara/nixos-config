@@ -28,7 +28,7 @@
     # Gateway
     defaultGateway = "10.18.8.1";
     # DNS
-    nameservers = [ "193.146.97.133" "193.146.97.132" ];
+    nameservers = [ "193.146.97.145" "193.146.97.171" ];
   };
   
   # Global power management for laptops
