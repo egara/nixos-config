@@ -138,7 +138,11 @@ The SicOS module offers several options to customize your environment. All optio
 | `enable` | boolean | `false` | Enables or disables the SicOS module entirely. |
 | `theming.enable` | boolean | `true` | Enables theme configuration (GTK, Qt, icons, cursors) through Home Manager and Stylix. |
 | `theming.mode` | string | `"dark"` | Sets the theme to either `"dark"` or `"light"`. |
+| `theming.base16Scheme` | string (enum) | `"catppuccin-mocha"` | Selects the Base16 color scheme for Stylix. Options: `catppuccin-mocha`, `equilibrium-light`, `everforest`, `gruvbox-dark`, `gruvbox-light-soft`. |
 | `powerManagement.enable` | boolean | `true` | Enables power management for laptops, using `power-profiles-daemon` and automatically adjusting brightness and power profiles when plugging/unplugging the AC adapter. |
+
+**Note on Theming:** The `theming.base16Scheme` option uses [Base16](https://github.com/chriskempson/base16) schemes to style the system via Stylix. You can preview these schemes at the [Tinted Theming Gallery](https://tinted-theming.github.io/tinted-gallery/). Currently, only the specified options are supported to ensure a cohesive look.
+
 | `insync.enable` | boolean | `false` | Enables integration with Insync, including a Waybar status indicator. |
 | `insync.package` | package | `pkgs.insync` | Allows specifying a different Insync package version (e.g., from `pkgs-stable`). |
 | `kanshi.enable` | boolean | `false` | Enables [Kanshi](https://sr.ht/~emersion/kanshi/) for automatic monitor profile management. Requires a custom configuration file. |

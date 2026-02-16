@@ -145,6 +145,12 @@ in
         default = "dark";
         description = "Set the theme mode for the system.";
       };
+
+      base16Scheme = lib.mkOption {
+        type = lib.types.enum [ "catppuccin-mocha" "equilibrium-light" "everforest" "gruvbox-dark" "gruvbox-light-soft" ];
+        default = "catppuccin-mocha";
+        description = "Set the base16 scheme for Stylix.";
+      };
     };
 
     # Power Management using power profiles daemon

@@ -66,6 +66,18 @@ in
               executable = true;
           };
 
+          # SicOS themes
+          ".config/sicos/themes" = {
+              source = ./themes;
+              recursive = true;
+          };
+
+          # Elephant files
+          ".config/elephant/" = {
+              source = ./config-files/elephant;
+              recursive = true;
+          };
+
           # Wallpapers
           ".config/hypr/wallpapers" = {
               source = ./wallpapers;
@@ -194,7 +206,7 @@ in
           # Dark theme
           darkTheme = commonConfig // {
             polarity = "dark";
-            base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
+            base16Scheme = "${pkgs.base16-schemes}/share/themes/${cfg.theming.base16Scheme}.yaml";
             image = ./wallpapers/fwd-wallhaven-wallhaven-mprye8.jpg;
             cursor = {
               package = pkgs.bibata-cursors;
@@ -206,7 +218,7 @@ in
           # Light Theme
           lightTheme = commonConfig // {
             polarity = "light";
-            base16Scheme = "${pkgs.base16-schemes}/share/themes/equilibrium-light.yaml";
+            base16Scheme = "${pkgs.base16-schemes}/share/themes/${cfg.theming.base16Scheme}.yaml";
             image = ./wallpapers/fwd-wallhaven-wallhaven-v9v3r5.jpg; # Un fondo de pantalla claro
             cursor = {
               package = pkgs.bibata-cursors;

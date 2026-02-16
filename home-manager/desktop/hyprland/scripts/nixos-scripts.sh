@@ -1,30 +1,29 @@
 #!/usr/bin/env bash
 
-# Script for Maintenace operations in NixOS
+# SicOS main menu
 # -----------------------------------------
 #
 # @author: Eloy García Almadén
 # @email: eloy.garcia.pca@gmail.com
 # ------------------------------------------
 
-items="󰚰\u00A0\u00A0\u00A0\u00A0Update\n\u00A0\u00A0\u00A0\u00A0Clean\n󰌶\u00A0\u00A0\u00A0\u00A0Light Theme\n󰽥\u00A0\u00A0\u00A0\u00A0Dark Theme\n󰱦\u00A0\u00A0\u00A0\u00A0Extranet\n\u00A0\u00A0\u00A0\u00A0Eclipse\n\u00A0\u00A0\u00A0\u00A0Hibernate"
+items="󰚰\u00A0\u00A0\u00A0\u00A0Update\n\u00A0\u00A0\u00A0\u00A0Clean\n󰔎\u00A0\u00A0\u00A0\u00A0Themes\n󰱦\u00A0\u00A0\u00A0\u00A0Extranet\n\u00A0\u00A0\u00A0\u00A0Eclipse\n\u00A0\u00A0\u00A0\u00A0Hibernate"
 
-output=$(echo -e $items | walker --dmenu -H)
+output=$(echo -e $items | walker --dmenu -H -n -N)
 
 if [[ "$output" == *"Update"* ]]; then
-  kitty --hold sh -c "~/.config/hypr/nixos-update.sh"
+    kitty --hold sh -c "~/.config/hypr/nixos-update.sh"
 elif [[ "$output" == *"Clean"* ]]; then
-  kitty --hold sh -c "~/.config/hypr/nixos-clean.sh"
-elif [[ "$output" == *"Light Theme"* ]]; then
-  kitty --hold sh -c "~/.config/hypr/theme-switcher.sh light"
-elif [[ "$output" == *"Dark Theme"* ]]; then
-  kitty --hold sh -c "~/.config/hypr/theme-switcher.sh dark"
+    kitty --hold sh -c "~/.config/hypr/nixos-clean.sh"
+elif [[ "$output" == *"Themes"* ]]; then
+    # sicosthemes is located in ~/.config/elephant/menus/sicos_themes.lua script file
+    exec walker -m menus:sicosthemes -H -n -N --width 800 --minheight 400
 elif [[ "$output" == *"Extranet"* ]]; then
-  kitty --hold sh -c "~/scripts/nixos/extranet.sh"
+    kitty --hold sh -c "~/scripts/nixos/extranet.sh"
 elif [[ "$output" == *"Eclipse"* ]]; then
-  . ~/scripts/nixos/eclipse.sh
+    . ~/scripts/nixos/eclipse.sh
 elif [[ "$output" == *"Hibernate"* ]]; then
-  kitty --hold sh -c "distrobox enter arch -- ~/distrobox/arch/programs/eclipse-2023-12/eclipse"
+    kitty --hold sh -c "distrobox enter arch -- ~/distrobox/arch/programs/eclipse-2023-12/eclipse"
 else
-  echo "Select an option"
+    echo "Select an option"
 fi

@@ -59,11 +59,13 @@ let
           config = lib.mkIf (host.desktop == "hyprland") (
             let
               themeMode = "dark";
+              themeScheme = "catppuccin-mocha";
             in
             {
               programs.sicos.hyprland.enable = true;
               programs.sicos.hyprland.theming.enable = true;
               programs.sicos.hyprland.theming.mode = themeMode;
+              programs.sicos.hyprland.theming.base16Scheme = themeScheme;
               programs.sicos.hyprland.powerManagement.enable = true;
               programs.sicos.hyprland.insync.enable = true;
               programs.sicos.hyprland.insync.package = pkgs-stable.insync;

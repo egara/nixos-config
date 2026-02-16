@@ -26,12 +26,15 @@ echo "                         "
 
 # Check if a theme argument is provided
 if [[ "$1" != "light" && "$1" != "dark" ]]; then
-  echo "Usage: $0 [light|dark]"
+  echo "Usage: $0 [light|dark] [scheme (optional)]"
+  echo "Available schemes: catppuccin-mocha, equilibrium-light, everforest, gruvbox-dark, gruvbox-light-soft"
   exit 1
 fi
 
 # Getting theme from the first argument
 THEME="$1"
+SCHEME="$2"
+
 # Getting hostname
 HOST="$(hostname)"
 # Getting DESKTOP environment
@@ -76,7 +79,17 @@ echo "Setting SicOS theme to '$THEME'..."
 # Use sed to replace the theme value in the identified file.
 # This command finds the line starting with optional whitespace followed by 'themeMode = "'
 # and replaces only the value inside the quotes, preserving indentation and the attribute path.
-sed -i "s/\(themeMode = \s*\"\).*\(\"\s*;\)/\1$THEME\2/" "$FILE_TO_EDIT"
+sed -i 's/\(themeMode = \s*"\).*\("\s*;\)/\1'"$THEME"'\2/' "$FILE_TO_EDIT"
+
+if [ -n "$SCHEME" ]; then
+    echo "Setting SicOS scheme to '$SCHEME'..."
+    # Check if themeScheme exists in the file
+    if grep -q 'themeScheme = "' "$FILE_TO_EDIT"; then
+         sed -i 's/\(themeScheme = \s*"\).*\("\s*;\)/\1'"$SCHEME"'\2/' "$FILE_TO_EDIT"
+    else
+         echo "Warning: 'themeScheme' variable not found in $FILE_TO_EDIT. Skipping scheme update."
+    fi
+fi
 
 echo "Configuration file updated. Rebuilding the system..."
 
@@ -111,6 +124,9 @@ echo "  |___/\___/_||_\___|  "
 echo "                       "
 
 echo "Theme changed successfully to '$THEME'!"
+if [ -n "$SCHEME" ]; then
+    echo "Scheme changed successfully to '$SCHEME'!"
+fi
 echo "Terminal will close in 3 seconds..."
 sleep 3
 
