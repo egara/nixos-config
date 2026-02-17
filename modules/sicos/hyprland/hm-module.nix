@@ -79,7 +79,7 @@ in
           };
 
           # Wallpapers
-          ".config/hypr/wallpapers" = {
+          ".config/sicos/wallpapers" = {
               source = ./wallpapers;
               recursive = true;
           };
