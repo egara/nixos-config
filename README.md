@@ -167,13 +167,14 @@ Included in this repository is a script named [`theme-switcher.sh`](https://gith
 
 **Note:** This script is **not** part of the core SicOS module because it relies on specific paths and configurations unique to my personal setup (e.g., the location of the flake configuration). However, it is provided here as a reference and inspiration for users who wish to implement similar functionality in their own environments.
 
-The script automates the process of switching between "light" and "dark" themes by performing the following steps:
+The script automates the process of switching between "light" and "dark" themes as well as the base16 scheme selected by performing the following steps:
 
-1.  **Locates the Configuration:** Finds the relevant NixOS configuration file containing the `themeMode` setting.
-2.  **Updates the Theme:** Modifies the configuration file to set the desired theme (`light` or `dark`).
-3.  **Rebuilds the System:** Executes `nixos-rebuild switch` to apply the changes system-wide.
-4.  **Restarts Services:** Refreshes UI components like Waybar, SwayNC, and Walker to reflect the new theme immediately.
-5.  **Updates Wallpaper:** Changes the desktop wallpaper to match the selected theme.
+1. **Locates the Configuration:** Finds the relevant NixOS configuration file containing the `themeMode` setting.
+2. **Updates the Theme:** Modifies the configuration file to set the desired theme (`light` or `dark`).
+3. **Updates the Scheme:** Modifies the configuration file to set the desired basic16Scheme.
+4. **Rebuilds the System:** Executes `nixos-rebuild switch` to apply the changes system-wide.
+5. **Restarts Services:** Refreshes UI components like Waybar, SwayNC, and Walker to reflect the new theme immediately.
+6. **Updates Wallpaper:** Changes the desktop wallpaper to match the selected theme.
 
 Feel free to adapt this script to fit your own configuration structure!
 
