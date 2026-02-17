@@ -32,6 +32,8 @@ This module handles the installation and configuration of all necessary componen
 
 - **Light & Dark Mode Theming**: The module offers full system integration for both light and dark themes via **Stylix**. It automatically switches wallpapers, icons, cursors, and configuration files for all components (Waybar, Walker, Wlogout, Swaync, etc.) to ensure a consistent and beautiful look in either mode.
 
+- **base16Scheme**: The module offers full system integration for color base16Scheme. More information below.
+
 ## Prerequisites
 
 - **Flake-based System**: Your NixOS system must be configured to use **flakes**.
