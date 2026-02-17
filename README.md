@@ -22,9 +22,11 @@ This module handles the installation and configuration of all necessary componen
   - **Volume Control**: A notification and a sound effect are triggered when you raise or lower the volume.
   - **Brightness Control**: A notification visually indicates the new screen brightness level.
 
-- **Custom Script Launcher**: Press `Mod + S` to open a menu with custom scripts. By default, it includes a script to clean the system by removing old NixOS generations and garbage-collecting unused store paths.
+- **SicOS settings menu**: Press `Mod + S` to open a menu with a basic SicOS settings menu. By default, it includes:
+  - A script to clean the system by removing old NixOS generations and garbage-collecting unused store paths.
+  - A wallpaper selector tool to pick any official wallpaper included. Those wallpapers are located in ~/.config/sicos/wallpapers and new wallpapers can be added an automatically recognized here.
 
-- **Wallpaper Management**: A collection of wallpapers is included in `modules/sicos/hyprland/wallpapers/`. You can press `Mod + 1` to randomly switch between them.
+- **Wallpaper Management**: A collection of wallpapers is included in `modules/sicos/hyprland/wallpapers/`. You can press `Mod + 1` to randomly switch between them too.
 
 - **Insync Integration**: Due to rendering issues with the official Insync tray icon in some Wayland environments, this module provides a custom Waybar integration that displays the current sync status.
 
