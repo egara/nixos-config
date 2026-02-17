@@ -34,7 +34,7 @@ default = [
   "websearch",
 ]
 empty = ["desktopapplications"]
-max_results = 50
+max_results = 9999
 
 [providers.sets]
 [providers.max_results_provider]

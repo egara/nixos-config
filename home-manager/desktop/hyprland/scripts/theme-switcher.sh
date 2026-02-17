@@ -42,7 +42,7 @@ DESKTOP="$(echo $XDG_CURRENT_DESKTOP)"
 # Define the configuration path
 CONFIG_PATH="$HOME/Zero/nixos-config"
 # Define the SicOS wallpapers path
-WALLPAPERS_PATH="$HOME/.config/hypr/wallpapers"
+WALLPAPERS_PATH="$HOME/.config/sicos/wallpapers"
 
 # Renaming DESKTOP environment to match flake output names
 if [ "$DESKTOP" = "Hyprland" ] || [ "$DESKTOP" = "hyprland" ]; then
