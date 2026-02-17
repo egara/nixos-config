@@ -147,7 +147,7 @@ in
       };
 
       base16Scheme = lib.mkOption {
-        type = lib.types.enum [ "catppuccin-mocha" "equilibrium-light" "everforest" "gruvbox-dark" "gruvbox-light-soft" ];
+        type = lib.types.str;
         default = "catppuccin-mocha";
         description = "Set the base16 scheme for Stylix.";
       };
