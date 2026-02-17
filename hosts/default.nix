@@ -59,7 +59,7 @@ let
           config = lib.mkIf (host.desktop == "hyprland") (
             let
               themeMode = "dark";
-              themeScheme = "tokyo-night-light";
+              themeScheme = "catppuccin-mocha";
             in
             {
               programs.sicos.hyprland.enable = true;
