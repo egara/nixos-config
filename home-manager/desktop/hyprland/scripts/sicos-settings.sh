@@ -21,7 +21,7 @@ elif [[ "$output" == *"Themes"* ]]; then
     exec walker -m menus:sicosthemes -H -n -N --width 800 --minheight 400
 elif [[ "$output" == *"Wallpapers"* ]]; then
     # sicoswallpapers is located in ~/.config/elephant/menus/sicos_wallpapers.lua script file
-    exec walker -m menus:sicoswallpapers -H -n -N --width 800 --minheight 400
+    exec walker -m menus:sicoswallpapers -H -N --width 800 --minheight 400
 elif [[ "$output" == *"Extranet"* ]]; then
     kitty --hold sh -c "~/scripts/nixos/extranet.sh"
 elif [[ "$output" == *"Eclipse"* ]]; then
