@@ -87,7 +87,7 @@ function GetEntries()
             Preview = preview_path,
             PreviewType = "file",
             Actions = {
-              activate = "kitty --hold sh -c '~/.config/hypr/theme-switcher.sh " .. mode .. " " .. base_name .. "'",
+              activate = "kitty --hold sh -c '~/.config/sicos/scripts/theme-switcher.sh " .. mode .. " " .. base_name .. "'",
               -- activate = "omarchy-theme-set " .. theme_name,
             },
           })

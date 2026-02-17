@@ -12,7 +12,7 @@ items="\u00A0\u00A0\u00A0\u00A0Clean"
 output=$(echo -e $items | walker --dmenu -H)
 
 if [[ "$output" == *"Clean"* ]]; then
-  kitty --hold sh -c "~/.config/hypr/nixos-clean.sh"
+  kitty --hold sh -c "~/.config/sicos/scripts/nixos-clean.sh"
 
 # Add some more here
 # elif [[ "$output" == *"Update"* ]]; then

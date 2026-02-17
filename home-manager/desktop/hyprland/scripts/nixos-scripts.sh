@@ -12,9 +12,11 @@ items="󰚰\u00A0\u00A0\u00A0\u00A0Update\n\u00A0\u00A0\u00A0\u00A0Clean\n�
 output=$(echo -e $items | walker --dmenu -H -n -N)
 
 if [[ "$output" == *"Update"* ]]; then
-    kitty --hold sh -c "~/.config/hypr/nixos-update.sh"
+    kitty --hold sh -c "~/.config/sicos/scripts/nixos-update.sh"
 elif [[ "$output" == *"Clean"* ]]; then
-    kitty --hold sh -c "~/.config/hypr/nixos-clean.sh"
+  kitty --hold sh -c "~/.config/sicos/scripts/nixos-clean.sh"
+
+# Add some more here
 elif [[ "$output" == *"Themes"* ]]; then
     # sicosthemes is located in ~/.config/elephant/menus/sicos_themes.lua script file
     exec walker -m menus:sicosthemes -H -n -N --width 800 --minheight 400

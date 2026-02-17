@@ -60,7 +60,7 @@ in
           ".config/walker/config.toml".source = cfg.walker.configFile;
 
           # Scripts (marked as executable)
-          ".config/hypr/" = {
+          ".config/sicos/scripts/" = {
               source = cfg.scripts.path;
               recursive = true;
               executable = true;
