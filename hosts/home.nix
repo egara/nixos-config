@@ -322,6 +322,10 @@ in {
           soft_wrap = "preferred_line_length";
         };
       };
+      # Disabling preview tabs
+      preview_tabs = {
+        enabled = false;
+      };
     };
 
     # userKeymaps = [
