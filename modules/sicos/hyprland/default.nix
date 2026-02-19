@@ -357,7 +357,7 @@ in
         feh # Image viewer
         grim # Screen capture for Wayland
         slurp # Region selection for grim
-        swappy # Screenshot editor
+        satty # Screenshot editor
         file-roller # Archive manager for Thunar
         brightnessctl # Screen brightness control
         playerctl # Media player control
