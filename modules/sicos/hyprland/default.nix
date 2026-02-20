@@ -355,8 +355,8 @@ in
         udiskie # Automount USB devices
         swww # for wallpapers
         feh # Image viewer
-        grim # Screen capture for Wayland
-        slurp # Region selection for grim
+        hyprshot # Screenshots taker
+        wl-clipboard
         satty # Screenshot editor
         file-roller # Archive manager for Thunar
         brightnessctl # Screen brightness control
