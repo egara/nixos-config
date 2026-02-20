@@ -355,8 +355,7 @@ in
         udiskie # Automount USB devices
         swww # for wallpapers
         feh # Image viewer
-        hyprshot # Screenshots taker
-        wl-clipboard
+        hyprshot # Screenshots tool
         satty # Screenshot editor
         file-roller # Archive manager for Thunar
         brightnessctl # Screen brightness control
