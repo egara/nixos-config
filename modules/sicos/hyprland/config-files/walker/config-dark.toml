@@ -76,6 +76,12 @@ fallback = [
   { action = "erase_history", label = "clear hist", bind = "ctrl h", after = "AsyncReload" },
 ]
 
+"menus:sicoswallpapers" = [
+  { action = "activate", default = true, bind = "Return", after = "Nothing" },
+  { action = "delete", bind = "ctrl d", after = "Reload" },
+  { action = "open", bind = "ctrl o", after = "Nothing" },
+]
+
 dmenu = [{ action = "select", default = true, bind = "Return" }]
 
 providerlist = [

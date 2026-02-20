@@ -29,7 +29,9 @@ function GetEntries()
           Preview = file_path,
           PreviewType = "file",
           Actions = {
-            activate = "swww img --transition-type grow --transition-pos 0,0 --transition-step 90 " .. file_path,
+            activate = "swww img --resize fit --transition-type grow --transition-pos 0,0 --transition-step 90 " .. file_path,
+            delete = "rm '" .. file_path .. "'",
+            open = "xdg-open '" .. file_path .. "'",
           },
         })
       end
