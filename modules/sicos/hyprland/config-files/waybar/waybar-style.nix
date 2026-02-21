@@ -118,12 +118,25 @@ button:hover {
 #taskbar,
 #custom-clipboard,
 #custom-notification,
+#custom-power,
 #custom-insync {
     background: @base00;
     margin: 5px 5px;
     padding: 8px;
     border-radius: 15px;
     color: @base05;
+}
+
+#custom-notification {
+    padding: 8px 10px;
+}
+
+#custom-insync {
+    padding: 8px 13px 8px 7px;
+}
+
+#custom-power {
+    padding: 8px 12px;
 }
 
 tooltip {
@@ -453,23 +466,6 @@ label:focus {
     font-size: 16px;
 }
 
-#custom-notification {
-    background: @base00;
-    margin: 5px 5px;
-    padding: 8px;
-    border-radius: 15px;
-    color: @base05;
-}
-
-#custom-insync {
-    background: @base00;
-    margin: 5px 5px;
-    padding: 8px;
-    border-radius: 15px;
-    color: @base05;
-    font-size: 16px;
-}
-
 #custom-insync.error {
     color: @base08;
 }
@@ -519,5 +515,6 @@ label:focus {
     margin: 5px 5px 5px 0;
     border-radius: 0 15px 15px 0;
     padding-left: 4px;
+    padding-right: 12px;
 }
 ''

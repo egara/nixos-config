@@ -192,7 +192,7 @@ in
         "on-click": "pavucontrol"
     },
     "custom/power": {
-        "format": " ⏻ ",
+        "format": "⏻",
         "tooltip": false,
         "on-click": "wlogout --protocol layer-shell"
     },
