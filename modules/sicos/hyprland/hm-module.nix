@@ -29,10 +29,10 @@ in
 
           # Waybar files
           ".config/waybar/config.jsonc".text = if cfg.theming.enable
-            then (import ./waybar-config.nix { inherit config lib nixosConfig; })
+            then (import ./config-files/waybar/waybar-config.nix { inherit config lib nixosConfig; })
             else (builtins.readFile cfg.waybar.configFile);
           ".config/waybar/style.css".text = if cfg.theming.enable
-            then (import ./waybar-style.nix { inherit config lib nixosConfig; })
+            then (import ./config-files/waybar/waybar-style.nix { inherit config lib nixosConfig; })
             else (builtins.readFile cfg.waybar.styleFile);
 
           # Wlogout files

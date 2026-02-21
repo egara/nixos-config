@@ -89,13 +89,13 @@ in
       "tooltip": false,
       "format": "{icon}",
       "format-icons": {
-        "notification": "<span foreground='#${c.base08}'></span>",
+        "notification": "<span foreground='#${c.base08}'><sup></sup></span>",
         "none": "",
-        "dnd-notification": "<span foreground='#${c.base08}'></span>",
+        "dnd-notification": "<span foreground='#${c.base08}'><sup></sup></span>",
         "dnd-none": "",
-        "inhibited-notification": "<span foreground='#${c.base08}'></span>",
+        "inhibited-notification": "<span foreground='#${c.base08}'><sup></sup></span>",
         "inhibited-none": "",
-        "dnd-inhibited-notification": "<span foreground='#${c.base08}'></span>",
+        "dnd-inhibited-notification": "<span foreground='#${c.base08}'><sup></sup></span>",
         "dnd-inhibited-none": ""
       },
       "return-type": "json",
