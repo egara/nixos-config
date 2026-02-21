@@ -87,15 +87,6 @@ in
       };
     };
 
-    # Swappy
-    swappy = {
-      configFile = lib.mkOption {
-        type = lib.types.path;
-        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/swappy/config";
-        description = "Path to the swappy config file.";
-      };
-    };
-
     # Kanshi
     kanshi = {
       enable = lib.mkEnableOption "Enable Kanshi integration for automated monitors layout switching.";

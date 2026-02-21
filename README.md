@@ -32,7 +32,7 @@ This module handles the installation and configuration of all necessary componen
 
 - **Light & Dark Mode Theming**: The module offers full system integration for both light and dark themes via **Stylix**. It automatically switches wallpapers, icons, cursors, and configuration files for all components (Waybar, Walker, Wlogout, Swaync, etc.) to ensure a consistent and beautiful look in either mode.
 
-- **base16Scheme**: The module offers full system integration for color base16Scheme. More information below.
+- **base16Scheme**: The module offers full system integration for color base16Scheme via Stylix too. More information below.
 
 ## Prerequisites
 
@@ -111,6 +111,7 @@ Below is a complete example of a `flake.nix` file:
               powerManagement.enable = true; # Enable power management for laptops
               insync.enable = true; # Enable Insync integration
               kanshi.enable = true; # Enable monitor profile management
+              waybar.overwrite = false; #Set the default waybar configurations for SicOS
             };
           }
 
@@ -152,13 +153,13 @@ The SicOS module offers several options to customize your environment. All optio
 | `hyprlock.configFile` | path | Internal file | Path to the `hyprlock.conf` file. |
 | `hyprlock.profilePicture` | path | Internal file | Path to the profile picture displayed on the lock screen. |
 | `hypridle.configFile` | path | Internal file | Path to the `hypridle.conf` file for idle management. |
-| `waybar.configFile` | path | Depends on `powerManagement` & `insync` | Path to Waybar's `config.jsonc` file. The module selects the appropriate configuration based on enabled options. |
-| `waybar.styleFile` | path | Depends on `powerManagement` | Path to Waybar's `style.css` file. |
+| `waybar.overwrite` | boolean | `false` | It allows the user to overwrite waybar's configFile and styleFile with custom files designed by the user. It it is set to false, Waybar will be set to the stock SicOS configurations and the look and feel will be dynamic and depend on the theming.base16Scheme selected |
+| `waybar.configFile` | path | Internal file | Path to Waybar's `config.jsonc` file. **It must be provided by the user if waybar.overwrite option is set to true.** |
+| `waybar.styleFile` | path | Internal file | Path to Waybar's `style.css` file. **It must be provided by the user if waybar.overwrite option is set to true.** |
 | `wlogout.layoutFile` | path | Internal file | Path to the `wlogout` layout file (shutdown menu). |
 | `wlogout.styleFile` | path | Internal file | Path to the `wlogout` style file. |
 | `swaync.configFile` | path | Internal file | Path to the `config.json` file for the `swaync` notification center. |
 | `swaync.styleFile` | path | Internal file | Path to the `style.css` file for `swaync`. |
-| `swappy.configFile` | path | Internal file | Path to the configuration file for the `swappy` screenshot editor. |
 | `kanshi.configFile` | path | Internal (empty) file | Path to the `kanshi` configuration file. **You must override this with your own monitor setup.** |
 | `walker.configFile` | path | Internal file | Path to the `config.toml` file for the `walker` application launcher. |
 | Scripts | `programs.sicos.hyprland.scripts.path` | [scripts/](https://github.com/egara/nixos-config/tree/main/modules/sicos/hyprland/scripts) |
@@ -193,13 +194,10 @@ Below is a table with the components you can customize and a link to their defau
 | Hyprland | `programs.sicos.hyprland.hyprland.configFile` | [hyprland.conf](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/hyprland-with-kanshi.conf) |
 | Hyprlock | `programs.sicos.hyprland.hyprlock.configFile` | [hyprlock.conf](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/hyprlock.conf) |
 | Hypridle | `programs.sicos.hyprland.hypridle.configFile` | [hypridle.conf](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/hypridle.conf) |
-| Waybar (config) | `programs.sicos.hyprland.waybar.configFile` | [config.jsonc](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/waybar/powermanagement/with-insync/config.jsonc) |
-| Waybar (style) | `programs.sicos.hyprland.waybar.styleFile` | [style.css](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/waybar/powermanagement/style.css) |
 | wlogout (layout) | `programs.sicos.hyprland.wlogout.layoutFile` | [layout](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/wlogout/layout) |
 | wlogout (style) | `programs.sicos.hyprland.wlogout.styleFile` | [style.css](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/wlogout/style.css) |
 | Swaync (config) | `programs.sicos.hyprland.swaync.configFile` | [config.json](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/swaync/config.json) |
 | Swaync (style) | `programs.sicos.hyprland.swaync.styleFile` | [style.css](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/swaync/style.css) |
-| Swappy | `programs.sicos.hyprland.swappy.configFile` | [config](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/swappy/config) |
 | Kanshi | `programs.sicos.hyprland.kanshi.configFile` | [config](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/kanshi/config) |
 | Walker | `programs.sicos.hyprland.walker.configFile` | [config.toml](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/walker/config.toml) |
 | Scripts | `programs.sicos.hyprland.scripts.path` | [scripts/](https://github.com/egara/nixos-config/tree/main/modules/sicos/hyprland/scripts) |

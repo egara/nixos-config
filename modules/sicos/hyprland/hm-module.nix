@@ -57,9 +57,6 @@ in
           ".config/swaync/config.json".source = cfg.swaync.configFile;
           ".config/swaync/style.css".source = cfg.swaync.styleFile;
 
-          # Swappy file
-          ".config/swappy/config".source = cfg.swappy.configFile;
-
           # Walker file
           ".config/walker/config.toml".source = cfg.walker.configFile;
 
