@@ -28,12 +28,12 @@ in
           ".config/hypr/hypridle.conf".source = cfg.hypridle.configFile;
 
           # Waybar files
-          ".config/waybar/config.jsonc".text = if cfg.theming.enable
-            then (import ./config-files/waybar/waybar-config.nix { inherit config lib nixosConfig; })
-            else (builtins.readFile cfg.waybar.configFile);
-          ".config/waybar/style.css".text = if cfg.theming.enable
-            then (import ./config-files/waybar/waybar-style.nix { inherit config lib nixosConfig; })
-            else (builtins.readFile cfg.waybar.styleFile);
+          ".config/waybar/config.jsonc".text = if cfg.waybar.overwrite
+            then (builtins.readFile cfg.waybar.configFile)
+            else (import ./config-files/waybar/waybar-config.nix { inherit config lib nixosConfig; });
+          ".config/waybar/style.css".text = if cfg.waybar.overwrite
+            then (builtins.readFile cfg.waybar.styleFile)
+            else (import ./config-files/waybar/waybar-style.nix { inherit config lib nixosConfig; });
 
           # Wlogout files
           ".config/wlogout/layout".source = cfg.wlogout.layoutFile;

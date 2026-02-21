@@ -59,7 +59,7 @@ let
           config = lib.mkIf (host.desktop == "hyprland") (
             let
               themeMode = "dark";
-              themeScheme = "catppuccin-mocha";
+              themeScheme = "gruvbox-dark";
             in
             {
               programs.sicos.hyprland.enable = true;
@@ -83,11 +83,7 @@ let
               programs.sicos.hyprland.kanshi.configFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/kanshi/config; };
 
               # Waybar
-              programs.sicos.hyprland.waybar.configFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/config.jsonc; };
-              programs.sicos.hyprland.waybar.styleFile =
-                if themeMode == "light"
-                then builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/style-light.css; }
-                else builtins.path { path = ../home-manager/desktop/hyprland/programs/waybar/style.css; };
+              programs.sicos.hyprland.waybar.overwrite = false;
 
               # Scripts
               programs.sicos.hyprland.scripts.path = builtins.path { path = ../home-manager/desktop/hyprland/scripts; };

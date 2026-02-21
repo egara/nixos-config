@@ -42,18 +42,15 @@ in
 
     # Group Waybar configs
     waybar = {
+      overwrite = lib.mkEnableOption "Overwrite waybar configurations. If it is set to true, then configFile and styleFile MUST be provided by the user.";
+      default = false;
+
       configFile = lib.mkOption {
         type = lib.types.path;
-        # Default config file will depend on if powerManagement is
-        # enabled or disabled by the user
-        #default = ./config-files/waybar/config.jsonc;
         description = "Path to the Waybar config.jsonc file.";
       };
       styleFile = lib.mkOption {
         type = lib.types.path;
-        # Default style config file will depend on if powerManagement is
-        # enabled or disabled by the user
-        #default = ./config-files/waybar/style.css;
         description = "Path to the Waybar style.css file.";
       };
     };
@@ -188,39 +185,6 @@ in
             "${sicos-source-path}/modules/sicos/hyprland/config-files/hyprland-with-kanshi.conf"
         else
             "${sicos-source-path}/modules/sicos/hyprland/config-files/hyprland-without-kanshi.conf"
-      );
-
-      ###################
-      # Waybar defaults #
-      ###################
-
-      # Default waybar configFile will depend on if powerManagement
-      # option is enabled or disabled by the user
-      programs.sicos.hyprland.waybar.configFile = lib.mkDefault (
-        if config.programs.sicos.hyprland.powerManagement.enable then
-          if config.programs.sicos.hyprland.insync.enable then
-            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/powermanagement/with-insync/config.jsonc"
-          else
-            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/powermanagement/without-insync/config.jsonc"
-        else
-          if config.programs.sicos.hyprland.insync.enable then
-            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/no-powermanagement/with-insync/config.jsonc"
-          else
-            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/no-powermanagement/without-insync/config.jsonc"
-      );
-      # Default waybar styleFile will depend on if powerManagement
-      # option is enabled or disabled by the user
-      programs.sicos.hyprland.waybar.styleFile = lib.mkDefault (
-        if config.programs.sicos.hyprland.powerManagement.enable then
-          if cfg.theming.mode == "light" then
-            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/powermanagement/style-light.css"
-          else
-            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/powermanagement/style.css"
-        else
-          if cfg.theming.mode == "light" then
-            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/no-powermanagement/style-light.css"
-          else
-            "${sicos-source-path}/modules/sicos/hyprland/config-files/waybar/no-powermanagement/style.css"
       );
 
       ####################
