@@ -8,12 +8,6 @@ in
   # It's imported into a user's home-manager configuration.
   config = lib.mkMerge [
     (lib.mkIf cfg.enable (
-      let
-        # Conditionally define the attribute set for the walker light theme
-        walkerLightTheme = lib.optionalAttrs (cfg.theming.mode == "light") {
-          ".config/walker/themes/sicos-light/style.css".source = cfg.walker.lightThemeFile;
-        };
-      in
       {
         home.file = {
           # Hyprland files
@@ -59,8 +53,9 @@ in
             then (builtins.readFile cfg.swaync.styleFile)
             else (import ./config-files/swaync/swaync-style.nix { inherit config lib nixosConfig; });
 
-          # Walker file
-          ".config/walker/config.toml".source = cfg.walker.configFile;
+          # Walker files
+          ".config/walker/config.toml".source = ./config-files/walker/config.toml;
+          ".config/walker/themes/stylix/style.css".text = import ./config-files/walker/themes/stylix/walker-style.nix { inherit config lib nixosConfig; };
 
           # Scripts (marked as executable)
           ".config/sicos/scripts/" = {
@@ -86,7 +81,7 @@ in
               source = ./wallpapers;
               recursive = true;
           };
-        } // walkerLightTheme; # Merge the conditional theme file
+        };
 
         # Configuring xdg-utils to use some default applications in Hyprland
         xdg.mimeApps = {

@@ -101,21 +101,7 @@ in
       };
     };
 
-    # Walker
-    walker = {
-      configFile = lib.mkOption {
-        type = lib.types.path;
-        default = if cfg.theming.mode == "light"
-                  then "${sicos-source-path}/modules/sicos/hyprland/config-files/walker/config-light.toml"
-                  else "${sicos-source-path}/modules/sicos/hyprland/config-files/walker/config-dark.toml";
-        description = "Path to the walker config.toml file.";
-      };
-      lightThemeFile = lib.mkOption {
-        type = lib.types.path;
-        default = "${sicos-source-path}/modules/sicos/hyprland/config-files/walker/themes/sicos-light/style.css";
-        description = "Path to the walker light theme css file.";
-      };
-    };
+
 
     # Custom scripts
     scripts = {

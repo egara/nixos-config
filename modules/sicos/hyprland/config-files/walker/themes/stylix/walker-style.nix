@@ -1,8 +1,14 @@
-@define-color window_bg_color #f5f2ed;
-@define-color accent_bg_color #007a7e;
-@define-color theme_fg_color #434138;
-@define-color error_bg_color #d02023;
-@define-color error_fg_color #f5f2ed;
+{ config, lib, nixosConfig }:
+
+let
+  c = config.lib.stylix.colors;
+in
+''
+@define-color window_bg_color #${c.base00};
+@define-color accent_bg_color #${c.base0D};
+@define-color theme_fg_color #${c.base05};
+@define-color error_bg_color #${c.base08};
+@define-color error_fg_color #${c.base00};
 
 * {
   all: unset;
@@ -34,7 +40,7 @@ scrollbar {
   background: @window_bg_color;
   padding: 20px;
   border-radius: 20px;
-  border: 1px solid #d8d4cb;
+  border: 1px solid #${c.base02};
 }
 
 .preview-box,
@@ -60,10 +66,10 @@ scrollbar {
 
 .input {
   caret-color: @accent_bg_color;
-  background: #e7e2d9;
+  background: #${c.base01};
   padding: 10px;
   color: @theme_fg_color;
-  border: 1px solid #d8d4cb;
+  border: 1px solid #${c.base02};
   border-radius: 8px;
 }
 
@@ -121,7 +127,7 @@ child:selected .item-box {
 }
 
 .preview {
-  border: 1px solid #d8d4cb;
+  border: 1px solid #${c.base02};
   padding: 10px;
   border-radius: 10px;
   color: @theme_fg_color;
@@ -160,7 +166,7 @@ child:selected .item-box {
 
 .keybinds {
   padding-top: 10px;
-  border-top: 1px solid #d8d4cb;
+  border-top: 1px solid #${c.base02};
   font-size: 12px;
   color: @theme_fg_color;
 }
@@ -207,3 +213,4 @@ child:selected .item-box {
 .preview-content.archlinuxpkgs, .preview-content.dnfpackages {
   font-family: monospace;
 }
+''

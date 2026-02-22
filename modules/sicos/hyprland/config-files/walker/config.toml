@@ -4,7 +4,7 @@ click_to_close = true
 selection_wrap = false
 global_argument_delimiter = "#"
 exact_search_prefix = "'"
-theme = "sicos-light"
+theme = "stylix"
 disable_mouse = false
 debug = false
 

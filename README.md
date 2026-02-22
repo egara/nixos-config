@@ -163,7 +163,6 @@ The SicOS module offers several options to customize your environment. All optio
 | `swaync.configFile` | path | Internal file | Path to the `config.json` file for the `swaync` notification center. **It must be provided by the user if swaync.overwrite option is set to true.** |
 | `swaync.styleFile` | path | Internal file | Path to the `style.css` file for `swaync`. **It must be provided by the user if swaync.overwrite option is set to true.** |
 | `kanshi.configFile` | path | Internal (empty) file | Path to the `kanshi` configuration file. **You must override this with your own monitor setup.** |
-| `walker.configFile` | path | Internal file | Path to the `config.toml` file for the `walker` application launcher. |
 | Scripts | `programs.sicos.hyprland.scripts.path` | [scripts/](https://github.com/egara/nixos-config/tree/main/modules/sicos/hyprland/scripts) |
 
 > **Note on Theming:** The `theming.base16Scheme` option uses [Base16](https://github.com/chriskempson/base16) schemes to style the system via Stylix. You can preview these schemes at the [Tinted Theming Gallery](https://tinted-theming.github.io/tinted-gallery/). Currently, only base16 schemes are supported to ensure a cohesive look. If you want to know the meaning of all the different colors within a base16Scheme you can check the official documentation [https://github.com/chriskempson/base16/blob/main/styling.md](https://github.com/chriskempson/base16/blob/main/styling.md).
@@ -201,7 +200,6 @@ Below is a table with the components you can customize and a link to their defau
 | Swaync (config) | `programs.sicos.hyprland.swaync.configFile` | [config.json](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/swaync/config.json) |
 | Swaync (style) | `programs.sicos.hyprland.swaync.styleFile` | [style.css](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/swaync/style.css) |
 | Kanshi | `programs.sicos.hyprland.kanshi.configFile` | [config](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/kanshi/config) |
-| Walker | `programs.sicos.hyprland.walker.configFile` | [config.toml](https://github.com/egara/nixos-config/blob/main/modules/sicos/hyprland/config-files/walker/config.toml) |
 | Scripts | `programs.sicos.hyprland.scripts.path` | [scripts/](https://github.com/egara/nixos-config/tree/main/modules/sicos/hyprland/scripts) |
 
 ### Customization Example
