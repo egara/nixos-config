@@ -1,17 +1,23 @@
-@define-color noti-border-color rgba(255, 255, 255, 0.15);
-@define-color noti-bg rgba(51,51,51,1);
-@define-color noti-bg-hover-alt #454545;
-@define-color noti-bg-alt rgba(43,43,43,0.7);
-@define-color noti-fg white;
-@define-color noti-bg-hover rgba(255, 255, 255, 0.1);
-@define-color noti-bg-focus rgba(255, 255, 255, 0.1);
-@define-color noti-close-bg rgba(255, 255, 255, 0.1);
-@define-color noti-close-bg-hover rgba(255, 255, 255, 0.15);
-@define-color noti-urgent rgba(255,0,80,0.8);
-@define-color bg-selected #2e71e6;
+{ config, lib, nixosConfig }:
+
+let
+  c = config.lib.stylix.colors;
+in
+''
+@define-color noti-border-color #${c.base03};
+@define-color noti-bg alpha(#${c.base00}, 0.95);
+@define-color noti-bg-hover-alt #${c.base01};
+@define-color noti-bg-alt #${c.base01};
+@define-color noti-fg #${c.base05};
+@define-color noti-bg-hover #${c.base02};
+@define-color noti-bg-focus #${c.base02};
+@define-color noti-close-bg #${c.base02};
+@define-color noti-close-bg-hover #${c.base03};
+@define-color noti-urgent #${c.base08};
+@define-color bg-selected #${c.base0D};
 
 *{
-  font-family: "GoMonoNerdFontPropo", "Noto Sans", sans-serif;
+  font-family: "${config.stylix.fonts.monospace.name}", "Noto Sans", sans-serif;
   font-size: 12px;
   color: @noti-fg;
 }
@@ -33,19 +39,9 @@
   padding: 0;
 }
 
-/* Uncomment to enable specific urgency colors */
-/* .low {
-  background: yellow;
-}
-
-.normal {
-  background: green;
-} */
-
 .critical {
   border: 1px solid @noti-urgent;
 }
-
 
 .notification-content {
   background: transparent;
@@ -55,7 +51,7 @@
 
 .close-button {
   background: @noti-close-bg;
-  color: white;
+  color: @noti-fg;
   text-shadow: none;
   padding: 0;
   border-radius: 100%;
@@ -81,7 +77,7 @@
   box-shadow: none;
   background: @noti-bg;
   border: 1px solid @noti-border-color;
-  color: white;
+  color: @noti-fg;
 }
 
 .notification-default-action:hover,
@@ -122,14 +118,14 @@
 
 .body-image {
   margin-top: 6px;
-  background-color: white;
+  background-color: @noti-fg;
   border-radius: 6px;
 }
 
 .summary {
   font-weight: bold;
   background: transparent;
-  color: white;
+  color: @noti-fg;
   text-shadow: none;
 }
 
@@ -137,7 +133,7 @@
   font-size: 12px;
   font-weight: bold;
   background: transparent;
-  color: white;
+  color: @noti-fg;
   text-shadow: none;
   margin-right: 18px;
 }
@@ -146,20 +142,19 @@
   font-size: 12px;
   font-weight: normal;
   background: transparent;
-  color: white;
+  color: @noti-fg;
   text-shadow: none;
 }
 
-/* The "Notifications" and "Do Not Disturb" text widget */
 .top-action-title {
-  color: white;
+  color: @noti-fg;
   text-shadow: none;
 }
 
 .control-center {
   background-color: @noti-bg-alt;
   border-radius: 6px;
-  border: none;
+  border: 1px solid @noti-border-color;
 }
 
 .control-center-list {
@@ -170,24 +165,21 @@
   background: transparent;
 }
 
-/* Window behind control center and on all other monitors */
 .blank-window {
   background: transparent;
 }
 
-/*** Widgets ***/
-
-/* Title widget */
 .widget-title {
   margin: 8px;
   font-size: 12px;
+  color: @noti-fg;
 }
 
 .widget-title>button {
   font-size: initial;
-  color: white;
+  color: @noti-fg;
   text-shadow: none;
-  background: @noti-bg;
+  background: @noti-bg-alt;
   border: 1px solid @noti-border-color;
   box-shadow: none;
   border-radius: 4px;
@@ -197,7 +189,6 @@
   background: @noti-bg-hover;
 }
 
-/* DND widget */
 .widget-dnd {
   margin: 8px;
   font-size: 1.1rem;
@@ -206,33 +197,27 @@
 .widget-dnd>switch {
   font-size: initial;
   border-radius: 4px;
-  background: @noti-bg;
+  background: @noti-bg-alt;
   border: 1px solid @noti-border-color;
   box-shadow: none;
+  color: @noti-fg;
 }
 
 .widget-dnd>switch:checked {
   background: @bg-selected;
 }
 
-/*
-.widget-dnd>switch slider {
-  background: @noti-bg-hover;
-  border-radius: 4px;
-}*/
-
-/* Label widget */
 .widget-label {
   margin: 4px 8px 8px;
+  color: @noti-fg;
 }
 
 .widget-label>label {
   font-size: 16px;
+  color: @noti-fg;
 }
 
-/* Mpris widget */
 .widget-mpris {
-  /* The parent to all players */
 }
 
 .widget-mpris-player {
@@ -243,13 +228,13 @@
 .widget-mpris-title {
   font-weight: bold;
   font-size: 1.25rem;
+  color: @noti-fg;
 }
 
 .widget-mpris-subtitle {
   font-size: 1.1rem;
+  color: @noti-fg;
 }
-
-/* Volume and Brightness Widget*/
 
 .widget-volume {
   background-color: @noti-bg;
@@ -257,9 +242,11 @@
   margin: 0px 8px 8px 8px;
   border-radius: 4px;
   font-size: 14px;
+  color: @noti-fg;
 }
 .widget-volume > box > button {
   background: transparent;
+  color: @noti-fg;
 }
 
 .widget-volume > box > button:hover {
@@ -286,24 +273,19 @@
 }
 
 .widget-backlight {
-  /*
-  background-color: @noti-bg;
-  padding: 8px 8px 4px 8px;
-  margin: 8px 8px 0px 8px;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  */
   background-color: @noti-bg;
   padding: 4px 4px 4px 20px;
   margin: 0px 8px 8px 8px;
   border-radius: 4px;
-  font-size: 14px;  
+  font-size: 14px;
+  color: @noti-fg;
 }
 
 .KB {
   padding: 4px 8px 4px 8px;
   margin: 0px 8px 0px 8px;
   border-radius: 0;
+  color: @noti-fg;
 }
 
 .widget-menubar>box{
@@ -315,9 +297,10 @@
 
 .widget-menubar>box>.menu-button-bar>button{
   border: 1px solid @noti-border-color;
-  background: @noti-bg;
+  background: @noti-bg-alt;
   border-radius: 4px;
   margin: 4px 8px;
+  color: @noti-fg;
 }
 
 .widget-buttons-grid{
@@ -326,12 +309,14 @@
   border-radius: 0px 0px 4px 4px;
   background-color: @noti-bg;
   font-size: 14px;
+  color: @noti-fg;
 }
 
 .widget-buttons-grid>flowbox>flowboxchild>button{
-  background: @noti-bg;
+  background: @noti-bg-alt;
   border-radius: 4px;
   margin: 5px;
+  color: @noti-fg;
 }
 
 .widget-buttons-grid>flowbox>flowboxchild>button:hover {
@@ -353,6 +338,7 @@
   padding: 2px 0px;
   margin: 5px 70px 3px;
   border: 1px solid @noti-border-color;
+  color: @noti-fg;
 }
 
 .screenshot-buttons>button:hover,
@@ -362,8 +348,8 @@
   background: @noti-bg-hover;
 }
 
-/* Notifications title */
 .control-center .widget-title > label {
   font-size: 16px;
+  color: @noti-fg;
 }
-
+''

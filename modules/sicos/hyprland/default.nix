@@ -76,6 +76,9 @@ in
 
     # Swaync
     swaync = {
+      overwrite = lib.mkEnableOption "Overwrite swaync configurations. If it is set to true, then configFile and styleFile MUST be provided by the user.";
+      default = false;
+
       configFile = lib.mkOption {
         type = lib.types.path;
         default = "${sicos-source-path}/modules/sicos/hyprland/config-files/swaync/config.json";
@@ -185,18 +188,6 @@ in
         if cfg.theming.mode == "light"
         then "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/style-light.css"
         else "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/style.css"
-      );
-
-      ####################
-      # Swaync defaults #
-      ####################
-      programs.sicos.hyprland.swaync.configFile = lib.mkDefault (
-        "${sicos-source-path}/modules/sicos/hyprland/config-files/swaync/config.json"
-      );
-      programs.sicos.hyprland.swaync.styleFile = lib.mkDefault (
-        if cfg.theming.mode == "light"
-        then "${sicos-source-path}/modules/sicos/hyprland/config-files/swaync/style-light.css"
-        else "${sicos-source-path}/modules/sicos/hyprland/config-files/swaync/style.css"
       );
 
       ##########################################

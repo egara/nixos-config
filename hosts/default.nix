@@ -62,6 +62,7 @@ let
               themeScheme = "gruvbox-dark";
             in
             {
+              # SicOS module options configuration
               programs.sicos.hyprland.enable = true;
               programs.sicos.hyprland.theming.enable = true;
               programs.sicos.hyprland.theming.mode = themeMode;
@@ -70,9 +71,10 @@ let
               programs.sicos.hyprland.insync.enable = true;
               programs.sicos.hyprland.insync.package = pkgs-stable.insync;
               programs.sicos.hyprland.kanshi.enable = true;
+              programs.sicos.hyprland.waybar.overwrite = false;
+              programs.sicos.hyprland.swaync.overwrite = false;
 
               # Custom config files
-
               # Hyprland
               programs.sicos.hyprland.hyprland.configFile = builtins.path { path = ../home-manager/desktop/hyprland/config/hyprland.conf; };
 
@@ -81,9 +83,6 @@ let
 
               # Kanshi
               programs.sicos.hyprland.kanshi.configFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/kanshi/config; };
-
-              # Waybar
-              programs.sicos.hyprland.waybar.overwrite = false;
 
               # Scripts
               programs.sicos.hyprland.scripts.path = builtins.path { path = ../home-manager/desktop/hyprland/scripts; };

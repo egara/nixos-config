@@ -55,7 +55,9 @@ in
 
           # Swaync files
           ".config/swaync/config.json".source = cfg.swaync.configFile;
-          ".config/swaync/style.css".source = cfg.swaync.styleFile;
+          ".config/swaync/style.css".text = if cfg.swaync.overwrite
+            then (builtins.readFile cfg.swaync.styleFile)
+            else (import ./config-files/swaync/swaync-style.nix { inherit config lib nixosConfig; });
 
           # Walker file
           ".config/walker/config.toml".source = cfg.walker.configFile;

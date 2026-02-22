@@ -112,6 +112,7 @@ Below is a complete example of a `flake.nix` file:
               insync.enable = true; # Enable Insync integration
               kanshi.enable = true; # Enable monitor profile management
               waybar.overwrite = false; #Set the default waybar configurations for SicOS
+              swaync.overwrite = false; #Set the default swaync configurations for SicOS
             };
           }
 
@@ -158,8 +159,9 @@ The SicOS module offers several options to customize your environment. All optio
 | `waybar.styleFile` | path | Internal file | Path to Waybar's `style.css` file. **It must be provided by the user if waybar.overwrite option is set to true.** |
 | `wlogout.layoutFile` | path | Internal file | Path to the `wlogout` layout file (shutdown menu). |
 | `wlogout.styleFile` | path | Internal file | Path to the `wlogout` style file. |
-| `swaync.configFile` | path | Internal file | Path to the `config.json` file for the `swaync` notification center. |
-| `swaync.styleFile` | path | Internal file | Path to the `style.css` file for `swaync`. |
+| `swaync.overwrite` | boolean | `false` | It allows the user to overwrite swaync's configFile and styleFile with custom files designed by the user. It it is set to false, swaync will be set to the stock SicOS configurations and the look and feel will be dynamic and depend on the theming.base16Scheme selected |
+| `swaync.configFile` | path | Internal file | Path to the `config.json` file for the `swaync` notification center. **It must be provided by the user if swaync.overwrite option is set to true.** |
+| `swaync.styleFile` | path | Internal file | Path to the `style.css` file for `swaync`. **It must be provided by the user if swaync.overwrite option is set to true.** |
 | `kanshi.configFile` | path | Internal (empty) file | Path to the `kanshi` configuration file. **You must override this with your own monitor setup.** |
 | `walker.configFile` | path | Internal file | Path to the `config.toml` file for the `walker` application launcher. |
 | Scripts | `programs.sicos.hyprland.scripts.path` | [scripts/](https://github.com/egara/nixos-config/tree/main/modules/sicos/hyprland/scripts) |
