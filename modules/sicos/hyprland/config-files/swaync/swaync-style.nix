@@ -5,9 +5,9 @@ let
 in
 ''
 @define-color noti-border-color #${c.base03};
-@define-color noti-bg alpha(#${c.base00}, 0.95);
+@define-color noti-bg alpha(#${c.base00}, 0.9);
 @define-color noti-bg-hover-alt #${c.base01};
-@define-color noti-bg-alt #${c.base01};
+@define-color noti-bg-alt alpha(#${c.base01}, 0.9);
 @define-color noti-fg #${c.base05};
 @define-color noti-bg-hover #${c.base02};
 @define-color noti-bg-focus #${c.base02};
