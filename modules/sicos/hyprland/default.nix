@@ -57,6 +57,8 @@ in
 
     # Wlogout
     wlogout = {
+      overwrite = lib.mkEnableOption "Overwrite wlogout configurations. If it is set to true, then styleFile MUST be provided by the user.";
+      default = false;
       layoutFile = lib.mkOption {
         type = lib.types.path;
         default = "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/layout";
@@ -167,14 +169,7 @@ in
             "${sicos-source-path}/modules/sicos/hyprland/config-files/hyprland-without-kanshi.conf"
       );
 
-      ####################
-      # Wlogout defaults #
-      ####################
-      programs.sicos.hyprland.wlogout.styleFile = lib.mkDefault (
-        if cfg.theming.mode == "light"
-        then "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/style-light.css"
-        else "${sicos-source-path}/modules/sicos/hyprland/config-files/wlogout/style.css"
-      );
+
 
       ##########################################
       # Hyprland Environment

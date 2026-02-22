@@ -31,7 +31,9 @@ in
 
           # Wlogout files
           ".config/wlogout/layout".source = cfg.wlogout.layoutFile;
-          ".config/wlogout/style.css".source = cfg.wlogout.styleFile;
+          ".config/wlogout/style.css".text = if cfg.wlogout.overwrite
+            then (builtins.readFile cfg.wlogout.styleFile)
+            else (import ./config-files/wlogout/wlogout-style.nix { inherit config lib pkgs nixosConfig; });
           ".config/wlogout/icons/hibernate.png".source = cfg.wlogout.hibernateIcon;
           ".config/wlogout/icons/lock.png".source = cfg.wlogout.lockIcon;
           ".config/wlogout/icons/logout.png".source = cfg.wlogout.logoutIcon;

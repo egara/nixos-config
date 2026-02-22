@@ -157,8 +157,9 @@ The SicOS module offers several options to customize your environment. All optio
 | `waybar.overwrite` | boolean | `false` | It allows the user to overwrite waybar's configFile and styleFile with custom files designed by the user. It it is set to false, Waybar will be set to the stock SicOS configurations and the look and feel will be dynamic and depend on the theming.base16Scheme selected |
 | `waybar.configFile` | path | Internal file | Path to Waybar's `config.jsonc` file. **It must be provided by the user if waybar.overwrite option is set to true.** |
 | `waybar.styleFile` | path | Internal file | Path to Waybar's `style.css` file. **It must be provided by the user if waybar.overwrite option is set to true.** |
+| `wlogout.overwrite` | boolean | `false` | It allows the user to overwrite wlogout's styleFile with a custom file designed by the user. It it is set to false, wlogout will be set to the stock SicOS configurations and the look and feel will be dynamic and depend on the theming.base16Scheme selected |
 | `wlogout.layoutFile` | path | Internal file | Path to the `wlogout` layout file (shutdown menu). |
-| `wlogout.styleFile` | path | Internal file | Path to the `wlogout` style file. |
+| `wlogout.styleFile` | path | Internal file | Path to the `wlogout` style file. **It must be provided by the user if wlogout.overwrite option is set to true.** |
 | `swaync.overwrite` | boolean | `false` | It allows the user to overwrite swaync's configFile and styleFile with custom files designed by the user. It it is set to false, swaync will be set to the stock SicOS configurations and the look and feel will be dynamic and depend on the theming.base16Scheme selected |
 | `swaync.configFile` | path | Internal file | Path to the `config.json` file for the `swaync` notification center. **It must be provided by the user if swaync.overwrite option is set to true.** |
 | `swaync.styleFile` | path | Internal file | Path to the `style.css` file for `swaync`. **It must be provided by the user if swaync.overwrite option is set to true.** |
