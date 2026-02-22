@@ -164,7 +164,7 @@ The SicOS module offers several options to customize your environment. All optio
 | `walker.configFile` | path | Internal file | Path to the `config.toml` file for the `walker` application launcher. |
 | Scripts | `programs.sicos.hyprland.scripts.path` | [scripts/](https://github.com/egara/nixos-config/tree/main/modules/sicos/hyprland/scripts) |
 
-> **Note on Theming:** The `theming.base16Scheme` option uses [Base16](https://github.com/chriskempson/base16) schemes to style the system via Stylix. You can preview these schemes at the [Tinted Theming Gallery](https://tinted-theming.github.io/tinted-gallery/). Currently, only base16 schemes are supported to ensure a cohesive look.
+> **Note on Theming:** The `theming.base16Scheme` option uses [Base16](https://github.com/chriskempson/base16) schemes to style the system via Stylix. You can preview these schemes at the [Tinted Theming Gallery](https://tinted-theming.github.io/tinted-gallery/). Currently, only base16 schemes are supported to ensure a cohesive look. If you want to know the meaning of all the different colors within a base16Scheme you can check the official documentation [https://github.com/chriskempson/base16/blob/main/styling.md](https://github.com/chriskempson/base16/blob/main/styling.md).
 
 ## Theme Switching Script
 
