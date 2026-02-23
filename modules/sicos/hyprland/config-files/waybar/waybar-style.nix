@@ -118,7 +118,6 @@ button:hover {
 #taskbar,
 #custom-clipboard,
 #custom-notification,
-#custom-power,
 #custom-insync {
     background: @base00;
     margin: 5px 5px;
