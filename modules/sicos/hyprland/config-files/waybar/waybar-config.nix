@@ -46,8 +46,8 @@ in
     "custom/walker": {
         "format": "  ",
         "tooltip": true,
-        "tooltip-format": "Applications",
-        "on-click": "walker"
+        "tooltip-format": "SicOS Menu (SUPER + s)",
+        "on-click": "$HOME/.config/sicos/scripts/sicos-settings.sh"
     },
     "hyprland/workspaces": {
       "active-only": false,
@@ -86,7 +86,8 @@ in
         "show-passive-items": true
     },
     "custom/notification": {
-      "tooltip": false,
+    "tooltip": true,
+    "tooltip-format": "Control Center",
       "format": "{icon}",
       "format-icons": {
         "notification": "<span foreground='#${c.base08}'><sup></sup></span>",
@@ -193,7 +194,8 @@ in
     },
     "custom/power": {
         "format": "⏻",
-        "tooltip": false,
+        "tooltip": true,
+        "tooltip-format": "Power Menu",
         "on-click": "wlogout --protocol layer-shell"
     },
     "power-profiles-daemon": {

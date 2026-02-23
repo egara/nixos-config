@@ -7,11 +7,13 @@
 # @email: eloy.garcia.pca@gmail.com
 # ------------------------------------------
 
-items="󰚰\u00A0\u00A0\u00A0\u00A0Update\n\u00A0\u00A0\u00A0\u00A0Clean\n󰔎\u00A0\u00A0\u00A0\u00A0Themes\n󰸉\u00A0\u00A0\u00A0\u00A0Wallpapers\n󰱦\u00A0\u00A0\u00A0\u00A0Extranet\n\u00A0\u00A0\u00A0\u00A0Eclipse\n\u00A0\u00A0\u00A0\u00A0Hibernate"
+items="󱓟\u00A0\u00A0\u00A0\u00A0Applications\n󰚰\u00A0\u00A0\u00A0\u00A0Update\n\u00A0\u00A0\u00A0\u00A0Clean\n󰔎\u00A0\u00A0\u00A0\u00A0Themes\n󰸉\u00A0\u00A0\u00A0\u00A0Wallpapers\n󰱦\u00A0\u00A0\u00A0\u00A0Extranet\n\u00A0\u00A0\u00A0\u00A0Eclipse\n\u00A0\u00A0\u00A0\u00A0Hibernate"
 
 output=$(echo -e $items | walker --dmenu -H -n -N)
 
-if [[ "$output" == *"Update"* ]]; then
+if [[ "$output" == *"Applications"* ]]; then
+    uwsm app -- walker
+elif [[ "$output" == *"Update"* ]]; then
     kitty --hold sh -c "~/.config/sicos/scripts/nixos-update.sh"
 elif [[ "$output" == *"Clean"* ]]; then
     kitty --hold sh -c "~/.config/sicos/scripts/nixos-clean.sh"
