@@ -205,8 +205,8 @@
       flac
       wireplumber
       pavucontrol
-      python3
-      python311Packages.pip
+      pkgs-stable.python3
+      pkgs-stable.python3Packages.pip
       p7zip
       unzip
       unrar
