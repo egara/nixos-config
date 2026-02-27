@@ -29,7 +29,7 @@ button {
 }
 
 button:focus, button:active, button:hover {
-	background-color: #${c.base0D};
+	background-color: #${c.base02};
 	outline-style: none;
 }
 '' + ( if iconSet == "black" then ''
