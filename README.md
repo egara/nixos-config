@@ -3,9 +3,9 @@ This repository gathers all the configuration needed to install NixOS on several
 
 # SicOS Desktop Environment
 
-SicOS is a complete desktop environment based on [Wayland](https://wayland.freedesktop.org/) and the [Hyprland](https://hyprland.org/) tiling compositor. It is provided as a NixOS module that simplifies its installation and setup, allowing users to enjoy a functional and customizable desktop experience out of the box.
+SicOS is a complete and opinionated desktop environment based on [Wayland](https://wayland.freedesktop.org/) and the [Hyprland](https://hyprland.org/) tiling compositor. It is provided as a NixOS module that simplifies its installation and setup, allowing users to enjoy a functional and customizable desktop experience out of the box.
 
-This module handles the installation and configuration of all necessary components, including the status bar (Waybar), application launcher (Walker), notification manager (swaync), screen locker (hyprlock), and much more.
+This module handles the installation and configuration of all necessary components, including the status bar (Waybar), application launcher (Walker), notification manager (swaync), screen locker (hyprlock), and much more. This module has been inspired by the amazing [Omarchy project](https://github.com/basecamp/omarchy) which is based on Arch. Thanks and kudos to all their talented people!
 
 ## Features
 
@@ -25,6 +25,8 @@ This module handles the installation and configuration of all necessary componen
 - **SicOS settings menu**: Press `Mod + S` to open a menu with a basic SicOS settings menu. By default, it includes:
   - A script to clean the system by removing old NixOS generations and garbage-collecting unused store paths.
   - A wallpaper selector tool to pick any official wallpaper included. Those wallpapers are located in ~/.config/sicos/wallpapers and new wallpapers can be added an automatically recognized here.
+
+- **Screensaver**: A custom screensaver utility has been implemented. It is based on the amazing [Omarchy's screensaver](https://github.com/basecamp/omarchy)
 
 - **Wallpaper Management**: A collection of wallpapers is included in `modules/sicos/hyprland/wallpapers/`. You can press `Mod + 1` to randomly switch between them too.
 

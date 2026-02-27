@@ -7,7 +7,7 @@
 # @email: eloy.garcia.pca@gmail.com
 # ------------------------------------------
 
-items="󱓟\u00A0\u00A0\u00A0\u00A0Applications\n󰚰\u00A0\u00A0\u00A0\u00A0Update\n\u00A0\u00A0\u00A0\u00A0Clean\n󰔎\u00A0\u00A0\u00A0\u00A0Themes\n󰸉\u00A0\u00A0\u00A0\u00A0Wallpapers\n󰱦\u00A0\u00A0\u00A0\u00A0Extranet\n\u00A0\u00A0\u00A0\u00A0Eclipse\n\u00A0\u00A0\u00A0\u00A0Hibernate"
+items="󱓟\u00A0\u00A0\u00A0\u00A0Applications\n󰚰\u00A0\u00A0\u00A0\u00A0Update\n\u00A0\u00A0\u00A0\u00A0Clean\n󱕅\u00A0\u00A0\u00A0\u00A0Screensaver\n󰔎\u00A0\u00A0\u00A0\u00A0Themes\n󰸉\u00A0\u00A0\u00A0\u00A0Wallpapers\n󰱦\u00A0\u00A0\u00A0\u00A0Extranet\n\u00A0\u00A0\u00A0\u00A0Eclipse\n\u00A0\u00A0\u00A0\u00A0Hibernate"
 
 output=$(echo -e $items | walker --dmenu -H -n -N)
 
@@ -18,6 +18,8 @@ elif [[ "$output" == *"Update"* ]]; then
 elif [[ "$output" == *"Clean"* ]]; then
     kitty --hold sh -c "~/.config/sicos/scripts/nixos-clean.sh"
 # Add some more here
+elif [[ "$output" == *"Screensaver"* ]]; then
+    . ~/.config/sicos/scripts/screensaver.sh
 elif [[ "$output" == *"Themes"* ]]; then
     # sicosthemes is located in ~/.config/elephant/menus/sicos_themes.lua script file
     exec walker -m menus:sicosthemes -H -n -N --width 800 --minheight 400
