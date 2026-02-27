@@ -292,6 +292,12 @@ in
         gnome-calculator # Calculator
         system-config-printer # CUPs GUI
         vlc # For volume up/down popping sound
+
+        # Tools for the screensaver
+        terminaltexteffects
+        jq
+        socat
+        libinput
       ];
     };
 }

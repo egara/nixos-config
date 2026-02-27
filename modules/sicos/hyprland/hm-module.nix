@@ -72,6 +72,12 @@ in
               recursive = true;
           };
 
+          # SicOS screensaver
+          ".config/sicos/screensaver" = {
+              source = ./screensaver;
+              recursive = true;
+          };
+
           # Elephant files
           ".config/elephant/" = {
               source = ./config-files/elephant;
