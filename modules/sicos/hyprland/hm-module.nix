@@ -77,6 +77,10 @@ in
               source = ./screensaver;
               recursive = true;
           };
+          ".config/sicos/scripts/screensaver.sh" = {
+              source = ./scripts/screensaver.sh;
+              recursive = true;
+          };
 
           # Elephant files
           ".config/elephant/" = {
