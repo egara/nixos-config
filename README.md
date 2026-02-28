@@ -5,7 +5,7 @@ This repository gathers all the configuration needed to install NixOS on several
 
 SicOS is a complete and opinionated desktop environment based on [Wayland](https://wayland.freedesktop.org/) and the [Hyprland](https://hyprland.org/) tiling compositor. It is provided as a NixOS module that simplifies its installation and setup, allowing users to enjoy a functional and customizable desktop experience out of the box.
 
-This module handles the installation and configuration of all necessary components, including the status bar (Waybar), application launcher (Walker), notification manager (swaync), screen locker (hyprlock), and much more. This module has been inspired by the amazing [Omarchy project](https://github.com/basecamp/omarchy) which is based on Arch. Thanks and kudos to all their talented people!
+This module handles the installation and configuration of all necessary components, including the customized display manager (SDDM), status bar (Waybar), application launcher (Walker), notification manager (swaync), screen locker (hyprlock), and much more. This module has been inspired by the amazing [Omarchy project](https://github.com/basecamp/omarchy) which is based on Arch. Thanks and kudos to all their talented people!
 
 ## Features
 
@@ -33,6 +33,8 @@ This module handles the installation and configuration of all necessary componen
 - **Insync Integration**: Due to rendering issues with the official Insync tray icon in some Wayland environments, this module provides a custom Waybar integration that displays the current sync status.
 
 - **Light & Dark Mode Theming**: The module offers full system integration for both light and dark themes via **Stylix**. It automatically switches wallpapers, icons, cursors, and configuration files for all components (Waybar, Walker, Wlogout, Swaync, etc.) to ensure a consistent and beautiful look in either mode.
+
+- **Customized SDDM Theme**: A minimalist, terminal-inspired SDDM theme that is fully integrated with **Stylix**. It features a dynamic clock, user selection, and power management buttons (shutdown/reboot), all while matching your system's color scheme and fonts.
 
 - **base16Scheme**: The module offers full system integration for color base16Scheme via Stylix too. More information below.
 
