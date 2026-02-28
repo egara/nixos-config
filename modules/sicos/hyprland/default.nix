@@ -3,6 +3,7 @@
 
 let
   cfg = config.programs.sicos.hyprland;
+  sddm-theme-sicos = pkgs.callPackage ./sddm-theme {};
 in
 {
   # 1. OPTIONS DEFINITION
@@ -181,7 +182,7 @@ in
           sddm = {
             enable = lib.mkForce true;
             wayland.enable = true;
-            theme = "catppuccin-mocha-mauve";
+            theme = "sicos";
           };
         };
 
@@ -276,7 +277,7 @@ in
         pamixer # For volume control
 
         # SDDM Theming
-        catppuccin-sddm
+        sddm-theme-sicos
 
         # Other tools
         udiskie # Automount USB devices

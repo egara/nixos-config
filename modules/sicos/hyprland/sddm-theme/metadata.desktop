@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=sicos
+Comment=A minimalist, nerd-inspired SDDM theme
+Type=X-SDDM-GreeterTheme
+Version=0.1
+MainScript=Main.qml
