@@ -1,9 +1,18 @@
 # /home/egarcia/Zero/nixos-config/modules/sicos/hyprland/default.nix
-{ config, pkgs, lib, sicos-source-path, ... }:
+{ config, pkgs, lib, sicos-source-path, username, ... }:
 
 let
   cfg = config.programs.sicos.hyprland;
-  sddm-theme-sicos = pkgs.callPackage ./sddm-theme {};
+
+  # Try to extract stylix colors from Home Manager if available
+  hmConfig = if (builtins.hasAttr "home-manager" config && builtins.hasAttr username config.home-manager.users)
+             then config.home-manager.users.${username}
+             else null;
+
+  sddm-theme-sicos = pkgs.callPackage ./sddm-theme {
+    colors = if hmConfig != null && (builtins.hasAttr "stylix" hmConfig.lib) then hmConfig.lib.stylix.colors else null;
+    fontName = if hmConfig != null && (builtins.hasAttr "stylix" hmConfig) then hmConfig.stylix.fonts.monospace.name else "Monospace";
+  };
 in
 {
   # 1. OPTIONS DEFINITION
@@ -183,6 +192,10 @@ in
             enable = lib.mkForce true;
             wayland.enable = true;
             theme = "sicos";
+            #theme = "catppuccin-mocha-mauve";
+            extraPackages = [
+              sddm-theme-sicos
+            ];
           };
         };
 
@@ -278,6 +291,7 @@ in
 
         # SDDM Theming
         sddm-theme-sicos
+        # catppuccin-sddm
 
         # Other tools
         udiskie # Automount USB devices

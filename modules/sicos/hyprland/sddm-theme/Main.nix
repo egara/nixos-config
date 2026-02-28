@@ -1,23 +1,44 @@
+{ colors, fontName }:
+''
 import QtQuick 2.15
+import QtQuick.Window 2.15
 import QtQuick.Controls 2.15 as Controls
 import QtQuick.Layouts 1.15
-import SddmComponents 2.0
 
 Rectangle {
     id: container
-    width: 1920
-    height: 1080
-    color: "#0f0f0f" // Back to solid black
+    width: Screen.width
+    height: Screen.height
+    color: "#${colors.base00}" // Base Background
 
-    property int sessionIndex: sddm.lastSessionIndex
+    property int sessionIndex: 0
+    property bool loginError: false
+
+    Connections {
+        target: sddm
+        function onLoginFailed() {
+            loginError = true
+            passwordField.text = ""
+            passwordField.focus = true
+        }
+        function onLoginSucceeded() {
+            loginError = false
+        }
+    }
+
+    Component.onCompleted: {
+        if (sessionModel.lastIndex !== undefined) {
+            sessionIndex = sessionModel.lastIndex
+        }
+    }
 
     Text {
         id: clock
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 50
-        color: "#00ff00" // Terminal green
-        font.family: "Monospace"
+        color: "#${colors.base0B}" // Accent Color (Green-ish)
+        font.family: "${fontName}"
         font.pixelSize: 48
         text: Qt.formatDateTime(new Date(), "HH:mm")
     }
@@ -30,21 +51,21 @@ Rectangle {
     Rectangle {
         id: loginBox
         width: 400
-        height: 220 // Even more compact
+        height: 220
         anchors.centerIn: parent
         color: "transparent"
-        border.color: "#00ff00" // Back to terminal green
+        border.color: "#${colors.base0B}" // Accent Color
         border.width: 1
 
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: 20
-            spacing: 8 // Minimal spacing
+            spacing: 8
 
             Text {
                 text: "> SicOS"
-                color: "#cccccc"
-                font.family: "Monospace"
+                color: "#${colors.base05}" // Main Text
+                font.family: "${fontName}"
                 font.pixelSize: 24
                 font.bold: true
                 Layout.alignment: Qt.AlignHCenter
@@ -56,37 +77,43 @@ Rectangle {
                 Layout.fillWidth: true
                 model: userModel
                 textRole: "name"
-                currentIndex: userModel.lastIndex
+                currentIndex: 0
                 
-                font.family: "Monospace"
+                Component.onCompleted: {
+                    if (userModel.lastIndex !== undefined) {
+                        currentIndex = userModel.lastIndex
+                    }
+                }
+                
+                font.family: "${fontName}"
                 font.pixelSize: 16
                 
                 delegate: Controls.ItemDelegate {
                     width: userSelect.width
                     contentItem: Text {
                         text: model.name
-                        color: "#00ff00"
-                        font.family: "Monospace"
+                        color: "#${colors.base0B}"
+                        font.family: "${fontName}"
                         font.pixelSize: 16
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
-                        color: parent.highlighted ? "#222222" : "transparent"
+                        color: parent.highlighted ? "#${colors.base02}" : "transparent" // Selection
                     }
                 }
 
                 contentItem: Text {
                     text: userSelect.displayText
-                    color: "#00ff00"
-                    font.family: "Monospace"
+                    color: "#${colors.base0B}"
+                    font.family: "${fontName}"
                     font.pixelSize: 16
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: 10
                 }
 
                 background: Rectangle {
-                    color: "#1a1a1a"
-                    border.color: "#00ff00"
+                    color: "#${colors.base01}" // Input Background
+                    border.color: "#${colors.base0B}"
                     border.width: 1
                 }
             }
@@ -99,13 +126,13 @@ Rectangle {
                 echoMode: TextInput.Password
                 focus: true
                 
-                color: "#00ff00"
-                font.family: "Monospace"
+                color: "#${colors.base0B}"
+                font.family: "${fontName}"
                 font.pixelSize: 16
                 
                 background: Rectangle {
-                    color: "#1a1a1a"
-                    border.color: "#00ff00"
+                    color: "#${colors.base01}"
+                    border.color: "#${colors.base0B}"
                     border.width: 1
                 }
 
@@ -118,15 +145,15 @@ Rectangle {
                 
                 contentItem: Text {
                     text: parent.text
-                    font.family: "Monospace"
-                    color: parent.down ? "#0f0f0f" : "#00ff00"
+                    font.family: "${fontName}"
+                    color: parent.down ? "#${colors.base00}" : "#${colors.base0B}"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
 
                 background: Rectangle {
-                    color: parent.down ? "#00ff00" : "transparent"
-                    border.color: "#00ff00"
+                    color: parent.down ? "#${colors.base0B}" : "transparent"
+                    border.color: "#${colors.base0B}"
                     border.width: 1
                 }
                 
@@ -140,9 +167,9 @@ Rectangle {
         anchors.top: loginBox.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 20
-        text: "STATUS: " + (sddm.loginError ? "ACCESS DENIED" : "READY")
-        color: sddm.loginError ? "#ff0000" : "#555555"
-        font.family: "Monospace"
+        text: "STATUS: " + (loginError ? "ACCESS DENIED" : "READY")
+        color: loginError ? "#${colors.base08}" : "#${colors.base04}" // Red / Grey
+        font.family: "${fontName}"
         font.pixelSize: 14
     }
 
@@ -159,15 +186,15 @@ Rectangle {
             
             contentItem: Text {
                 text: parent.text
-                font.family: "Monospace"
-                color: parent.down ? "#0f0f0f" : "#00ff00"
+                font.family: "${fontName}"
+                color: parent.down ? "#${colors.base00}" : "#${colors.base0B}"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
-                color: parent.down ? "#00ff00" : "transparent"
-                border.color: "#00ff00"
+                color: parent.down ? "#${colors.base0B}" : "transparent"
+                border.color: "#${colors.base0B}"
                 border.width: 1
             }
             
@@ -182,15 +209,15 @@ Rectangle {
             
             contentItem: Text {
                 text: parent.text
-                font.family: "Monospace"
-                color: parent.down ? "#0f0f0f" : "#00ff00"
+                font.family: "${fontName}"
+                color: parent.down ? "#${colors.base00}" : "#${colors.base0B}"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
-                color: parent.down ? "#00ff00" : "transparent"
-                border.color: "#00ff00"
+                color: parent.down ? "#${colors.base0B}" : "transparent"
+                border.color: "#${colors.base0B}"
                 border.width: 1
             }
             
@@ -198,3 +225,4 @@ Rectangle {
         }
     }
 }
+''
