@@ -10,54 +10,66 @@ This repository is a **NixOS Flake** configuration that manages multiple machine
 - **Pure Flakes:** All configurations are driven by `flake.nix`.
 - **Modularity:** Configuration is split into `hosts`, `modules` (system-level), and `home-manager` (user-level).
 - **SicOS:** A custom Hyprland-based desktop environment module that can be imported by any NixOS system.
-- **Theming:** Integrated Light/Dark mode switching using `Stylix`.
+- **Theming:** Integrated Light/Dark mode switching using **Stylix** and a custom theme switcher.
 
 ## 2. Architecture & Directory Structure
 
 - **`flake.nix`**: The entry point. Defines inputs (NixOS, Home Manager, Stylix, etc.) and outputs (`nixosConfigurations`, `nixosModules`, `homeManagerModules`).
 - **`hosts/`**: Contains machine-specific configurations.
-    - `default.nix`: Logic to generate `nixosConfigurations` for all hosts.
-    - `<hostname>/`: Directory for each machine (e.g., `ironman`, `rocket`, `strange`, `vm`).
+    - `default.nix`: **Central logic** using `mkHost` to generate configurations. Defines `themeMode` and `themeScheme` for SicOS.
+    - `<hostname>/`: Directory for each machine (e.g., `ironman`, `rocket`, `strange`, `vm`, `taskmaster`).
         - `configuration.nix`: Main system configuration for the host.
         - `hardware-configuration.nix`: Hardware-specific settings.
         - `disko-config.nix`: Disk partitioning layout (managed by Disko).
 - **`modules/`**: Custom NixOS modules.
-    - `sicos/hyprland/`: **The core SicOS module.**
-        - `default.nix`: Defines module options (`programs.sicos.hyprland.*`) and system-level config.
-        - `hm-module.nix`: The Home Manager companion module, handling user-specific config and Stylix integration.
-        - `config-files/`: Raw configuration files for Hyprland, Waybar, etc.
-        - `scripts/`: Helper scripts deployed to the system.
-- **`home-manager/`**: User-specific configurations (dotfiles) not strictly tied to the SicOS module but used in the broader configuration.
-    - `desktop/hyprland/scripts/theme-switcher.sh`: The master script for toggling themes.
+    - `sicos/hyprland/`: **The core SicOS module.** Highly modular and configurable.
+        - `default.nix`: Defines extensive module options (`programs.sicos.hyprland.*`) and system-level config (SDDM, packages, portals).
+        - `hm-module.nix`: Home Manager companion module. Manages dotfiles via dynamic Nix templates and integrates with **Stylix**.
+        - `config-files/`: Raw configuration templates (Waybar, SwayNC, Wlogout, etc.).
+        - `scripts/`: Helper scripts like `sicos-settings.sh` and `screensaver.sh`.
+        - `themes/`: Predefined color schemes and previews.
+        - `wallpapers/`: Curated wallpapers for light/dark modes.
+        - `sddm-theme/`: Custom SicOS theme for the SDDM login manager.
+- **`home-manager/`**: User-specific configurations (dotfiles) and shared resources used by the SicOS module.
+    - `desktop/hyprland/scripts/theme-switcher.sh`: The master script for toggling themes and rebuilding the system.
 
 ## 3. Key Components
 
 ### 3.1. SicOS Module
 **Location:** `modules/sicos/hyprland/`
 
-SicOS provides a complete desktop experience. It is split into two parts:
-1.  **NixOS Module (`default.nix`)**: Installs packages (Hyprland, Waybar, SDDM), enables system services (power profiles, polkit), and defines the `programs.sicos.hyprland` options.
-2.  **Home Manager Module (`hm-module.nix`)**: Manages dotfiles (`.config/hypr/...`, `.config/waybar/...`) and integrates with **Stylix** for theming.
+SicOS provides a complete, themed desktop experience. It is split into two parts:
+1.  **NixOS Module (`default.nix`)**:
+    - Installs a wide range of packages (`hyprland`, `hyprlock`, `hypridle`, `waybar`, `swaynotificationcenter`, `wlogout`, `walker`, etc.).
+    - Enables system services (`sddm` with custom theme, `gvfs`, `udisks2`, `polkit`).
+    - Defines options to overwrite default configs for Waybar, Wlogout, SwayNC, etc.
+2.  **Home Manager Module (`hm-module.nix`)**:
+    - Manages dotfiles in `.config/hypr`, `.config/waybar`, `.config/swaync`, etc.
+    - Uses dynamic `.text` generation for Waybar, Wlogout, and SwayNC styles to integrate Stylix colors.
+    - Configures `xdg.mimeApps` for default applications (Zed, Firefox, Thunar, etc.).
+    - Integrates with **Stylix** for global theming.
 
 **Key Options:**
 - `enable`: Activate the module.
 - `theming.mode`: `"light"` or `"dark"`.
-- `powerManagement.enable`: Optimizations for laptops (affects Waybar config).
-- `insync.enable`: Custom tray integration for Insync.
+- `theming.base16Scheme`: Base16 color scheme name (e.g., `"catppuccin-mocha"`).
+- `powerManagement.enable`: System optimizations and Waybar power modules.
+- `kanshi.enable`: Automated monitor layout management.
+- `insync.enable`: Google Drive sync integration.
 
 ### 3.2. Theming & Stylix
-Theming is handled by **Stylix** (via `hm-module.nix`) and a custom switcher script.
-- **Stylix**: Sets the global color scheme (Base16), fonts, and cursor. It automatically themes applications like Kitty, GTK, and builds the color palette.
-- **Switching Mechanism**:
-    1.  User runs `theme-switcher.sh [light|dark]`.
-    2.  Script finds the file defining `theming.mode` (usually in `hosts/<host>/configuration.nix` or similar).
-    3.  Script updates the Nix file using `sed`.
-    4.  Script runs `nixos-rebuild switch`.
-    5.  Script reloads UI components (Waybar, SwayNC, Walker) to apply changes immediately without logout.
+Theming is a core feature of SicOS, managed by **Stylix** and the `theme-switcher.sh` script.
+- **Stylix Integration**: Defined in `hm-module.nix`. It sets colors, fonts (GoMono Nerd Font), and cursors (Bibata) globally. It handles polarity (light/dark) and targets various apps (Kitty, Zed, Btop, Yazi).
+- **Theme Switcher Script**:
+    1.  Located at `home-manager/desktop/hyprland/scripts/theme-switcher.sh`.
+    2.  Updates `themeMode` and `themeScheme` in `hosts/default.nix` using `sed`.
+    3.  Runs `nixos-rebuild switch --flake .#<host>-hyprland`.
+    4.  Restarts UI services (`waybar`, `swaync`, `walker`) using `uwsm app` to apply changes instantly.
+    5.  Updates the wallpaper using `swww`.
 
 ### 3.3. Hosts
-- **VM (`vm`)**: QEMU virtual machine for testing.
-- **Rocket (`rocket`)**: Desktop PC (custom build).
+- **VM (`vm`)**: Virtual machine for testing (Plasma/Hyprland).
+- **Rocket (`rocket`)**: Desktop PC (Nvidia/AMD).
 - **Ironman (`ironman`)**: Laptop (Intel/Nvidia).
 - **Taskmaster (`taskmaster`)**: Work Laptop.
 - **Strange (`strange`)**: Framework Laptop 13 (AMD Ryzen AI 300).
@@ -65,34 +77,34 @@ Theming is handled by **Stylix** (via `hm-module.nix`) and a custom switcher scr
 ## 4. Operational Workflows for the Agent
 
 ### 4.1. Modifying the Desktop Environment (SicOS)
-**Goal:** Change how the desktop looks or behaves (e.g., Waybar, Hyprland).
-1.  **Identify Component:** Is it a system package (edit `default.nix`) or a user config/dotfile (edit `hm-module.nix` or `config-files/`)?
+**Goal:** Change UI components or behavior.
+1.  **Identify Component:**
+    - System packages or global services: Edit `modules/sicos/hyprland/default.nix`.
+    - User config or dynamic styles: Edit `modules/sicos/hyprland/hm-module.nix` or the corresponding `.nix` template in `config-files/`.
 2.  **Edit Config:**
-    - If modifying `waybar/config.jsonc`, check if you need to edit the `powermanagement` or `no-powermanagement` version.
-    - If adding a new keybinding, edit `hyprland-with-kanshi.conf` (or `without`).
-3.  **Apply:** Run `nixos-rebuild switch --flake .#<hostname>`.
+    - Waybar: `modules/sicos/hyprland/config-files/waybar/waybar-style.nix`.
+    - Hyprland: `home-manager/desktop/hyprland/config/hyprland.conf`.
+3.  **Apply:** Run `nixos-rebuild switch --flake .#<host>-hyprland`.
 
 ### 4.2. Adding a New Package
-- **System-wide:** Edit `hosts/<host>/configuration.nix` (or `modules/sicos/hyprland/default.nix` if it should be in SicOS) and add to `environment.systemPackages`.
-- **User-specific:** Edit `home-manager/users/<user>.nix` (or `hosts/home.nix` if shared) and add to `home.packages`.
+- **System-wide:** Add to `environment.systemPackages` in `modules/sicos/hyprland/default.nix` (if SicOS-related) or `hosts/<host>/configuration.nix`.
+- **User-specific:** Add to `home.packages` in `hosts/home.nix`.
 
 ### 4.3. Creating a New Host
 1.  Create `hosts/<new-host>/`.
-2.  Add `hardware-configuration.nix` (usually generated by `nixos-generate-config`).
-3.  Add `configuration.nix` (importing SicOS and hardware config).
-4.  Add `disko-config.nix` (if managing disks).
-5.  Update `hosts/default.nix` to include the new host in `flake.nix` outputs.
+2.  Add `hardware-configuration.nix`, `configuration.nix`, and `disko-config.nix`.
+3.  Update `hosts/default.nix` to add a new `mkHost` entry in the `in { ... }` block.
 
 ## 5. File Map
 
 | Path | Description |
 | :--- | :--- |
-| `flake.nix` | Project root, dependencies, outputs. |
-| `modules/sicos/hyprland/default.nix` | SicOS System Module (Packages, Services, Options). |
-| `modules/sicos/hyprland/hm-module.nix` | SicOS Home Manager Module (Dotfiles, Stylix). |
-| `modules/sicos/hyprland/config-files/` | Raw config files for Hyprland, Waybar, etc. |
-| `home-manager/desktop/hyprland/scripts/theme-switcher.sh` | Theme switching logic. |
-| `hosts/` | Machine definitions. |
+| `flake.nix` | Entry point, inputs, and module exports. |
+| `hosts/default.nix` | Central host generator and SicOS settings. |
+| `modules/sicos/hyprland/default.nix` | SicOS System Module (Packages, SDDM, Options). |
+| `modules/sicos/hyprland/hm-module.nix` | SicOS Home Manager Module (Stylix, Dotfiles). |
+| `modules/sicos/hyprland/config-files/` | Configuration templates (Nix-based CSS/JSON). |
+| `home-manager/desktop/hyprland/scripts/` | User-space scripts (theme switcher, etc.). |
 
 ## 6. General Rules & Style Guide
 
@@ -104,4 +116,4 @@ Theming is handled by **Stylix** (via `hm-module.nix`) and a custom switcher scr
 ### 6.2. Style Guidelines
 - **Nix Formatting:** Use standard formatting (2 spaces indentation).
 - **Comments Content:** Explain *why* something is done, not just *what* is done.
-- **Commit Messages:** Use clear, concise messages describing the change.
+- **Commit Messages:** Use clear, concise messages (e.g., `feat(sicos): add screensaver script`).
