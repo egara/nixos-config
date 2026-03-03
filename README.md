@@ -34,7 +34,7 @@ This module handles the installation and configuration of all necessary componen
 
 - **Light & Dark Mode Theming**: The module offers full system integration for both light and dark themes via **Stylix**. It automatically switches wallpapers, icons, cursors, and configuration files for all components (Waybar, Walker, Wlogout, Swaync, etc.) to ensure a consistent and beautiful look in either mode.
 
-- **Customized SDDM Theme**: A minimalist, terminal-inspired SDDM theme that is fully integrated with **Stylix**. It features a dynamic clock, user selection, and power management buttons (shutdown/reboot), all while matching your system's color scheme and fonts.
+- **Customized SDDM Theme**: A minimalist, terminal-inspired SDDM theme. It features a dynamic clock, user selection, and power management buttons (shutdown/reboot). It includes two static versions (light and dark) that are automatically selected based on the system's `theming.mode` setting.
 
 - **base16Scheme**: The module offers full system integration for color base16Scheme via Stylix too. More information below.
 

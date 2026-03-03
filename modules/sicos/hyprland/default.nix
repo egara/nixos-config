@@ -4,14 +4,8 @@
 let
   cfg = config.programs.sicos.hyprland;
 
-  # Try to extract stylix colors from Home Manager if available
-  hmConfig = if (builtins.hasAttr "home-manager" config && builtins.hasAttr username config.home-manager.users)
-             then config.home-manager.users.${username}
-             else null;
-
   sddm-theme-sicos = pkgs.callPackage ./sddm-theme {
-    colors = if hmConfig != null && (builtins.hasAttr "stylix" hmConfig.lib) then hmConfig.lib.stylix.colors else null;
-    fontName = if hmConfig != null && (builtins.hasAttr "stylix" hmConfig) then hmConfig.stylix.fonts.monospace.name else "Monospace";
+    mode = cfg.theming.mode;
   };
 in
 {

@@ -1,15 +1,13 @@
-{ colors, fontName }:
-''
-import QtQuick 2.15
-import QtQuick.Window 2.15
-import QtQuick.Controls 2.15 as Controls
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls as Controls
+import QtQuick.Layouts
 
 Rectangle {
     id: container
     width: Screen.width
     height: Screen.height
-    color: "#${colors.base00}" // Base Background
+    color: "#f5f5f5" // Base Background
 
     property int sessionIndex: 0
     property bool loginError: false
@@ -37,8 +35,8 @@ Rectangle {
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 50
-        color: "#${colors.base0B}" // Accent Color (Green-ish)
-        font.family: "${fontName}"
+        color: "#0055ff" // Accent Color (Blue)
+        font.family: "Monospace"
         font.pixelSize: 48
         text: Qt.formatDateTime(new Date(), "HH:mm")
     }
@@ -54,7 +52,7 @@ Rectangle {
         height: 220
         anchors.centerIn: parent
         color: "transparent"
-        border.color: "#${colors.base0B}" // Accent Color
+        border.color: "#0055ff" // Accent Color
         border.width: 1
 
         ColumnLayout {
@@ -64,8 +62,8 @@ Rectangle {
 
             Text {
                 text: "> SicOS"
-                color: "#${colors.base05}" // Main Text
-                font.family: "${fontName}"
+                color: "#333333" // Main Text
+                font.family: "Monospace"
                 font.pixelSize: 24
                 font.bold: true
                 Layout.alignment: Qt.AlignHCenter
@@ -85,35 +83,35 @@ Rectangle {
                     }
                 }
                 
-                font.family: "${fontName}"
+                font.family: "Monospace"
                 font.pixelSize: 16
                 
                 delegate: Controls.ItemDelegate {
                     width: userSelect.width
                     contentItem: Text {
                         text: model.name
-                        color: "#${colors.base0B}"
-                        font.family: "${fontName}"
+                        color: "#0055ff"
+                        font.family: "Monospace"
                         font.pixelSize: 16
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
-                        color: parent.highlighted ? "#${colors.base02}" : "transparent" // Selection
+                        color: parent.highlighted ? "#d0d0d0" : "transparent" // Selection
                     }
                 }
 
                 contentItem: Text {
                     text: userSelect.displayText
-                    color: "#${colors.base0B}"
-                    font.family: "${fontName}"
+                    color: "#0055ff"
+                    font.family: "Monospace"
                     font.pixelSize: 16
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: 10
                 }
 
                 background: Rectangle {
-                    color: "#${colors.base01}" // Input Background
-                    border.color: "#${colors.base0B}"
+                    color: "#e0e0e0" // Input Background
+                    border.color: "#0055ff"
                     border.width: 1
                 }
             }
@@ -126,13 +124,13 @@ Rectangle {
                 echoMode: TextInput.Password
                 focus: true
                 
-                color: "#${colors.base0B}"
-                font.family: "${fontName}"
+                color: "#0055ff"
+                font.family: "Monospace"
                 font.pixelSize: 16
                 
                 background: Rectangle {
-                    color: "#${colors.base01}"
-                    border.color: "#${colors.base0B}"
+                    color: "#e0e0e0"
+                    border.color: "#0055ff"
                     border.width: 1
                 }
 
@@ -145,15 +143,15 @@ Rectangle {
                 
                 contentItem: Text {
                     text: parent.text
-                    font.family: "${fontName}"
-                    color: parent.down ? "#${colors.base00}" : "#${colors.base0B}"
+                    font.family: "Monospace"
+                    color: parent.down ? "#f5f5f5" : "#0055ff"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
 
                 background: Rectangle {
-                    color: parent.down ? "#${colors.base0B}" : "transparent"
-                    border.color: "#${colors.base0B}"
+                    color: parent.down ? "#0055ff" : "transparent"
+                    border.color: "#0055ff"
                     border.width: 1
                 }
                 
@@ -168,8 +166,8 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 20
         text: "STATUS: " + (loginError ? "ACCESS DENIED" : "READY")
-        color: loginError ? "#${colors.base08}" : "#${colors.base04}" // Red / Grey
-        font.family: "${fontName}"
+        color: loginError ? "#d00000" : "#777777" // Red / Grey
+        font.family: "Monospace"
         font.pixelSize: 14
     }
 
@@ -186,15 +184,15 @@ Rectangle {
             
             contentItem: Text {
                 text: parent.text
-                font.family: "${fontName}"
-                color: parent.down ? "#${colors.base00}" : "#${colors.base0B}"
+                font.family: "Monospace"
+                color: parent.down ? "#f5f5f5" : "#0055ff"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
-                color: parent.down ? "#${colors.base0B}" : "transparent"
-                border.color: "#${colors.base0B}"
+                color: parent.down ? "#0055ff" : "transparent"
+                border.color: "#0055ff"
                 border.width: 1
             }
             
@@ -209,15 +207,15 @@ Rectangle {
             
             contentItem: Text {
                 text: parent.text
-                font.family: "${fontName}"
-                color: parent.down ? "#${colors.base00}" : "#${colors.base0B}"
+                font.family: "Monospace"
+                color: parent.down ? "#f5f5f5" : "#0055ff"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
-                color: parent.down ? "#${colors.base0B}" : "transparent"
-                border.color: "#${colors.base0B}"
+                color: parent.down ? "#0055ff" : "transparent"
+                border.color: "#0055ff"
                 border.width: 1
             }
             
@@ -225,4 +223,3 @@ Rectangle {
         }
     }
 }
-''
