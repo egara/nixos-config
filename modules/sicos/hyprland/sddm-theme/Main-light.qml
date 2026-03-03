@@ -30,6 +30,24 @@ Rectangle {
         }
     }
 
+    Shortcut {
+        sequence: "F1"
+        onActivated: sddm.powerOff()
+    }
+
+    Shortcut {
+        sequence: "F2"
+        onActivated: sddm.reboot()
+    }
+
+    Shortcut {
+        sequence: "F3"
+        onActivated: {
+            userSelect.focus = true
+            userSelect.popup.open()
+        }
+    }
+
     Text {
         id: clock
         anchors.top: parent.top
@@ -76,13 +94,14 @@ Rectangle {
                 model: userModel
                 textRole: "name"
                 currentIndex: 0
+                onActivated: passwordField.focus = true
                 
                 Component.onCompleted: {
                     if (userModel.lastIndex !== undefined) {
                         currentIndex = userModel.lastIndex
                     }
                 }
-                
+
                 font.family: "Monospace"
                 font.pixelSize: 16
                 
@@ -171,6 +190,17 @@ Rectangle {
         font.pixelSize: 14
     }
 
+    Text {
+        anchors.top: loginBox.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.topMargin: 40
+        text: "[F1] SHUTDOWN  [F2] REBOOT  [F3] USER"
+        color: "#999999"
+        font.family: "Monospace"
+        font.pixelSize: 10
+        visible: !loginError
+    }
+
     // Power Buttons
     RowLayout {
         anchors.bottom: parent.bottom
@@ -179,7 +209,7 @@ Rectangle {
         anchors.margins: 50
         
         Controls.Button {
-            text: "SHUTDOWN"
+            text: "SHUTDOWN [F1]"
             Layout.preferredWidth: 150
             
             contentItem: Text {
@@ -202,7 +232,7 @@ Rectangle {
         Item { Layout.fillWidth: true } // Spacer
 
         Controls.Button {
-            text: "REBOOT"
+            text: "REBOOT [F2]"
             Layout.preferredWidth: 150
             
             contentItem: Text {
