@@ -1,38 +1,62 @@
 #!/usr/bin/env bash
 
-# --- Path to your Hyprland configuration ---
-CONFIG_FILE="$HOME/.config/hypr/hyprland.conf"
+# SicOS Keybindings Hint (Clean & Interactive)
+# ------------------------------------------------------------------
+# Muestra los atajos de forma elegante y ejecuta el seleccionado
+# ocultando completamente los detalles técnicos del comando.
+# ------------------------------------------------------------------
 
-# --- Check if the file exists ---
-if [[ ! -f "$CONFIG_FILE" ]]; then
-    notify-send "Error" "Configuration file not found at $CONFIG_FILE"
-    exit 1
+# 1. Obtener todos los binds de Hyprland
+all_binds=$(hyprctl binds -j)
+
+# 2. Generar la lista con metadatos ocultos tras el separador 󰇘
+# Formato de cada línea: "Grupo  │  Atajo  ➜  Descripción󰇘dispatcher󰇘argumentos"
+processed_list=$(echo "$all_binds" | jq -r '
+  def get_mods(m):
+    [
+      (if (m / 64 % 2 >= 1) then "󰘳" else empty end),
+      (if (m / 4 % 2 >= 1) then "Ctrl" else empty end),
+      (if (m / 8 % 2 >= 1) then "Alt" else empty end),
+      (if (m / 1 % 2 >= 1) then "Shift" else empty end)
+    ];
+
+  def get_group(desc; submap):
+    if submap != "" then "󱗼 " + submap
+    elif (desc | test("(?i)volume|brightness")) then "󰕾 Hardware"
+    elif (desc | test("(?i)workspace|magic")) then "󱂬 Workspaces"
+    elif (desc | test("(?i)window|focus|floating|pseudo|split")) then "󱂬 Windows"
+    elif (desc | test("(?i)layout")) then "󰕰 Layouts"
+    elif (desc | test("(?i)screenshot|color picker")) then "󰄄 Utils"
+    elif (desc | test("(?i)terminal|file manager|editor|firefox|browser|gemini|lazyssh|launcher|sicos")) then "󰵆 Apps"
+    else "󰘥 Misc" end;
+
+  .[] | 
+  select(.has_description and (.dispatcher | test("mouse") | not)) |
+  get_mods(.modmask) as $mods |
+  (if .key == "SUPER_L" or .key == "SUPER_R" then "󰘳" 
+   elif .key == "" then "code:" + (.keycode | tostring) 
+   else .key end) as $key |
+  (if ($mods | contains([$key])) then $mods else $mods + [$key] end | join(" + ")) as $shortcut |
+  get_group(.description; .submap) as $group |
+  "\($group)  │  \($shortcut)  ➜  \(.description)󰇘\(.dispatcher)󰇘\(.arg)"
+')
+
+# 3. Crear la lista "limpia" para mostrar en el menú (quitando los metadatos)
+display_menu=$(echo "$processed_list" | sed 's/󰇘.*//' | sort)
+
+# 4. Mostrar el menú al usuario
+selected=$(echo "$display_menu" | walker --dmenu --placeholder "Buscar atajos de teclado...")
+
+# 5. Si el usuario seleccionó algo, buscar el comando correspondiente y ejecutarlo
+if [ -n "$selected" ]; then
+    # Buscamos la línea original que empieza exactamente por lo seleccionado seguido del separador
+    match=$(echo "$processed_list" | grep -F "${selected}󰇘" | head -n 1)
+    
+    if [ -n "$match" ]; then
+        # Extraer el dispatcher y los argumentos usando el separador oculto
+        dispatcher=$(echo "$match" | awk -F'󰇘' '{print $2}')
+        arg=$(echo "$match" | awk -F'󰇘' '{print $3}')
+        
+        hyprctl dispatch "$dispatcher" "$arg"
+    fi
 fi
-
-# 1. Extract and clean the binds
-# 2. Use AWK to format with tabs (\t)
-# 3. Use 'sort' to group shortcuts alphabetically
-grep -E '^bind[a-z]*\s*=' "$CONFIG_FILE" | \
-    sed -e 's/^[^=]*=[[:space:]]*//' \
-        -e 's/,[[:space:]]*exec.*//' \
-        -e 's/^,[[:space:]]*//' \
-        -e 's/,[[:space:]]*$//' | \
-    sed 's/\$mainMod/SUPER/g' | \
-    awk -F, '{
-        # Trim whitespace
-        for (i=1; i<=NF; i++) gsub(/^[ \t]+|[ \t]+$/, "", $i);
-
-        if (NF >= 2) {
-            shortcut = $1 " + " $2;
-            desc = ""; 
-            for(i=3; i<=NF; i++) desc = desc $i (i==NF ? "" : ", ");
-            gsub(/^[ \t]+|[ \t]+$/, "", desc);
-            if (desc == "") desc = "System Action";
-
-            # Using \t (Tabs) for flexible alignment
-            printf "%s \t➜  %s\n", shortcut, desc
-        } 
-        else if (NF == 1 && $1 != "") {
-            printf "%s \t➜  Special Key\n", $1
-        }
-    }' | walker --dmenu
