@@ -52,10 +52,10 @@ Rectangle {
         id: clock
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 50
+        anchors.topMargin: 80
         color: "#00ff00" // Accent Color (Green-ish)
         font.family: "Monospace"
-        font.pixelSize: 48
+        font.pixelSize: 64
         text: Qt.formatDateTime(new Date(), "HH:mm")
     }
 
@@ -66,8 +66,8 @@ Rectangle {
 
     Rectangle {
         id: loginBox
-        width: 400
-        height: 220
+        width: 500
+        height: 300
         anchors.centerIn: parent
         color: "transparent"
         border.color: "#00ff00" // Accent Color
@@ -75,14 +75,14 @@ Rectangle {
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 20
-            spacing: 8
+            anchors.margins: 30
+            spacing: 15
 
             Text {
                 text: "> SicOS"
                 color: "#cccccc" // Main Text
                 font.family: "Monospace"
-                font.pixelSize: 24
+                font.pixelSize: 32
                 font.bold: true
                 Layout.alignment: Qt.AlignHCenter
             }
@@ -103,7 +103,7 @@ Rectangle {
                 }
 
                 font.family: "Monospace"
-                font.pixelSize: 16
+                font.pixelSize: 20
                 
                 delegate: Controls.ItemDelegate {
                     width: userSelect.width
@@ -111,7 +111,7 @@ Rectangle {
                         text: model.name
                         color: "#00ff00"
                         font.family: "Monospace"
-                        font.pixelSize: 16
+                        font.pixelSize: 20
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
@@ -123,7 +123,7 @@ Rectangle {
                     text: userSelect.displayText
                     color: "#00ff00"
                     font.family: "Monospace"
-                    font.pixelSize: 16
+                    font.pixelSize: 20
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: 10
                 }
@@ -145,7 +145,7 @@ Rectangle {
                 
                 color: "#00ff00"
                 font.family: "Monospace"
-                font.pixelSize: 16
+                font.pixelSize: 20
                 
                 background: Rectangle {
                     color: "#1a1a1a"
@@ -163,6 +163,7 @@ Rectangle {
                 contentItem: Text {
                     text: parent.text
                     font.family: "Monospace"
+                    font.pixelSize: 20
                     color: parent.down ? "#0f0f0f" : "#00ff00"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -183,21 +184,21 @@ Rectangle {
     Text {
         anchors.top: loginBox.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 20
+        anchors.topMargin: 30
         text: "STATUS: " + (loginError ? "ACCESS DENIED" : "READY")
         color: loginError ? "#ff0000" : "#555555" // Red / Grey
         font.family: "Monospace"
-        font.pixelSize: 14
+        font.pixelSize: 18
     }
 
     Text {
         anchors.top: loginBox.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 40
+        anchors.topMargin: 60
         text: "[F1] SHUTDOWN  [F2] REBOOT  [F3] USER"
         color: "#333333"
         font.family: "Monospace"
-        font.pixelSize: 10
+        font.pixelSize: 14
         visible: !loginError
     }
 
@@ -210,11 +211,12 @@ Rectangle {
         
         Controls.Button {
             text: "SHUTDOWN [F1]"
-            Layout.preferredWidth: 150
+            Layout.preferredWidth: 200
             
             contentItem: Text {
                 text: parent.text
                 font.family: "Monospace"
+                font.pixelSize: 18
                 color: parent.down ? "#0f0f0f" : "#00ff00"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -233,11 +235,12 @@ Rectangle {
 
         Controls.Button {
             text: "REBOOT [F2]"
-            Layout.preferredWidth: 150
+            Layout.preferredWidth: 200
             
             contentItem: Text {
                 text: parent.text
                 font.family: "Monospace"
+                font.pixelSize: 18
                 color: parent.down ? "#0f0f0f" : "#00ff00"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
