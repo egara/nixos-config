@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
 
-# SicOS Keybindings Hint (Clean & Interactive)
+# SicOS Keybindings Hint (Clean, Aligned & Interactive)
 # ------------------------------------------------------------------
-# Muestra los atajos de forma elegante y ejecuta el seleccionado
-# ocultando completamente los detalles técnicos del comando.
+# Muestra los atajos de forma elegante y alineada, y ejecuta el seleccionado.
 # ------------------------------------------------------------------
 
 # 1. Obtener todos los binds de Hyprland
 all_binds=$(hyprctl binds -j)
 
-# 2. Generar la lista con metadatos ocultos tras el separador 󰇘
-# Formato de cada línea: "Grupo  │  Atajo  ➜  Descripción󰇘dispatcher󰇘argumentos"
+# 2. Generar la lista con metadatos ocultos y alineación por columnas
+# Usamos \t como separador temporal para el comando 'column'
 processed_list=$(echo "$all_binds" | jq -r '
   def get_mods(m):
     [
@@ -38,11 +37,12 @@ processed_list=$(echo "$all_binds" | jq -r '
    else .key end) as $key |
   (if ($mods | contains([$key])) then $mods else $mods + [$key] end | join(" + ")) as $shortcut |
   get_group(.description; .submap) as $group |
-  "\($group)  │  \($shortcut)  ➜  \(.description)󰇘\(.dispatcher)󰇘\(.arg)"
-')
+  "\($group)\t│  \($shortcut)\t➜  \(.description)󰇘\(.dispatcher)󰇘\(.arg)"
+' | column -t -s $'\t')
 
 # 3. Crear la lista "limpia" para mostrar en el menú (quitando los metadatos)
-display_menu=$(echo "$processed_list" | sed 's/󰇘.*//' | sort)
+# sort -u para evitar duplicados si los hubiera
+display_menu=$(echo "$processed_list" | sed 's/󰇘.*//' | sort -u)
 
 # 4. Mostrar el menú al usuario
 selected=$(echo "$display_menu" | walker --dmenu --placeholder "Buscar atajos de teclado...")
@@ -50,6 +50,7 @@ selected=$(echo "$display_menu" | walker --dmenu --placeholder "Buscar atajos de
 # 5. Si el usuario seleccionó algo, buscar el comando correspondiente y ejecutarlo
 if [ -n "$selected" ]; then
     # Buscamos la línea original que empieza exactamente por lo seleccionado seguido del separador
+    # Usamos grep -F para tratar el texto de forma literal (por los caracteres especiales)
     match=$(echo "$processed_list" | grep -F "${selected}󰇘" | head -n 1)
     
     if [ -n "$match" ]; then
