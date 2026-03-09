@@ -2,14 +2,14 @@
 
 # SicOS Keybindings Hint (Clean, Aligned & Interactive)
 # ------------------------------------------------------------------
-# Muestra los atajos de forma elegante y alineada, y ejecuta el seleccionado.
+# Display shortcuts elegantly and aligned, and execute the selected one.
 # ------------------------------------------------------------------
 
-# 1. Obtener todos los binds de Hyprland
+# 1. Get all Hyprland binds
 all_binds=$(hyprctl binds -j)
 
-# 2. Generar la lista con metadatos ocultos y alineación por columnas
-# Usamos \t como separador temporal para el comando 'column'
+# 2. Generate the list with hidden metadata and column alignment
+# Use \t as a temporary separator for the 'column' command
 processed_list=$(echo "$all_binds" | jq -r '
   def get_mods(m):
     [
@@ -40,21 +40,21 @@ processed_list=$(echo "$all_binds" | jq -r '
   "\($group)\t│  \($shortcut)\t➜  \(.description)󰇘\(.dispatcher)󰇘\(.arg)"
 ' | column -t -s $'\t')
 
-# 3. Crear la lista "limpia" para mostrar en el menú (quitando los metadatos)
-# sort -u para evitar duplicados si los hubiera
+# 3. Create the "clean" list to show in the menu (removing metadata)
+# sort -u to avoid duplicates if any
 display_menu=$(echo "$processed_list" | sed 's/󰇘.*//' | sort -u)
 
-# 4. Mostrar el menú al usuario
-selected=$(echo "$display_menu" | walker --dmenu --placeholder "Buscar atajos de teclado...")
+# 4. Show the menu to the user
+selected=$(echo "$display_menu" | walker --dmenu --placeholder "Search keyboard shortcuts...")
 
-# 5. Si el usuario seleccionó algo, buscar el comando correspondiente y ejecutarlo
+# 5. If the user selected something, find the corresponding command and execute it
 if [ -n "$selected" ]; then
-    # Buscamos la línea original que empieza exactamente por lo seleccionado seguido del separador
-    # Usamos grep -F para tratar el texto de forma literal (por los caracteres especiales)
+    # Search for the original line that starts exactly with the selection followed by the separator
+    # Use grep -F to treat the text literally (due to special characters)
     match=$(echo "$processed_list" | grep -F "${selected}󰇘" | head -n 1)
     
     if [ -n "$match" ]; then
-        # Extraer el dispatcher y los argumentos usando el separador oculto
+        # Extract the dispatcher and arguments using the hidden separator
         dispatcher=$(echo "$match" | awk -F'󰇘' '{print $2}')
         arg=$(echo "$match" | awk -F'󰇘' '{print $3}')
         
