@@ -89,6 +89,7 @@ scrollbar {
 
 .list {
   color: @theme_fg_color;
+  font-family: monospace;
 }
 
 child {

@@ -37,15 +37,15 @@ processed_list=$(echo "$all_binds" | jq -r '
    else .key end) as $key |
   (if ($mods | contains([$key])) then $mods else $mods + [$key] end | join(" + ")) as $shortcut |
   get_group(.description; .submap) as $group |
-  "\($group)\t│  \($shortcut)\t➜  \(.description)󰇘\(.dispatcher)󰇘\(.arg)"
-' | column -t -s $'\t')
+  "\($group)\t\($shortcut)\t➜ \(.description)󰇘\(.dispatcher)󰇘\(.arg)"
+' | column -t -s $'\t' -o '  │  ')
 
 # 3. Create the "clean" list to show in the menu (removing metadata)
 # sort -u to avoid duplicates if any
 display_menu=$(echo "$processed_list" | sed 's/󰇘.*//' | sort -u)
 
 # 4. Show the menu to the user
-selected=$(echo "$display_menu" | walker --dmenu --placeholder "Search keyboard shortcuts...")
+selected=$(echo "$display_menu" | walker --dmenu --placeholder "Search keyboard shortcuts..." --width 1000)
 
 # 5. If the user selected something, find the corresponding command and execute it
 if [ -n "$selected" ]; then
