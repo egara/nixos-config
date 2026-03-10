@@ -7,7 +7,7 @@
 # @email: eloy.garcia.pca@gmail.com
 # ------------------------------------------
 
-items="󱓟\u00A0\u00A0\u00A0\u00A0Applications\n⏻\u00A0\u00A0\u00A0\u00A0Power\n󰚰\u00A0\u00A0\u00A0\u00A0Update\n\u00A0\u00A0\u00A0\u00A0Clean\n󱕅\u00A0\u00A0\u00A0\u00A0Screensaver\n󰔎\u00A0\u00A0\u00A0\u00A0Themes\n󰸉\u00A0\u00A0\u00A0\u00A0Wallpapers\n\u00A0\u00A0\u00A0\u00A0Hyprland Keybindings\n󰱦\u00A0\u00A0\u00A0\u00A0Extranet\n\u00A0\u00A0\u00A0\u00A0Eclipse\n\u00A0\u00A0\u00A0\u00A0Hibernate"
+items="󱓟\u00A0\u00A0\u00A0\u00A0 Applications\n⏻\u00A0\u00A0\u00A0\u00A0 Power\n󰚰\u00A0\u00A0\u00A0\u00A0 Update\n\u00A0\u00A0\u00A0\u00A0 Clean\n󱕅\u00A0\u00A0\u00A0\u00A0 Screensaver\n󰔎\u00A0\u00A0\u00A0\u00A0 Themes\n󰸉\u00A0\u00A0\u00A0\u00A0 Wallpapers\n\u00A0\u00A0\u00A0\u00A0Hyprland Keybindings\n󰱦\u00A0\u00A0\u00A0\u00A0 Extranet\n\u00A0\u00A0\u00A0\u00A0 Eclipse\n\u00A0\u00A0\u00A0\u00A0 Hibernate"
 
 output=$(echo -e $items | walker --dmenu -H -n -N)
 
@@ -28,7 +28,7 @@ elif [[ "$output" == *"Wallpapers"* ]]; then
     # sicoswallpapers is located in ~/.config/elephant/menus/sicos_wallpapers.lua script file
     exec walker -m menus:sicoswallpapers -H --width 800 --minheight 400
 elif [[ "$output" == *"Hyprland"* ]]; then
-    kitty --hold sh -c "~/.config/sicos/scripts/show-hyprland-keybindings.sh"
+    . ~/.config/sicos/scripts/show-hyprland-keybindings.sh
 elif [[ "$output" == *"Extranet"* ]]; then
     kitty --hold sh -c "~/scripts/nixos/extranet.sh"
 elif [[ "$output" == *"Eclipse"* ]]; then
