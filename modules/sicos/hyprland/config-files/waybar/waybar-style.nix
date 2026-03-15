@@ -501,14 +501,14 @@ label:focus {
     margin: 5px 0 5px 5px;
     border-radius: 15px 0 0 15px;
     padding: 2px 0;
-    min-width: 55px;
+    min-width: 50px;
 }
 
 #memory {
     margin: 5px 5px 5px 0;
     border-radius: 0 15px 15px 0;
     padding: 2px 0;
-    min-width: 55px;
+    min-width: 50px;
 }
 
 /* Make battery and power-profiles-daemon modules look like a single block */
