@@ -108,7 +108,7 @@ in
     },
     "clock": {
         "interval": 60,
-        "format": "<span size='14000'></span>  {:%a %b %d  %H:%M %p}",
+        "format": "<span size='14000' rise='-2000'></span>  {:%a %b %d  %H:%M %p}",
         "rotate": 0,
         "tooltip-format": "<span>{calendar}</span>",
         "calendar": {
