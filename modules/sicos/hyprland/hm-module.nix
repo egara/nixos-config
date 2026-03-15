@@ -164,7 +164,7 @@ in
             fonts = let
               monospaceFont = {
                 package = pkgs.nerd-fonts.go-mono;
-                name = "GoMonoNerdFontPropo-Bold";
+                name = "GoMono Nerd Font Mono";
               };
             in {
               monospace = monospaceFont;

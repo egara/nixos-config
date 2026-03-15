@@ -89,7 +89,7 @@ scrollbar {
 
 .list {
   color: @theme_fg_color;
-  font-family: monospace;
+  font-family: ${config.stylix.fonts.monospace.name};
 }
 
 child {
@@ -111,6 +111,9 @@ child:selected .item-box {
 }
 
 .item-text-box {
+}
+
+.item-text {
 }
 
 .item-subtext {
@@ -212,6 +215,6 @@ child:selected .item-box {
 }
 
 .preview-content.archlinuxpkgs, .preview-content.dnfpackages {
-  font-family: monospace;
+  font-family: ${config.stylix.fonts.monospace.name};
 }
 ''

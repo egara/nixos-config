@@ -23,7 +23,7 @@ let
     # Check if Insync is running (using pgrep -x for exact match)
     # The pgrep utility must be available in the Waybar environment (part of procps).
     if ! ${pkgs.procps}/bin/pgrep -x insync > /dev/null; then
-        echo '{"text": "", "tooltip": "Insync is not running", "class": "error"}'
+        echo "{\"text\": \"<span size='17000'></span>\", \"tooltip\": \"Insync is not running\", \"class\": \"error\"}"
         exit 0
     fi
 
@@ -35,24 +35,20 @@ let
                     
     # --- Process and Output Status ---
 
-    ICON="󰅟"
+    ICON="<span size='17000'>󰅟</span>"
     CLASS="synced"
     TOOLTIP_TEXT="Insync: All files synced"
 
     if [ "$SYNCING_COUNT" -gt 0 ]; then
         # If the count is > 0, it means an active sync file was found.
-        ICON="󰘿" # Cloud with spinning arrows
+        ICON="<span size='17000'>󰘿</span>" # Cloud with spinning arrows
         CLASS="syncing"
         TOOLTIP_TEXT="Insync is currently syncing..."
     fi
 
     # --- Output the result as JSON for Waybar ---
-    # Using echo with the icon character directly in the JSON string.
-    # We ensure the script uses the necessary utilities and quotes correctly.
-    # Use echo and ensure the shell is robust enough to handle the UTF-8 characters.
-    # The shebang '#!/usr/bin/env sh' at the top of the file helps here.
-
-    JSON_OUTPUT='{"text": "'"$ICON"'", "tooltip": "'"$TOOLTIP_TEXT"'", "class": "'"$CLASS"'"}'
+    # Using double quotes and escaping them for correct JSON format.
+    JSON_OUTPUT="{\"text\": \"$ICON\", \"tooltip\": \"$TOOLTIP_TEXT\", \"class\": \"$CLASS\"}"
     echo "$JSON_OUTPUT"
   '';
 

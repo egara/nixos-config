@@ -7,7 +7,7 @@
 # @email: eloy.garcia.pca@gmail.com
 # ------------------------------------------
 
-items="󱓟\u00A0\u00A0\u00A0\u00A0 Applications\n⏻\u00A0\u00A0\u00A0\u00A0 Power\n󰚰\u00A0\u00A0\u00A0\u00A0 Update\n\u00A0\u00A0\u00A0\u00A0 Clean\n󱕅\u00A0\u00A0\u00A0\u00A0 Screensaver\n󰔎\u00A0\u00A0\u00A0\u00A0 Themes\n󰸉\u00A0\u00A0\u00A0\u00A0 Wallpapers\n\u00A0\u00A0\u00A0\u00A0Hyprland Keybindings\n󰱦\u00A0\u00A0\u00A0\u00A0 Extranet\n\u00A0\u00A0\u00A0\u00A0 Eclipse\n\u00A0\u00A0\u00A0\u00A0 Hibernate"
+items="󱓟\u00A0\u00A0\u00A0\u00A0Applications\n⏻\u00A0\u00A0\u00A0\u00A0Power\n󰚰\u00A0\u00A0\u00A0\u00A0Update\n\u00A0\u00A0\u00A0\u00A0Clean\n󱕅\u00A0\u00A0\u00A0\u00A0Screensaver\n󰔎\u00A0\u00A0\u00A0\u00A0Themes\n󰸉\u00A0\u00A0\u00A0\u00A0Wallpapers\n󰋖\u00A0\u00A0\u00A0\u00A0Hyprland Keybindings\n󰱦\u00A0\u00A0\u00A0\u00A0Extranet\n\u00A0\u00A0\u00A0\u00A0Eclipse\n\u00A0\u00A0\u00A0\u00A0Hibernate"
 
 output=$(echo -e $items | walker --dmenu -H -n -N)
 

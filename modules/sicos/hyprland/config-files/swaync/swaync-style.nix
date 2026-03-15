@@ -244,9 +244,10 @@ in
   font-size: 14px;
   color: @noti-fg;
 }
-.widget-volume > box > button {
+.widget-volume > box > label {
   background: transparent;
   color: @noti-fg;
+  font-size: 20px;
 }
 
 .widget-volume > box > button:hover {
@@ -281,6 +282,10 @@ in
   color: @noti-fg;
 }
 
+.widget-backlight > label {
+  font-size: 20px;
+}
+
 .KB {
   padding: 4px 8px 4px 8px;
   margin: 0px 8px 0px 8px;
@@ -301,6 +306,7 @@ in
   border-radius: 4px;
   margin: 4px 8px;
   color: @noti-fg;
+  font-size: 20px;
 }
 
 .widget-buttons-grid{
@@ -317,6 +323,7 @@ in
   border-radius: 4px;
   margin: 5px;
   color: @noti-fg;
+  font-size: 20px;
 }
 
 .widget-buttons-grid>flowbox>flowboxchild>button:hover {
@@ -324,6 +331,7 @@ in
 }
 
 .screenshot-buttons,
+.info-buttons,
 .screencast-buttons,
 .powermode-buttons,
 .power-buttons{
@@ -331,6 +339,7 @@ in
 }
 
 .screenshot-buttons>button,
+.info-buttons>button,
 .screencast-buttons>button,
 .powermode-buttons>button,
 .power-buttons>button{
@@ -339,9 +348,11 @@ in
   margin: 5px 70px 3px;
   border: 1px solid @noti-border-color;
   color: @noti-fg;
+  font-size: 20px;
 }
 
 .screenshot-buttons>button:hover,
+.info-buttons>button:hover,
 .screencast-buttons>button:hover,
 .powermode-buttons>button:hover,
 .power-buttons>button:hover{

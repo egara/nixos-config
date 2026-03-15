@@ -44,7 +44,7 @@ in
     },
 
     "custom/walker": {
-        "format": "  ",
+        "format": "",
         "tooltip": true,
         "tooltip-format": "SicOS Menu (SUPER + s)",
         "on-click": "$HOME/.config/sicos/scripts/sicos-settings.sh"
@@ -108,7 +108,7 @@ in
     },
     "clock": {
         "interval": 60,
-        "format": "  {:%a %b %d  %H:%M %p}",
+        "format": "<span size='14000'></span>  {:%a %b %d  %H:%M %p}",
         "rotate": 0,
         "tooltip-format": "<span>{calendar}</span>",
         "calendar": {
@@ -135,19 +135,19 @@ in
     },
     "cpu": {
         "interval": 2,
-        "format": "{usage}%  ",
+        "format": "{usage}% <span size='14000' rise='-2000'></span>",
         "tooltip": false
     },
     "memory": {
         "interval": 2,
-        "format": "{}%  "
+        "format": "{}% <span size='11000'></span>"
     },
    "disk": {
         "interval": 15,
-        "format": "{percentage_used}% 󰋊 "
+        "format": "{percentage_used}% <span size='14000'>󰋊</span>"
     },
     "backlight": {
-        "format": "{percent}% {icon}",
+        "format": "{percent}% <span size='13000' rise='-1500'>{icon}</span>",
         "format-icons": ["", "", "", "", "", "", "", "", ""]
     },
     "battery": {
@@ -156,10 +156,10 @@ in
             "warning": 30,
             "critical": 15
         },
-        "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}%  ",
-        "format-alt": "{time} {icon}",
+        "format": "{capacity}% <span size='14000'>{icon}</span>",
+        "format-charging": "{capacity}% <span size='14000'></span>",
+        "format-plugged": "{capacity}% <span size='11000'></span>",
+        "format-alt": "{time} <span size='14000'>{icon}</span>",
         "format-icons": [" ", " ", " ", " ", " "]
     },
     "battery#bat2": {
@@ -168,19 +168,19 @@ in
     "network": {
         "format-wifi": "{ipaddr}",
         "format-ethernet": "{ipaddr}/{cidr}",
-        "tooltip-format-wifi": "{essid} ({signalStrength}%)  ",
-        "tooltip-format": "{ifname} via {gwaddr} 󰈀",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%) <span size='14000'></span>",
+        "tooltip-format": "{ifname} via {gwaddr} <span size='14000'>󰈀</span>",
         "format-linked": "{ifname} (No IP)",
-        "format-disconnected": "Disconnected ",
+        "format-disconnected": "Disconnected <span size='14000'></span>",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
     "pulseaudio": {
-        "format": "{volume}% {icon}",
-        "format-bluetooth": "{volume}% {icon} 󰂯",
-        "format-bluetooth-muted": "󰖁 {icon} 󰂯",
+        "format": "{volume}% <span size='17000' rise='-3000'>{icon}</span>",
+        "format-bluetooth": "{volume}% <span size='17000' rise='-3000'>{icon}</span> 󰂯",
+        "format-bluetooth-muted": "󰖁 <span size='17000' rise='-3000'>{icon}</span> 󰂯",
         "format-muted": "󰖁 {format_source}",
-        "format-source": "{volume}% ",
-        "format-source-muted": " ",
+        "format-source": "{volume}% <span size='17000' rise='-3000'></span>",
+        "format-source-muted": "<span size='17000' rise='-3000'></span>",
         "format-icons": {
             "headphone": "󰋋",
             "hands-free": "󱡒 ",
@@ -205,8 +205,8 @@ in
         "format-icons": {
         "default": "",
         "performance": "",
-        "balanced": "",
-        "power-saver": ""
+        "balanced": "<span size='14000'></span>",
+        "power-saver": "<span size='14000'></span>"
       }
     },
     "custom/playerctl#backward": {
@@ -242,7 +242,7 @@ in
       "return-type": "json"
     },
     "custom/clipboard": {
-      "format": "  ",
+      "format": "",
       "tooltip": true,
       "tooltip-format": "Clipboard",
       "on-click": "walker -m clipboard"

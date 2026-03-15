@@ -37,17 +37,7 @@
     }
     */
   },
-  "widgets": [
-    "label",
-    "menubar",
-    "buttons-grid",
-    "backlight",
-    "volume",
-    "mpris",
-    "title",
-    "dnd",
-    "notifications"
-  ],
+  "widgets": ["label", "menubar", "buttons-grid", "backlight", "volume", "mpris", "title", "dnd", "notifications"],
   "widget-config": {
     "title": {
       "text": "Notifications",
@@ -86,6 +76,20 @@
       "show-per-app-label": true
     },
     "menubar": {
+      "menu#info-buttons": {
+        "label": "󰙎",
+        "position": "right",
+        "actions": [
+          {
+            "label": "󰙎   About (Full)",
+            "command": "swaync-client -cp && sleep 1 && kitty --hold sh -c 'fastfetch -c all.jsonc'"
+          },
+          {
+            "label": "󰙎   About (Partial)",
+            "command": "swaync-client -cp && sleep 1 && kitty --hold sh -c 'fastfetch'"
+          }
+        ]
+      },
       "menu#power-buttons": {
         "label": "",
         "position": "right",
@@ -125,29 +129,21 @@
             "command": "power-saver-mode"
           }
         ]
-      } /*,
+      },
       "menu#screenshot-buttons": {
         "label": "",
         "position": "left",
         "actions": [
           {
-            "label": "   Entire screen",
-            "command": "swaync-client -cp && sleep 1 && hyprshot -m output"
+            "label": "   Select & Edit",
+            "command": "swaync-client -cp && sleep 1 && hyprshot -m region --raw | satty --filename - --early-exit --copy-command wl-copy --initial-tool arrow --output-filename ~/Pictures/screenshot-$(date '+%Y%m%d-%H:%M:%S').png"
           },
           {
-            "label": "   Select a region",
-            "command": "swaync-client -cp && sleep 1 && hyprshot -m region"
-          },
-          {
-            "label": "   Open screenshot menu",
-            "command": "swaync-client -cp && rofi-screenshot"
-          },
-          {
-            "label": "   Open screenshot folder",
-            "command": "exo-open $HYPRSHOT_DIR"
+            "label": "   Select & Copy",
+            "command": "swaync-client -cp && sleep 1 && hyprshot -m region --clipboard-only"
           }
         ]
-      },
+      } /*,
       "menu#screencast-buttons": {
         "label": "",
         "position": "left",
@@ -186,7 +182,7 @@
           "command": "swaync-client -t && walker -m files"
         },
         {
-          "label": "󰘥",
+          "label": "󰋖",
           "command": "swaync-client -t && ~/.config/sicos/scripts/show-hyprland-keybindings.sh"
         },
         {

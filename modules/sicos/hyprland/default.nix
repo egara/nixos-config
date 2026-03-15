@@ -301,6 +301,7 @@ in
         gnome-calculator # Calculator
         system-config-printer # CUPs GUI
         vlc # For volume up/down popping sound
+        fastfetch # For system information
 
         # Tools for the screensaver
         terminaltexteffects

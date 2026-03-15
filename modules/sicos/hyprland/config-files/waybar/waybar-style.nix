@@ -128,14 +128,16 @@ button:hover {
 
 #custom-notification {
     padding: 8px 10px;
+    font-size: 18px;
 }
 
 #custom-insync {
-    padding: 8px 13px 8px 7px;
+    padding: 8px 10px;
 }
 
 #custom-power {
     padding: 8px 12px;
+    font-size: 18px;
 }
 
 tooltip {
@@ -453,7 +455,8 @@ label:focus {
 }
 
 #custom-walker {
-    font-size: 16px;
+    font-size: 23px;
+    padding: 0 5px;
 }
 
 #custom-clipboard {
@@ -462,7 +465,7 @@ label:focus {
     padding: 8px;
     border-radius: 15px;
     color: @base05;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 #custom-insync.error {
@@ -477,14 +480,14 @@ label:focus {
 #backlight {
     margin: 5px 0 5px 5px;
     border-radius: 15px 0 0 15px;
-    padding-right: 0px;
+    padding: 8px 0;
     min-width: 55px;
 }
 
 #pulseaudio {
     margin: 5px 5px 5px 0;
     border-radius: 0 15px 15px 0;
-    padding-left: 0px;
+    padding: 8px 0;
     min-width: 55px;
 }
 
@@ -492,14 +495,14 @@ label:focus {
 #cpu {
     margin: 5px 0 5px 5px;
     border-radius: 15px 0 0 15px;
-    padding-right: 0px;
+    padding: 8px 0;
     min-width: 55px;
 }
 
 #memory {
     margin: 5px 5px 5px 0;
     border-radius: 0 15px 15px 0;
-    padding-left: 0px;
+    padding: 8px 0;
     min-width: 55px;
 }
 
