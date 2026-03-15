@@ -121,22 +121,22 @@ button:hover {
 #custom-insync {
     background: @base00;
     margin: 5px 5px;
-    padding: 8px;
+    padding: 2px 8px;
     border-radius: 15px;
     color: @base05;
 }
 
 #custom-notification {
-    padding: 8px 10px;
+    padding: 2px 10px;
     font-size: 18px;
 }
 
 #custom-insync {
-    padding: 8px 10px;
+    padding: 2px 10px;
 }
 
 #custom-power {
-    padding: 8px 12px;
+    padding: 2px 12px;
     font-size: 18px;
 }
 
@@ -427,9 +427,14 @@ label:focus {
 #taskbar {
     background: @base00;
     margin: 5px 5px;
-    padding: 8px;
+    padding: 2px 8px;
     border-radius: 15px;
     color: @base05;
+}
+
+#taskbar button {
+    padding: 0;
+    margin: 0 3px;
 }
 
 #taskbar button.active {
@@ -480,14 +485,14 @@ label:focus {
 #backlight {
     margin: 5px 0 5px 5px;
     border-radius: 15px 0 0 15px;
-    padding: 8px 0;
+    padding: 2px 0;
     min-width: 55px;
 }
 
 #pulseaudio {
     margin: 5px 5px 5px 0;
     border-radius: 0 15px 15px 0;
-    padding: 8px 0;
+    padding: 2px 0;
     min-width: 55px;
 }
 
@@ -495,14 +500,14 @@ label:focus {
 #cpu {
     margin: 5px 0 5px 5px;
     border-radius: 15px 0 0 15px;
-    padding: 8px 0;
+    padding: 2px 0;
     min-width: 55px;
 }
 
 #memory {
     margin: 5px 5px 5px 0;
     border-radius: 0 15px 15px 0;
-    padding: 8px 0;
+    padding: 2px 0;
     min-width: 55px;
 }
 
