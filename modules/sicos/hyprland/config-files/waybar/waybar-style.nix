@@ -433,8 +433,8 @@ label:focus {
 }
 
 #taskbar button {
-    padding: 0;
-    margin: 0 3px;
+    padding: 0px 8px;
+    margin: 6px 4px;
 }
 
 #taskbar button.active {

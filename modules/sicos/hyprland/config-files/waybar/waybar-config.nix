@@ -66,7 +66,7 @@ in
     },
     "wlr/taskbar": {
         "format": "{icon}",
-        "icon-size": 18,
+        "icon-size": 17,
         "tooltip-format": "{title}",
         "on-click": "activate",
         "on-click-middle": "close"
