@@ -67,7 +67,7 @@
     eclipses.eclipse-jee
     #jdk8
     #jdk17
-    teams-for-linux
+    #teams-for-linux
     opencode
     #pkgs-stable.jdk8
   ];
