@@ -175,12 +175,12 @@ in
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
     "pulseaudio": {
-        "format": "{volume}% <span size='17000' rise='-3000'>{icon}</span>",
-        "format-bluetooth": "{volume}% <span size='17000' rise='-3000'>{icon}</span> 󰂯",
-        "format-bluetooth-muted": "󰖁 <span size='17000' rise='-3000'>{icon}</span> 󰂯",
+        "format": "{volume}% <span size='14000'>{icon}</span>",
+        "format-bluetooth": "{volume}% <span size='14000'>{icon}</span> 󰂯",
+        "format-bluetooth-muted": "󰖁 <span size='14000'>{icon}</span> 󰂯",
         "format-muted": "󰖁 {format_source}",
-        "format-source": "{volume}% <span size='17000' rise='-3000'></span>",
-        "format-source-muted": "<span size='17000' rise='-3000'></span>",
+        "format-source": "{volume}% <span size='14000'></span>",
+        "format-source-muted": "<span size='14000'></span>",
         "format-icons": {
             "headphone": "󰋋",
             "hands-free": "󱡒 ",
