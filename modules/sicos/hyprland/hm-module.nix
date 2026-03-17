@@ -163,8 +163,8 @@ in
             };
             fonts = let
               monospaceFont = {
-                package = pkgs.nerd-fonts.go-mono;
-                name = "GoMono Nerd Font Mono";
+                package = pkgs.nerd-fonts.jetbrains-mono;
+                name = "JetBrainsMono Nerd Font Mono";
               };
             in {
               monospace = monospaceFont;

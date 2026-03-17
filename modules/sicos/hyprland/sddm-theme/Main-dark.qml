@@ -54,7 +54,7 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 80
         color: "#00ff00" // Accent Color (Green-ish)
-        font.family: "GoMono Nerd Font Mono"
+        font.family: "JetBrainsMono Nerd Font Mono"
         font.pixelSize: 80
         text: Qt.formatDateTime(new Date(), "HH:mm")
     }
@@ -81,7 +81,7 @@ Rectangle {
             Text {
                 text: "> SicOS"
                 color: "#cccccc" // Main Text
-                font.family: "GoMono Nerd Font Mono"
+                font.family: "JetBrainsMono Nerd Font Mono"
                 font.pixelSize: 40
                 font.bold: true
                 Layout.alignment: Qt.AlignHCenter
@@ -102,7 +102,7 @@ Rectangle {
                     }
                 }
 
-                font.family: "GoMono Nerd Font Mono"
+                font.family: "JetBrainsMono Nerd Font Mono"
                 font.pixelSize: 24
                 
                 delegate: Controls.ItemDelegate {
@@ -110,7 +110,7 @@ Rectangle {
                     contentItem: Text {
                         text: model.name
                         color: "#00ff00"
-                        font.family: "GoMono Nerd Font Mono"
+                        font.family: "JetBrainsMono Nerd Font Mono"
                         font.pixelSize: 24
                         verticalAlignment: Text.AlignVCenter
                     }
@@ -122,7 +122,7 @@ Rectangle {
                 contentItem: Text {
                     text: userSelect.displayText
                     color: "#00ff00"
-                    font.family: "GoMono Nerd Font Mono"
+                    font.family: "JetBrainsMono Nerd Font Mono"
                     font.pixelSize: 24
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: 10
@@ -144,7 +144,7 @@ Rectangle {
                 focus: true
                 
                 color: "#00ff00"
-                font.family: "GoMono Nerd Font Mono"
+                font.family: "JetBrainsMono Nerd Font Mono"
                 font.pixelSize: 24
                 
                 background: Rectangle {
@@ -162,7 +162,7 @@ Rectangle {
                 
                 contentItem: Text {
                     text: parent.text
-                    font.family: "GoMono Nerd Font Mono"
+                    font.family: "JetBrainsMono Nerd Font Mono"
                     font.pixelSize: 24
                     color: parent.down ? "#0f0f0f" : "#00ff00"
                     horizontalAlignment: Text.AlignHCenter
@@ -187,7 +187,7 @@ Rectangle {
         anchors.topMargin: 30
         text: "STATUS: " + (loginError ? "ACCESS DENIED" : "READY")
         color: loginError ? "#ff0000" : "#555555" // Red / Grey
-        font.family: "GoMono Nerd Font Mono"
+        font.family: "JetBrainsMono Nerd Font Mono"
         font.pixelSize: 22
     }
 
@@ -197,7 +197,7 @@ Rectangle {
         anchors.topMargin: 70
         text: "[F1] SHUTDOWN  [F2] REBOOT  [F3] USER"
         color: "#333333"
-        font.family: "GoMono Nerd Font Mono"
+        font.family: "JetBrainsMono Nerd Font Mono"
         font.pixelSize: 18
         visible: !loginError
     }
@@ -215,7 +215,7 @@ Rectangle {
             
             contentItem: Text {
                 text: parent.text
-                font.family: "GoMono Nerd Font Mono"
+                font.family: "JetBrainsMono Nerd Font Mono"
                 font.pixelSize: 22
                 color: parent.down ? "#0f0f0f" : "#00ff00"
                 horizontalAlignment: Text.AlignHCenter
@@ -239,7 +239,7 @@ Rectangle {
             
             contentItem: Text {
                 text: parent.text
-                font.family: "GoMono Nerd Font Mono"
+                font.family: "JetBrainsMono Nerd Font Mono"
                 font.pixelSize: 22
                 color: parent.down ? "#0f0f0f" : "#00ff00"
                 horizontalAlignment: Text.AlignHCenter

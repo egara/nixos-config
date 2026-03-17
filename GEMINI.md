@@ -59,7 +59,7 @@ SicOS provides a complete, themed desktop experience. It is split into two parts
 
 ### 3.2. Theming & Stylix
 Theming is a core feature of SicOS, managed by **Stylix** and the `theme-switcher.sh` script.
-- **Stylix Integration**: Defined in `hm-module.nix`. It sets colors, fonts (GoMono Nerd Font), and cursors (Bibata) globally. It handles polarity (light/dark) and targets various apps (Kitty, Zed, Btop, Yazi).
+- **Stylix Integration**: Defined in `hm-module.nix`. It sets colors, fonts (JetBrainsMono Nerd Font), and cursors (Bibata) globally. It handles polarity (light/dark) and targets various apps (Kitty, Zed, Btop, Yazi).
 - **Theme Switcher Script**:
     1.  Located at `home-manager/desktop/hyprland/scripts/theme-switcher.sh`.
     2.  Updates `themeMode` and `themeScheme` in `hosts/default.nix` using `sed`.

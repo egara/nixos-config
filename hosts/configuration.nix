@@ -341,7 +341,7 @@
   # Fonts
   fonts.packages = with pkgs; [
     font-awesome
-    nerd-fonts.go-mono
+    nerd-fonts.jetbrains-mono
     meslo-lgs-nf
     noto-fonts
     noto-fonts-cjk-sans
