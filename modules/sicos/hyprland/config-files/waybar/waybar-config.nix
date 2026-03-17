@@ -144,7 +144,7 @@ in
     },
    "disk": {
         "interval": 15,
-        "format": "{percentage_used}% <span size='14000'>󰋊</span>"
+        "format": "{percentage_used}% <span size='13000' rise='-1500'>󰋊</span>"
     },
     "backlight": {
         "format": "{percent}% <span size='13000' rise='-1500'>{icon}</span>",
@@ -156,10 +156,10 @@ in
             "warning": 30,
             "critical": 15
         },
-        "format": "{capacity}% <span size='14000'>{icon}</span>",
-        "format-charging": "{capacity}% <span size='14000'></span>",
+        "format": "{capacity}% <span size='13000' rise='-1500'>{icon}</span>",
+        "format-charging": "{capacity}% <span size='13000' rise='-1500'></span>",
         "format-plugged": "{capacity}% <span size='11000'></span>",
-        "format-alt": "{time} <span size='14000'>{icon}</span>",
+        "format-alt": "{time} <span size='13000' rise='-1500'>{icon}</span>",
         "format-icons": [" ", " ", " ", " ", " "]
     },
     "battery#bat2": {
@@ -168,19 +168,19 @@ in
     "network": {
         "format-wifi": "{ipaddr}",
         "format-ethernet": "{ipaddr}/{cidr}",
-        "tooltip-format-wifi": "{essid} ({signalStrength}%) <span size='14000'></span>",
-        "tooltip-format": "{ifname} via {gwaddr} <span size='14000'>󰈀</span>",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%) <span size='13000' rise='-1500'></span>",
+        "tooltip-format": "{ifname} via {gwaddr} <span size='13000' rise='-1500'>󰈀</span>",
         "format-linked": "{ifname} (No IP)",
-        "format-disconnected": "Disconnected <span size='14000'></span>",
+        "format-disconnected": "Disconnected <span size='13000' rise='-1500'></span>",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
     "pulseaudio": {
-        "format": "{volume}% <span size='14000'>{icon}</span>",
-        "format-bluetooth": "{volume}% <span size='14000'>{icon}</span> 󰂯",
-        "format-bluetooth-muted": "󰖁 <span size='14000'>{icon}</span> 󰂯",
+        "format": "{volume}% <span size='13000' rise='-1500'>{icon}</span>",
+        "format-bluetooth": "{volume}% <span size='13000' rise='-1500'>{icon}</span> 󰂯",
+        "format-bluetooth-muted": "󰖁 <span size='13000' rise='-1500'>{icon}</span> 󰂯",
         "format-muted": "󰖁 {format_source}",
-        "format-source": "{volume}% <span size='14000'></span>",
-        "format-source-muted": "<span size='14000'></span>",
+        "format-source": "{volume}% <span size='13000' rise='-1500'></span>",
+        "format-source-muted": "<span size='13000' rise='-1500'></span>",
         "format-icons": {
             "headphone": "󰋋",
             "hands-free": "󱡒 ",
@@ -205,8 +205,8 @@ in
         "format-icons": {
         "default": "",
         "performance": "",
-        "balanced": "<span size='14000'></span>",
-        "power-saver": "<span size='14000'></span>"
+        "balanced": "<span size='13000' rise='-1500'></span>",
+        "power-saver": "<span size='13000' rise='-1500'></span>"
       }
     },
     "custom/playerctl#backward": {
