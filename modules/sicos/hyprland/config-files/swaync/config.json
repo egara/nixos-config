@@ -81,11 +81,11 @@
         "position": "right",
         "actions": [
           {
-            "label": "󰙎   About (Full)",
+            "label": "About (Full)",
             "command": "swaync-client -cp && sleep 1 && kitty --hold sh -c 'fastfetch -c all.jsonc'"
           },
           {
-            "label": "󰙎   About (Partial)",
+            "label": "About (Partial)",
             "command": "swaync-client -cp && sleep 1 && kitty --hold sh -c 'fastfetch'"
           }
         ]
@@ -95,19 +95,19 @@
         "position": "right",
         "actions": [
           {
-            "label": "   Reboot",
+            "label": "Reboot",
             "command": "systemctl reboot"
           },
           {
-            "label": "   Lock",
+            "label": "Lock",
             "command": "hyprlock"
           },
           {
-            "label": "   Logout",
+            "label": "Logout",
             "command": "hyprctl dispatch exit 0"
           },
           {
-            "label": "   Shut down",
+            "label": "Shut down",
             "command": "systemctl poweroff"
           }
         ]
@@ -135,11 +135,11 @@
         "position": "left",
         "actions": [
           {
-            "label": "   Select & Edit",
+            "label": "Select region & Edit",
             "command": "swaync-client -cp && sleep 1 && hyprshot -m region --raw | satty --filename - --early-exit --copy-command wl-copy --initial-tool arrow --output-filename ~/Pictures/screenshot-$(date '+%Y%m%d-%H:%M:%S').png"
           },
           {
-            "label": "   Select & Copy",
+            "label": "Select region & Copy",
             "command": "swaync-client -cp && sleep 1 && hyprshot -m region --clipboard-only"
           }
         ]
@@ -168,17 +168,18 @@
       }*/
     },
     "buttons-grid": {
+      "buttons-per-row": 3,
       "actions": [
         {
-          "label": "",
+          "label": "󰈀",
           "command": "swaync-client -t && nm-connection-editor"
         },
         {
-          "label": "",
+          "label": "󰂯",
           "command": "swaync-client -t && blueman-manager"
         },
         {
-          "label": "",
+          "label": "",
           "command": "swaync-client -t && walker -m files"
         },
         {
@@ -188,6 +189,13 @@
         {
           "label": "",
           "command": "swaync-client -t && walker -m clipboard"
+        },
+        {
+          "active": false,
+          "command": "~/.config/sicos/scripts/toggle-hypridle.sh",
+          "label": "󰛊",
+          "type": "toggle"
+          /*"update_command": "notify-send 'Hi'"*/
         }
       ]
     }

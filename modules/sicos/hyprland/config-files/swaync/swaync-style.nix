@@ -330,6 +330,14 @@ in
   background: @noti-bg-hover;
 }
 
+.widget-buttons-grid>flowbox>flowboxchild>button:checked {
+  background-color: @bg-selected;
+}
+
+.widget-buttons-grid>flowbox>flowboxchild>button:checked label {
+  color: @noti-fg;
+}
+
 .screenshot-buttons,
 .info-buttons,
 .screencast-buttons,
