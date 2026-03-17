@@ -178,7 +178,7 @@ in
                 applications = 10;
                 desktop = 10;
                 popups = 10;
-                terminal = 11;
+                terminal = 10;
               };
             };
             targets = {
