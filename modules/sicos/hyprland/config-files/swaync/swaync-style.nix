@@ -306,7 +306,14 @@ in
   border-radius: 4px;
   margin: 4px 8px;
   color: @noti-fg;
-  font-size: 20px;
+}
+
+.widget-menubar label{
+  font-size: 12px;
+}
+
+.widget-menubar>box label{
+  font-size: 18px;
 }
 
 .widget-buttons-grid{
@@ -314,7 +321,6 @@ in
   margin: 0px 8px 8px;
   border-radius: 0px 0px 4px 4px;
   background-color: @noti-bg;
-  font-size: 14px;
   color: @noti-fg;
 }
 
@@ -323,7 +329,10 @@ in
   border-radius: 4px;
   margin: 5px;
   color: @noti-fg;
-  font-size: 20px;
+}
+
+.widget-buttons-grid>flowbox>flowboxchild>button label{
+  font-size: 18px;
 }
 
 .widget-buttons-grid>flowbox>flowboxchild>button:hover {
