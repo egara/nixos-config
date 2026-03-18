@@ -14,7 +14,7 @@ output=$(echo -e $items | walker --dmenu -H -n -N)
 if [[ "$output" == *"Applications"* ]]; then
     uwsm app -- walker
 elif [[ "$output" == *"Power"* ]]; then
-    wlogout --protocol layer-shell
+    wlogout --protocol layer-shell -b 6
 elif [[ "$output" == *"Clean"* ]]; then
     kitty --hold sh -c "~/.config/sicos/scripts/nixos-clean.sh"
 elif [[ "$output" == *"Screensaver"* ]]; then

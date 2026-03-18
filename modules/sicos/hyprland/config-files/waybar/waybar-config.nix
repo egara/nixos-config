@@ -196,7 +196,7 @@ in
         "format": "⏻",
         "tooltip": true,
         "tooltip-format": "Power Menu",
-        "on-click": "wlogout --protocol layer-shell"
+        "on-click": "wlogout --protocol layer-shell -b 6"
     },
     "power-profiles-daemon": {
         "format": "{icon}",
