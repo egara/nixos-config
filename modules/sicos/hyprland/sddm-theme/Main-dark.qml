@@ -95,7 +95,7 @@ Rectangle {
                 textRole: "name"
                 currentIndex: 0
                 onActivated: passwordField.focus = true
-                
+
                 Component.onCompleted: {
                     if (userModel.lastIndex !== undefined) {
                         currentIndex = userModel.lastIndex
@@ -104,7 +104,7 @@ Rectangle {
 
                 font.family: "JetBrainsMono Nerd Font Mono"
                 font.pixelSize: 24
-                
+
                 delegate: Controls.ItemDelegate {
                     width: userSelect.width
                     contentItem: Text {
@@ -140,13 +140,14 @@ Rectangle {
                 id: passwordField
                 Layout.fillWidth: true
                 placeholderText: "Password..."
+                placeholderTextColor: "#00aa00" // Dimmed Accent Color
                 echoMode: TextInput.Password
                 focus: true
-                
+
                 color: "#00ff00"
                 font.family: "JetBrainsMono Nerd Font Mono"
                 font.pixelSize: 24
-                
+
                 background: Rectangle {
                     color: "#1a1a1a"
                     border.color: "#00ff00"
@@ -155,11 +156,11 @@ Rectangle {
 
                 onAccepted: sddm.login(userSelect.currentText, passwordField.text, sessionIndex)
             }
-            
+
             Controls.Button {
                 text: "EXECUTE"
                 Layout.fillWidth: true
-                
+
                 contentItem: Text {
                     text: parent.text
                     font.family: "JetBrainsMono Nerd Font Mono"
@@ -174,19 +175,19 @@ Rectangle {
                     border.color: "#00ff00"
                     border.width: 1
                 }
-                
+
                 onClicked: sddm.login(userSelect.currentText, passwordField.text, sessionIndex)
             }
         }
     }
-    
+
     // Status / Error message
     Text {
         anchors.top: loginBox.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 30
         text: "STATUS: " + (loginError ? "ACCESS DENIED" : "READY")
-        color: loginError ? "#ff0000" : "#555555" // Red / Grey
+        color: loginError ? "#ff0000" : "#8cf58c" // Red / Accent Color
         font.family: "JetBrainsMono Nerd Font Mono"
         font.pixelSize: 22
     }
@@ -196,7 +197,7 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 70
         text: "[F1] SHUTDOWN  [F2] REBOOT  [F3] USER"
-        color: "#333333"
+        color: "#888888" // Lighter grey for hints
         font.family: "JetBrainsMono Nerd Font Mono"
         font.pixelSize: 18
         visible: !loginError
@@ -208,11 +209,11 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: 50
-        
+
         Controls.Button {
             text: "SHUTDOWN [F1]"
             Layout.preferredWidth: 250
-            
+
             contentItem: Text {
                 text: parent.text
                 font.family: "JetBrainsMono Nerd Font Mono"
@@ -227,7 +228,7 @@ Rectangle {
                 border.color: "#00ff00"
                 border.width: 1
             }
-            
+
             onClicked: sddm.powerOff()
         }
 
@@ -236,7 +237,7 @@ Rectangle {
         Controls.Button {
             text: "REBOOT [F2]"
             Layout.preferredWidth: 250
-            
+
             contentItem: Text {
                 text: parent.text
                 font.family: "JetBrainsMono Nerd Font Mono"
@@ -251,7 +252,7 @@ Rectangle {
                 border.color: "#00ff00"
                 border.width: 1
             }
-            
+
             onClicked: sddm.reboot()
         }
     }
