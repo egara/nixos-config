@@ -100,7 +100,10 @@
   ];
 
   # Creating a symlink for openjdk8 in order to configure Eclipse properly
-  systemd.tmpfiles.rules = [
-    "L /var/lib/jvm/openjdk8 - - - - ${pkgs-stable.jdk8}/lib/openjdk"
-  ];
+  system.activationScripts.jdk8-link = {
+    text = ''
+      mkdir -p /var/lib/jvm
+      ln -sfn ${pkgs-stable.jdk8}/lib/openjdk /var/lib/jvm/openjdk8
+    '';
+  };
 }
