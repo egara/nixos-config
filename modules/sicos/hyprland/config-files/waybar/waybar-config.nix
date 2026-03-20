@@ -93,11 +93,11 @@ in
         "notification": "<span foreground='#${c.base08}'><sup></sup></span>",
         "none": "",
         "dnd-notification": "<span foreground='#${c.base08}'><sup></sup></span>",
-        "dnd-none": "",
+        "dnd-none": "󰪑",
         "inhibited-notification": "<span foreground='#${c.base08}'><sup></sup></span>",
         "inhibited-none": "",
         "dnd-inhibited-notification": "<span foreground='#${c.base08}'><sup></sup></span>",
-        "dnd-inhibited-none": ""
+        "dnd-inhibited-none": "󰪑"
       },
       "return-type": "json",
       "exec-if": "which swaync-client",
