@@ -243,7 +243,7 @@
       tcpdump
       wireshark
       killall
-      protonvpn-gui
+      proton-vpn
       gemini-cli-bin
       #gradia
       posting
@@ -353,6 +353,35 @@
     dina-font
     proggyfonts
   ];
+
+  # Nix pragmatism: nix-ld and envfs -- BEGIN
+  # For more information check out https://fzakaria.com/2025/02/26/nix-pragmatism-nix-ld-and-envfs
+  # This tricks pre-compiled Linux binaries into finding libraries on NixOS
+  programs = {
+    nix-ld = {
+      enable = true;
+      # put whatever libraries you think you might need
+      # nix-ld includes a strong sane-default as well
+      # in addition to these
+      libraries = with pkgs; [
+        stdenv.cc.cc.lib
+        zlib
+      ];
+    };
+  };
+
+  # A fuse filesystem that dynamically populates contents of /bin and /usr/bin/ so that it contains
+  # all executables from the PATH of the requesting process. This allows executing FHS based
+  # programs on a non-FHS system. For example, this is useful to execute shebangs on NixOS
+  # that assume hard coded locations like /bin or /usr/bin etc.
+  # By default, binaries are only available whenever the calling process executes or open a
+  # program, not when using stat or listing the directory
+  services = {
+    envfs = {
+      enable = true;
+    };
+  };
+  #  Nix pragmatism: nix-ld and envfs -- FINISH
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
