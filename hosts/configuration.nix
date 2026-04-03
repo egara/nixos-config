@@ -179,6 +179,7 @@
     enable = true;
     packages = [
       "com.stremio.Stremio"
+      "fr.arnaudmichel.launcherstudio"
     ];
   };
 
