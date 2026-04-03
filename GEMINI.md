@@ -65,7 +65,7 @@ Theming is a core feature of SicOS, managed by **Stylix** and the `theme-switche
     2.  Updates `themeMode` and `themeScheme` in `hosts/default.nix` using `sed`.
     3.  Runs `nixos-rebuild switch --flake .#<host>-hyprland`.
     4.  Restarts UI services (`waybar`, `swaync`, `walker`) using `uwsm app` to apply changes instantly.
-    5.  Updates the wallpaper using `swww`.
+    5.  Updates the wallpaper using `awww`.
 
 ### 3.3. Hosts
 - **VM (`vm`)**: Virtual machine for testing (Plasma/Hyprland).

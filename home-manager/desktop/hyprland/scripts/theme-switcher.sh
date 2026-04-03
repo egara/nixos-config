@@ -131,6 +131,6 @@ echo "Terminal will close in 3 seconds..."
 sleep 3
 
 # Changing wallpaper
-swww img --transition-type grow --transition-pos 0,0 --transition-step 90 $WALLPAPERS_PATH/sicos-$THEME.jpg
+awww img --transition-type grow --transition-pos 0,0 --transition-step 90 $WALLPAPERS_PATH/sicos-$THEME.jpg
 
 kill $PPID

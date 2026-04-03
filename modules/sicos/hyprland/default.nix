@@ -289,7 +289,7 @@ in
 
         # Other tools
         udiskie # Automount USB devices
-        swww # for wallpapers
+        awww # for wallpapers
         feh # Image viewer
         hyprshot # Screenshots tool
         satty # Screenshot editor
