@@ -70,6 +70,7 @@
     #teams-for-linux
     opencode
     #pkgs-stable.jdk8
+    kdePackages.kdenlive
   ];
 
   # # Creating a symlink for openjdk8 in order to configure Eclipse properly
