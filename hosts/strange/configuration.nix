@@ -39,7 +39,7 @@
   };
 
   # Kernel
-  boot.kernelPackages = pkgs-stable.linuxPackages_zen;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Kernel parameters passed in GRUB in order to
   # allow the laptop starts normally due to the
@@ -50,10 +50,20 @@
   # Docker
   virtualisation.docker.package = pkgs.docker;
 
+  # Limits for NPU (FastFlowLM requires unlimited memlock)
+  security.pam.loginLimits = [
+    { domain = "*"; item = "memlock"; type = "-"; value = "unlimited"; }
+  ];
+
+  systemd.settings.Manager.DefaultLimitMEMLOCK = "infinity";
+
   # Bluetooth support and management
   hardware.bluetooth.enable = true; # enables support for Bluetooth
   hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
   services.blueman.enable = true;
+
+  # Ensure redistributable firmware is enabled for the NPU
+  hardware.enableRedistributableFirmware = true;
 
   # List of packages installed in system profile only for this host
   environment.systemPackages = with pkgs; [
