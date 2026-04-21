@@ -81,6 +81,7 @@
     opencode
     #pkgs-stable.jdk8
     kdePackages.kdenlive
+    chatbox
   ];
 
   # # Creating a symlink for openjdk8 in order to configure Eclipse properly
