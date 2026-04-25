@@ -162,6 +162,7 @@
     KUBE_EDITOR= "nano";
     BROWSER = "firefox";
     TERMINAL = "kitty";
+    FAST_FLOW_LM_API_KEY = "local";
   };
 
   # Allow unfree packages
