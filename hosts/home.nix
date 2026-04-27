@@ -296,7 +296,7 @@ in {
 
     ];
     userSettings = {
-      hour_format = "hour24";
+      base_keymap = "SublimeText";
       vim_mode = false;
       restore_on_startup = "last_workspace";
       session = {
@@ -325,6 +325,52 @@ in {
       # Disabling preview tabs
       preview_tabs = {
         enabled = false;
+      };
+      # Langage models
+      language_models = {
+        lmstudio = {
+          api_url = "http://localhost:1234/api/v0/";
+        };
+        openai_compatible = {
+          FastFlowLM = {
+            api_url = "http://localhost:52625/v1";
+            available_models = [
+              {
+                name = "qwen3.5:4b";
+                display_name = "qwen3.5:4b";
+                max_tokens = 32768;
+                capabilities = {
+                  tools = true;
+                  images = true;
+                  parallel_tool_calls = true;
+                  prompt_cache_key = true;
+                };
+              }
+              {
+                name = "qwen3.5:9b";
+                display_name = "qwen3.5:9b";
+                max_tokens = 16384;
+                capabilities = {
+                  tools = true;
+                  images = true;
+                  parallel_tool_calls = true;
+                  prompt_cache_key = true;
+                };
+              }
+              {
+                name = "gpt-oss-sg:20b";
+                display_name = "gpt-oss-sg:20b";
+                max_tokens = 24576;
+                capabilities = {
+                  tools = false;
+                  images = false;
+                  parallel_tool_calls = false;
+                  prompt_cache_key = false;
+                };
+              }
+            ];
+          };
+        };
       };
     };
 
