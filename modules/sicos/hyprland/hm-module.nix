@@ -276,6 +276,7 @@ in
         };
         gtk3.extraConfig.gtk-application-prefer-dark-theme = config.stylix.polarity == "dark";
         gtk4.extraConfig.gtk-application-prefer-dark-theme = config.stylix.polarity == "dark";
+        gtk4.theme = config.gtk.theme;
       };
 
       # QT configuration and theming
