@@ -90,4 +90,38 @@
   #   chmod 777 -R /var/lib/jvm
   #   ln -sf ${pkgs-stable.jdk8}/lib/openjdk /var/lib/jvm/openjdk8
   # '';
+
+  # Special container which will be integrated directly into the system and systemd management
+  virtualisation = {
+    oci-containers = {
+      backend = "docker";
+      containers = {
+        # OpenWebUI
+        open-webui = {
+          image = "ghcr.io/open-webui/open-webui:main";
+          autoStart = false;
+          # Important. This OPENAI_API_BASE_URL will only work if
+          # FastFlowLM which runs via Distrobox starts listening
+          # on all the network interfaces (0.0.0.0) instead of
+          # only on 127.0.0.1. In order to achieve this, it is necessary
+          # to run flm with this command:
+          # flm serve gemma4-it:e4b --ctx-len 32768 --pmode performance --host 0.0.0.0
+          environment = {
+            OPENAI_API_BASE_URL = "http://host.docker.internal:52625/v1";
+            OPENAI_API_KEY = "local";
+            WEBUI_AUTH = "false";
+          };
+          extraOptions = [
+            "--add-host=host.docker.internal:host-gateway"
+          ];
+          ports = [
+            "3000:8080"
+          ];
+          volumes = [
+            "/home/egarcia/Docker/open-webui/data:/app/backend/data:rw"
+          ];
+        };
+      };
+    };
+  };
 }
