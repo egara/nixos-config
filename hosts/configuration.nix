@@ -244,7 +244,7 @@
       nmap
       element-desktop
       tcpdump
-      wireshark
+      pkgs-stable.wireshark
       killall
       proton-vpn
       gemini-cli-bin
