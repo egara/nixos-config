@@ -65,6 +65,17 @@
   # Ensure redistributable firmware is enabled for the NPU
   hardware.enableRedistributableFirmware = true;
 
+  # AMD AI Stack provided by nix-amd-ai flake
+  hardware.amd-npu = {
+    enable = true;
+    enableFastFlowLM = true;   # LLM inference on NPU
+    enableLemonade = false;    # OpenAI-compatible API server
+    enableROCm = false;        # ROCm GPU backends (llamacpp + sd-cpp)
+    enableVulkan = false;      # Vulkan GPU backends (llamacpp + whispercpp)
+    enableImageGen = false;    # default true; set false to drop sd-cpp from closure
+    lemonade.user = "egarcia";
+  };
+
   # List of packages installed in system profile only for this host
   environment.systemPackages = with pkgs; [
     bluez-tools

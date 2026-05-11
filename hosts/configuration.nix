@@ -150,6 +150,7 @@
       "libvirtd"
       "bluetooth"
       "kvm"
+      "render"
     ];
     packages = with pkgs; [
       #firefox

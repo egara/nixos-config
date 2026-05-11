@@ -1,5 +1,5 @@
 #Variables
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, self, ... }:
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, nix-amd-ai, self, ... }:
 let
   # Main user
   username = "egarcia";
@@ -175,6 +175,7 @@ let
       imports = [(import ./strange/disko-config.nix)];
     }
     nixos-hardware.nixosModules.framework-amd-ai-300-series
+    nix-amd-ai.nixosModules.default
     ./strange/hardware-configuration.nix
     ./efi-configuration.nix
     ./strange/configuration.nix
