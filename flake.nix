@@ -85,10 +85,16 @@
       url = "github:NixOS/nixos-hardware/master";
     };
 
-  # Nix Flatpak. Install and manage flatpaks programatically using Nix
+    # Nix Flatpak. Install and manage flatpaks programatically using Nix
     # https://github.com/gmodena/nix-flatpak
     nix-flatpak = {
       url = "github:gmodena/nix-flatpak";
+    };
+
+    # Nix flake to enable AMD Ryzen 5 AI hardware, FastFlowLM and Lemonade
+    # https://github.com/noamsto/nix-amd-ai
+    nix-amd-ai = {
+      url = "github:noamsto/nix-amd-ai";
     };
   };
 
@@ -100,6 +106,7 @@
       "https://cache.nixos.org/"
       "https://nix-community.cachix.org" # It is recommended in Autofirma flake tutorial https://nix-community.github.io/autofirma-nix
       "https://walker-git.cachix.org" # It is recommended for walker application launcher
+      "https://nix-amd-ai.cachix.org"
     ];
 
     # Public keys that verify the integrity of binaries downloaded from the substituters.
@@ -108,13 +115,14 @@
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "walker-git.cachix.org-1:vmC0ocfPWh0S/vRAQGtChuiZBTAe4wiKDeyyXM0/7pM="
+      "nix-amd-ai.cachix.org-1:F4OU4vw/lV2oiG6SBHZ+nqjl4EFJuqI4X9A7pvaBmhQ="
     ];
   };
 
   # Function that tells my flake which to use and what do what to do with the dependencies.
   # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, hyprswitch, wallpaperdownloader, hyprland, hyprland-plugins, ... }:
   # outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, walker, ... }:
-  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, ... }:
+  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, nix-amd-ai, ... }:
   {
     nixosModules = {
       sicos-hyprland = {
@@ -143,7 +151,7 @@
         # to be defined anymore.
         # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
         # inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix walker;
-        inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader autofirma-nix stylix walker nixos-hardware nix-flatpak self;
+        inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader autofirma-nix stylix walker nixos-hardware nix-flatpak nix-amd-ai self;
       }
     );
   };
