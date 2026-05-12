@@ -66,6 +66,10 @@
   hardware.enableRedistributableFirmware = true;
 
   # AMD AI Stack provided by nix-amd-ai flake
+  # Important: If this native installation is enabled, the FastFlowLM instance
+  # which is installed in a Docker container and run by Distrobox won't
+  # work anymore. If you want FLM run inside the container, please disable this
+  # module
   hardware.amd-npu = {
     enable = true;
     enableFastFlowLM = true;   # LLM inference on NPU
