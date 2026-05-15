@@ -71,8 +71,8 @@
   # work anymore. If you want FLM run inside the container, please disable this
   # module
   hardware.amd-npu = {
-    enable = true;
-    enableFastFlowLM = true;   # LLM inference on NPU
+    enable = false;
+    enableFastFlowLM = false;   # LLM inference on NPU
     enableLemonade = false;    # OpenAI-compatible API server
     enableROCm = false;        # ROCm GPU backends (llamacpp + sd-cpp)
     enableVulkan = false;      # Vulkan GPU backends (llamacpp + whispercpp)
