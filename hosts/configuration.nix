@@ -257,6 +257,7 @@
       openssl
       lazyssh # For SSH management
       inetutils # Network utilities
+      virtiofsd
   ];
 
   # List of programs that must be enabled
@@ -295,6 +296,10 @@
     # KVM-QUEMU and Virtual Manager
     libvirtd = {
       enable = true;
+      # Adding virtifsd to enable filesystem sharing between host and guest
+      qemu = {
+        vhostUserPackages = with pkgs; [ virtiofsd ];
+      };
     };
 
     # Allow SPICE USB redirection for USB passthrough in QEMU
