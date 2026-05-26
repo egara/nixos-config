@@ -19,8 +19,8 @@ in
         type = lib.types.path;
         # Default config file will depend on if kanshi is
         # enabled or disabled by the user
-        # default = "${sicos-source-path}/modules/sicos/hyprland/config-files/hyprland.conf";
-        description = "Path to hyprland.conf file.";
+        # default = "${sicos-source-path}/modules/sicos/hyprland/config-files/hyprland.lua";
+        description = "Path to hyprland.lua file.";
       };
     };
 
@@ -259,7 +259,6 @@ in
         hypridle
         waybar
         hyprland-qtutils
-        hyprnome # Workspaces like in GNOME
         wlogout
         xdg-desktop-portal-gtk
         xdg-desktop-portal-hyprland
