@@ -280,6 +280,13 @@ in
         gtk4.theme = config.gtk.theme;
       };
 
+      # Set dconf color-scheme preference for GTK4/Adwaita applications
+      dconf.settings = {
+        "org/gnome/desktop/interface" = {
+          color-scheme = if config.stylix.polarity == "dark" then "prefer-dark" else "prefer-light";
+        };
+      };
+
       # QT configuration and theming
       qt = {
         enable = true;

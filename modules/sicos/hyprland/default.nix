@@ -224,6 +224,9 @@ in
 
       programs.xfconf.enable = true;
 
+      # Enable dconf system service
+      programs.dconf.enable = true;
+
       # Walker (Launcher)
       programs.walker.enable = true;
 
@@ -235,6 +238,11 @@ in
         enable = true;
         wlr.enable = lib.mkForce true;
         extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+        config = {
+          common = {
+            default = [ "gtk" ];
+          };
+        };
       };
 
       # Waybar overlay for experimental features
@@ -246,9 +254,11 @@ in
         })
       ];
 
-      # Hint Electron apps to use wayland
+      # Hint Electron apps to use wayland and force Adwaita color scheme preference
+      # Force Adwaita color scheme for GTK applications
       environment.sessionVariables = {
         NIXOS_OZONE_WL = "1";
+        ADW_DEBUG_COLOR_SCHEME = if cfg.theming.mode == "dark" then "prefer-dark" else "prefer-light";
       };
 
       # Add packages required for the Hyprland setup
@@ -262,6 +272,8 @@ in
         wlogout
         xdg-desktop-portal-gtk
         xdg-desktop-portal-hyprland
+        gsettings-desktop-schemas
+        glib
         xwayland
         meson
         wayland-protocols
