@@ -1,5 +1,5 @@
 #Variables
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, nix-amd-ai, self, ... }:
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, nix-amd-ai, antigravity-nix, self, ... }:
 let
   # Main user
   username = "egarcia";
@@ -59,7 +59,7 @@ let
           config = lib.mkIf (host.desktop == "hyprland") (
             let
               themeMode = "dark";
-              themeScheme = "catppuccin-mocha";
+              themeScheme = "tokyo-city-dark";
             in
             {
               # SicOS module options configuration
@@ -163,6 +163,7 @@ let
       _module.args.disks = [ "/dev/nvme0n1" ];
       imports = [(import ./taskmaster/disko-config.nix)];
     }
+
     ./taskmaster/hardware-configuration.nix
     ./efi-configuration.nix
     ./taskmaster/configuration.nix

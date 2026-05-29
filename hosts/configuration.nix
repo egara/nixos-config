@@ -248,7 +248,7 @@
       pkgs-stable.wireshark
       killall
       proton-vpn
-      gemini-cli-bin
+      inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-cli
       #gradia
       posting
       k9s
