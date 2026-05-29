@@ -192,7 +192,8 @@
       nvd    # NixOS package version diff tool
       firefox
       google-chrome
-      kdePackages.okular
+      #kdePackages.okular
+      papers
       #qmmp
       pkgs-stable.qmmp
       pkgs-stable.audacity
@@ -209,8 +210,8 @@
       flac
       wireplumber
       pavucontrol
-      pkgs-stable.python3
-      pkgs-stable.python3Packages.pip
+      # pkgs-stable.python3
+      # pkgs-stable.python3Packages.pip
       p7zip
       unzip
       unrar
