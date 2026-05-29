@@ -98,6 +98,7 @@
     };
 
     # Antigravity tools
+    # https://github.com/jacopone/antigravity-nix
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
