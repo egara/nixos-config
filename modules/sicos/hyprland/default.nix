@@ -259,6 +259,8 @@ in
       environment.sessionVariables = {
         NIXOS_OZONE_WL = "1";
         ADW_DEBUG_COLOR_SCHEME = if cfg.theming.mode == "dark" then "prefer-dark" else "prefer-light";
+	# Allow to write spanish accents in GTK apps like Papers
+	GTK_IM_MODULE = "gtk-im-context-simple";
       };
 
       # Add packages required for the Hyprland setup
