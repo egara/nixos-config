@@ -133,9 +133,9 @@ in {
           { run = "feh \"$@\""; orphan= true; for = "unix"; }
         ];
 
-        # The default PDF reader will be Okular
+        # The default PDF reader will be Papers
         pdf = [
-          { run = "okular \"$@\""; orphan = true; for = "unix"; }
+          { run = "papers \"$@\""; orphan = true; for = "unix"; }
         ];
 
         # The default editor will be sublime text

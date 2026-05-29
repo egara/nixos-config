@@ -117,8 +117,8 @@ in
             #"text/html" = "firefox.desktop";
             "x-scheme-handler/http" = "firefox.desktop";
             "x-scheme-handler/https" = "firefox.desktop";
-            "application/pdf" = "org.kde.okular.desktop";
-            "application/x-pdf" = "org.kde.okular.desktop";
+            "application/pdf" = "org.gnome.Papers.desktop";
+            "application/x-pdf" = "org.gnome.Papers.desktop";
             "x-terminal-emulator" = "kitty.desktop";
             "inode/directory" = "thunar.desktop";
             "x-scheme-handler/file" = "thunar.desktop";
