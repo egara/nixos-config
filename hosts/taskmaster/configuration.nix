@@ -30,7 +30,7 @@
     # DNS
     nameservers = [ "193.146.97.145" "193.146.97.171" ];
   };
-  
+
   # Global power management for laptops
   powerManagement.enable = true;
 
@@ -58,7 +58,7 @@
   #     # START_CHARGE_THRESH_BAT0 = 40; # 40 and bellow it starts to charge
   #     # STOP_CHARGE_THRESH_BAT0 = 90; # 90 and above it stops charging
   #   };
-  # }; 
+  # };
 
   # Thermald proactively prevents overheating on Intel CPUs and works well with other tools
   services.thermald.enable = true;
@@ -72,16 +72,16 @@
         # When power button is pushed
         HandlePowerKey = "suspend";
       };
-    };    
-  }; 
+    };
+  };
 
   # Kernel
   boot.kernelPackages = pkgs-stable.linuxPackages_zen;
 
   # Kernel parameters passed in GRUB in order to
-  # allow the laptop starts normally due to the 
+  # allow the laptop starts normally due to the
   # hardware of this machine
-   boot.kernelParams = [ 
+   boot.kernelParams = [
    ];
 
   # Docker
@@ -96,7 +96,9 @@
   environment.systemPackages = with pkgs; [
       apache-directory-studio
       eclipses.eclipse-jee
-      pkgs-stable.jdk8  
+      pkgs-stable.jdk8
+      opencode
+      python3
   ];
 
   # Creating a symlink for openjdk8 in order to configure Eclipse properly
