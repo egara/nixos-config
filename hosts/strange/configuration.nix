@@ -96,6 +96,7 @@
     opencode
     #pkgs-stable.jdk8
     kdePackages.kdenlive
+    obsidian
     #chatbox
   ];
 
