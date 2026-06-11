@@ -60,6 +60,17 @@ in
           ".config/walker/config.toml".source = ./config-files/walker/config.toml;
           ".config/walker/themes/stylix/style.css".text = import ./config-files/walker/themes/stylix/walker-style.nix { inherit config lib nixosConfig; };
 
+          # UWSM environment variables
+          # (Needed because uwsm cannot parse hyprland.lua to extract env vars)
+          ".config/uwsm/env".text = ''
+            export XCURSOR_SIZE=24
+            export GDK_BACKEND=wayland
+            export XDG_CURRENT_DESKTOP=Hyprland
+            export XDG_SESSION_TYPE=wayland
+            export XDG_SESSION_DESKTOP=Hyprland
+            export TERMINAL=kitty
+          '';
+
           # Scripts (marked as executable)
           ".config/sicos/scripts/" = {
               source = cfg.scripts.path;

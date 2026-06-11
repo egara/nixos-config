@@ -21,6 +21,9 @@
 -- Execute your favorite apps at launch
 
 hl.on("hyprland.start", function ()
+    -- Finalize UWSM startup to export WAYLAND_DISPLAY and other critical variables
+    hl.exec_cmd("uwsm finalize")
+
     -- Kanshi (Multi monitor layout manager)
     -- If you want to enable kanshi, you will need to create a .config/kanshi/config file with your hardware
     -- More information: https://gitlab.freedesktop.org/emersion/kanshi
@@ -39,8 +42,8 @@ hl.on("hyprland.start", function ()
     hl.exec_cmd("uwsm app -- waybar")
 
     -- Walker & Elephant
-    hl.exec_cmd("uwsm app -- walker --gapplication-service")
-    hl.exec_cmd("uwsm app -- elephant")
+    hl.exec_cmd("walker --gapplication-service")
+    hl.exec_cmd("elephant")
 
     -- Notifications
     hl.exec_cmd("uwsm app -- swaync")
@@ -64,14 +67,7 @@ end)
 -- ###############################
 -- Environment variables - START
 -- ###############################
-
-hl.env("XCURSOR_SIZE", "24")
-hl.env("GDK_BACKEND", "wayland")
-hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
-hl.env("XDG_SESSION_TYPE", "wayland")
-hl.env("XDG_SESSION_DESKTOP", "Hyprland")
-hl.env("TERMINAL", "kitty")
-
+-- (Moved to ~/.config/uwsm/env as per UWSM best practices)
 -- ################################
 -- Environment variables - FINISH
 -- ################################
@@ -107,7 +103,7 @@ hl.bind(mainMod .. " + SPACE", hl.dsp.layout("movetoroot"), { description = "Mov
 -- hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("uwsm app -- " .. webapp .. "='https://gemini.google.com/'"), { description = "Gemini" })
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("~/.config/sicos/scripts/sicos-settings.sh"), { description = "SicOS settings menu" })
 -- hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("uwsm app -- " .. terminal .. " --override term=xterm-256color -e lazyssh"), { description = "Lazyssh" })
-hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd("uwsm app -- " .. menu), { description = "App Launcher (Walker)" })
+hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd(menu), { description = "App Launcher (Walker)" })
 hl.bind(mainMod .. " + CTRL + Up", hl.dsp.window.fullscreen({ mode = "fullscreen" }), { description = "Maximize Window (Toggling)" })
 hl.bind(mainMod .. " + ALT + Right", hl.dsp.window.resize({ x = 20, y = 0, relative = true }), { repeating = true, description = "Resize Current Window (Right)" })
 hl.bind(mainMod .. " + ALT + Left", hl.dsp.window.resize({ x = -20, y = 0, relative = true }), { repeating = true, description = "Resize Current Window (Left)" })
