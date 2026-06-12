@@ -391,4 +391,39 @@ in {
       uris = ["qemu:///system"];
     };
   };
+
+  # Configuring xdg-utils to use some default applications
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/x-nix" = "dev.zed.Zed.desktop";
+      "text/plain" = "dev.zed.Zed.desktop";
+      "text/markdown" = "dev.zed.Zed.desktop";
+      "application/javascript" = "dev.zed.Zed.desktop";
+      "application/json" = "dev.zed.Zed.desktop";
+      "application/x-yaml" = "dev.zed.Zed.desktop";
+      "text/css" = "dev.zed.Zed.desktop";
+      #"text/x-nix" = "sublime_text.desktop";
+      #"text/plain" = "sublime_text.desktop";
+      #"text/markdown" = "sublime_text.desktop";
+      #"application/javascript" = "sublime_text.desktop";
+      #"application/json" = "sublime_text.desktop";
+      #"application/x-yaml" = "sublime_text.desktop";
+      #"text/css" = "sublime_text.desktop";
+      #"text/html" = "firefox.desktop";
+      "x-scheme-handler/http" = "firefox.desktop";
+      "x-scheme-handler/https" = "firefox.desktop";
+      "application/pdf" = "org.gnome.Papers.desktop";
+      "application/x-pdf" = "org.gnome.Papers.desktop";
+      "x-terminal-emulator" = "kitty.desktop";
+      "inode/directory" = "thunar.desktop";
+      "x-scheme-handler/file" = "thunar.desktop";
+      "video/mp4" = "vlc.desktop";
+      "video/webm" = "vlc.desktop";
+      "video/x-matroska" = "vlc.desktop";
+      "audio/mpeg" = "qmmp.desktop";
+      "image/jpeg" = "feh.desktop";
+      "image/png" = "feh.desktop";
+    };
+  };
 }
