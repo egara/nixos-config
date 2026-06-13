@@ -10,7 +10,7 @@
 
     # Stable Nix packages
     nixpkgs-stable = {
-      url = "github:nixos/nixpkgs?ref=nixos-25.11";
+      url = "github:nixos/nixpkgs?ref=nixos-26.05";
     };
 
     # Disko packages (for automatic partitioning)

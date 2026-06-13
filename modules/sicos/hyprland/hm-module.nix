@@ -126,6 +126,15 @@ in
           enable = true;
         };
 
+        # Fuzzel installation and special configuration for
+        # system monitoring
+        # It's enable using home manager in order to let
+        # Stylix to do its magic and change the theme
+        # on the fly
+        programs.fuzzel = {
+          enable = true;
+        };
+
       }
     ))
     (lib.mkIf cfg.theming.enable {
@@ -168,6 +177,8 @@ in
               zed.enable = true;
 
               btop.enable = true;
+
+              fuzzel.enable = true;
 
               # Waybar theme colors will be built dinamically depending on the
               # scheme defined by the user

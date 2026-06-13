@@ -234,7 +234,7 @@
       pciutils
       spotify
       bind
-      encfs
+      cryfs
       #pkgs-stable.quickemu
       #pkgs-stable.quickgui
       quickemu
