@@ -59,7 +59,7 @@ let
           config = lib.mkIf (host.desktop == "hyprland") (
             let
               themeMode = "dark";
-              themeScheme = "tokyo-city-dark";
+              themeScheme = "gruvbox-dark";
             in
             {
               # SicOS module options configuration
