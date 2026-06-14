@@ -17,7 +17,7 @@ start_screensaver() {
     # Format: "MONITOR_NAME WORKSPACE_ID"
     while read -r MON WS_ID; do
         # Launch kitty on the specific workspace using [workspace ID] rule
-        hyprctl dispatch exec "[workspace $WS_ID] kitty --class screensaver --start-as=fullscreen bash -c 'trap \"kill 0\" EXIT; (while true; do tte -i ~/.config/sicos/screensaver/sicos-art.txt --frame-rate 120 --canvas-width 0 --canvas-height 0 --reuse-canvas --anchor-canvas c --anchor-text c --random-effect --no-eol --no-restore-cursor; done) & read -n 1 -s'"
+        hyprctl eval "hl.dispatch(hl.dsp.exec_cmd([[ [workspace $WS_ID] kitty --class screensaver --start-as=fullscreen bash -c 'trap \"kill 0\" EXIT; (while true; do tte -i ~/.config/sicos/screensaver/sicos-art.txt --frame-rate 120 --canvas-width 0 --canvas-height 0 --reuse-canvas --anchor-canvas c --anchor-text c --random-effect --no-eol --no-restore-cursor; done) & read -n 1 -s' ]]))"
     done < <(hyprctl monitors -j | jq -r '.[] | "\(.name) \(.activeWorkspace.id)"')
 
     # Wait for kitty processes to start
