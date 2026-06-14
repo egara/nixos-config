@@ -30,7 +30,7 @@ quick_activate = ["F1", "F2", "F3", "F4"]
 default = [
   "desktopapplications",
   "calc",
-  "runner",
+  #"runner",
   "menus",
   "websearch",
 ]
