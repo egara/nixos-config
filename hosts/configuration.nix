@@ -247,7 +247,7 @@
       minikube
       kubernetes-helm
       usbutils
-      transmission_4-gtk
+      fragments
       inputs.wallpaperdownloader.packages.x86_64-linux.default
       fd
       wl-clipboard
