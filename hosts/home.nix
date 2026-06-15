@@ -22,6 +22,14 @@ let
     hash = "sha256-ixZKOtLOwLHLeSoEkk07TB3N57DXoVEyImR3qzGUzxQ=";
   };
 
+  # GitHub repository for wise-enter yazi plugin https://github.com/jaam8/wise-enter.yazi
+  yazi-wise-enter-plugin = pkgs.fetchFromGitHub {
+    owner = "jaam8";
+    repo = "wise-enter.yazi";
+    rev = "main";
+    hash = "sha256-oYaaLbSyVbfshD2CWXx0aZEpxqzRfrWRjmQjeqCuVYU=";
+  };
+
   # GitHub repository for tokyo night yazi theme https://github.com/BennyOe/tokyo-night.yazi
   #yazi-theme-tokyo-night = pkgs.fetchFromGitHub {
   #    owner = "BennyOe";
@@ -83,6 +91,10 @@ in {
     package = pkgs.yazi.override {
       _7zz = pkgs._7zz-rar;  # Support for RAR extraction
     };
+
+    extraPackages = with pkgs; [
+      unar
+    ];
 
     # Theme (Tokyo Night)
     #theme = {
@@ -180,7 +192,9 @@ in {
       #full-border = "${yazi-plugins}/full-border.yazi";
       #toggle-pane = "${yazi-plugins}/toggle-pane.yazi";
       mount = "${yazi-plugins}/mount.yazi";
-      smart-enter = "${yazi-plugins}/smart-enter.yazi";
+      wise-enter = "${yazi-wise-enter-plugin}/";
+      #smart-enter = "${yazi-plugins}/smart-enter.yazi";
+
     };
 
     # Some plugins need to be loaded before hand.
@@ -261,9 +275,14 @@ in {
         }
         {
           on = "<Enter>";
-          run = "plugin smart-enter";
-          desc = "Enter the child directory, or open the file";
+          run = "plugin wise-enter";
+          desc = "Enter the child directory, open the file or uncompress an archive";
         }
+        # {
+        #   on = "<Enter>";
+        #   run = "plugin smart-enter";
+        #   desc = "Enter the child directory, or open the file";
+        # }
         {
           on = "<Delete>";
           run = "trash";
