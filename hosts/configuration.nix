@@ -28,12 +28,51 @@
       ];
   	};
 
+   # /etc/hosts
 	 extraHosts =
 	 ''
 	 # StandarStripesUleApplication
 	 127.0.0.1	uleapp	uleapp
 	 127.0.0.1   uleapp-ldap-test	uleapp-ldap-test
 	 '';
+  };
+
+  # sudoers
+  security.sudo = {
+      # place top level options (like wheelNeedPassword) here
+      enable = true; # make sure to enable the sudo package
+      execWheelOnly = false;
+      wheelNeedsPassword = true;
+
+      extraConfig = "#includedir /etc/sudoers.d"; # write custom config in here
+
+      extraRules = [
+          {
+              # Rule for egarcia ALL=(ALL) NOPASSWD: /usr/bin/openconnect
+              users = [ "egarcia" ]; # apply this rule to this user
+              # groups = [ "wheel" ]; # replace the line above with this line to apply the rule to groups
+              host = "ALL"; # host portion of ALL=(ALL:ALL) (i.e. the "ALL=" part), optional
+              runAs = "ALL"; # the "(ALL:ALL)" part in ALL=(ALL:ALL), optional
+
+              # commands = [ # takes in a list of commands
+              #   "/run/wrappers/bin/passwd" # you can write the commands as only a string
+
+              #   # or write more complex commands uses an attribute set
+              #   {
+              #     command = "ALL"; # this would be NOPASSWD: ALL
+              #     options = [ "NOPASSWD" ]; # don't need the ":" at the end
+              #   }
+              # ];
+
+              commands = [
+                {
+                  command = "/usr/bin/openconnect"; # this would be NOPASSWD: ALL
+                  options = [ "NOPASSWD" ]; # don't need the ":" at the end
+                }
+              ];
+
+          }
+      ];
   };
 
   # Services for managing VPNs via NetworkManager
@@ -267,6 +306,7 @@
       lazyssh # For SSH management
       inetutils # Network utilities
       virtiofsd
+      glow # TUI for viewing markdown files
   ];
 
   # List of programs that must be enabled
