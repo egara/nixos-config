@@ -66,7 +66,7 @@
 
               commands = [
                 {
-                  command = "/usr/bin/openconnect"; # this would be NOPASSWD: ALL
+                  command = "/run/current-system/sw/bin/openconnect"; # this would be NOPASSWD: ALL
                   options = [ "NOPASSWD" ]; # don't need the ":" at the end
                 }
               ];
