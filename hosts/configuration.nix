@@ -38,6 +38,7 @@
   };
 
   # sudoers
+  # https://dev.to/patimapoochai/how-to-edit-the-sudoers-file-in-nixos-with-examples-4k34
   security.sudo = {
       # place top level options (like wheelNeedPassword) here
       enable = true; # make sure to enable the sudo package
