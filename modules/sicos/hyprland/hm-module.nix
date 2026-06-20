@@ -285,7 +285,7 @@ in
       # QT configuration and theming
       qt = {
         enable = true;
-        platformTheme.name = "gtk";
+        platformTheme.name = "gtk3";
         style = {
           name = if config.stylix.polarity == "dark" then "adwaita-dark" else "adwaita";
           package = pkgs.adwaita-qt;
