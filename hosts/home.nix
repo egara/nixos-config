@@ -345,6 +345,13 @@ in {
       preview_tabs = {
         enabled = false;
       };
+      # Agent code servers
+      agent_servers = {
+        OpenCode = {
+          command = "opencode";
+          args = ["acp"];
+        };
+      };
       # Langage models
       language_models = {
         lmstudio = {
