@@ -11,7 +11,11 @@
 #           └─ default.nix
 #
 
-{ config, lib, pkgs, username, ... }:
+{
+  pkgs,
+  username,
+  ...
+}:
 
 let
   # GitHub repository for yazi plugins https://github.com/yazi-rs/plugins
@@ -48,11 +52,12 @@ let
   #     sha256 = "sha256-RrF97Lg9v0LV+XseJw4RrdbXlv+LJzfooOgqHD+LGcw=";
   # };
 
-in {
+in
+{
   #imports =
-    # Home Manager Modules
-    #(import ../modules/programs) ++
-    #(import ../modules/services);
+  # Home Manager Modules
+  #(import ../modules/programs) ++
+  #(import ../modules/services);
 
   home = {
     username = "${username}";
@@ -89,7 +94,7 @@ in {
 
     # Recommended for RAR files
     package = pkgs.yazi.override {
-      _7zz = pkgs._7zz-rar;  # Support for RAR extraction
+      _7zz = pkgs._7zz-rar; # Support for RAR extraction
     };
 
     extraPackages = with pkgs; [
@@ -127,27 +132,48 @@ in {
         # use xdg-open for all file types, thus respecting the system's default
         # applications.
         open = [
-          { run = "xdg-open \"$@\""; orphan = true; for = "unix"; desc = "Open"; }
+          {
+            run = "xdg-open \"$@\"";
+            orphan = true;
+            for = "unix";
+            desc = "Open";
+          }
         ];
 
         # The default player for music will be QMMP
         play = [
-          { run = "qmmp \"$@\""; orphan= true; for = "unix"; }
+          {
+            run = "qmmp \"$@\"";
+            orphan = true;
+            for = "unix";
+          }
         ];
 
         # The default player for video will be VLC
         video = [
-          { run = "vlc \"$@\""; orphan = true; for = "unix"; }
+          {
+            run = "vlc \"$@\"";
+            orphan = true;
+            for = "unix";
+          }
         ];
 
         # The default image viewer will be feh
         image = [
-          { run = "feh \"$@\""; orphan= true; for = "unix"; }
+          {
+            run = "feh \"$@\"";
+            orphan = true;
+            for = "unix";
+          }
         ];
 
         # The default PDF reader will be Papers
         pdf = [
-          { run = "papers \"$@\""; orphan = true; for = "unix"; }
+          {
+            run = "papers \"$@\"";
+            orphan = true;
+            for = "unix";
+          }
         ];
 
         # The default editor will be sublime text
@@ -157,33 +183,89 @@ in {
 
         # The default editor will be Zed
         edit = [
-          { run = "zeditor \"$@\""; orphan = true; for = "unix"; }
+          {
+            run = "zeditor \"$@\"";
+            orphan = true;
+            for = "unix";
+          }
         ];
 
         # A generic opener for Firefox
         firefox = [
-          { run = "firefox \"$@\""; orphan = true; for = "unix"; }
+          {
+            run = "firefox \"$@\"";
+            orphan = true;
+            for = "unix";
+          }
         ];
       };
 
       open = {
         # Setting default applications for some kind of files
         rules = [
-          { mime = "text/*"; use = "edit"; }
-          { mime = "video/*"; use = "video"; }
-          { mime = "application/json"; use = "edit"; }
-          { mime = "application/pdf"; use = ["pdf" "firefox"]; }
-          { mime = "audio/aac"; use = "play"; }
-          { mime = "audio/midi"; use = "play"; }
-          { mime = "audio/x-midi"; use = "play"; }
-          { mime = "audio/mpeg"; use = "play"; }
-          { mime = "audio/ogg"; use = "play"; }
-          { mime = "audio/wav"; use = "play"; }
-          { mime = "audio/webm"; use = "play"; }
-          { mime = "audio/3gpp"; use = "play"; }
-          { mime = "image/jpeg"; use = "image"; }
-          { mime = "image/png"; use = "image"; }
-          { mime = "*"; use = "open"; } # Fallback to xdg-open for all other mimetypes
+          {
+            mime = "text/*";
+            use = "edit";
+          }
+          {
+            mime = "video/*";
+            use = "video";
+          }
+          {
+            mime = "application/json";
+            use = "edit";
+          }
+          {
+            mime = "application/pdf";
+            use = [
+              "pdf"
+              "firefox"
+            ];
+          }
+          {
+            mime = "audio/aac";
+            use = "play";
+          }
+          {
+            mime = "audio/midi";
+            use = "play";
+          }
+          {
+            mime = "audio/x-midi";
+            use = "play";
+          }
+          {
+            mime = "audio/mpeg";
+            use = "play";
+          }
+          {
+            mime = "audio/ogg";
+            use = "play";
+          }
+          {
+            mime = "audio/wav";
+            use = "play";
+          }
+          {
+            mime = "audio/webm";
+            use = "play";
+          }
+          {
+            mime = "audio/3gpp";
+            use = "play";
+          }
+          {
+            mime = "image/jpeg";
+            use = "image";
+          }
+          {
+            mime = "image/png";
+            use = "image";
+          }
+          {
+            mime = "*";
+            use = "open";
+          } # Fallback to xdg-open for all other mimetypes
         ];
       };
     };
@@ -232,14 +314,20 @@ in {
           desc = "Mount and manage USB devices";
         }
         {
-          on = [ "g" "u" ];
+          on = [
+            "g"
+            "u"
+          ];
           run = "cd /run/media/egarcia";
           desc = "USB";
         }
         {
           on = "<C-c>";
-          for  = "unix";
-          run = ["shell -- for path in \"$@\"; do echo \"file://$path\"; done | wl-copy -t text/uri-list" "yank"];
+          for = "unix";
+          run = [
+            "shell -- for path in \"$@\"; do echo \"file://$path\"; done | wl-copy -t text/uri-list"
+            "yank"
+          ];
           desc = "Copy a file both in system and yazi clipboard";
         }
         {
@@ -254,8 +342,8 @@ in {
         }
         {
           on = "!";
-          for  = "unix";
-          run = ["shell \"$SHELL\" --block"];
+          for = "unix";
+          run = [ "shell \"$SHELL\" --block" ];
           desc = "Open $SHELL here";
         }
         {
@@ -299,6 +387,11 @@ in {
 
   programs.zed-editor = {
     enable = true;
+    extraPackages = [
+      pkgs.nil
+      pkgs.nixd
+    ];
+
     # For more extensions, go to https://github.com/DuskSystems/nix-zed-extensions/tree/main/generated/extensions
     extensions = [
       "nix"
@@ -349,7 +442,7 @@ in {
       agent_servers = {
         OpenCode = {
           command = "opencode";
-          args = ["acp"];
+          args = [ "acp" ];
         };
       };
       # Langage models
@@ -413,8 +506,8 @@ in {
   # Virtual Manager special configuration (https://nixos.wiki/wiki/Virt-manager)
   dconf.settings = {
     "org/virt-manager/virt-manager/connections" = {
-      autoconnect = ["qemu:///system"];
-      uris = ["qemu:///system"];
+      autoconnect = [ "qemu:///system" ];
+      uris = [ "qemu:///system" ];
     };
   };
 
