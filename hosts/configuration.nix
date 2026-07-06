@@ -2,7 +2,14 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, pkgs-stable, inputs, username, ... }:
+{
+  config,
+  pkgs,
+  pkgs-stable,
+  inputs,
+  username,
+  ...
+}:
 #{ config, pkgs, inputs, username, stylix, ... }:
 
 {
@@ -17,8 +24,8 @@
 
   # Enable networking
   networking = {
-  	networkmanager = {
-  		enable = true;
+    networkmanager = {
+      enable = true;
       # Enabling some NetworkManager plugins for managing VPNs
       plugins = with pkgs; [
         networkmanager-fortisslvpn
@@ -26,54 +33,53 @@
         networkmanager-openvpn
         networkmanager_strongswan
       ];
-  	};
+    };
 
-   # /etc/hosts
-	 extraHosts =
-	 ''
-	 # StandarStripesUleApplication
-	 127.0.0.1	uleapp	uleapp
-	 127.0.0.1   uleapp-ldap-test	uleapp-ldap-test
-	 '';
+    # /etc/hosts
+    extraHosts = ''
+      	 # StandarStripesUleApplication
+      	 127.0.0.1	uleapp	uleapp
+      	 127.0.0.1   uleapp-ldap-test	uleapp-ldap-test
+      	 '';
   };
 
   # sudoers
   # https://dev.to/patimapoochai/how-to-edit-the-sudoers-file-in-nixos-with-examples-4k34
   security.sudo = {
-      # place top level options (like wheelNeedPassword) here
-      enable = true; # make sure to enable the sudo package
-      execWheelOnly = false;
-      wheelNeedsPassword = true;
+    # place top level options (like wheelNeedPassword) here
+    enable = true; # make sure to enable the sudo package
+    execWheelOnly = false;
+    wheelNeedsPassword = true;
 
-      extraConfig = "#includedir /etc/sudoers.d"; # write custom config in here
+    extraConfig = "#includedir /etc/sudoers.d"; # write custom config in here
 
-      extraRules = [
+    extraRules = [
+      {
+        # Rule for egarcia ALL=(ALL) NOPASSWD: /usr/bin/openconnect
+        users = [ "egarcia" ]; # apply this rule to this user
+        # groups = [ "wheel" ]; # replace the line above with this line to apply the rule to groups
+        host = "ALL"; # host portion of ALL=(ALL:ALL) (i.e. the "ALL=" part), optional
+        runAs = "ALL"; # the "(ALL:ALL)" part in ALL=(ALL:ALL), optional
+
+        # commands = [ # takes in a list of commands
+        #   "/run/wrappers/bin/passwd" # you can write the commands as only a string
+
+        #   # or write more complex commands uses an attribute set
+        #   {
+        #     command = "ALL"; # this would be NOPASSWD: ALL
+        #     options = [ "NOPASSWD" ]; # don't need the ":" at the end
+        #   }
+        # ];
+
+        commands = [
           {
-              # Rule for egarcia ALL=(ALL) NOPASSWD: /usr/bin/openconnect
-              users = [ "egarcia" ]; # apply this rule to this user
-              # groups = [ "wheel" ]; # replace the line above with this line to apply the rule to groups
-              host = "ALL"; # host portion of ALL=(ALL:ALL) (i.e. the "ALL=" part), optional
-              runAs = "ALL"; # the "(ALL:ALL)" part in ALL=(ALL:ALL), optional
-
-              # commands = [ # takes in a list of commands
-              #   "/run/wrappers/bin/passwd" # you can write the commands as only a string
-
-              #   # or write more complex commands uses an attribute set
-              #   {
-              #     command = "ALL"; # this would be NOPASSWD: ALL
-              #     options = [ "NOPASSWD" ]; # don't need the ":" at the end
-              #   }
-              # ];
-
-              commands = [
-                {
-                  command = "/run/current-system/sw/bin/openconnect"; # this would be NOPASSWD: ALL
-                  options = [ "NOPASSWD" ]; # don't need the ":" at the end
-                }
-              ];
-
+            command = "/run/current-system/sw/bin/openconnect"; # this would be NOPASSWD: ALL
+            options = [ "NOPASSWD" ]; # don't need the ":" at the end
           }
-      ];
+        ];
+
+      }
+    ];
   };
 
   # Services for managing VPNs via NetworkManager
@@ -88,13 +94,13 @@
       enable = true;
     };
     tailscale = {
-     enable = true;
+      enable = true;
     };
     wg-netmanager = {
       enable = true;
     };
     xl2tpd = {
-     enable = true;
+      enable = true;
     };
   };
 
@@ -155,11 +161,11 @@
   # Enable OpenGL
   # 20240623 - It seems hardware.opengl has...
   #hardware = {
-	#  opengl = {
-	#    enable = true;
-	#    driSupport = true;
-	#    driSupport32Bit = true;
-	#  };
+  #  opengl = {
+  #    enable = true;
+  #    driSupport = true;
+  #    driSupport32Bit = true;
+  #  };
   #};
   # This is the new way to do it
   # More info:
@@ -202,13 +208,13 @@
   boot.kernel.sysctl = {
     "fs.inotify.max_user_watches" = 1048576; # default: 8192
     "fs.inotify.max_user_instances" = 524298; # default: 128
-    "fs.inotify.max_queued_events"  =   32768; # default: 16384
+    "fs.inotify.max_queued_events" = 32768; # default: 16384
   };
 
   # Environment variables
   environment.sessionVariables = {
     EDITOR = "nano";
-    KUBE_EDITOR= "nano";
+    KUBE_EDITOR = "nano";
     BROWSER = "firefox";
     TERMINAL = "kitty";
     FAST_FLOW_LM_API_KEY = "local";
@@ -237,77 +243,80 @@
   # List of stable and unstable packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-      nvd    # NixOS package version diff tool
-      firefox
-      google-chrome
-      #kdePackages.okular
-      papers
-      #qmmp
-      pkgs-stable.qmmp
-      pkgs-stable.audacity
-      pkgs-stable.carla
-      nano
-      #tailscale
-      libreoffice
-      ntfs3g
-      fltk
-      portaudio
-      lame
-      libvorbis
-      libogg
-      flac
-      wireplumber
-      pavucontrol
-      # pkgs-stable.python3
-      # pkgs-stable.python3Packages.pip
-      p7zip
-      unzip
-      unrar
-      zip
-      kdePackages.partitionmanager
-      distrobox
-      #fastfetch
-      #sublime4
-      vlc
-      telegram-desktop
-      pkgs-stable.insync
-      pciutils
-      spotify
-      bind
-      cryfs
-      #pkgs-stable.quickemu
-      #pkgs-stable.quickgui
-      quickemu
-      quickgui
-      yt-dlp
-      openconnect # For VPN extranet
-      kubectl
-      kubie
-      kubecolor
-      minikube
-      kubernetes-helm
-      usbutils
-      fragments
-      inputs.wallpaperdownloader.packages.x86_64-linux.default
-      fd
-      wl-clipboard
-      nmap
-      element-desktop
-      tcpdump
-      pkgs-stable.wireshark
-      killall
-      proton-vpn
-      inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-cli
-      #gradia
-      posting
-      k9s
-      mesa-demos
-      buttermanager
-      openssl
-      lazyssh # For SSH management
-      inetutils # Network utilities
-      virtiofsd
-      glow # TUI for viewing markdown files
+    nvd # NixOS package version diff tool
+    firefox
+    google-chrome
+    #kdePackages.okular
+    papers
+    #qmmp
+    pkgs-stable.qmmp
+    pkgs-stable.audacity
+    pkgs-stable.carla
+    nano
+    #tailscale
+    libreoffice
+    ntfs3g
+    fltk
+    portaudio
+    lame
+    libvorbis
+    libogg
+    flac
+    wireplumber
+    pavucontrol
+    # pkgs-stable.python3
+    # pkgs-stable.python3Packages.pip
+    p7zip
+    unzip
+    unrar
+    zip
+    kdePackages.partitionmanager
+    distrobox
+    #fastfetch
+    #sublime4
+    vlc
+    telegram-desktop
+    pkgs-stable.insync
+    pciutils
+    spotify
+    bind
+    cryfs
+    #pkgs-stable.quickemu
+    #pkgs-stable.quickgui
+    quickemu
+    quickgui
+    yt-dlp
+    openconnect # For VPN extranet
+    kubectl
+    kubie
+    kubecolor
+    minikube
+    kubernetes-helm
+    usbutils
+    fragments
+    inputs.wallpaperdownloader.packages.x86_64-linux.default
+    fd
+    wl-clipboard
+    nmap
+    element-desktop
+    tcpdump
+    pkgs-stable.wireshark
+    killall
+    proton-vpn
+    inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-cli
+    #gradia
+    posting
+    k9s
+    mesa-demos
+    buttermanager
+    openssl
+    lazyssh # For SSH management
+    inetutils # Network utilities
+    virtiofsd
+    glow # TUI for viewing markdown files
+    # Tools to encrypt/decrypt and manage keys
+    age
+    sops
   ];
 
   # List of programs that must be enabled
