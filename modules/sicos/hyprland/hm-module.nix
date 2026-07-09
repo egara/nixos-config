@@ -1,4 +1,10 @@
-{ config, pkgs, lib, nixosConfig, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  nixosConfig,
+  ...
+}:
 
 let
   cfg = nixosConfig.programs.sicos.hyprland;
@@ -7,144 +13,160 @@ in
   # This is a home-manager module.
   # It's imported into a user's home-manager configuration.
   config = lib.mkMerge [
-    (lib.mkIf cfg.enable (
-      {
-        home.file = {
-          # Hyprland files
-          ".config/hypr/hyprland.lua".source = cfg.hyprland.configFile;
-          # ".config/hypr/hyprland.conf".source = cfg.hyprland.configFile;
-          ".config/hypr/pop-sound.mp3".source = ./config-files/pop-sound.mp3;
+    (lib.mkIf cfg.enable ({
+      home.file = {
+        # Hyprland files
+        ".config/hypr/hyprland.lua".source = cfg.hyprland.configFile;
+        # ".config/hypr/hyprland.conf".source = cfg.hyprland.configFile;
+        ".config/hypr/pop-sound.mp3".source = ./config-files/pop-sound.mp3;
 
-          # Hyprlock files
-          ".config/hypr/hyprlock.conf".source = cfg.hyprlock.configFile;
-          ".config/hypr/user.jpg".source = cfg.hyprlock.profilePicture;
+        # Hyprlock files
+        ".config/hypr/hyprlock.conf".source = cfg.hyprlock.configFile;
+        ".config/hypr/user.jpg".source = cfg.hyprlock.profilePicture;
 
-          # Hypridle file
-          ".config/hypr/hypridle.conf".source = cfg.hypridle.configFile;
+        # Hypridle file
+        ".config/hypr/hypridle.conf".source = cfg.hypridle.configFile;
 
-          # Waybar files
-          ".config/waybar/config.jsonc".text = if cfg.waybar.overwrite
-            then (builtins.readFile cfg.waybar.configFile)
-            else (import ./config-files/waybar/waybar-config.nix { inherit config lib nixosConfig; });
-          ".config/waybar/style.css".text = if cfg.waybar.overwrite
-            then (builtins.readFile cfg.waybar.styleFile)
-            else (import ./config-files/waybar/waybar-style.nix { inherit config lib nixosConfig; });
+        # Waybar files
+        ".config/waybar/config.jsonc".text =
+          if cfg.waybar.overwrite then
+            (builtins.readFile cfg.waybar.configFile)
+          else
+            (import ./config-files/waybar/waybar-config.nix { inherit config lib nixosConfig; });
+        ".config/waybar/style.css".text =
+          if cfg.waybar.overwrite then
+            (builtins.readFile cfg.waybar.styleFile)
+          else
+            (import ./config-files/waybar/waybar-style.nix { inherit config lib nixosConfig; });
 
-          # Wlogout files
-          ".config/wlogout/layout".source = cfg.wlogout.layoutFile;
-          ".config/wlogout/style.css".text = if cfg.wlogout.overwrite
-            then (builtins.readFile cfg.wlogout.styleFile)
-            else (import ./config-files/wlogout/wlogout-style.nix { inherit config lib pkgs nixosConfig; });
-          ".config/wlogout/icons/hibernate.png".source = cfg.wlogout.hibernateIcon;
-          ".config/wlogout/icons/lock.png".source = cfg.wlogout.lockIcon;
-          ".config/wlogout/icons/logout.png".source = cfg.wlogout.logoutIcon;
-          ".config/wlogout/icons/reboot.png".source = cfg.wlogout.rebootIcon;
-          ".config/wlogout/icons/shutdown.png".source = cfg.wlogout.shutdownIcon;
-          ".config/wlogout/icons/suspend.png".source = cfg.wlogout.suspendIcon;
+        # Wlogout files
+        ".config/wlogout/layout".source = cfg.wlogout.layoutFile;
+        ".config/wlogout/style.css".text =
+          if cfg.wlogout.overwrite then
+            (builtins.readFile cfg.wlogout.styleFile)
+          else
+            (import ./config-files/wlogout/wlogout-style.nix {
+              inherit
+                config
+                lib
+                pkgs
+                nixosConfig
+                ;
+            });
+        ".config/wlogout/icons/hibernate.png".source = cfg.wlogout.hibernateIcon;
+        ".config/wlogout/icons/lock.png".source = cfg.wlogout.lockIcon;
+        ".config/wlogout/icons/logout.png".source = cfg.wlogout.logoutIcon;
+        ".config/wlogout/icons/reboot.png".source = cfg.wlogout.rebootIcon;
+        ".config/wlogout/icons/shutdown.png".source = cfg.wlogout.shutdownIcon;
+        ".config/wlogout/icons/suspend.png".source = cfg.wlogout.suspendIcon;
 
-          # Black icons for light theme
-          ".config/wlogout/icons/hibernate-black.png".source = ./config-files/wlogout/icons/hibernate-black.png;
-          ".config/wlogout/icons/lock-black.png".source = ./config-files/wlogout/icons/lock-black.png;
-          ".config/wlogout/icons/logout-black.png".source = ./config-files/wlogout/icons/logout-black.png;
-          ".config/wlogout/icons/reboot-black.png".source = ./config-files/wlogout/icons/reboot-black.png;
-          ".config/wlogout/icons/shutdown-black.png".source = ./config-files/wlogout/icons/shutdown-black.png;
-          ".config/wlogout/icons/suspend-black.png".source = ./config-files/wlogout/icons/suspend-black.png;
+        # Black icons for light theme
+        ".config/wlogout/icons/hibernate-black.png".source =
+          ./config-files/wlogout/icons/hibernate-black.png;
+        ".config/wlogout/icons/lock-black.png".source = ./config-files/wlogout/icons/lock-black.png;
+        ".config/wlogout/icons/logout-black.png".source = ./config-files/wlogout/icons/logout-black.png;
+        ".config/wlogout/icons/reboot-black.png".source = ./config-files/wlogout/icons/reboot-black.png;
+        ".config/wlogout/icons/shutdown-black.png".source = ./config-files/wlogout/icons/shutdown-black.png;
+        ".config/wlogout/icons/suspend-black.png".source = ./config-files/wlogout/icons/suspend-black.png;
 
-          # Swaync files
-          ".config/swaync/config.json".source = cfg.swaync.configFile;
-          ".config/swaync/style.css".text = if cfg.swaync.overwrite
-            then (builtins.readFile cfg.swaync.styleFile)
-            else (import ./config-files/swaync/swaync-style.nix { inherit config lib nixosConfig; });
+        # Swaync files
+        ".config/swaync/config.json".source = cfg.swaync.configFile;
+        ".config/swaync/style.css".text =
+          if cfg.swaync.overwrite then
+            (builtins.readFile cfg.swaync.styleFile)
+          else
+            (import ./config-files/swaync/swaync-style.nix { inherit config lib nixosConfig; });
 
-          # Walker files
-          ".config/walker/config.toml".source = ./config-files/walker/config.toml;
-          ".config/walker/themes/stylix/style.css".text = import ./config-files/walker/themes/stylix/walker-style.nix { inherit config lib nixosConfig; };
+        # Walker files
+        ".config/walker/config.toml".source = ./config-files/walker/config.toml;
+        ".config/walker/themes/stylix/style.css".text =
+          import ./config-files/walker/themes/stylix/walker-style.nix
+            { inherit config lib nixosConfig; };
 
-          # UWSM environment variables
-          # (Needed because uwsm cannot parse hyprland.lua to extract env vars)
-          ".config/uwsm/env".text = ''
-            export XCURSOR_SIZE=24
-            export GDK_BACKEND=wayland
-            export XDG_CURRENT_DESKTOP=Hyprland
-            export XDG_SESSION_TYPE=wayland
-            export XDG_SESSION_DESKTOP=Hyprland
-            export TERMINAL=kitty
-          '';
+        # UWSM environment variables
+        # (Needed because uwsm cannot parse hyprland.lua to extract env vars)
+        ".config/uwsm/env".text = ''
+          export XCURSOR_SIZE=24
+          export GDK_BACKEND=wayland
+          export XDG_CURRENT_DESKTOP=Hyprland
+          export XDG_SESSION_TYPE=wayland
+          export XDG_SESSION_DESKTOP=Hyprland
+          export TERMINAL=kitty
+        '';
 
-          # Scripts (marked as executable)
-          ".config/sicos/scripts/" = {
-              source = cfg.scripts.path;
-              recursive = true;
-              executable = true;
-          };
-
-          # SicOS themes
-          ".config/sicos/themes" = {
-              source = ./themes;
-              recursive = true;
-          };
-
-          # SicOS screensaver
-          ".config/sicos/screensaver" = {
-              source = ./screensaver;
-              recursive = true;
-          };
-          ".config/sicos/scripts/screensaver.sh" = {
-              source = ./scripts/screensaver.sh;
-              recursive = true;
-          };
-
-          # Elephant files
-          ".config/elephant/" = {
-              source = ./config-files/elephant;
-              recursive = true;
-          };
-
-          # Wallpapers
-          ".config/sicos/wallpapers" = {
-              source = ./wallpapers;
-              recursive = true;
-          };
+        # Scripts (marked as executable)
+        ".config/sicos/scripts/" = {
+          source = cfg.scripts.path;
+          recursive = true;
+          executable = true;
         };
 
-        # Kitty terminal emulator special configuration
-        programs.kitty = {
-          enable = true;
-          shellIntegration.enableBashIntegration = true;
-          extraConfig = "
+        # SicOS themes
+        ".config/sicos/themes" = {
+          source = ./themes;
+          recursive = true;
+        };
+
+        # SicOS screensaver
+        ".config/sicos/screensaver" = {
+          source = ./screensaver;
+          recursive = true;
+        };
+        ".config/sicos/scripts/screensaver.sh" = {
+          source = ./scripts/screensaver.sh;
+          recursive = true;
+        };
+
+        # Elephant files
+        ".config/elephant/" = {
+          source = ./config-files/elephant;
+          recursive = true;
+        };
+
+        # Wallpapers
+        ".config/sicos/wallpapers" = {
+          source = ./wallpapers;
+          recursive = true;
+        };
+      };
+
+      # Kitty terminal emulator special configuration
+      programs.kitty = {
+        enable = true;
+        shellIntegration.enableBashIntegration = true;
+        extraConfig = "
             cursor_trail 3
             cursor_trail_decay 0.1 0.4
           ";
-        };
+      };
 
-        # Btop installation and special configuration for
-        # system monitoring
-        # It's enable using home manager in order to let
-        # Stylix to do its magic and change the theme
-        # on the fly
-        programs.btop = {
-          enable = true;
-        };
+      # Btop installation and special configuration for
+      # system monitoring
+      # It's enable using home manager in order to let
+      # Stylix to do its magic and change the theme
+      # on the fly
+      programs.btop = {
+        enable = true;
+      };
 
-        # # Fuzzel installation and special configuration for
-        # # system monitoring
-        # # It's enable using home manager in order to let
-        # # Stylix to do its magic and change the theme
-        # # on the fly
-        # programs.fuzzel = {
-        #   enable = true;
-        #   settings = {
-        #     main = {
-        #       use-bold = "yes";
-        #       dpi-aware = "no";
-        #       hide-before-typing = "yes";
-        #       show-actions = "yes";
-        #     };
-        #   };
-        # };
+      # # Fuzzel installation and special configuration for
+      # # system monitoring
+      # # It's enable using home manager in order to let
+      # # Stylix to do its magic and change the theme
+      # # on the fly
+      # programs.fuzzel = {
+      #   enable = true;
+      #   settings = {
+      #     main = {
+      #       use-bold = "yes";
+      #       dpi-aware = "no";
+      #       hide-before-typing = "yes";
+      #       show-actions = "yes";
+      #     };
+      #   };
+      # };
 
-      }
-    ))
+    }))
     (lib.mkIf cfg.theming.enable {
       ########################################
       # Theming with Stylix
@@ -159,26 +181,28 @@ in
               dark = "Papirus-Dark";
               light = "Papirus";
             };
-            fonts = let
-              monospaceFont = {
-                package = pkgs.nerd-fonts.jetbrains-mono;
-                name = "JetBrainsMono Nerd Font Mono";
+            fonts =
+              let
+                monospaceFont = {
+                  package = pkgs.nerd-fonts.jetbrains-mono;
+                  name = "JetBrainsMono Nerd Font Mono";
+                };
+              in
+              {
+                monospace = monospaceFont;
+                serif = monospaceFont;
+                sansSerif = monospaceFont;
+                emoji = {
+                  package = pkgs.noto-fonts-color-emoji;
+                  name = "Noto Color Emoji";
+                };
+                sizes = {
+                  applications = 10;
+                  desktop = 10;
+                  popups = 10;
+                  terminal = 10;
+                };
               };
-            in {
-              monospace = monospaceFont;
-              serif = monospaceFont;
-              sansSerif = monospaceFont;
-              emoji = {
-                package = pkgs.noto-fonts-color-emoji;
-                name = "Noto Color Emoji";
-              };
-              sizes = {
-                applications = 10;
-                desktop = 10;
-                popups = 10;
-                terminal = 10;
-              };
-            };
             targets = {
               kitty.enable = true;
 
@@ -199,10 +223,10 @@ in
               # configurations]
               yazi = {
                 enable = true;
-                 boldDirectory = true;
-                 colors = {
-                   enable = true;
-                 };
+                boldDirectory = true;
+                colors = {
+                  enable = true;
+                };
               };
 
               # GTK and QT theming will be managed by Home Manger (see above)
@@ -241,19 +265,16 @@ in
             };
           };
 
-        # Selecting stylix theming depending on the theme selected by the user
-        in if cfg.theming.mode == "light" then lightTheme else darkTheme;
+          # Selecting stylix theming depending on the theme selected by the user
+        in
+        if cfg.theming.mode == "light" then lightTheme else darkTheme;
 
       #############################
       # Theming with Home Manager #
       #############################
-      # Cursor theming will be globally managed by stylix (see below)
-      #home.pointerCursor = {
-      #  gtk.enable = true;
-      #  package = pkgs.bibata-cursors;
-      #  name = "Bibata-Modern-Classic";
-      #  size = 10;
-      #};
+      # Cursor theming is globally managed by stylix (see above).
+      # Explicitly enable pointerCursor config generation in Home Manager.
+      home.pointerCursor.enable = true;
 
       # GTK configuration and theming
       gtk = {
