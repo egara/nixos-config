@@ -1,4 +1,9 @@
-{ config, pkgs, pkgs-stable, ... }:
+{
+  config,
+  pkgs,
+  pkgs-stable,
+  ...
+}:
 
 {
   ###########################################
@@ -44,15 +49,20 @@
   # Kernel parameters passed in GRUB in order to
   # allow the laptop starts normally due to the
   # hardware of this machine
-   boot.kernelParams = [
-   ];
+  boot.kernelParams = [
+  ];
 
   # Docker
   virtualisation.docker.package = pkgs.docker;
 
   # Limits for NPU (FastFlowLM requires unlimited memlock)
   security.pam.loginLimits = [
-    { domain = "*"; item = "memlock"; type = "-"; value = "unlimited"; }
+    {
+      domain = "*";
+      item = "memlock";
+      type = "-";
+      value = "unlimited";
+    }
   ];
 
   systemd.settings.Manager.DefaultLimitMEMLOCK = "infinity";
@@ -72,11 +82,11 @@
   # module
   hardware.amd-npu = {
     enable = false;
-    enableFastFlowLM = false;   # LLM inference on NPU
-    enableLemonade = false;    # OpenAI-compatible API server
-    enableROCm = false;        # ROCm GPU backends (llamacpp + sd-cpp)
-    enableVulkan = false;      # Vulkan GPU backends (llamacpp + whispercpp)
-    enableImageGen = false;    # default true; set false to drop sd-cpp from closure
+    enableFastFlowLM = false; # LLM inference on NPU
+    enableLemonade = false; # OpenAI-compatible API server
+    enableROCm = false; # ROCm GPU backends (llamacpp + sd-cpp)
+    enableVulkan = false; # Vulkan GPU backends (llamacpp + whispercpp)
+    enableImageGen = false; # default true; set false to drop sd-cpp from closure
     lemonade.user = "egarcia";
   };
 
@@ -96,8 +106,9 @@
     opencode
     #pkgs-stable.jdk8
     kdePackages.kdenlive
-    obsidian
+    #obsidian
     #chatbox
+    rpi-imager # Run: sudo -E rpi-imager
   ];
 
   # # Creating a symlink for openjdk8 in order to configure Eclipse properly
