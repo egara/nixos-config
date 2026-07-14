@@ -321,6 +321,12 @@
 
   # List of programs that must be enabled
   programs = {
+    # GNUPG for encryption/decryption
+    gnupg.agent = {
+      enable = true;
+      pinentryPackage = pkgs.pinentry-tty;
+    };
+
     # AppImage (this configuration allows to execute an AppImage directly)
     appimage = {
       enable = true;
