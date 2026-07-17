@@ -280,7 +280,7 @@
     pciutils
     spotify
     bind
-    cryfs
+    pkgs-stable.cryfs
     #pkgs-stable.quickemu
     #pkgs-stable.quickgui
     quickemu
