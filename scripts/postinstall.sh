@@ -55,6 +55,9 @@ yadm clone --bootstrap https://egara:$YADM_TOKEN@github.com/egara/yadm.git
 # Changing URL in order to use imported ssh keys
 yadm remote set-url origin git@github.com:egara/yadm
 
+# Decrypting yadm files
+yadm decrypt
+
 # Restoring KDE Plasma settings if it is needed
 if command -v konsave >/dev/null; then
   echo "KDE Plasma desktop detected. Restoring settings. Please wait..."
