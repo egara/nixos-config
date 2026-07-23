@@ -317,6 +317,7 @@
     # Tools to encrypt/decrypt and manage keys
     age
     sops
+    keepassxc
   ];
 
   # List of programs that must be enabled

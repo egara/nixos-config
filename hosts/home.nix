@@ -503,14 +503,6 @@ in
     # ];
   };
 
-  # KeepassXC with secret service and secret portal integration
-  # https://wiki.nixos.org/wiki/Secret_Service
-  programs.keepassxc = {
-    autostart = true;
-    enable = true;
-  };
-  xdg.autostart.enable = true; # Enable creation of XDG autostart entries.
-
   # Virtual Manager special configuration (https://nixos.wiki/wiki/Virt-manager)
   dconf.settings = {
     "org/virt-manager/virt-manager/connections" = {
