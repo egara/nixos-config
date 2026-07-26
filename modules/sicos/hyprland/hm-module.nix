@@ -130,6 +130,13 @@ in
         };
       };
 
+      # Configure XDG user directories (Downloads, Music, Pictures, etc.)
+      # to get proper icons and default directory paths in file managers.
+      xdg.userDirs = {
+        enable = true;
+        createDirectories = true;
+      };
+
       # Kitty terminal emulator special configuration
       programs.kitty = {
         enable = true;
