@@ -270,7 +270,7 @@
     unzip
     unrar
     zip
-    kdePackages.partitionmanager
+    gnome-disk-utility
     distrobox
     #fastfetch
     #sublime4
@@ -334,10 +334,6 @@
       binfmt = true;
     };
 
-    # Partition manager
-    partition-manager = {
-      enable = true;
-    };
 
     # Virtual Manager
     virt-manager = {
