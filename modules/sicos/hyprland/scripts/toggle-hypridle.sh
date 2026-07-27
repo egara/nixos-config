@@ -7,13 +7,13 @@
 # @email: eloy.garcia.pca@gmail.com
 # -------------------------------------
 
-if pgrep -x "hypridle" >/dev/null
+if systemctl --user is-active --quiet hypridle.service
 then
-    # Hypridle is running -> kill the process
-    hyprctl dispatch exec "pkill hypridle"
+    # Hypridle is running -> stop the service
+    systemctl --user stop hypridle.service
     notify-send -t 2500 -u low -r 9993 "Hypridle" "Idle has been disabled"
 else
-    # Hypridle is not running -> run the process
-    uwsm app -- hyprctl dispatch exec "hypridle &"
+    # Hypridle is not running -> start the service
+    systemctl --user start hypridle.service
     notify-send -t 2500 -u low -r 9993 "Hypridle" "Idle has been enabled"
 fi
