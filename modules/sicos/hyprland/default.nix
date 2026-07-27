@@ -193,7 +193,7 @@ in
           };
         };
 
-        # Mount, trash, and other functionalities for Thunar
+        # Mount, trash, and other functionalities for Nautilus
         gvfs.enable = true;
 
         # Thumbnail support for images
@@ -213,14 +213,7 @@ in
         xwayland.enable = true;
       };
 
-      # Thunar File Manager
-      programs.thunar = {
-        enable = true;
-        plugins = with pkgs; [
-          thunar-archive-plugin
-          thunar-volman
-        ];
-      };
+
 
       programs.xfconf.enable = true;
 
@@ -270,6 +263,7 @@ in
         hyprlock
         hypridle
         waybar
+        nautilus # File manager
         hyprland-qtutils
         wlogout
         xdg-desktop-portal-gtk
@@ -306,7 +300,7 @@ in
         feh # Image viewer
         hyprshot # Screenshots tool
         satty # Screenshot editor
-        file-roller # Archive manager for Thunar
+        file-roller # Archive manager for Nautilus
         brightnessctl # Screen brightness control
         playerctl # Media player control
         lxqt.lxqt-policykit # Polkit agent

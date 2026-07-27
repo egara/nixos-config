@@ -295,8 +295,8 @@ in
         }
         {
           on = "<S-e>";
-          run = ''shell 'thunar "$YAZI_CWD"' --orphan'';
-          desc = "Open Thunar in the current directory";
+          run = ''shell 'nautilus "$YAZI_CWD"' --orphan'';
+          desc = "Open Nautilus in the current directory";
         }
         {
           on = "<S-t>";
@@ -535,8 +535,8 @@ in
       "application/pdf" = "org.gnome.Papers.desktop";
       "application/x-pdf" = "org.gnome.Papers.desktop";
       "x-terminal-emulator" = "kitty.desktop";
-      "inode/directory" = "thunar.desktop";
-      "x-scheme-handler/file" = "thunar.desktop";
+      "inode/directory" = "org.gnome.Nautilus.desktop";
+      "x-scheme-handler/file" = "org.gnome.Nautilus.desktop";
       "video/mp4" = "vlc.desktop";
       "video/webm" = "vlc.desktop";
       "video/x-matroska" = "vlc.desktop";

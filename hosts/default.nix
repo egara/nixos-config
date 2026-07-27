@@ -114,7 +114,7 @@ let
             # This prevents errors on rebuild if a previous one failed
             home.activation = {
               cleanup-hm-backups = home-manager.lib.hm.dag.entryAfter ["writeBoundary"] ''
-                $DRY_RUN_CMD find "$HOME" -name "*.backup" -delete
+                $DRY_RUN_CMD find "$HOME" -name "*.backup" -delete 2>/dev/null || true
               '';
             };
           };

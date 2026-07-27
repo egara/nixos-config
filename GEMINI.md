@@ -46,7 +46,7 @@ SicOS provides a complete, themed desktop experience. It is split into two parts
 2.  **Home Manager Module (`hm-module.nix`)**:
     - Manages dotfiles in `.config/hypr`, `.config/waybar`, `.config/swaync`, etc.
     - Uses dynamic `.text` generation for Waybar, Wlogout, and SwayNC styles to integrate Stylix colors.
-    - Configures `xdg.mimeApps` for default applications (Zed, Firefox, Thunar, etc.).
+    - Configures `xdg.mimeApps` for default applications (Zed, Firefox, Nautilus, etc.).
     - Integrates with **Stylix** for global theming.
 
 **Key Options:**

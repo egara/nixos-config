@@ -54,7 +54,7 @@ hl.on("hyprland.start", function ()
     hl.exec_cmd("uwsm app -- lxqt-policykit-agent")
 
     -- USB mounting daemon
-    hl.exec_cmd("uwsm app -- udiskie -f thunar -t")
+    hl.exec_cmd("uwsm app -- udiskie -f nautilus -t")
 
     -- Welcome animation
     hl.exec_cmd("uwsm app -- kitty --class welcome-terminal -o window_padding_width=30 -e ~/.config/sicos/scripts/welcome-animation.sh")
@@ -78,7 +78,7 @@ end)
 
 local lock = "hyprlock"
 local terminal = "kitty"
-local fileManager = "thunar"
+local fileManager = "nautilus"
 local menu = "walker"
 -- local browser = "firefox"
 -- local webapp = "google-chrome-stable --app"
@@ -93,7 +93,7 @@ hl.bind("CTRL + ALT + T", hl.dsp.exec_cmd("uwsm app -- " .. terminal), { descrip
 -- hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("uwsm app -- subl"), { description = "Text Editor (Sublime Text)" })
 hl.bind(mainMod .. " + Q", hl.dsp.window.close(), { description = "Close Window" })
 hl.bind("CTRL + ALT + Delete", hl.dsp.exit(), { description = "Exit" })
-hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("uwsm app -- " .. fileManager), { description = "File Manager (Thunar)" })
+hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("uwsm app -- " .. fileManager), { description = "File Manager (Nautilus)" })
 hl.bind(mainMod .. " + F", hl.dsp.window.float({ action = "toggle" }), { description = "Toggle Floating Window" })
 hl.bind(mainMod .. " + KP_Multiply", hl.dsp.window.pseudo(), { description = "Reduce/Enlarge Current Window" })
 hl.bind(mainMod .. " + KP_Divide", hl.dsp.layout("togglesplit"), { description = "Change Layout" })
@@ -350,7 +350,7 @@ hl.window_rule({
 })
 
 hl.window_rule({
-    match = { class = "^(kitty|thunar)$" },
+    match = { class = "^(kitty|org.gnome.Nautilus)$" },
     opacity = "0.9 0.8",
 })
 
