@@ -248,10 +248,10 @@
     google-chrome
     #kdePackages.okular
     papers
-    #qmmp
     pkgs-stable.qmmp
     pkgs-stable.audacity
-    pkgs-stable.carla
+    #pkgs-stable.carla
+    # Changing carla to helvum (native patchbay for PipeWire based on GTK4)
     nano
     #tailscale
     libreoffice
