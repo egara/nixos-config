@@ -252,6 +252,7 @@
     pkgs-stable.audacity
     #pkgs-stable.carla
     # Changing carla to helvum (native patchbay for PipeWire based on GTK4)
+    helvum
     nano
     #tailscale
     libreoffice
