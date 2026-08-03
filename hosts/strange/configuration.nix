@@ -173,6 +173,18 @@
   security.pam.services.hyprlock.fprintAuth = true;
   security.pam.services.sddm.fprintAuth = true;
 
+  # Important
+  # In order to start using fingerprint reader it is necessary
+  # to enroll your first fingerprint. To do that:
+  # Run fprintd-enroll in your terminal
+  # Place the index-right-fingerprint several times until
+  # the application completes the process and it is exited by
+  # itself
+  # From this moment, the user will be able to unlock the device
+  # from SDDM (when SDDM greeter is on the sceen, press Enter and
+  # place your tight index fingerprint in order to login)
+  # from hyprlock, simply place your right index finger on the reader
+  # without doing anythin else
   ##########################
   # Fingerprint reader - END
   # ########################
