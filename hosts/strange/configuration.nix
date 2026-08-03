@@ -109,6 +109,9 @@
     #obsidian
     #chatbox
     rpi-imager # Run: sudo -E rpi-imager
+    # Ensure you have a Polkit Authentication Agent running (required for Hyprland)
+    hyprland-protocols
+    polkit_gnome # Replacing libsForQt5.polkit-kde-agent with GTK-based polkit-gnome
   ];
 
   # # Creating a symlink for openjdk8 in order to configure Eclipse properly
@@ -151,4 +154,27 @@
       # };
     };
   };
+
+  ############################
+  # Fingerprint reader - BEGIN
+  # ##########################
+  # Enable the core fingerprint service
+  services.fprintd.enable = true;
+
+  # Optional: standard recommendation for Framework hardware compatibility
+  # imports = [ <nixos-hardware/framework/13-inch/amd> ]; # or /intel if applicable
+
+  # Enable PAM auth for sudo, login, and screen lockers
+  security.pam.services.login.fprintAuth = true;
+  security.pam.services.sudo.fprintAuth = true;
+
+  # If using swaylock or hyprlock specifically, explicitly allow fingerprint bypass:
+  security.pam.services.swaylock.fprintAuth = true;
+  security.pam.services.hyprlock.fprintAuth = true;
+  security.pam.services.sddm.fprintAuth = true;
+
+  ##########################
+  # Fingerprint reader - END
+  # ########################
+
 }
