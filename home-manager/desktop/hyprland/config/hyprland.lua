@@ -56,7 +56,7 @@ hl.on("hyprland.start", function ()
     hl.exec_cmd("uwsm app -- insync start")
 
     -- Polkit
-    hl.exec_cmd("uwsm app -- lxqt-policykit-agent")
+    hl.exec_cmd("uwsm app -- polkit-gnome-authentication-agent-1")
 
     -- USB mounting daemon
     hl.exec_cmd("uwsm app -- udiskie -f nautilus -t")
@@ -162,8 +162,8 @@ end, { description = "Enable Monocle Layout" })
 -- hl.bind(", XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle && if [ '$(pamixer --get-mute)' == 'true' ]; then dunstify -a '-- Changing volume --' -u low -r 9993 'Volume Muted'; else dunstify -a '-- Changing volume --' -u low -r 9993 'Volume Unmuted'; fi"))
 
 -- New configuration with swaync
-hl.bind("xf86audioraisevolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ && notify-send -u low -t 5000 -h string:synchronous:volume -h int:value:$(pamixer --get-volume) -h string:x-canonical-private-synchronous:script 'Volume' && cvlc --no-video --play-and-exit ~/.config/hypr/pop-sound.mp3"))
-hl.bind("xf86audiolowervolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- && notify-send -u low -t 5000 -h string:synchronous:volume -h int:value:$(pamixer --get-volume) -h string:x-canonical-private-synchronous:script 'Volume' && cvlc --no-video --play-and-exit ~/.config/hypr/pop-sound.mp3"))
+hl.bind("xf86audioraisevolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ && notify-send -u low -t 5000 -h string:synchronous:volume -h int:value:$(pamixer --get-volume) -h string:x-canonical-private-synchronous:script 'Volume' && pw-play ~/.config/hypr/pop-sound.mp3"))
+hl.bind("xf86audiolowervolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- && notify-send -u low -t 5000 -h string:synchronous:volume -h int:value:$(pamixer --get-volume) -h string:x-canonical-private-synchronous:script 'Volume' && pw-play ~/.config/hypr/pop-sound.mp3"))
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle && if [ '$(pamixer --get-mute)' == 'true' ]; then notify-send -u low -r 9993 'Volume' 'Volume Muted'; else notify-send -u low -r 9993 'Volume' 'Volume unmuted'; fi"))
 
 -- Screen brighness

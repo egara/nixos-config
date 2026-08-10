@@ -303,11 +303,14 @@ in
         file-roller # Archive manager for Nautilus
         brightnessctl # Screen brightness control
         playerctl # Media player control
-        lxqt.lxqt-policykit # Polkit agent
+        polkit_gnome # Polkit agent
+        # NixOS does not symlink libexec to /run/current-system/sw/libexec by default.
+        # This wrapper exposes the agent executable to the global PATH (bin/) so it can be 
+        # seamlessly executed from raw .lua configuration files without hardcoding nix store paths.
+        (pkgs.writeShellScriptBin "polkit-gnome-authentication-agent-1" "exec ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1")
         catfish # File search GUI
         gnome-calculator # Calculator
         system-config-printer # CUPs GUI
-        vlc # For volume up/down popping sound
         fastfetch # For system information
 
         # Tools for the screensaver
