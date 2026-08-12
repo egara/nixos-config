@@ -109,9 +109,6 @@
     #obsidian
     #chatbox
     rpi-imager # Run: sudo -E rpi-imager
-    # Ensure you have a Polkit Authentication Agent running (required for Hyprland)
-    hyprland-protocols
-    polkit_gnome # Replacing libsForQt5.polkit-kde-agent with GTK-based polkit-gnome
   ];
 
   # Mounting openjdk8 via bind mount so Eclipse properly recognizes it as a static path without symlink issues

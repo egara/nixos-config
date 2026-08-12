@@ -303,12 +303,13 @@ in
         file-roller # Archive manager for Nautilus
         brightnessctl # Screen brightness control
         playerctl # Media player control
+        # Ensure you have a Polkit Authentication Agent running (required for Hyprland)
+        hyprland-protocols
         polkit_gnome # Polkit agent
         # NixOS does not symlink libexec to /run/current-system/sw/libexec by default.
-        # This wrapper exposes the agent executable to the global PATH (bin/) so it can be 
+        # This wrapper exposes the agent executable to the global PATH (bin/) so it can be
         # seamlessly executed from raw .lua configuration files without hardcoding nix store paths.
         (pkgs.writeShellScriptBin "polkit-gnome-authentication-agent-1" "exec ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1")
-        catfish # File search GUI
         gnome-calculator # Calculator
         system-config-printer # CUPs GUI
         fastfetch # For system information
@@ -318,6 +319,7 @@ in
         jq
         socat
         libinput
+
       ];
     };
 }
