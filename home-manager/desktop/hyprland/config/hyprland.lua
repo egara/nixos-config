@@ -366,6 +366,7 @@ hl.window_rule({
     suppress_event = "maximize",
 })
 
+
 -- Focus on activate any window
 hl.window_rule({
     match = { class = ".*" },
@@ -444,6 +445,12 @@ hl.layer_rule({
 hl.layer_rule({
     match = { namespace = "selection" },
     no_anim = true,
+})
+
+-- Fix DMS native tray menus
+hl.layer_rule({
+    match = { namespace = "^dms:.*" },
+    animation = "fade",
 })
 
 -- ######################

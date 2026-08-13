@@ -409,6 +409,12 @@ hl.layer_rule({
     no_anim = true,
 })
 
+-- Fix DMS native tray menus
+hl.layer_rule({
+    match = { namespace = "^dms:.*" },
+    animation = "fade",
+})
+
 -- ######################
 -- Layer Rules - FINISH
 -- ######################
