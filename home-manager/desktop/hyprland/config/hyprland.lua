@@ -49,7 +49,7 @@ hl.on("hyprland.start", function ()
 
     -- Applications
     hl.exec_cmd("uwsm app -- Telegram -startintray")
-    hl.exec_cmd("uwsm app -- insync start")
+    hl.exec_cmd("bash -c 'sleep 3 && uwsm app -- insync start'")
 
     -- Polkit
     hl.exec_cmd("uwsm app -- polkit-gnome-authentication-agent-1")
