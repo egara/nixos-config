@@ -104,6 +104,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # DankMaterialShell
+    dankmaterialshell = {
+      url = "github:AvengeMedia/DankMaterialShell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   # The binary cache configuration is strongly recommended to avoid unnecessary local compilation.
@@ -128,7 +134,7 @@
   };
 
   # Function that tells my flake which to use and what do what to do with the dependencies.
-  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, nix-amd-ai, antigravity-nix, ... }:
+  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, nix-amd-ai, antigravity-nix, dankmaterialshell, ... }:
   {
     nixosModules = {
       sicos-hyprland = {
@@ -144,6 +150,7 @@
       sicos-hyprland = {
         imports = [
           stylix.homeModules.stylix
+          dankmaterialshell.homeModules.dank-material-shell
           (import ./modules/sicos/hyprland/hm-module.nix)
         ];
       };
@@ -157,7 +164,7 @@
         # to be defined anymore.
         # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
         # inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix walker;
-        inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader autofirma-nix stylix walker nixos-hardware nix-flatpak nix-amd-ai antigravity-nix self;
+        inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader autofirma-nix stylix walker nixos-hardware nix-flatpak nix-amd-ai antigravity-nix dankmaterialshell self;
       }
     );
   };

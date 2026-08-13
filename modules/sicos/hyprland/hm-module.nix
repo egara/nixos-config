@@ -28,16 +28,14 @@ in
         ".config/hypr/hypridle.conf".source = cfg.hypridle.configFile;
 
         # Waybar files
-        ".config/waybar/config.jsonc".text =
-          if cfg.waybar.overwrite then
-            (builtins.readFile cfg.waybar.configFile)
-          else
-            (import ./config-files/waybar/waybar-config.nix { inherit config lib nixosConfig; });
-        ".config/waybar/style.css".text =
-          if cfg.waybar.overwrite then
-            (builtins.readFile cfg.waybar.styleFile)
-          else
-            (import ./config-files/waybar/waybar-style.nix { inherit config lib nixosConfig; });
+        ".config/waybar/config.jsonc" = lib.mkIf (cfg.shell == "waybar") {
+          text = if cfg.waybar.overwrite then (builtins.readFile cfg.waybar.configFile)
+                 else (import ./config-files/waybar/waybar-config.nix { inherit config lib nixosConfig; });
+        };
+        ".config/waybar/style.css" = lib.mkIf (cfg.shell == "waybar") {
+          text = if cfg.waybar.overwrite then (builtins.readFile cfg.waybar.styleFile)
+                 else (import ./config-files/waybar/waybar-style.nix { inherit config lib nixosConfig; });
+        };
 
         # Wlogout files
         ".config/wlogout/layout".source = cfg.wlogout.layoutFile;
@@ -70,12 +68,13 @@ in
         ".config/wlogout/icons/suspend-black.png".source = ./config-files/wlogout/icons/suspend-black.png;
 
         # Swaync files
-        ".config/swaync/config.json".source = cfg.swaync.configFile;
-        ".config/swaync/style.css".text =
-          if cfg.swaync.overwrite then
-            (builtins.readFile cfg.swaync.styleFile)
-          else
-            (import ./config-files/swaync/swaync-style.nix { inherit config lib nixosConfig; });
+        ".config/swaync/config.json" = lib.mkIf (cfg.shell == "waybar") {
+          source = cfg.swaync.configFile;
+        };
+        ".config/swaync/style.css" = lib.mkIf (cfg.shell == "waybar") {
+          text = if cfg.swaync.overwrite then (builtins.readFile cfg.swaync.styleFile)
+                 else (import ./config-files/swaync/swaync-style.nix { inherit config lib nixosConfig; });
+        };
 
         # Walker files
         ".config/walker/config.toml".source = ./config-files/walker/config.toml;
@@ -98,6 +97,20 @@ in
         ".config/sicos/scripts/" = {
           source = cfg.scripts.path;
           recursive = true;
+          executable = true;
+        };
+        
+        ".config/sicos/scripts/start-shell.sh" = {
+          text = ''
+            #!/usr/bin/env bash
+            ${if cfg.shell == "waybar" then ''
+              uwsm app -- waybar &
+              uwsm app -- swaync &
+            '' else ''
+              # DankMaterialShell is managed by its own systemd service.
+              # systemctl --user start dms.service
+            ''}
+          '';
           executable = true;
         };
 
@@ -129,6 +142,69 @@ in
           recursive = true;
         };
       };
+
+      # Enable DankMaterialShell service
+      programs.dank-material-shell = lib.mkIf (cfg.shell == "dank-material-shell") {
+        enable = true;
+        systemd.enable = true;
+      };
+
+      # Make DMS settings mutable so we can persist UI changes (like wallpaper)
+      # without breaking stylix integration.
+      xdg.configFile = lib.mkIf (cfg.shell == "dank-material-shell") {
+        "DankMaterialShell/settings.json".force = lib.mkForce true;
+      };
+      xdg.stateFile = lib.mkIf (cfg.shell == "dank-material-shell") {
+        "DankMaterialShell/session.json".force = lib.mkForce true;
+      };
+
+      home.activation.make-dms-mutable = lib.mkIf (cfg.shell == "dank-material-shell") (lib.hm.dag.entryAfter ["linkGeneration"] ''
+        mkdir -p "$HOME/.config/DankMaterialShell"
+        mkdir -p "$HOME/.local/state/DankMaterialShell"
+        
+        # Handle settings.json
+        target="$HOME/.config/DankMaterialShell/settings.json"
+        if [ -L "$target" ]; then
+          real=$(readlink -f "$target")
+          rm "$target"
+          if [ -f "$target.backup" ]; then
+            # Merge user's backup with Stylix's new theme/fonts
+            ${pkgs.jq}/bin/jq -s '.[0] * {
+              currentThemeName: .[1].currentThemeName,
+              customThemeFile: .[1].customThemeFile,
+              fontFamily: .[1].fontFamily,
+              monoFontFamily: .[1].monoFontFamily
+            }' "$target.backup" "$real" > "$target"
+          else
+            cp "$real" "$target"
+          fi
+          chmod 644 "$target"
+        elif [ ! -e "$target" ]; then
+          echo "{}" > "$target"
+          chmod 644 "$target"
+        fi
+
+        # Handle session.json
+        target="$HOME/.local/state/DankMaterialShell/session.json"
+        if [ -L "$target" ]; then
+          real=$(readlink -f "$target")
+          rm "$target"
+          if [ -f "$target.backup" ]; then
+            # Merge user's backup (weather info) with Stylix's wallpaper paths
+            ${pkgs.jq}/bin/jq -s '.[0] * {
+              wallpaperPath: .[1].wallpaperPath,
+              wallpaperPathDark: .[1].wallpaperPathDark,
+              wallpaperPathLight: .[1].wallpaperPathLight
+            }' "$target.backup" "$real" > "$target"
+          else
+            cp "$real" "$target"
+          fi
+          chmod 644 "$target"
+        elif [ ! -e "$target" ]; then
+          echo "{}" > "$target"
+          chmod 644 "$target"
+        fi
+      '');
 
       # Configure XDG user directories (Downloads, Music, Pictures, etc.)
       # to get proper icons and default directory paths in file managers.
@@ -223,6 +299,8 @@ in
               # scheme defined by the user
               waybar.enable = false;
 
+              dank-material-shell.enable = cfg.shell == "dank-material-shell";
+
               # Yazi is working again with stylix. The custom theming
               # configuration within /hosts/home.nix is disabled
               # [Yazi theming is not currently working using Stylix so
@@ -306,7 +384,7 @@ in
       # Set dconf color-scheme preference for GTK4/Adwaita applications
       dconf.settings = {
         "org/gnome/desktop/interface" = {
-          color-scheme = if config.stylix.polarity == "dark" then "prefer-dark" else "prefer-light";
+          color-scheme = lib.mkForce (if config.stylix.polarity == "dark" then "prefer-dark" else "prefer-light");
         };
       };
 

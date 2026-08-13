@@ -36,16 +36,12 @@ hl.on("hyprland.start", function ()
     -- Networking
     hl.exec_cmd("uwsm app -- nm-applet --indicator")
 
-    -- Waybar
-    hl.exec_cmd("uwsm app -- waybar")
+    -- Shell (waybar+swaync or dank-material-shell)
+    hl.exec_cmd("uwsm app -- ~/.config/sicos/scripts/start-shell.sh")
 
     -- Walker & Elephant
     hl.exec_cmd("walker --gapplication-service")
     hl.exec_cmd("elephant")
-
-    -- Notifications
-    -- hl.exec_cmd("uwsm app -- dunst")
-    hl.exec_cmd("uwsm app -- swaync")
 
     -- Clipboard
     -- hl.exec_cmd("uwsm app -- wl-paste --type text --watch cliphist store")

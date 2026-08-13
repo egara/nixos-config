@@ -100,22 +100,34 @@ pushd "$CONFIG_PATH"
 sudo nixos-rebuild switch --flake .#$HOST-$DESKTOP
 
 # Restart Waybar to apply theme changes
-echo "Restarting Waybar to apply new theme..."
-pkill waybar
-sleep 1
-nohup uwsm app -- waybar > /dev/null 2>&1 &
+if command -v waybar &> /dev/null; then
+    echo "Restarting Waybar to apply new theme..."
+    pkill waybar || true
+    sleep 1
+    nohup uwsm app -- waybar > /dev/null 2>&1 &
+fi
 
 # Restart swaync to apply theme changes
-echo "Restarting swaync to apply new theme..."
-pkill swaync
-sleep 1
-nohup uwsm app -- swaync > /dev/null 2>&1 &
+if command -v swaync &> /dev/null; then
+    echo "Restarting swaync to apply new theme..."
+    pkill swaync || true
+    sleep 1
+    nohup uwsm app -- swaync > /dev/null 2>&1 &
+fi
+
+# Restart DankMaterialShell if active
+if systemctl --user is-active --quiet dms.service; then
+    echo "Restarting DankMaterialShell to apply new theme..."
+    systemctl --user restart dms.service
+fi
 
 # Restart Walker to apply theme changes
-echo "Restarting Walker to apply new theme..."
-pkill walker
-sleep 1
-nohup uwsm app -- walker --gapplication-service > /dev/null 2>&1 &
+if command -v walker &> /dev/null; then
+    echo "Restarting Walker to apply new theme..."
+    pkill walker || true
+    sleep 1
+    nohup uwsm app -- walker --gapplication-service > /dev/null 2>&1 &
+fi
 
 echo "   ___                 "
 echo "  |   \ ___ _ _  ___   "

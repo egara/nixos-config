@@ -1,5 +1,5 @@
 # /home/egarcia/Zero/nixos-config/modules/sicos/hyprland/default.nix
-{ config, pkgs, lib, sicos-source-path, username, ... }:
+{ config, pkgs, lib, sicos-source-path, username, inputs, ... }:
 
 let
   cfg = config.programs.sicos.hyprland;
@@ -22,6 +22,13 @@ in
         # default = "${sicos-source-path}/modules/sicos/hyprland/config-files/hyprland.lua";
         description = "Path to hyprland.lua file.";
       };
+    };
+
+    # Shell
+    shell = lib.mkOption {
+      type = lib.types.enum [ "waybar" "dank-material-shell" ];
+      default = "waybar";
+      description = "Which shell to use (waybar or dank-material-shell).";
     };
 
     # Group lock and idle configs
@@ -203,6 +210,9 @@ in
         udisks2.enable = true;
 
         dbus.enable = true;
+        
+        # Accountsservice for user avatars and info
+        accounts-daemon.enable = true;
       };
 
       # Hyprland
@@ -254,6 +264,7 @@ in
         ADW_DEBUG_COLOR_SCHEME = if cfg.theming.mode == "dark" then "prefer-dark" else "prefer-light";
 	# Allow to write spanish accents in GTK apps like Papers
 	GTK_IM_MODULE = "gtk-im-context-simple";
+        XDG_MENU_PREFIX = "gnome-";
       };
 
       # Add packages required for the Hyprland setup
@@ -262,7 +273,6 @@ in
         hyprland
         hyprlock
         hypridle
-        waybar
         nautilus # File manager
         hyprland-qtutils
         wlogout
@@ -286,7 +296,6 @@ in
         kitty
 
         # Notification daemon
-        swaynotificationcenter
         libnotify
         pamixer # For volume control
 
@@ -320,6 +329,17 @@ in
         socat
         libinput
 
+        # Optional features for shell components
+        cava
+        matugen
+        gnome-menus
+
+      ] ++ lib.optionals (cfg.shell == "waybar") [
+        waybar
+        swaynotificationcenter
+      ] ++ lib.optionals (cfg.shell == "dank-material-shell") [
+        inputs.dankmaterialshell.packages.${pkgs.system}.default
+        quickshell
       ];
     };
 }

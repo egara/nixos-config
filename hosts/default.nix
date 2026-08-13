@@ -1,5 +1,5 @@
 #Variables
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, nix-amd-ai, antigravity-nix, self, ... }:
+{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, nix-amd-ai, antigravity-nix, dankmaterialshell, self, ... }:
 let
   # Main user
   username = "egarcia";
@@ -64,6 +64,8 @@ let
             {
               # SicOS module options configuration
               programs.sicos.hyprland.enable = true;
+              programs.sicos.hyprland.shell = "dank-material-shell";
+              #programs.sicos.hyprland.shell = "waybar";
               programs.sicos.hyprland.theming.enable = true;
               programs.sicos.hyprland.theming.mode = themeMode;
               programs.sicos.hyprland.theming.base16Scheme = themeScheme;
@@ -106,6 +108,7 @@ let
               (import ./home.nix)
             ]
               ++ lib.optionals (desktop == "hyprland") [
+                dankmaterialshell.homeModules.dank-material-shell
                 (import ../modules/sicos/hyprland/hm-module.nix)
               ]
               ++ homeManagerExtraImports;
@@ -113,7 +116,7 @@ let
             # Activation script to clean up leftover backup files
             # This prevents errors on rebuild if a previous one failed
             home.activation = {
-              cleanup-hm-backups = home-manager.lib.hm.dag.entryAfter ["writeBoundary"] ''
+              cleanup-hm-backups = home-manager.lib.hm.dag.entryBefore ["checkLinkTargets"] ''
                 $DRY_RUN_CMD find "$HOME" -name "*.backup" -delete 2>/dev/null || true
               '';
             };
