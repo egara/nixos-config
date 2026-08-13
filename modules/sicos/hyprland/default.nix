@@ -213,6 +213,9 @@ in
         
         # Accountsservice for user avatars and info
         accounts-daemon.enable = true;
+
+        # Upower for battery status (used by DMS and other shells)
+        upower.enable = true;
       };
 
       # Hyprland

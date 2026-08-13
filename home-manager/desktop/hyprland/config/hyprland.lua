@@ -176,7 +176,9 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl s 5%- && notify-
 hl.bind(mainMod .. " + 1", hl.dsp.exec_cmd("awww img /home/egarcia/Insync/eloy.garcia.pca@gmail.com/Google\\ Drive/Wallpapers/$(ls /home/egarcia/Insync/eloy.garcia.pca@gmail.com/Google\\ Drive/Wallpapers | shuf -n 1)"), { description = "Change Wallpaper (Random)" })
 
 -- Screenshots
-hl.bind("Print", hl.dsp.exec_cmd("notify-send -t 2500 -u low -r 9993 'Screenshot' 'Select the region you want' && hyprshot -m region --raw | satty --filename - --early-exit --copy-command wl-copy --initial-tool arrow --output-filename ~/Pictures/screenshot-$(date '+%Y%m%d-%H:%M:%S').png"), { description = "Take a region screenshot and edit it" })
+-- hl.bind("Print", hl.dsp.exec_cmd("notify-send -t 2500 -u low -r 9993 'Screenshot' 'Select the region you want' && hyprshot -m region --raw | satty --filename - --early-exit --notification-thumbnail app-icon --copy-command wl-copy --initial-tool arrow --output-filename ~/Pictures/screenshot-$(date '+%Y%m%d-%H:%M:%S').png"), { description = "Take a region screenshot and edit it" })
+-- Testing new satty option "--notification-thumbnail screenshot" to dislpay a thumbnail of the screenshot but it doesn't work
+hl.bind("Print", hl.dsp.exec_cmd("notify-send -t 2500 -u low -r 9993 'Screenshot' 'Select the region you want' && hyprshot -m region --raw | satty --filename - --early-exit --notification-thumbnail screenshot --copy-command wl-copy --initial-tool arrow --output-filename ~/Pictures/screenshot-$(date '+%Y%m%d-%H:%M:%S').png"), { description = "Take a region screenshot and edit it" })
 hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd("hyprshot -m region --clipboard-only"), { description = "Take a screenshot and copy it to the clipboard" })
 
 -- Lock screen manually
