@@ -26,7 +26,7 @@ in
 
     # Shell
     shell = lib.mkOption {
-      type = lib.types.enum [ "waybar" "dank-material-shell" ];
+      type = lib.types.enum [ "waybar" "dank-material-shell" "sicos-bar" ];
       default = "waybar";
       description = "Which shell to use (waybar or dank-material-shell).";
     };
@@ -342,6 +342,8 @@ in
         swaynotificationcenter
       ] ++ lib.optionals (cfg.shell == "dank-material-shell") [
         inputs.dankmaterialshell.packages.${pkgs.system}.default
+        quickshell
+      ] ++ lib.optionals (cfg.shell == "sicos-bar") [
         quickshell
       ];
     };

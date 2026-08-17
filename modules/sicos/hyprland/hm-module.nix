@@ -82,6 +82,11 @@ in
           import ./config-files/walker/themes/stylix/walker-style.nix
             { inherit config lib nixosConfig; };
 
+        # Quickshell files
+        ".config/quickshell/shell.qml" = lib.mkIf (cfg.shell == "sicos-bar") {
+          text = import ./config-files/quickshell/quickshell-bar.nix { inherit config lib nixosConfig pkgs; };
+        };
+
         # UWSM environment variables
         # (Needed because uwsm cannot parse hyprland.lua to extract env vars)
         ".config/uwsm/env".text = ''
@@ -106,6 +111,8 @@ in
             ${if cfg.shell == "waybar" then ''
               uwsm app -- waybar &
               uwsm app -- swaync &
+            '' else if cfg.shell == "sicos-bar" then ''
+              uwsm app -- quickshell &
             '' else ''
               # DankMaterialShell is managed by its own systemd service.
               # systemctl --user start dms.service
