@@ -21,13 +21,16 @@ Para evitar archivos monolíticos gigantescos, la barra se compone de un archivo
   - `clock.nix`: Reloj central en tiempo real (`Qt.formatDateTime`).
   - `power.nix`: Selector dinámico de *Power Profiles* y botón de sesión interactuando con subprocesos del sistema (`powerprofilesctl`).
   - `system.nix`: Botón lanzador de aplicaciones (`walker`) y *placeholders* visuales de CPU y RAM.
-  - `workspaces.nix`: Integración nativa bidireccional con el paginador de Hyprland (`Quickshell.Hyprland`).
-
+  - `workspaces.nix`: Integración nativa bidireccional con Hyprland (`Quickshell.Hyprland`). Identifica dinámicamente las ventanas abiertas en cada escritorio renderizando su icono del sistema y agrupándolas inteligentemente mediante una heurística de *class* y *título*.
 ## 🚀 Progreso Actual
 - [x] **Setup y Arquitectura Modular:** Refactorización completada mediante interpolación Nix, garantizando escalabilidad para futuros módulos.
 - [x] **Maquetación Base (QML):** Diseño *Pill-style* flotante, transparente e interactivo.
 - [x] **Módulo Reloj:** Integrado con actualización en tiempo real.
-- [x] **Módulo Workspaces:** Integración nativa con detección de escritorios y animaciones dinámicas de anchura/color.
+- [x] **Módulo Workspaces (Premium UX):**
+  - Renderizado dinámico de píldoras por área de trabajo que cambian de tamaño fluidamente según la cantidad de apps.
+  - Generación en tiempo real de los iconos de sistema de las ventanas (usando proveedor nativo `image://icon/` de Qt).
+  - Lógica heurística *Custom* para mapear aplicaciones TUI (Yazi, Btop, Neovim) corriendo en terminales (Kitty, etc.) leyendo sus títulos e inyectando su icono original.
+  - Evento de clic de cambio de entorno adaptado a la nueva API Lua de llamadas en la comunicación de Quickshell-Hyprland (`hl.dsp.focus`).
 - [x] **Módulo Lanzador y Apagado:** Integrados con llamadas por proceso (`Process`).
 - [x] **Gestión de Energía Integral:**
   - **Power Profiles:** Selector interactivo y persistente que cambia entre rendimiento, balanceado y ahorro.
