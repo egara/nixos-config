@@ -25,7 +25,12 @@ Para evitar archivos monolíticos gigantescos, la barra se compone de un archivo
 ## 🚀 Progreso Actual
 - [x] **Setup y Arquitectura Modular:** Refactorización completada mediante interpolación Nix, garantizando escalabilidad para futuros módulos.
 - [x] **Maquetación Base (QML):** Diseño *Pill-style* flotante, transparente e interactivo.
-- [x] **Módulo Reloj:** Integrado con actualización en tiempo real.
+- [x] **Módulo Reloj y Calendario (Premium UX):**
+  - Reloj central en la barra con actualización en tiempo real.
+  - Popup interactivo dividido en dos paneles (notificaciones a la izquierda, calendario a la derecha).
+  - Integración del motor de calendario y *Memento Mori* (esperanza de vida) porteado desde Omarchy (`Model.js`).
+  - Navegación interactiva por meses con *hover effects* en el título del mes ("BACK TO TODAY") para regresar rápidamente.
+  - Gestión correcta del teclado en Wayland (`HyprlandFocusGrab` y `WlrLayershell.keyboardFocus`) para permitir la inserción del año de nacimiento.
 - [x] **Módulo Workspaces (Premium UX):**
   - Renderizado dinámico de píldoras por área de trabajo que cambian de tamaño fluidamente según la cantidad de apps.
   - Generación en tiempo real de los iconos de sistema de las ventanas (usando proveedor nativo `image://icon/` de Qt).
@@ -48,7 +53,8 @@ Para evitar archivos monolíticos gigantescos, la barra se compone de un archivo
   - Interacciones de ratón nativas (Left/Right/Middle clicks) conectadas a los métodos del provider del Tray.
 
 ## 🚧 Siguientes Pasos
-1. **Control Multimedia (Opcional):** Mostrar información y botones para música usando la API de MPRIS de QuickShell.
+1. **Módulo de Notificaciones:** Implementar el panel izquierdo del popup del reloj para albergar el listado e historial de notificaciones del sistema. Se tomará como referencia la implementación de Dank Material Shell (DMS).
+2. **Control Multimedia (Opcional):** Mostrar información y botones para música usando la API de MPRIS de QuickShell.
 
 ## 🎨 UI/UX Guidelines & Consistency
 Para mantener la homogeneidad visual ("Premium UX") en todos los componentes de Quickshell, se deben seguir estrictamente las siguientes reglas de diseño:
@@ -56,6 +62,7 @@ Para mantener la homogeneidad visual ("Premium UX") en todos los componentes de 
 - **Subtítulos (Pills/Sections):** Los textos descriptivos sobre tarjetas (ej. "Top CPU", "Health", "Capacity") deben heredar el color Cyan de Stylix (`#${c.base0D}`) y tener un `font.pixelSize: 13` centrado horizontalmente (`Layout.alignment: Qt.AlignHCenter`).
 - **Botones Interactivos:** Los botones grandes de la parte inferior de los menús (ej. cambiar perfil de energía, lanzar aplicaciones) deben usar un formato "pill-style" redondeado (`radius: 20`) sin borde. El color de fondo en reposo será el oscuro estándar de los menús (`#${c.base02}`), y al hacer hover cambiará a un gris claro sutil (`#${c.base03}`). Su texto no debe estar en negrita a menos que representen un estado activo.
 - **Listas y Filas:** En lugar de forzar clics precisos en botones diminutos, las filas de las listas deben estar envueltas en rectángulos clickables (`MouseArea` sobre toda la fila) con un ligero resalte en hover (`#${c.base03}`). Los iconos de acción (ej. papelera de reciclaje) sólo serán visibles (`visible: mouseArea.containsMouse`) cuando se pase el ratón por encima de la fila.
+- **Fondo de las Islas (Pills):** Todos los widgets principales de la barra superior que funcionen como "islas" independientes (Reloj, Monitor del Sistema, System Tray, Batería, etc.) deben tener por defecto un color de fondo unificado de `#${c.base01}`. Al pasar el ratón (hover), el fondo debe cambiar a `#${c.base03}`, y cuando su menú esté activo/abierto, el botón debe adoptar el color `#${c.base02}`.
 
 ## 📚 Referencias y Documentación
 - **Documentación Oficial de Quickshell (v0.1.0):** [https://quickshell.org/docs/v0.1.0/guide/](https://quickshell.org/docs/v0.1.0/guide/)

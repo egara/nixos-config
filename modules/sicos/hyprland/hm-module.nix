@@ -86,6 +86,9 @@ in
         ".config/quickshell/shell.qml" = lib.mkIf (cfg.shell == "sicos-bar") {
           text = import ./config-files/quickshell/quickshell-bar.nix { inherit config lib nixosConfig pkgs; };
         };
+        ".config/quickshell/Model.js" = lib.mkIf (cfg.shell == "sicos-bar") {
+          source = ./config-files/quickshell/Model.js;
+        };
 
         # UWSM environment variables
         # (Needed because uwsm cannot parse hyprland.lua to extract env vars)

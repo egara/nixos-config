@@ -23,6 +23,7 @@ import Quickshell.Hyprland
 import Quickshell.Services.UPower
 import Quickshell.Services.SystemTray
 import Quickshell.Io // for Process
+import "Model.js" as Model
 
 PanelWindow {
     id: root
@@ -33,6 +34,8 @@ PanelWindow {
         left: true
         right: true
     }
+    
+    WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
     
     // Add some margins for a floating look
     margins {
@@ -51,6 +54,7 @@ PanelWindow {
     property bool batteryVisible: false
     property bool sysinfoVisible: false
     property bool trayMenuVisible: false
+    property bool clockVisible: false
 
     // Invisible background window to catch outside clicks for smooth exit animations
     PanelWindow {
@@ -59,7 +63,7 @@ PanelWindow {
             top: true; bottom: true; left: true; right: true
         }
         color: "#01000000"
-        visible: root.batteryVisible || root.sysinfoVisible || root.trayMenuVisible || popupContent.opacity > 0
+        visible: root.batteryVisible || root.sysinfoVisible || root.trayMenuVisible || root.clockVisible || popupContent.opacity > 0
         
         MouseArea {
             anchors.fill: parent
@@ -67,6 +71,7 @@ PanelWindow {
                 root.batteryVisible = false
                 root.sysinfoVisible = false
                 root.trayMenuVisible = false
+                root.clockVisible = false
             }
         }
     }
@@ -78,6 +83,7 @@ PanelWindow {
 
     ${battery.popup}
     ${sysinfo.popup}
+    ${clock.popup}
 
     Rectangle {
         anchors.fill: parent
@@ -109,7 +115,7 @@ PanelWindow {
             RowLayout {
                 Layout.alignment: Qt.AlignCenter
                 
-                ${clock}
+                ${clock.widget}
             }
 
             // ==========================================

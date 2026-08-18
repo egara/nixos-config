@@ -287,7 +287,7 @@
     Rectangle {
         id: batteryWidgetContainer
         property bool showPercent: UPower.displayDevice != null && UPower.displayDevice.state !== 4 && UPower.displayDevice.state !== 5
-        color: batteryMouseArea.containsMouse ? "#${c.base03}" : "#${c.base02}"
+        color: batteryMouseArea.containsMouse ? "#${c.base03}" : (root.batteryVisible ? "#${c.base02}" : "#${c.base01}")
         radius: 14 // Fully rounded pill
         Layout.preferredHeight: 28
         Layout.preferredWidth: showPercent ? 70 : 42
