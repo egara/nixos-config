@@ -4,11 +4,9 @@
     PopupWindow {
         id: sysinfoPopup
         anchor.window: root
-        anchor.rect.x: 0
-        anchor.rect.y: root.height
-        anchor.rect.width: 120
-        anchor.rect.height: 0
+        anchor.item: sysinfoWidgetContainer
         anchor.edges: Edges.Bottom
+        anchor.gravity: Edges.Bottom
         visible: root.sysinfoVisible || popupSysContent.opacity > 0
         implicitWidth: 400
         implicitHeight: 480
@@ -369,6 +367,7 @@
   widget = ''
     // SysInfo Island (CPU & RAM)
     Rectangle {
+        id: sysinfoWidgetContainer
         color: sysMouseArea.containsMouse ? "#${c.base03}" : "#${c.base01}"
         radius: 14 // Pill style
         Layout.preferredHeight: 28
