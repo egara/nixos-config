@@ -42,10 +42,13 @@ Para evitar archivos monolíticos gigantescos, la barra se compone de un archivo
   - Listas de los 5 procesos principales que más consumen integradas nativamente sin bloqueos.
   - UX de hover en filas con iconos de borrado dinámicos para fulminar procesos (`kill`).
   - Botón integrado para lanzar Btop completo.
+- [x] **Módulo System Tray:**
+  - Integración nativa con `Quickshell.Services.SystemTray`.
+  - Soporte para iconos pasivos (NetworkManager, Bluetooth, Insync) y renderizado adaptativo de los iconos desde el path o tema local.
+  - Interacciones de ratón nativas (Left/Right/Middle clicks) conectadas a los métodos del provider del Tray.
 
 ## 🚧 Siguientes Pasos
-1. **System Tray (Bandeja del sistema):** Añadir el soporte para iconos pasivos (NetworkManager, Bluetooth, Insync) en la parte derecha de la barra.
-2. **Control Multimedia (Opcional):** Mostrar información y botones para música usando la API de MPRIS de QuickShell.
+1. **Control Multimedia (Opcional):** Mostrar información y botones para música usando la API de MPRIS de QuickShell.
 
 ## 🎨 UI/UX Guidelines & Consistency
 Para mantener la homogeneidad visual ("Premium UX") en todos los componentes de Quickshell, se deben seguir estrictamente las siguientes reglas de diseño:

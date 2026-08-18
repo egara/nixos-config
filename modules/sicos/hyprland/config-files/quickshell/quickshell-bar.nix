@@ -11,14 +11,17 @@ let
   system = import ./components/system.nix { inherit config lib pkgs c fontName; };
   sysinfo = import ./components/sysinfo.nix { inherit config lib pkgs c fontName; };
   power = import ./components/power.nix { inherit config lib pkgs c fontName; };
+  tray = import ./components/tray.nix { inherit config lib pkgs c fontName; };
 in
 ''
+//@ pragma UseQApplication
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Services.UPower
+import Quickshell.Services.SystemTray
 import Quickshell.Io // for Process
 
 PanelWindow {
@@ -47,6 +50,7 @@ PanelWindow {
     // Popup visibility state for smooth animations
     property bool batteryVisible: false
     property bool sysinfoVisible: false
+    property bool trayMenuVisible: false
 
     // Invisible background window to catch outside clicks for smooth exit animations
     PanelWindow {
@@ -54,14 +58,15 @@ PanelWindow {
         anchors {
             top: true; bottom: true; left: true; right: true
         }
-        color: "transparent"
-        visible: root.batteryVisible || root.sysinfoVisible || popupContent.opacity > 0
+        color: "#01000000"
+        visible: root.batteryVisible || root.sysinfoVisible || root.trayMenuVisible || popupContent.opacity > 0
         
         MouseArea {
             anchors.fill: parent
             onClicked: {
                 root.batteryVisible = false
                 root.sysinfoVisible = false
+                root.trayMenuVisible = false
             }
         }
     }
@@ -114,20 +119,7 @@ PanelWindow {
                 Layout.alignment: Qt.AlignRight
                 spacing: 12
 
-                // Tray placeholder
-                Rectangle {
-                    color: "#${c.base01}"
-                    radius: 8
-                    Layout.preferredHeight: 28
-                    Layout.preferredWidth: 60
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Tray..."
-                        color: "#${c.base05}"
-                        font.family: "${fontName}"
-                        font.pixelSize: 12
-                    }
-                }
+                ${tray}
 
                 ${battery.widget}
                 ${power}
