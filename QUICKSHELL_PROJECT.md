@@ -36,8 +36,23 @@ Para evitar archivos monolíticos gigantescos, la barra se compone de un archivo
   - **Power Profiles:** Selector interactivo y persistente que cambia entre rendimiento, balanceado y ahorro.
   - **Batería Avanzada (Premium UX):** Píldora interactiva que muestra porcentajes e íconos Nerd Font dinámicos (`⚡`, `󰚥`, `🔋`), adaptándose si el límite de carga está topado (80%) y replegando el texto suavemente para ahorrar espacio de pantalla cuando el equipo está conectado.
   - **Popouts Interactivos:** Menús flotantes al hacer clic en módulos (como Batería) con transiciones suaves *fade/slide-up*, cierre haciendo click fuera (`PanelWindow` overlay background), y tarjetas de información contextual (Health, Capacity, Time Remaining, Hardware Limit).
+- [x] **Módulo System Monitor (CPU/RAM):**
+  - Popout interactivo con alineación a la izquierda y dimensionamiento (`implicitWidth`/`implicitHeight`) optimizado.
+  - Generación de gráficos circulares dinámicos (QML `Canvas`) para el uso global del sistema.
+  - Listas de los 5 procesos principales que más consumen integradas nativamente sin bloqueos.
+  - UX de hover en filas con iconos de borrado dinámicos para fulminar procesos (`kill`).
+  - Botón integrado para lanzar Btop completo.
 
 ## 🚧 Siguientes Pasos
-1. **Módulos de Sistema (CPU/RAM):** Diseñar la lectura interactiva para uso real en los placeholders ya definidos en `system.nix`.
-2. **System Tray (Bandeja del sistema):** Añadir el soporte para iconos pasivos (NetworkManager, Bluetooth, Insync) en la parte derecha de la barra.
-3. **Control Multimedia (Opcional):** Mostrar información y botones para música usando la API de MPRIS de QuickShell.
+1. **System Tray (Bandeja del sistema):** Añadir el soporte para iconos pasivos (NetworkManager, Bluetooth, Insync) en la parte derecha de la barra.
+2. **Control Multimedia (Opcional):** Mostrar información y botones para música usando la API de MPRIS de QuickShell.
+
+## 🎨 UI/UX Guidelines & Consistency
+Para mantener la homogeneidad visual ("Premium UX") en todos los componentes de Quickshell, se deben seguir estrictamente las siguientes reglas de diseño:
+- **Títulos de Popups:** Deben usar `font.pixelSize: 18` sin estar en negrita (`font.bold: false` u omitido).
+- **Subtítulos (Pills/Sections):** Los textos descriptivos sobre tarjetas (ej. "Top CPU", "Health", "Capacity") deben heredar el color Cyan de Stylix (`#${c.base0D}`) y tener un `font.pixelSize: 13` centrado horizontalmente (`Layout.alignment: Qt.AlignHCenter`).
+- **Botones Interactivos:** Los botones grandes de la parte inferior de los menús (ej. cambiar perfil de energía, lanzar aplicaciones) deben usar un formato "pill-style" redondeado (`radius: 20`) sin borde. El color de fondo en reposo será el oscuro estándar de los menús (`#${c.base02}`), y al hacer hover cambiará a un gris claro sutil (`#${c.base03}`). Su texto no debe estar en negrita a menos que representen un estado activo.
+- **Listas y Filas:** En lugar de forzar clics precisos en botones diminutos, las filas de las listas deben estar envueltas en rectángulos clickables (`MouseArea` sobre toda la fila) con un ligero resalte en hover (`#${c.base03}`). Los iconos de acción (ej. papelera de reciclaje) sólo serán visibles (`visible: mouseArea.containsMouse`) cuando se pase el ratón por encima de la fila.
+
+## 📚 Referencias y Documentación
+- **Documentación Oficial de Quickshell (v0.1.0):** [https://quickshell.org/docs/v0.1.0/guide/](https://quickshell.org/docs/v0.1.0/guide/)

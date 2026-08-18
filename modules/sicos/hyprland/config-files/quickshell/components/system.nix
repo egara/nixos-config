@@ -20,36 +20,10 @@
             hoverEnabled: true
             onClicked: {
                 cmdRunner.command = ["uwsm", "app", "--", "walker"]
-                cmdRunner.start()
+                cmdRunner.running = true
             }
         }
     }
 
-    // CPU / Mem Placeholders
-    Rectangle {
-        color: "#${c.base01}"
-        radius: 8
-        Layout.preferredHeight: 28
-        Layout.preferredWidth: 60
-        Text {
-            anchors.centerIn: parent
-            text: " CPU"
-            color: "#${c.base05}"
-            font.family: "${fontName}"
-            font.pixelSize: 12
-        }
-    }
-    Rectangle {
-        color: "#${c.base01}"
-        radius: 8
-        Layout.preferredHeight: 28
-        Layout.preferredWidth: 60
-        Text {
-            anchors.centerIn: parent
-            text: " RAM"
-            color: "#${c.base05}"
-            font.family: "${fontName}"
-            font.pixelSize: 12
-        }
-    }
+
 ''

@@ -9,6 +9,7 @@ let
   workspaces = import ./components/workspaces.nix { inherit config lib pkgs c fontName; };
   clock = import ./components/clock.nix { inherit config lib pkgs c fontName; };
   system = import ./components/system.nix { inherit config lib pkgs c fontName; };
+  sysinfo = import ./components/sysinfo.nix { inherit config lib pkgs c fontName; };
   power = import ./components/power.nix { inherit config lib pkgs c fontName; };
 in
 ''
@@ -37,7 +38,7 @@ PanelWindow {
         right: 12
     }
     
-    height: 40
+    implicitHeight: 40
     color: "transparent"
     
     // Exclusive zone so windows don't overlap
@@ -45,6 +46,7 @@ PanelWindow {
 
     // Popup visibility state for smooth animations
     property bool batteryVisible: false
+    property bool sysinfoVisible: false
 
     // Invisible background window to catch outside clicks for smooth exit animations
     PanelWindow {
@@ -53,11 +55,14 @@ PanelWindow {
             top: true; bottom: true; left: true; right: true
         }
         color: "transparent"
-        visible: root.batteryVisible || popupContent.opacity > 0
+        visible: root.batteryVisible || root.sysinfoVisible || popupContent.opacity > 0
         
         MouseArea {
             anchors.fill: parent
-            onClicked: root.batteryVisible = false
+            onClicked: {
+                root.batteryVisible = false
+                root.sysinfoVisible = false
+            }
         }
     }
 
@@ -67,6 +72,7 @@ PanelWindow {
     }
 
     ${battery.popup}
+    ${sysinfo.popup}
 
     Rectangle {
         anchors.fill: parent
@@ -88,6 +94,7 @@ PanelWindow {
                 spacing: 12
 
                 ${system}
+                ${sysinfo.widget}
                 ${workspaces}
             }
 

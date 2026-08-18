@@ -10,8 +10,8 @@
         anchor.rect.height: 0
         anchor.edges: Edges.Bottom
         visible: root.batteryVisible || popupContent.opacity > 0
-        width: 380
-        height: 280
+        implicitWidth: 380
+        implicitHeight: 280
         color: "transparent"
 
         // Helper functions
