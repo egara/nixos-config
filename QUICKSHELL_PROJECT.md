@@ -67,3 +67,7 @@ Para mantener la homogeneidad visual ("Premium UX") en todos los componentes de 
 
 ## 📚 Referencias y Documentación
 - **Documentación Oficial de Quickshell (v0.1.0):** [https://quickshell.org/docs/v0.1.0/guide/](https://quickshell.org/docs/v0.1.0/guide/)
+- **Proyectos de Referencia Local (Código Fuente):**
+  - **DankMaterialShell (DMS):** `/home/egarcia/Development/git/DankMaterialShell`
+  - **Omarchy:** `/home/egarcia/Development/git/omarchy`
+  - *(Nota para el agente: Cuando se solicite revisar o copiar funcionalidades de estos proyectos, se debe investigar a fondo el código fuente en estos directorios).*
