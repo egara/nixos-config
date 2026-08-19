@@ -63,7 +63,7 @@ PanelWindow {
             top: true; bottom: true; left: true; right: true
         }
         color: "#01000000"
-        visible: root.batteryVisible || root.sysinfoVisible || root.trayMenuVisible || root.clockVisible || popupContent.opacity > 0
+        visible: root.batteryVisible || root.sysinfoVisible || root.trayMenuVisible || popupContent.opacity > 0
         
         MouseArea {
             anchors.fill: parent
@@ -71,7 +71,6 @@ PanelWindow {
                 root.batteryVisible = false
                 root.sysinfoVisible = false
                 root.trayMenuVisible = false
-                root.clockVisible = false
             }
         }
     }
