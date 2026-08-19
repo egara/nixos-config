@@ -27,10 +27,22 @@ Para evitar archivos monolíticos gigantescos, la barra se compone de un archivo
 - [x] **Maquetación Base (QML):** Diseño *Pill-style* flotante, transparente e interactivo.
 - [x] **Módulo Reloj y Calendario (Premium UX):**
   - Reloj central en la barra con actualización en tiempo real.
-  - Popup interactivo dividido en dos paneles (notificaciones a la izquierda, calendario a la derecha).
+  - Al hacer click abre un popup interactivo o "isla" dividido en dos paneles.
   - Integración del motor de calendario y *Memento Mori* (esperanza de vida) porteado desde Omarchy (`Model.js`).
-  - Navegación interactiva por meses con *hover effects* en el título del mes ("BACK TO TODAY") para regresar rápidamente.
-  - Gestión correcta del teclado en Wayland (`HyprlandFocusGrab` y `WlrLayershell.keyboardFocus`) para permitir la inserción del año de nacimiento.
+  - Navegación interactiva por meses con *hover effects* en el título del mes ("BACK TO TODAY").
+  - Gestión correcta del teclado en Wayland (`HyprlandFocusGrab` y `WlrLayershell.keyboardFocus`) para la inserción del año.
+- [ ] **Módulo de Notificaciones (Parcialmente implementado):**
+  - **Hecho:** Integración de la API de notificaciones en `quickshell-bar.nix`.
+  - **Hecho:** Historial de notificaciones dentro de la isla (panel izquierdo del popup del reloj).
+  - **Hecho:** Funciones para limpiar (`Clear All`) y descartar individualmente (X).
+  - **Hecho:** Popups OSD flotantes en tiempo real con ventana independiente (`PanelWindow`) para evitar cortes.
+  - **Hecho:** Sonido del sistema configurado (`message.oga`).
+  - **Hecho:** Icono dinámico de campana en el reloj (muestra nuevas notificaciones) e interruptor para Modo No Molestar (DND).
+  - **Pendiente:** Pulir diseño y estilo de la lista del historial y de las tarjetas (colores, espaciados).
+  - **Pendiente:** Integrar posibles interacciones/acciones ('actions') devueltas por la notificación.
+  - **Pendiente:** Opciones avanzadas de personalización o transiciones más elaboradas.
+- [ ] **Módulo Multimedia (Pendiente):**
+  - Reproductor interactivo en la isla (mediante MPRIS).
 - [x] **Módulo Workspaces (Premium UX):**
   - Renderizado dinámico de píldoras por área de trabajo que cambian de tamaño fluidamente según la cantidad de apps.
   - Generación en tiempo real de los iconos de sistema de las ventanas (usando proveedor nativo `image://icon/` de Qt).
@@ -52,9 +64,15 @@ Para evitar archivos monolíticos gigantescos, la barra se compone de un archivo
   - Soporte para iconos pasivos (NetworkManager, Bluetooth, Insync) y renderizado adaptativo de los iconos desde el path o tema local.
   - Interacciones de ratón nativas (Left/Right/Middle clicks) conectadas a los métodos del provider del Tray.
 
+- [x] **Módulo de Notificaciones (Premium UX):**
+  - Panel izquierdo del popup del reloj con listado e historial de notificaciones.
+  - Implementación con `NotificationServer` y un `ListModel` reactivo.
+  - Generación de iconos dinámica (`image://icon/`) con fallbacks.
+  - Hover actions (Trash) y animaciones de limpieza.
+  - Strip de etiquetas HTML embebidas en los `body` de las notificaciones para mantener la consistencia estética.
+
 ## 🚧 Siguientes Pasos
-1. **Módulo de Notificaciones:** Implementar el panel izquierdo del popup del reloj para albergar el listado e historial de notificaciones del sistema. Se tomará como referencia la implementación de Dank Material Shell (DMS).
-2. **Control Multimedia (Opcional):** Mostrar información y botones para música usando la API de MPRIS de QuickShell.
+1. **Control Multimedia (Opcional):** Mostrar información y botones para música usando la API de MPRIS de QuickShell.
 
 ## 🎨 UI/UX Guidelines & Consistency
 Para mantener la homogeneidad visual ("Premium UX") en todos los componentes de Quickshell, se deben seguir estrictamente las siguientes reglas de diseño:

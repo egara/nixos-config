@@ -73,33 +73,151 @@
                                 id: clearHover
                                 anchors.fill: parent
                                 hoverEnabled: true
+                                onClicked: root.clearNotifications()
                             }
                         }
                     }
 
-                    // Placeholder for notifications list
+                    // Empty State
                     Rectangle {
+                        visible: notificationModel.count === 0
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        color: "#40${c.base02}"
-                        radius: 12
+                        color: "transparent"
                         
                         ColumnLayout {
                             anchors.centerIn: parent
                             spacing: 8
                             Text {
                                 text: "󰂚"
-                                color: "#${c.base03}"
+                                color: "#40${c.base05}"
                                 font.family: "${fontName}"
                                 font.pixelSize: 48
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             Text {
                                 text: "No hay notificaciones nuevas"
-                                color: "#${c.base04}"
+                                color: "#80${c.base05}"
                                 font.family: "${fontName}"
                                 font.pixelSize: 14
                                 Layout.alignment: Qt.AlignHCenter
+                            }
+                        }
+                    }
+
+                    // List of notifications
+                    ListView {
+                        id: notifList
+                        visible: notificationModel.count > 0
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        model: notificationModel
+                        spacing: 8
+                        clip: true
+
+                        delegate: Rectangle {
+                            width: notifList.width
+                            implicitHeight: notifCol.implicitHeight + 24
+                            color: notifMouseArea.containsMouse ? "#${c.base03}" : "#40${c.base02}"
+                            radius: 12
+                            border.color: "#33${c.base05}"
+                            border.width: 1
+
+                            MouseArea {
+                                id: notifMouseArea
+                                anchors.fill: parent
+                                hoverEnabled: true
+                            }
+
+                            RowLayout {
+                                anchors.fill: parent
+                                anchors.margins: 12
+                                spacing: 12
+
+                                // Icon
+                                Image {
+                                    source: "image://icon/" + model.iconName
+                                    sourceSize.width: 32
+                                    sourceSize.height: 32
+                                    Layout.preferredWidth: 32
+                                    Layout.preferredHeight: 32
+                                    Layout.alignment: Qt.AlignTop
+                                }
+
+                                ColumnLayout {
+                                    id: notifCol
+                                    Layout.fillWidth: true
+                                    spacing: 4
+
+                                    RowLayout {
+                                        Layout.fillWidth: true
+                                        Text {
+                                            text: model.appName
+                                            color: "#${c.base0D}"
+                                            font.family: "${fontName}"
+                                            font.pixelSize: 13
+                                            font.bold: true
+                                            Layout.fillWidth: true
+                                            elide: Text.ElideRight
+                                        }
+                                        Text {
+                                            text: model.timeStr
+                                            color: "#${c.base04}"
+                                            font.family: "${fontName}"
+                                            font.pixelSize: 11
+                                        }
+                                        
+                                        // Close button (only visible on hover)
+                                        Rectangle {
+                                            Layout.preferredWidth: 20
+                                            Layout.preferredHeight: 20
+                                            radius: 10
+                                            color: closeHover.containsMouse ? "#${c.base08}" : "transparent"
+                                            visible: notifMouseArea.containsMouse
+                                            
+                                            Text {
+                                                anchors.centerIn: parent
+                                                text: "󰅖"
+                                                color: closeHover.containsMouse ? "#${c.base00}" : "#${c.base05}"
+                                                font.family: "${fontName}"
+                                                font.pixelSize: 14
+                                            }
+                                            
+                                            MouseArea {
+                                                id: closeHover
+                                                anchors.fill: parent
+                                                hoverEnabled: true
+                                                onClicked: {
+                                                    root.dismissNotification(model.notifId, index)
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    Text {
+                                        text: model.summary
+                                        color: "#${c.base05}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 14
+                                        font.bold: true
+                                        Layout.fillWidth: true
+                                        wrapMode: Text.Wrap
+                                        maximumLineCount: 2
+                                        elide: Text.ElideRight
+                                    }
+
+                                    Text {
+                                        text: model.body
+                                        color: "#${c.base04}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 13
+                                        Layout.fillWidth: true
+                                        wrapMode: Text.Wrap
+                                        maximumLineCount: 3
+                                        elide: Text.ElideRight
+                                        visible: text !== ""
+                                    }
+                                }
                             }
                         }
                     }
@@ -377,7 +495,20 @@
         RowLayout {
             id: clockLayout
             anchors.centerIn: parent
-            spacing: 6
+            spacing: 8
+            
+            Text {
+                text: root.dndMode ? "󰂛" : (notificationModel.count > 0 ? "󰂚" : "󰂜")
+                color: root.dndMode ? "#80${c.base05}" : (notificationModel.count > 0 ? "#${c.base0D}" : "#${c.base05}")
+                font.family: "${fontName}"
+                font.pixelSize: 14
+                
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: root.dndMode = !root.dndMode
+                }
+            }
+
             Text {
                 id: clockText
                 text: Qt.formatDateTime(new Date(), "ddd d MMM  hh:mm")

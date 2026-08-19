@@ -22,8 +22,11 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Services.UPower
 import Quickshell.Services.SystemTray
+import Quickshell.Services.Notifications
 import Quickshell.Io // for Process
 import "Model.js" as Model
+
+Scope {
 
 PanelWindow {
     id: root
@@ -55,6 +58,9 @@ PanelWindow {
     property bool sysinfoVisible: false
     property bool trayMenuVisible: false
     property bool clockVisible: false
+    
+    // Do not disturb mode
+    property bool dndMode: false
 
     // Invisible background window to catch outside clicks for smooth exit animations
     PanelWindow {
@@ -75,11 +81,106 @@ PanelWindow {
         }
     }
 
+    // Notifications Model and Server
+    property var notifObjects: ({})
+    
+    ListModel {
+        id: notificationModel
+    }
+
+    NotificationServer {
+        id: notifServer
+        onNotification: notif => {
+            var iconName = notif.appIcon;
+            if (!iconName || iconName === "") {
+                iconName = notif.desktopEntry;
+            }
+            if (!iconName || iconName === "") {
+                iconName = "dialog-information"; // fallback
+            }
+            
+            var safeBody = notif.body ? notif.body.toString().replace(/<[^>]*>?/gm, "") : "";
+            
+            root.notifObjects[notif.id] = notif;
+            notificationModel.insert(0, {
+                notifId: notif.id,
+                appName: notif.appName || "Sistema",
+                summary: notif.summary || "",
+                body: safeBody,
+                iconName: iconName,
+                timeStr: Qt.formatTime(new Date(), "hh:mm")
+            });
+            
+            if (!root.dndMode) {
+                // Play notification sound
+                soundPlayer.running = true;
+                
+                // Show OSD popup
+                var osdId = notif.id;
+                osdModel.insert(0, {
+                    notifId: osdId,
+                    appName: notif.appName || "Sistema",
+                    summary: notif.summary || "",
+                    body: safeBody,
+                    iconName: iconName,
+                    timeStr: Qt.formatTime(new Date(), "hh:mm")
+                });
+                
+                // Auto-dismiss OSD after 5 seconds
+                var timerCode = 'import QtQuick; Timer { interval: 5000; running: true; repeat: false; onTriggered: { root.removeOsd(' + osdId + '); this.destroy(); } }';
+                Qt.createQmlObject(timerCode, root, "osdTimer" + osdId);
+            }
+        }
+    }
+    
+    function clearNotifications() {
+        for (var k in root.notifObjects) {
+            try { root.notifObjects[k].dismiss(); } catch(e) {}
+        }
+        root.notifObjects = {};
+        notificationModel.clear();
+    }
+    
+    function dismissNotification(notifId, index) {
+        try { root.notifObjects[notifId].dismiss(); } catch(e) {}
+        delete root.notifObjects[notifId];
+        notificationModel.remove(index);
+    }
+    
+    function removeOsd(id) {
+        for (var i = 0; i < osdModel.count; i++) {
+            if (osdModel.get(i).notifId === id) {
+                osdModel.remove(i);
+                break;
+            }
+        }
+    }
+    
+    function forceDismissNotification(notifId) {
+        removeOsd(notifId);
+        for (var i = 0; i < notificationModel.count; i++) {
+            if (notificationModel.get(i).notifId === notifId) {
+                dismissNotification(notifId, i);
+                break;
+            }
+        }
+    }
+
+    // Storage for OSD notifications
+    ListModel { id: osdModel }
+    
+    // Sound player
+    Process {
+        id: soundPlayer
+        command: ["pw-play", "/run/current-system/sw/share/sounds/freedesktop/stereo/message.oga"]
+    }
+
     // Helper component to run commands
     Process {
         id: cmdRunner
     }
 
+    // --- POPUPS ---
     ${battery.popup}
     ${sysinfo.popup}
     ${clock.popup}
@@ -128,6 +229,144 @@ PanelWindow {
 
                 ${battery.widget}
                 ${power}
+            }
+        }
+    }
+}
+
+    // --- OSD WINDOW ---
+    PanelWindow {
+        id: osdWindow
+        visible: osdModel.count > 0
+        
+        anchors {
+            top: true
+            left: false
+            right: false
+            bottom: false
+        }
+        
+        margins { top: 60 }
+        
+        color: "transparent"
+        exclusiveZone: -1
+        WlrLayershell.layer: WlrLayer.Overlay
+        WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+        
+        implicitWidth: osdLayout.implicitWidth
+        implicitHeight: osdLayout.implicitHeight
+        
+        ColumnLayout {
+            id: osdLayout
+            spacing: 8
+            
+            Repeater {
+                model: osdModel
+                Rectangle {
+                    width: 380
+                    implicitHeight: osdCol.implicitHeight + 24
+                    color: "#${c.base01}"
+                    radius: 12
+                    border.color: "#33${c.base05}"
+                    border.width: 1
+
+                    RowLayout {
+                        anchors.fill: parent
+                        anchors.margins: 12
+                        spacing: 12
+
+                        Image {
+                            source: "image://icon/" + model.iconName
+                            sourceSize.width: 32
+                            sourceSize.height: 32
+                            Layout.preferredWidth: 32
+                            Layout.preferredHeight: 32
+                            Layout.alignment: Qt.AlignTop
+                        }
+
+                        ColumnLayout {
+                            id: osdCol
+                            Layout.fillWidth: true
+                            spacing: 4
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Text {
+                                    text: model.appName
+                                    color: "#${c.base0D}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 13
+                                    font.bold: true
+                                    Layout.fillWidth: true
+                                    elide: Text.ElideRight
+                                }
+                                Text {
+                                    text: model.timeStr
+                                    color: "#${c.base04}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 11
+                                }
+                            }
+
+                            Text {
+                                text: model.summary
+                                color: "#${c.base05}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                                font.bold: true
+                                Layout.fillWidth: true
+                                wrapMode: Text.Wrap
+                                maximumLineCount: 2
+                                elide: Text.ElideRight
+                            }
+
+                            Text {
+                                text: model.body
+                                color: "#${c.base04}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 13
+                                Layout.fillWidth: true
+                                wrapMode: Text.Wrap
+                                maximumLineCount: 3
+                                elide: Text.ElideRight
+                                visible: text !== ""
+                            }
+                        }
+                        
+                        Rectangle {
+                            Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                            width: 24; height: 24
+                            radius: 12
+                            color: osdCloseMouseArea.containsMouse ? "#33${c.base08}" : "transparent"
+                            
+                            Text {
+                                anchors.centerIn: parent
+                                text: "󰅖"
+                                color: "#${c.base05}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                            }
+                            
+                            MouseArea {
+                                id: osdCloseMouseArea
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                onClicked: {
+                                    root.forceDismissNotification(model.notifId)
+                                }
+                            }
+                        }
+                    }
+                    
+                    Component.onCompleted: osdEnterAnim.start()
+                    NumberAnimation on opacity {
+                        id: osdEnterAnim
+                        from: 0
+                        to: 1
+                        duration: 250
+                        easing.type: Easing.OutCubic
+                    }
+                }
             }
         }
     }
