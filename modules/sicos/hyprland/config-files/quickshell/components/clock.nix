@@ -140,6 +140,29 @@
                         section.property: "appName"
                         section.criteria: ViewSection.FullString
 
+                        populate: Transition {
+                            NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 200; easing.type: Easing.OutCubic }
+                        }
+
+                        add: Transition {
+                            NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 200; easing.type: Easing.OutCubic }
+                        }
+                        
+                        remove: Transition {
+                            ParallelAnimation {
+                                NumberAnimation { property: "opacity"; to: 0; duration: 150; easing.type: Easing.OutCubic }
+                                NumberAnimation { property: "scale"; to: 0.95; duration: 150; easing.type: Easing.OutCubic }
+                            }
+                        }
+                        
+                        addDisplaced: Transition {
+                            NumberAnimation { properties: "y"; duration: 200; easing.type: Easing.OutCubic }
+                        }
+                        
+                        removeDisplaced: Transition {
+                            NumberAnimation { properties: "y"; duration: 200; easing.type: Easing.OutCubic }
+                        }
+
                         delegate: ColumnLayout {
                             id: delegateRoot
                             width: notifList.width
