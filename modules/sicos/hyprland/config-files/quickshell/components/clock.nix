@@ -176,11 +176,17 @@
                                 spacing: 8
 
                                 Image {
-                                    source: "image://icon/" + model.iconName
+                                    source: {
+                                        var img = model.iconName.toString();
+                                        if (img.startsWith("image://") || img.startsWith("file://")) return img;
+                                        if (img.startsWith("/")) return "file://" + img;
+                                        return "image://icon/" + img;
+                                    }
                                     sourceSize.width: 24
                                     sourceSize.height: 24
                                     Layout.preferredWidth: 24
                                     Layout.preferredHeight: 24
+                                    fillMode: Image.PreserveAspectCrop
                                 }
 
                                 Text {

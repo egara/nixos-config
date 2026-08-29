@@ -91,7 +91,10 @@ PanelWindow {
     NotificationServer {
         id: notifServer
         onNotification: notif => {
-            var iconName = notif.appIcon;
+            var iconName = notif.image;
+            if (!iconName || iconName === "") {
+                iconName = notif.appIcon;
+            }
             if (!iconName || iconName === "") {
                 iconName = notif.desktopEntry;
             }
@@ -310,11 +313,17 @@ PanelWindow {
                         spacing: 12
 
                         Image {
-                            source: "image://icon/" + model.iconName
+                            source: {
+                                var img = model.iconName.toString();
+                                if (img.startsWith("image://") || img.startsWith("file://")) return img;
+                                if (img.startsWith("/")) return "file://" + img;
+                                return "image://icon/" + img;
+                            }
                             sourceSize.width: 32
                             sourceSize.height: 32
                             Layout.preferredWidth: 32
                             Layout.preferredHeight: 32
+                            fillMode: Image.PreserveAspectCrop
                             Layout.alignment: Qt.AlignTop
                         }
 
