@@ -300,106 +300,115 @@ PanelWindow {
             Repeater {
                 model: osdModel
                 Rectangle {
-                    width: 380
-                    implicitHeight: osdCol.implicitHeight + 24
-                    color: "#${c.base01}"
-                    radius: 12
+                    width: 420
+                    implicitHeight: Math.max(90, osdCol.implicitHeight + 32)
+                    color: "#F0${c.base01}"
+                    radius: 16
                     border.color: "#33${c.base05}"
                     border.width: 1
+                    clip: true
 
-                    RowLayout {
-                        anchors.fill: parent
+                    Rectangle {
+                        id: osdIcon
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
                         anchors.margins: 12
-                        spacing: 12
+                        width: height
+                        radius: 8
+                        color: "transparent"
+                        clip: true
 
                         Image {
+                            anchors.fill: parent
                             source: {
                                 var img = model.iconName.toString();
                                 if (img.startsWith("image://") || img.startsWith("file://")) return img;
                                 if (img.startsWith("/")) return "file://" + img;
                                 return "image://icon/" + img;
                             }
-                            sourceSize.width: 32
-                            sourceSize.height: 32
-                            Layout.preferredWidth: 32
-                            Layout.preferredHeight: 32
+                            sourceSize.width: 128
+                            sourceSize.height: 128
                             fillMode: Image.PreserveAspectCrop
-                            Layout.alignment: Qt.AlignTop
                         }
+                    }
 
-                        ColumnLayout {
-                            id: osdCol
+                    ColumnLayout {
+                        id: osdCol
+                        anchors.left: osdIcon.right
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.margins: 16
+                        spacing: 6
+
+                        RowLayout {
                             Layout.fillWidth: true
-                            spacing: 4
-
-                            RowLayout {
-                                Layout.fillWidth: true
-                                Text {
-                                    text: model.appName
-                                    color: "#${c.base0D}"
-                                    font.family: "${fontName}"
-                                    font.pixelSize: 13
-                                    font.bold: true
-                                    Layout.fillWidth: true
-                                    elide: Text.ElideRight
-                                }
-                                Text {
-                                    text: model.timeStr
-                                    color: "#${c.base04}"
-                                    font.family: "${fontName}"
-                                    font.pixelSize: 11
-                                }
-                            }
-
                             Text {
-                                text: model.summary
-                                color: "#${c.base05}"
+                                text: model.appName
+                                color: "#${c.base0D}"
                                 font.family: "${fontName}"
                                 font.pixelSize: 14
                                 font.bold: true
                                 Layout.fillWidth: true
-                                wrapMode: Text.Wrap
-                                maximumLineCount: 2
                                 elide: Text.ElideRight
                             }
-
                             Text {
-                                text: model.body
+                                text: model.timeStr
                                 color: "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 13
-                                Layout.fillWidth: true
-                                wrapMode: Text.Wrap
-                                maximumLineCount: 3
-                                elide: Text.ElideRight
-                                visible: text !== ""
-                            }
-                        }
-                        
-                        Rectangle {
-                            Layout.alignment: Qt.AlignTop | Qt.AlignRight
-                            width: 24; height: 24
-                            radius: 12
-                            color: osdCloseMouseArea.containsMouse ? "#33${c.base08}" : "transparent"
-                            
-                            Text {
-                                anchors.centerIn: parent
-                                text: "󰅖"
-                                color: "#${c.base05}"
-                                font.family: "${fontName}"
-                                font.pixelSize: 14
+                                font.pixelSize: 12
                             }
                             
-                            MouseArea {
-                                id: osdCloseMouseArea
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                onClicked: {
-                                    root.forceDismissNotification(model.notifId)
+                            Rectangle {
+                                Layout.preferredWidth: 24
+                                Layout.preferredHeight: 24
+                                radius: 12
+                                color: osdCloseHover.hovered ? "#33${c.base08}" : "transparent"
+                                
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "󰅖"
+                                    color: osdCloseHover.hovered ? "#${c.base08}" : "#${c.base05}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 14
+                                }
+                                
+                                HoverHandler {
+                                    id: osdCloseHover
+                                }
+                                
+                                TapHandler {
+                                    onTapped: {
+                                        root.forceDismissNotification(model.notifId)
+                                    }
                                 }
                             }
                         }
-                    }
+
+                        Text {
+                            text: model.summary
+                            color: "#${c.base05}"
+                            font.family: "${fontName}"
+                            font.pixelSize: 15
+                            font.bold: true
+                            Layout.fillWidth: true
+                            wrapMode: Text.Wrap
+                            maximumLineCount: 2
+                            elide: Text.ElideRight
+                        }
+
+                        Text {
+                            text: model.body
+                            color: "#${c.base04}"
+                            font.family: "${fontName}"
+                            font.pixelSize: 14
+                            Layout.fillWidth: true
+                            wrapMode: Text.Wrap
+                            maximumLineCount: 3
+                            elide: Text.ElideRight
+                            visible: text !== ""
+                        }
+                    }    
                     
                     Component.onCompleted: osdEnterAnim.start()
                     NumberAnimation on opacity {

@@ -227,27 +227,29 @@
                             }
 
                             // Notification Card
-                            Rectangle {
+                            Item {
                                 Layout.fillWidth: true
-                                implicitHeight: notifCol.implicitHeight + 20
-                                color: notifHover.hovered ? "#${c.base03}" : "#40${c.base02}"
-                                radius: 10
-                                border.color: "#33${c.base05}"
-                                border.width: 1
+                                Layout.preferredHeight: cardContent.height + 20
+
+                                Rectangle {
+                                    anchors.fill: parent
+                                    color: notifHover.hovered ? "#${c.base03}" : "#40${c.base02}"
+                                    radius: 10
+                                    border.color: "#33${c.base05}"
+                                    border.width: 1
+                                }
 
                                 HoverHandler {
                                     id: notifHover
                                 }
 
-                                RowLayout {
-                                    anchors.fill: parent
+                                ColumnLayout {
+                                    id: cardContent
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    anchors.top: parent.top
                                     anchors.margins: 10
-                                    spacing: 8
-
-                                    ColumnLayout {
-                                        id: notifCol
-                                        Layout.fillWidth: true
-                                        spacing: 4
+                                    spacing: 4
 
                                         RowLayout {
                                             Layout.fillWidth: true
@@ -317,7 +319,6 @@
                             }
                         }
                     }
-                }
 
                 // Divider
                 Rectangle {
