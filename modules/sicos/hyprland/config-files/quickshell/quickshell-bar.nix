@@ -102,14 +102,37 @@ PanelWindow {
             var safeBody = notif.body ? notif.body.toString().replace(/<[^>]*>?/gm, "") : "";
             
             root.notifObjects[notif.id] = notif;
+            
+            // Extract existing data for the same app to keep them grouped
+            var appNameToMatch = notif.appName || "Sistema";
+            var existingData = [];
+            for (var i = notificationModel.count - 1; i >= 0; i--) {
+                var item = notificationModel.get(i);
+                if (item.appName === appNameToMatch) {
+                    existingData.unshift({
+                        notifId: item.notifId,
+                        appName: item.appName,
+                        summary: item.summary,
+                        body: item.body,
+                        iconName: item.iconName,
+                        timeStr: item.timeStr
+                    });
+                    notificationModel.remove(i);
+                }
+            }
+            
             notificationModel.insert(0, {
                 notifId: notif.id,
-                appName: notif.appName || "Sistema",
+                appName: appNameToMatch,
                 summary: notif.summary || "",
                 body: safeBody,
                 iconName: iconName,
                 timeStr: Qt.formatTime(new Date(), "hh:mm")
             });
+            
+            for (var j = 0; j < existingData.length; j++) {
+                notificationModel.insert(j + 1, existingData[j]);
+            }
             
             if (!root.dndMode) {
                 // Play notification sound
@@ -145,6 +168,17 @@ PanelWindow {
         try { root.notifObjects[notifId].dismiss(); } catch(e) {}
         delete root.notifObjects[notifId];
         notificationModel.remove(index);
+    }
+    
+    function dismissNotificationGroup(appName) {
+        for (var i = notificationModel.count - 1; i >= 0; i--) {
+            if (notificationModel.get(i).appName === appName) {
+                var notifId = notificationModel.get(i).notifId;
+                try { root.notifObjects[notifId].dismiss(); } catch(e) {}
+                delete root.notifObjects[notifId];
+                notificationModel.remove(i);
+            }
+        }
     }
     
     function removeOsd(id) {

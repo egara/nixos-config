@@ -114,108 +114,152 @@
                         model: notificationModel
                         spacing: 8
                         clip: true
+                        section.property: "appName"
+                        section.criteria: ViewSection.FullString
 
-                        delegate: Rectangle {
+                        delegate: ColumnLayout {
+                            id: delegateRoot
                             width: notifList.width
-                            implicitHeight: notifCol.implicitHeight + 24
-                            color: notifMouseArea.containsMouse ? "#${c.base03}" : "#40${c.base02}"
-                            radius: 12
-                            border.color: "#33${c.base05}"
-                            border.width: 1
+                            spacing: 6
 
-                            MouseArea {
-                                id: notifMouseArea
-                                anchors.fill: parent
-                                hoverEnabled: true
-                            }
-
+                            // Group Header (visible only for the first item of a group)
                             RowLayout {
-                                anchors.fill: parent
-                                anchors.margins: 12
-                                spacing: 12
+                                visible: delegateRoot.ListView.previousSection !== delegateRoot.ListView.section
+                                Layout.fillWidth: true
+                                Layout.topMargin: index === 0 ? 0 : 8
+                                spacing: 8
 
-                                // Icon
                                 Image {
                                     source: "image://icon/" + model.iconName
-                                    sourceSize.width: 32
-                                    sourceSize.height: 32
-                                    Layout.preferredWidth: 32
-                                    Layout.preferredHeight: 32
-                                    Layout.alignment: Qt.AlignTop
+                                    sourceSize.width: 24
+                                    sourceSize.height: 24
+                                    Layout.preferredWidth: 24
+                                    Layout.preferredHeight: 24
                                 }
 
-                                ColumnLayout {
-                                    id: notifCol
+                                Text {
+                                    text: model.appName
+                                    color: "#${c.base0D}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 13
+                                    font.bold: true
                                     Layout.fillWidth: true
-                                    spacing: 4
+                                    elide: Text.ElideRight
+                                }
 
-                                    RowLayout {
+                                // Group close button
+                                Rectangle {
+                                    Layout.preferredWidth: 20
+                                    Layout.preferredHeight: 20
+                                    radius: 10
+                                    color: groupCloseHover.hovered ? "#${c.base08}" : "transparent"
+                                    
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: "󰅖"
+                                        color: groupCloseHover.hovered ? "#${c.base00}" : "#${c.base05}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 14
+                                    }
+                                    
+                                    HoverHandler {
+                                        id: groupCloseHover
+                                    }
+                                    
+                                    TapHandler {
+                                        onTapped: {
+                                            root.dismissNotificationGroup(model.appName)
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Notification Card
+                            Rectangle {
+                                Layout.fillWidth: true
+                                implicitHeight: notifCol.implicitHeight + 20
+                                color: notifHover.hovered ? "#${c.base03}" : "#40${c.base02}"
+                                radius: 10
+                                border.color: "#33${c.base05}"
+                                border.width: 1
+
+                                HoverHandler {
+                                    id: notifHover
+                                }
+
+                                RowLayout {
+                                    anchors.fill: parent
+                                    anchors.margins: 10
+                                    spacing: 8
+
+                                    ColumnLayout {
+                                        id: notifCol
                                         Layout.fillWidth: true
-                                        Text {
-                                            text: model.appName
-                                            color: "#${c.base0D}"
-                                            font.family: "${fontName}"
-                                            font.pixelSize: 13
-                                            font.bold: true
+                                        spacing: 4
+
+                                        RowLayout {
                                             Layout.fillWidth: true
-                                            elide: Text.ElideRight
-                                        }
-                                        Text {
-                                            text: model.timeStr
-                                            color: "#${c.base04}"
-                                            font.family: "${fontName}"
-                                            font.pixelSize: 11
-                                        }
-                                        
-                                        // Close button (only visible on hover)
-                                        Rectangle {
-                                            Layout.preferredWidth: 20
-                                            Layout.preferredHeight: 20
-                                            radius: 10
-                                            color: closeHover.containsMouse ? "#${c.base08}" : "transparent"
-                                            visible: notifMouseArea.containsMouse
                                             
                                             Text {
-                                                anchors.centerIn: parent
-                                                text: "󰅖"
-                                                color: closeHover.containsMouse ? "#${c.base00}" : "#${c.base05}"
+                                                text: model.summary
+                                                color: "#${c.base05}"
                                                 font.family: "${fontName}"
                                                 font.pixelSize: 14
+                                                font.bold: true
+                                                Layout.fillWidth: true
+                                                wrapMode: Text.Wrap
+                                                maximumLineCount: 2
+                                                elide: Text.ElideRight
                                             }
                                             
-                                            MouseArea {
-                                                id: closeHover
-                                                anchors.fill: parent
-                                                hoverEnabled: true
-                                                onClicked: {
-                                                    root.dismissNotification(model.notifId, index)
+                                            Text {
+                                                text: model.timeStr
+                                                color: "#${c.base04}"
+                                                font.family: "${fontName}"
+                                                font.pixelSize: 11
+                                                Layout.alignment: Qt.AlignTop
+                                            }
+
+                                            // Close button
+                                            Rectangle {
+                                                Layout.preferredWidth: 20
+                                                Layout.preferredHeight: 20
+                                                Layout.alignment: Qt.AlignTop
+                                                radius: 10
+                                                color: closeHover.hovered ? "#${c.base08}" : "transparent"
+                                                visible: notifHover.hovered
+                                                
+                                                Text {
+                                                    anchors.centerIn: parent
+                                                    text: "󰅖"
+                                                    color: closeHover.hovered ? "#${c.base00}" : "#${c.base05}"
+                                                    font.family: "${fontName}"
+                                                    font.pixelSize: 14
+                                                }
+                                                
+                                                HoverHandler {
+                                                    id: closeHover
+                                                }
+                                                
+                                                TapHandler {
+                                                    onTapped: {
+                                                        root.dismissNotification(model.notifId, index)
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
 
-                                    Text {
-                                        text: model.summary
-                                        color: "#${c.base05}"
-                                        font.family: "${fontName}"
-                                        font.pixelSize: 14
-                                        font.bold: true
-                                        Layout.fillWidth: true
-                                        wrapMode: Text.Wrap
-                                        maximumLineCount: 2
-                                        elide: Text.ElideRight
-                                    }
-
-                                    Text {
-                                        text: model.body
-                                        color: "#${c.base04}"
-                                        font.family: "${fontName}"
-                                        font.pixelSize: 13
-                                        Layout.fillWidth: true
-                                        wrapMode: Text.Wrap
-                                        maximumLineCount: 3
-                                        elide: Text.ElideRight
-                                        visible: text !== ""
+                                        Text {
+                                            text: model.body
+                                            color: "#${c.base04}"
+                                            font.family: "${fontName}"
+                                            font.pixelSize: 13
+                                            Layout.fillWidth: true
+                                            wrapMode: Text.Wrap
+                                            maximumLineCount: 3
+                                            elide: Text.ElideRight
+                                            visible: text !== ""
+                                        }
                                     }
                                 }
                             }
