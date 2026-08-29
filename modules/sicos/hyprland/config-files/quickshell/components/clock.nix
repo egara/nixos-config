@@ -56,11 +56,34 @@
                             Layout.fillWidth: true
                         }
                         
+                        // DND Button
                         Rectangle {
                             width: 32
                             height: 32
                             radius: 16
-                            color: clearHover.containsMouse ? "#${c.base03}" : "transparent"
+                            color: dndHover.hovered ? "#${c.base03}" : (root.dndMode ? "#20${c.base0D}" : "transparent")
+                            
+                            Text {
+                                anchors.centerIn: parent
+                                text: "󰂛"
+                                color: root.dndMode ? "#${c.base0D}" : "#${c.base04}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 16
+                            }
+                            HoverHandler {
+                                id: dndHover
+                            }
+                            TapHandler {
+                                onTapped: root.dndMode = !root.dndMode
+                            }
+                        }
+
+                        // Clear all button
+                        Rectangle {
+                            width: 32
+                            height: 32
+                            radius: 16
+                            color: clearHover.hovered ? "#${c.base03}" : "transparent"
                             
                             Text {
                                 anchors.centerIn: parent
@@ -69,11 +92,11 @@
                                 font.family: "${fontName}"
                                 font.pixelSize: 16
                             }
-                            MouseArea {
+                            HoverHandler {
                                 id: clearHover
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                onClicked: root.clearNotifications()
+                            }
+                            TapHandler {
+                                onTapped: root.clearNotifications()
                             }
                         }
                     }
