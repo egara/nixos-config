@@ -150,8 +150,8 @@
                         
                         remove: Transition {
                             ParallelAnimation {
-                                NumberAnimation { property: "opacity"; to: 0; duration: 150; easing.type: Easing.OutCubic }
-                                NumberAnimation { property: "scale"; to: 0.95; duration: 150; easing.type: Easing.OutCubic }
+                                NumberAnimation { property: "x"; to: notifList.width; duration: 300; easing.type: Easing.OutCubic }
+                                NumberAnimation { property: "opacity"; to: 0; duration: 250; easing.type: Easing.OutCubic }
                             }
                         }
                         
@@ -166,11 +166,31 @@
                         delegate: ColumnLayout {
                             id: delegateRoot
                             width: notifList.width
-                            spacing: 6
+                            
+                            readonly property bool isFirstInGroup: delegateRoot.ListView.previousSection !== delegateRoot.ListView.section
+                            readonly property bool hasMultiple: delegateRoot.ListView.nextSection === delegateRoot.ListView.section || !isFirstInGroup
+                            readonly property bool isExpanded: root.expandedGroups[model.appName] === true
+                            readonly property bool shouldShow: isFirstInGroup || isExpanded
+                            
+                            visible: opacity > 0
+                            opacity: shouldShow ? 1 : 0
+                            height: shouldShow ? implicitHeight : 0
+                            spacing: shouldShow ? 6 : 0
+                            clip: true
+                            
+                            Behavior on height {
+                                NumberAnimation { duration: 300; easing.type: Easing.OutQuart }
+                            }
+                            Behavior on opacity {
+                                NumberAnimation { duration: 250; easing.type: Easing.InOutQuad }
+                            }
+                            Behavior on spacing {
+                                NumberAnimation { duration: 300; easing.type: Easing.OutQuart }
+                            }
 
                             // Group Header (visible only for the first item of a group)
                             RowLayout {
-                                visible: delegateRoot.ListView.previousSection !== delegateRoot.ListView.section
+                                visible: delegateRoot.isFirstInGroup
                                 Layout.fillWidth: true
                                 Layout.topMargin: index === 0 ? 0 : 8
                                 spacing: 8
@@ -187,6 +207,19 @@
                                     Layout.preferredWidth: 24
                                     Layout.preferredHeight: 24
                                     fillMode: Image.PreserveAspectCrop
+                                    
+                                    onStatusChanged: {
+                                        if (status === Image.Error) {
+                                            if (model.desktopEntry && source.toString() !== "image://icon/" + model.desktopEntry) {
+                                                source = "image://icon/" + model.desktopEntry;
+                                            } else if (model.appIcon && source.toString() !== "image://icon/" + model.appIcon) {
+                                                source = "image://icon/" + model.appIcon;
+                                            } else {
+                                                var generic = "image://icon/dialog-information";
+                                                if (source.toString() !== generic) source = generic;
+                                            }
+                                        }
+                                    }
                                 }
 
                                 Text {
@@ -197,6 +230,38 @@
                                     font.bold: true
                                     Layout.fillWidth: true
                                     elide: Text.ElideRight
+                                }
+
+                                // Group expand button
+                                Rectangle {
+                                    Layout.preferredWidth: 20
+                                    Layout.preferredHeight: 20
+                                    radius: 10
+                                    color: groupExpandHover.hovered ? "#33${c.base05}" : "transparent"
+                                    visible: delegateRoot.hasMultiple
+                                    
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: "󰅂"
+                                        rotation: delegateRoot.isExpanded ? 180 : 0
+                                        color: "#${c.base05}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 14
+                                        
+                                        Behavior on rotation {
+                                            NumberAnimation { duration: 300; easing.type: Easing.OutBack }
+                                        }
+                                    }
+                                    
+                                    HoverHandler {
+                                        id: groupExpandHover
+                                    }
+                                    
+                                    TapHandler {
+                                        onTapped: {
+                                            root.toggleGroup(model.appName)
+                                        }
+                                    }
                                 }
 
                                 // Group close button

@@ -83,6 +83,17 @@ PanelWindow {
 
     // Notifications Model and Server
     property var notifObjects: ({})
+    property var expandedGroups: ({})
+    
+    function toggleGroup(appName) {
+        var copy = Object.assign({}, expandedGroups);
+        if (copy[appName]) {
+            delete copy[appName];
+        } else {
+            copy[appName] = true;
+        }
+        expandedGroups = copy;
+    }
     
     ListModel {
         id: notificationModel
@@ -102,6 +113,8 @@ PanelWindow {
         persistenceSupported: true
 
         onNotification: notif => {
+            notif.tracked = true;
+            
             var iconName = notif.image;
             if (!iconName || iconName === "") {
                 iconName = notif.appIcon;
@@ -117,20 +130,32 @@ PanelWindow {
             
             root.notifObjects[notif.id] = notif;
             
+            // Listen for when the sender closes the notification
+            if (notif.Retainable) {
+                var dropHandler = function() {
+                    root.forceDismissNotification(notif.id);
+                };
+                notif.Retainable.dropped.connect(dropHandler);
+            }
+            
             // Extract existing data for the same app to keep them grouped
             var appNameToMatch = notif.appName || "Sistema";
             var existingData = [];
             for (var i = notificationModel.count - 1; i >= 0; i--) {
                 var item = notificationModel.get(i);
                 if (item.appName === appNameToMatch) {
-                    existingData.unshift({
-                        notifId: item.notifId,
-                        appName: item.appName,
-                        summary: item.summary,
-                        body: item.body,
-                        iconName: item.iconName,
-                        timeStr: item.timeStr
-                    });
+                    if (item.notifId !== notif.id) {
+                        existingData.unshift({
+                            notifId: item.notifId,
+                            appName: item.appName,
+                            summary: item.summary,
+                            body: item.body,
+                            iconName: item.iconName,
+                            desktopEntry: item.desktopEntry || "",
+                            appIcon: item.appIcon || "",
+                            timeStr: item.timeStr
+                        });
+                    }
                     notificationModel.remove(i);
                 }
             }
@@ -141,6 +166,8 @@ PanelWindow {
                 summary: notif.summary || "",
                 body: safeBody,
                 iconName: iconName,
+                desktopEntry: notif.desktopEntry || "",
+                appIcon: notif.appIcon || "",
                 timeStr: Qt.formatTime(new Date(), "hh:mm")
             });
             
@@ -162,6 +189,8 @@ PanelWindow {
                     summary: notif.summary || "",
                     body: safeBody,
                     iconName: iconName,
+                    desktopEntry: notif.desktopEntry || "",
+                    appIcon: notif.appIcon || "",
                     timeStr: Qt.formatTime(new Date(), "hh:mm")
                 });
                 
@@ -172,12 +201,48 @@ PanelWindow {
         }
     }
     
-    function clearNotifications() {
-        for (var k in root.notifObjects) {
-            try { root.notifObjects[k].dismiss(); } catch(e) {}
+    property var removalQueue: []
+    Timer {
+        id: removalTimer
+        interval: 120
+        repeat: true
+        onTriggered: {
+            if (root.removalQueue.length > 0) {
+                var notifId = root.removalQueue.shift();
+                root.forceDismissNotification(notifId);
+            } else {
+                stop();
+            }
         }
-        root.notifObjects = {};
-        notificationModel.clear();
+    }
+    
+    function clearNotifications() {
+        var newQueue = root.removalQueue.slice();
+        var toQueue = [];
+        var toInstant = [];
+        var seenApps = {};
+        
+        for (var i = 0; i < notificationModel.count; i++) {
+            var notif = notificationModel.get(i);
+            var isExpanded = root.expandedGroups[notif.appName] === true;
+            
+            if (isExpanded || !seenApps[notif.appName]) {
+                toQueue.push(notif.notifId);
+                seenApps[notif.appName] = true;
+            } else {
+                toInstant.push(notif.notifId);
+            }
+        }
+        
+        for (var j = 0; j < toInstant.length; j++) {
+            root.forceDismissNotification(toInstant[j]);
+        }
+        for (var k = 0; k < toQueue.length; k++) {
+            newQueue.push(toQueue[k]);
+        }
+        
+        root.removalQueue = newQueue;
+        if (root.removalQueue.length > 0) removalTimer.start();
     }
     
     function dismissNotification(notifId, index) {
@@ -187,14 +252,33 @@ PanelWindow {
     }
     
     function dismissNotificationGroup(appName) {
-        for (var i = notificationModel.count - 1; i >= 0; i--) {
-            if (notificationModel.get(i).appName === appName) {
-                var notifId = notificationModel.get(i).notifId;
-                try { root.notifObjects[notifId].dismiss(); } catch(e) {}
-                delete root.notifObjects[notifId];
-                notificationModel.remove(i);
+        var newQueue = root.removalQueue.slice();
+        var isExpanded = root.expandedGroups[appName] === true;
+        var firstFound = false;
+        var toQueue = [];
+        var toInstant = [];
+        
+        for (var i = 0; i < notificationModel.count; i++) {
+            var notif = notificationModel.get(i);
+            if (notif.appName === appName) {
+                if (isExpanded || !firstFound) {
+                    toQueue.push(notif.notifId);
+                    firstFound = true;
+                } else {
+                    toInstant.push(notif.notifId);
+                }
             }
         }
+        
+        for (var j = 0; j < toInstant.length; j++) {
+            root.forceDismissNotification(toInstant[j]);
+        }
+        for (var k = 0; k < toQueue.length; k++) {
+            newQueue.push(toQueue[k]);
+        }
+        
+        root.removalQueue = newQueue;
+        if (root.removalQueue.length > 0) removalTimer.start();
     }
     
     function removeOsd(id) {
@@ -343,6 +427,19 @@ PanelWindow {
                             sourceSize.width: 128
                             sourceSize.height: 128
                             fillMode: Image.PreserveAspectCrop
+                            
+                            onStatusChanged: {
+                                if (status === Image.Error) {
+                                    if (model.desktopEntry && source.toString() !== "image://icon/" + model.desktopEntry) {
+                                        source = "image://icon/" + model.desktopEntry;
+                                    } else if (model.appIcon && source.toString() !== "image://icon/" + model.appIcon) {
+                                        source = "image://icon/" + model.appIcon;
+                                    } else {
+                                        var generic = "image://icon/dialog-information";
+                                        if (source.toString() !== generic) source = generic;
+                                    }
+                                }
+                            }
                         }
                     }
 
