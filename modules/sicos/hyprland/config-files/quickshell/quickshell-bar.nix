@@ -90,6 +90,17 @@ PanelWindow {
 
     NotificationServer {
         id: notifServer
+        
+        keepOnReload: false
+        actionsSupported: true
+        actionIconsSupported: true
+        bodyHyperlinksSupported: true
+        bodyImagesSupported: true
+        bodyMarkupSupported: true
+        imageSupported: true
+        inlineReplySupported: true
+        persistenceSupported: true
+
         onNotification: notif => {
             var iconName = notif.image;
             if (!iconName || iconName === "") {
@@ -143,6 +154,8 @@ PanelWindow {
                 
                 // Show OSD popup
                 var osdId = notif.id;
+                root.removeOsd(osdId); // Clear existing if this is an update
+                
                 osdModel.insert(0, {
                     notifId: osdId,
                     appName: notif.appName || "Sistema",

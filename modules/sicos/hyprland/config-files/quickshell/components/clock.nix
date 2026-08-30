@@ -229,7 +229,7 @@
                             // Notification Card
                             Item {
                                 Layout.fillWidth: true
-                                Layout.preferredHeight: cardContent.height + 20
+                                implicitHeight: cardContent.implicitHeight + 20
 
                                 Rectangle {
                                     anchors.fill: parent
@@ -245,10 +245,8 @@
 
                                 ColumnLayout {
                                     id: cardContent
-                                    anchors.left: parent.left
-                                    anchors.right: parent.right
-                                    anchors.top: parent.top
-                                    anchors.margins: 10
+                                    anchors.centerIn: parent
+                                    width: delegateRoot.width - 20
                                     spacing: 4
 
                                         RowLayout {
