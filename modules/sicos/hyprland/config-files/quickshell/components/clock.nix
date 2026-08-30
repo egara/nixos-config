@@ -360,7 +360,7 @@
                                                 
                                                 TapHandler {
                                                     onTapped: {
-                                                        root.dismissNotification(model.notifId, index)
+                                                        root.forceDismissNotification(model.notifId, false)
                                                     }
                                                 }
                                             }

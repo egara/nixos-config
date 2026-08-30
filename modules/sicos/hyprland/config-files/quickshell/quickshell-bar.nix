@@ -133,7 +133,7 @@ PanelWindow {
             // Listen for when the sender closes the notification
             if (notif.Retainable) {
                 var dropHandler = function() {
-                    root.forceDismissNotification(notif.id);
+                    root.forceDismissNotification(notif.id, true);
                 };
                 notif.Retainable.dropped.connect(dropHandler);
             }
@@ -245,12 +245,6 @@ PanelWindow {
         if (root.removalQueue.length > 0) removalTimer.start();
     }
     
-    function dismissNotification(notifId, index) {
-        try { root.notifObjects[notifId].dismiss(); } catch(e) {}
-        delete root.notifObjects[notifId];
-        notificationModel.remove(index);
-    }
-    
     function dismissNotificationGroup(appName) {
         var newQueue = root.removalQueue.slice();
         var isExpanded = root.expandedGroups[appName] === true;
@@ -290,11 +284,16 @@ PanelWindow {
         }
     }
     
-    function forceDismissNotification(notifId) {
+    function forceDismissNotification(notifId, fromSender) {
         removeOsd(notifId);
         for (var i = 0; i < notificationModel.count; i++) {
             if (notificationModel.get(i).notifId === notifId) {
-                dismissNotification(notifId, i);
+                var obj = root.notifObjects[notifId];
+                delete root.notifObjects[notifId];
+                notificationModel.remove(i);
+                if (!fromSender && obj) {
+                    try { obj.dismiss(); } catch(e) {}
+                }
                 break;
             }
         }
@@ -387,16 +386,28 @@ PanelWindow {
         WlrLayershell.layer: WlrLayer.Overlay
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
         
-        implicitWidth: osdLayout.implicitWidth
-        implicitHeight: osdLayout.implicitHeight
+        implicitWidth: 420
+        implicitHeight: osdList.height
         
-        ColumnLayout {
-            id: osdLayout
+        ListView {
+            id: osdList
+            width: 420
+            height: Math.min(contentHeight, 800)
             spacing: 8
+            interactive: false
             
-            Repeater {
-                model: osdModel
-                Rectangle {
+            add: Transition {
+                ParallelAnimation {
+                    NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 300; easing.type: Easing.OutCubic }
+                    NumberAnimation { property: "y"; from: -20; duration: 300; easing.type: Easing.OutBack }
+                }
+            }
+            remove: Transition {
+                NumberAnimation { property: "opacity"; to: 0; duration: 200; easing.type: Easing.OutCubic }
+            }
+            
+            model: osdModel
+            delegate: Rectangle {
                     width: 420
                     implicitHeight: Math.max(90, osdCol.implicitHeight + 32)
                     color: "#F0${c.base01}"
@@ -519,18 +530,8 @@ PanelWindow {
                             visible: text !== ""
                         }
                     }    
-                    
-                    Component.onCompleted: osdEnterAnim.start()
-                    NumberAnimation on opacity {
-                        id: osdEnterAnim
-                        from: 0
-                        to: 1
-                        duration: 250
-                        easing.type: Easing.OutCubic
-                    }
                 }
             }
         }
     }
-}
 ''
