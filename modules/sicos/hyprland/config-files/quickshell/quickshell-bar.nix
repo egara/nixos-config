@@ -314,7 +314,7 @@ PanelWindow {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         anchors.margins: 12
-                        width: height
+                        width: 66
                         radius: 8
                         color: "transparent"
                         clip: true
