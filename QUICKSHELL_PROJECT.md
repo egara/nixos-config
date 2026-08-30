@@ -19,7 +19,7 @@ Para evitar archivos monolíticos gigantescos, la barra se compone de un archivo
 - **Directorio `components/`**: Contiene submódulos independientes:
   - `battery.nix`: Lógica avanzada de batería (`UPower`), cálculo de tiempo restante, detección del 80% límite de carga por BIOS y animaciones del *Popout Window*.
   - `clock.nix`: Reloj central en tiempo real (`Qt.formatDateTime`).
-  - `power.nix`: Selector dinámico de *Power Profiles* y botón de sesión interactuando con subprocesos del sistema (`powerprofilesctl`).
+  - `misc.nix`: Isla miscelánea que aloja el selector dinámico de *Power Profiles*, el botón de sesión interactuando con subprocesos del sistema (`powerprofilesctl`), y el módulo interactivo MPRIS. Aquí iremos implementando más widgets en el futuro.
   - `system.nix`: Botón lanzador de aplicaciones (`walker`) y *placeholders* visuales de CPU y RAM.
   - `workspaces.nix`: Integración nativa bidireccional con Hyprland (`Quickshell.Hyprland`). Identifica dinámicamente las ventanas abiertas en cada escritorio renderizando su icono del sistema y agrupándolas inteligentemente mediante una heurística de *class* y *título*.
 ## 🚀 Progreso Actual
@@ -39,7 +39,7 @@ Para evitar archivos monolíticos gigantescos, la barra se compone de un archivo
   - Soporte integral para iconos (Avatares en OSD, Iconos de App en grupos) con lógica de fallback automático.
   - Interactividad total soportando acciones (`actions`) nativas para abrir apps al clickar.
   - Strip de etiquetas HTML embebidas y control avanzado de tipografía.
-- [ ] **Módulo Multimedia (Pendiente):**
+- [x] **Módulo Multimedia (Completado):**
   - Reproductor interactivo en la isla (mediante MPRIS).
 - [x] **Módulo Workspaces (Premium UX):**
   - Renderizado dinámico de píldoras por área de trabajo que cambian de tamaño fluidamente según la cantidad de apps.

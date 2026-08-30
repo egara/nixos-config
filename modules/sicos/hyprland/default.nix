@@ -333,7 +333,6 @@ in
         libinput
 
         # Optional features for shell components
-        cava
         matugen
         gnome-menus
 
@@ -344,7 +343,16 @@ in
         inputs.dankmaterialshell.packages.${pkgs.system}.default
         quickshell
       ] ++ lib.optionals (cfg.shell == "sicos-bar") [
-        quickshell
+        (pkgs.symlinkJoin {
+          name = "quickshell-wrapped";
+          paths = [ pkgs.quickshell ];
+          buildInputs = [ pkgs.makeWrapper ];
+          postBuild = ''
+            wrapProgram $out/bin/quickshell \
+              --prefix QML2_IMPORT_PATH : "${pkgs.qt6.qt5compat}/${pkgs.qt6.qtbase.qtQmlPrefix}" \
+              --prefix QT_PLUGIN_PATH : "${pkgs.kdePackages.qtimageformats}/${pkgs.qt6.qtbase.qtPluginPrefix}:${pkgs.kdePackages.kimageformats}/${pkgs.qt6.qtbase.qtPluginPrefix}"
+          '';
+        })
       ];
     };
 }

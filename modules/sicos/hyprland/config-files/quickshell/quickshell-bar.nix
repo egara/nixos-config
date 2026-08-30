@@ -10,7 +10,7 @@ let
   clock = import ./components/clock.nix { inherit config lib pkgs c fontName; };
   system = import ./components/system.nix { inherit config lib pkgs c fontName; };
   sysinfo = import ./components/sysinfo.nix { inherit config lib pkgs c fontName; };
-  power = import ./components/power.nix { inherit config lib pkgs c fontName; };
+  misc = import ./components/misc.nix { inherit config lib pkgs c fontName; };
   tray = import ./components/tray.nix { inherit config lib pkgs c fontName; };
   progressOsd = import ./components/progressOsd.nix { inherit config lib pkgs c fontName; };
 in
@@ -22,9 +22,11 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Services.UPower
+import Quickshell.Services.Mpris
 import Quickshell.Services.SystemTray
 import Quickshell.Services.Notifications
 import Quickshell.Io // for Process
+import Qt5Compat.GraphicalEffects
 import "Model.js" as Model
 
 Scope {
@@ -59,6 +61,7 @@ PanelWindow {
     property bool sysinfoVisible: false
     property bool trayMenuVisible: false
     property bool clockVisible: false
+    property bool miscVisible: false
     
     // Do not disturb mode
     property bool dndMode: false
@@ -82,7 +85,7 @@ PanelWindow {
             top: true; bottom: true; left: true; right: true
         }
         color: "#01000000"
-        visible: root.batteryVisible || root.sysinfoVisible || root.trayMenuVisible || popupContent.opacity > 0
+        visible: root.batteryVisible || root.sysinfoVisible || root.trayMenuVisible || root.miscVisible || popupContent.opacity > 0 || popupContentMisc.opacity > 0
         
         MouseArea {
             anchors.fill: parent
@@ -90,6 +93,7 @@ PanelWindow {
                 root.batteryVisible = false
                 root.sysinfoVisible = false
                 root.trayMenuVisible = false
+                root.miscVisible = false
             }
         }
     }
@@ -369,6 +373,7 @@ PanelWindow {
     ${battery.popup}
     ${sysinfo.popup}
     ${clock.popup}
+    ${misc.popup}
 
     Rectangle {
         anchors.fill: parent
@@ -413,7 +418,7 @@ PanelWindow {
                 ${tray}
 
                 ${battery.widget}
-                ${power}
+                ${misc.widget}
             }
         }
     }
