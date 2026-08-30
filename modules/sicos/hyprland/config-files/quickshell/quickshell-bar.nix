@@ -62,6 +62,7 @@ PanelWindow {
     property bool trayMenuVisible: false
     property bool clockVisible: false
     property bool miscVisible: false
+    property real miscButtonX: 0
     
     // Do not disturb mode
     property bool dndMode: false

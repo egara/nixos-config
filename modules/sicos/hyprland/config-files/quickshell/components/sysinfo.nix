@@ -4,22 +4,26 @@
     PopupWindow {
         id: sysinfoPopup
         anchor.window: root
-        anchor.item: sysinfoWidgetContainer
-        anchor.edges: Edges.Bottom
-        anchor.gravity: Edges.Bottom
+        anchor.rect.x: 10
+        anchor.rect.y: root.height
+        anchor.rect.width: 1
+        anchor.rect.height: 1
+        anchor.edges: Edges.Bottom | Edges.Left
         visible: root.sysinfoVisible || popupSysContent.opacity > 0
         implicitWidth: 400
         implicitHeight: 480
         color: "transparent"
 
-        Rectangle {
+        HyprlandFocusGrab {
+            active: root.sysinfoVisible
+            windows: [sysinfoPopup, root]
+            onCleared: root.sysinfoVisible = false
+        }
+
+        Item {
             id: popupSysContent
             width: parent.width
             height: parent.height
-            color: "#F0${c.base01}"
-            radius: 16
-            border.color: "#33${c.base05}"
-            border.width: 1
             
             opacity: root.sysinfoVisible ? 1 : 0
             y: root.sysinfoVisible ? 0 : -20
@@ -27,9 +31,50 @@
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
             Behavior on y { NumberAnimation { duration: 250; easing.type: Easing.OutBack } }
 
+            // The background color providing the pixels
+            Rectangle {
+                id: bgSourceSysinfo
+                anchors.fill: parent
+                color: "#F0${c.base01}"
+                visible: false // Hidden because it's only a source for the mask
+            }
+
+            // The mask shape (Body + Beak)
+            Item {
+                id: bgMaskSysinfo
+                anchors.fill: parent
+                visible: false
+
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.topMargin: 12
+                    radius: 16
+                    color: "black"
+                }
+
+                Rectangle {
+                    width: 20
+                    height: 20
+                    color: "black"
+                    rotation: 45
+                    y: 2
+                    anchors.left: parent.left
+                    anchors.leftMargin: 120 // Aligned with the sysinfo widget
+                }
+            }
+
+            // The final masked background without overlaps or internal borders
+            OpacityMask {
+                anchors.fill: parent
+                source: bgSourceSysinfo
+                maskSource: bgMaskSysinfo
+            }
+
+
             ColumnLayout {
                 anchors.fill: parent
                 anchors.margins: 20
+                anchors.topMargin: 32
                 spacing: 16
                 
                 // Header

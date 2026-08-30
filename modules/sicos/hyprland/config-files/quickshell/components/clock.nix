@@ -18,14 +18,10 @@
             onCleared: root.clockVisible = false
         }
 
-        Rectangle {
+        Item {
             id: popupContentClock
             width: parent.width
             height: parent.height
-            color: "#F0${c.base01}" // Transparent dark background
-            radius: 16
-            border.color: "#33${c.base05}"
-            border.width: 1
             
             opacity: root.clockVisible ? 1 : 0
             y: root.clockVisible ? 0 : -20
@@ -33,9 +29,48 @@
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
             Behavior on y { NumberAnimation { duration: 250; easing.type: Easing.OutBack } }
 
+            // The background color providing the pixels
+            Rectangle {
+                id: bgSourceClock
+                anchors.fill: parent
+                color: "#F0${c.base01}"
+                visible: false
+            }
+
+            // The mask shape (Body + Beak)
+            Item {
+                id: bgMaskClock
+                anchors.fill: parent
+                visible: false
+
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.topMargin: 18 // 12 + 6px to match root.height anchor of others
+                    radius: 16
+                    color: "black"
+                }
+
+                Rectangle {
+                    width: 20
+                    height: 20
+                    color: "black"
+                    rotation: 45
+                    y: 8 // 2 + 6px
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+
+            // The final masked background
+            OpacityMask {
+                anchors.fill: parent
+                source: bgSourceClock
+                maskSource: bgMaskClock
+            }
+
             RowLayout {
                 anchors.fill: parent
                 anchors.margins: 20
+                anchors.topMargin: 38 // 32 + 6px
                 spacing: 20
 
                 // Left side: Notifications (DankMaterialShell style placeholder)

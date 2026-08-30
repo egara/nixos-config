@@ -4,14 +4,14 @@
     PopupWindow {
         id: miscPopup
         anchor.window: root
-        anchor.rect.x: root.width - 330
+        anchor.rect.x: root.width - 20
         anchor.rect.y: root.height
-        anchor.rect.width: 65
-        anchor.rect.height: 0
-        anchor.edges: Edges.Bottom
+        anchor.rect.width: 1
+        anchor.rect.height: 1
+        anchor.edges: Edges.Bottom | Edges.Right
         visible: root.miscVisible || popupContentMisc.opacity > 0
         implicitWidth: 380
-        implicitHeight: 500
+        implicitHeight: 512
         color: "transparent"
 
         property var manualPlayer: null
@@ -62,18 +62,45 @@
                 onWheel: {} // intercept scroll events too
             }
             
-            // Ambient Background Mask
-            Rectangle {
+            // Ambient Background Mask (Body + Beak)
+            Item {
                 id: popupBgMask
                 anchors.fill: parent
-                radius: 16
                 visible: false
+
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.topMargin: 12
+                    radius: 16
+                    color: "black"
+                }
+
+                Rectangle {
+                    width: 20
+                    height: 20
+                    color: "black"
+                    rotation: 45
+                    y: 12 - 10 // stick out by 10px
+                    // Dynamically calculate X position using the globally tracked button coordinate
+                    x: {
+                        if (root.miscButtonX > 0) {
+                            // The popup is anchored with Edges.Right to root.width - 20.
+                            // This means its right edge is exactly at root.width - 20.
+                            let popupLeftEdge = (root.width - 20) - miscPopup.implicitWidth;
+                            // Ensure the beak doesn't go outside the rounded corners
+                            let calculatedX = root.miscButtonX - popupLeftEdge - (width / 2);
+                            return Math.max(20, Math.min(miscPopup.implicitWidth - 40, calculatedX));
+                        }
+                        return parent.width - 98; // Fallback
+                    }
+                }
             }
 
             // Raw image for ambient bg
             Image {
                 id: ambientBgImg
                 anchors.fill: parent
+                anchors.topMargin: 12
                 source: albumImage.source
                 fillMode: Image.PreserveAspectCrop
                 visible: false
@@ -86,6 +113,7 @@
                 source: ambientBgImg
                 radius: 80
                 visible: false
+                cached: true
             }
 
             // Clipped blurred bg
@@ -95,13 +123,17 @@
                 maskSource: popupBgMask
             }
 
-            // Tint and border layer
+            // Tint layer (Masked)
             Rectangle {
+                id: tintRect
                 anchors.fill: parent
                 color: "#E6${c.base01}" // 90% solid base color to darken the blur
-                radius: 16
-                border.color: "#33${c.base05}"
-                border.width: 1
+                visible: false
+            }
+            OpacityMask {
+                anchors.fill: parent
+                source: tintRect
+                maskSource: popupBgMask
             }
             
             opacity: root.miscVisible ? 1 : 0
@@ -111,7 +143,10 @@
 
             ColumnLayout {
                 anchors.fill: parent
-                anchors.margins: 20
+                anchors.topMargin: 20 + 12
+                anchors.leftMargin: 20
+                anchors.rightMargin: 20
+                anchors.bottomMargin: 20
                 spacing: 16
 
                 // Top Source Switcher and Close button
@@ -418,6 +453,7 @@
   widget = ''
     // Miscellaneous Island
     Rectangle {
+        id: miscIslandMain
         color: miscIslandArea.containsMouse ? "#${c.base03}" : (root.miscVisible ? "#${c.base02}" : "#${c.base02}")
         radius: 14
         Layout.preferredHeight: 28
@@ -440,6 +476,8 @@
             hoverEnabled: true
             onClicked: {
                 if (parent.activePlayer) {
+                    // Calculate exactly when clicked! Layout is 100% finished and accurate.
+                    root.miscButtonX = musicIconRect.mapToItem(null, musicIconRect.width / 2, 0).x;
                     root.miscVisible = !root.miscVisible;
                 }
             }
@@ -452,6 +490,7 @@
 
             // MPRIS Media Icon
             Rectangle {
+                id: musicIconRect
                 width: 20; height: 20
                 radius: 10
                 color: "transparent"

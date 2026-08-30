@@ -4,11 +4,11 @@
     PopupWindow {
         id: batteryPopup
         anchor.window: root
-        anchor.rect.x: root.width - 240 // Adjust position for wider popup
+        anchor.rect.x: root.width - 10
         anchor.rect.y: root.height
-        anchor.rect.width: 65
-        anchor.rect.height: 0
-        anchor.edges: Edges.Bottom
+        anchor.rect.width: 1
+        anchor.rect.height: 1
+        anchor.edges: Edges.Bottom | Edges.Right
         visible: root.batteryVisible || popupContent.opacity > 0
         implicitWidth: 380
         implicitHeight: 280
@@ -64,25 +64,67 @@
             return minutes + "m";
         }
 
-        Rectangle {
+        HyprlandFocusGrab {
+            active: root.batteryVisible
+            windows: [batteryPopup, root]
+            onCleared: root.batteryVisible = false
+        }
+
+        Item {
             id: popupContent
             width: parent.width
             height: parent.height
-            color: "#F0${c.base01}" // Slightly transparent dark background
-            radius: 16
-            border.color: "#33${c.base05}"
-            border.width: 1
             
-            // DMS-style smooth entrance/exit transitions (fade and slide up)
             opacity: root.batteryVisible ? 1 : 0
             y: root.batteryVisible ? 0 : -20
             
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
             Behavior on y { NumberAnimation { duration: 250; easing.type: Easing.OutBack } }
 
+            // The background color providing the pixels
+            Rectangle {
+                id: bgSourceBattery
+                anchors.fill: parent
+                color: "#F0${c.base01}"
+                visible: false
+            }
+
+            // The mask shape (Body + Beak)
+            Item {
+                id: bgMaskBattery
+                anchors.fill: parent
+                visible: false
+
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.topMargin: 12
+                    radius: 16
+                    color: "black"
+                }
+
+                Rectangle {
+                    width: 20
+                    height: 20
+                    color: "black"
+                    rotation: 45
+                    y: 2
+                    anchors.right: parent.right
+                    anchors.rightMargin: 150 // Aligned with battery widget
+                }
+            }
+
+            // The final masked background
+            OpacityMask {
+                anchors.fill: parent
+                source: bgSourceBattery
+                maskSource: bgMaskBattery
+            }
+
+
             ColumnLayout {
                 anchors.fill: parent
                 anchors.margins: 20
+                anchors.topMargin: 32
                 spacing: 16
 
                 // Top Row: Icon, Status, Close
