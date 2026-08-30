@@ -298,6 +298,27 @@ PanelWindow {
             }
         }
     }
+    
+    function invokeDefaultAction(notifId) {
+        var obj = root.notifObjects[notifId];
+        if (obj) {
+            var invoked = false;
+            if (typeof obj.invokeDefaultAction === 'function') {
+                try { obj.invokeDefaultAction(); invoked = true; } catch(e) {}
+            } else if (obj.actions) {
+                for (var i = 0; i < obj.actions.length; i++) {
+                    if (obj.actions[i].id === "default") {
+                        try { obj.actions[i].invoke(); invoked = true; } catch(e) {}
+                        break;
+                    }
+                }
+                if (!invoked && obj.actions.length > 0) {
+                    try { obj.actions[0].invoke(); invoked = true; } catch(e) {}
+                }
+            }
+            root.forceDismissNotification(notifId, false);
+        }
+    }
 
     // Storage for OSD notifications
     ListModel { id: osdModel }
@@ -415,6 +436,16 @@ PanelWindow {
                     border.color: "#33${c.base05}"
                     border.width: 1
                     clip: true
+                    
+                    HoverHandler {
+                        cursorShape: Qt.PointingHandCursor
+                    }
+                    
+                    TapHandler {
+                        onTapped: {
+                            root.invokeDefaultAction(model.notifId)
+                        }
+                    }
 
                     Rectangle {
                         id: osdIcon

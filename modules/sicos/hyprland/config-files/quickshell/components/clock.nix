@@ -197,10 +197,21 @@
 
                                 Image {
                                     source: {
+                                        var appImg = model.desktopEntry;
+                                        if (!appImg || appImg === "") appImg = model.appIcon;
+                                        
+                                        if (appImg && appImg !== "") {
+                                            if (appImg.startsWith("/")) return "file://" + appImg;
+                                            return "image://icon/" + appImg;
+                                        }
+                                        
                                         var img = model.iconName.toString();
-                                        if (img.startsWith("image://") || img.startsWith("file://")) return img;
-                                        if (img.startsWith("/")) return "file://" + img;
-                                        return "image://icon/" + img;
+                                        if (img && img !== "") {
+                                            if (img.startsWith("image://") || img.startsWith("file://")) return img;
+                                            if (img.startsWith("/")) return "file://" + img;
+                                            return "image://icon/" + img;
+                                        }
+                                        return "image://icon/dialog-information";
                                     }
                                     sourceSize.width: 24
                                     sourceSize.height: 24
@@ -210,13 +221,19 @@
                                     
                                     onStatusChanged: {
                                         if (status === Image.Error) {
-                                            if (model.desktopEntry && source.toString() !== "image://icon/" + model.desktopEntry) {
-                                                source = "image://icon/" + model.desktopEntry;
-                                            } else if (model.appIcon && source.toString() !== "image://icon/" + model.appIcon) {
-                                                source = "image://icon/" + model.appIcon;
-                                            } else {
-                                                var generic = "image://icon/dialog-information";
-                                                if (source.toString() !== generic) source = generic;
+                                            var img = model.iconName.toString();
+                                            var fallbackSource = "image://icon/dialog-information";
+                                            
+                                            if (img && img !== "") {
+                                                if (img.startsWith("image://") || img.startsWith("file://")) fallbackSource = img;
+                                                else if (img.startsWith("/")) fallbackSource = "file://" + img;
+                                                else fallbackSource = "image://icon/" + img;
+                                            }
+                                            
+                                            if (source.toString() !== fallbackSource) {
+                                                source = fallbackSource;
+                                            } else if (source.toString() !== "image://icon/dialog-information") {
+                                                source = "image://icon/dialog-information";
                                             }
                                         }
                                     }
@@ -306,13 +323,59 @@
 
                                 HoverHandler {
                                     id: notifHover
+                                    cursorShape: Qt.PointingHandCursor
                                 }
 
-                                ColumnLayout {
+                                TapHandler {
+                                    onTapped: {
+                                        root.invokeDefaultAction(model.notifId)
+                                    }
+                                }
+
+                                RowLayout {
                                     id: cardContent
                                     anchors.centerIn: parent
                                     width: delegateRoot.width - 20
-                                    spacing: 4
+                                    spacing: 12
+
+                                    Rectangle {
+                                        Layout.preferredWidth: 48
+                                        Layout.preferredHeight: 48
+                                        Layout.alignment: Qt.AlignTop
+                                        radius: 8
+                                        color: "transparent"
+                                        clip: true
+
+                                        Image {
+                                            anchors.fill: parent
+                                            source: {
+                                                var img = model.iconName.toString();
+                                                if (img.startsWith("image://") || img.startsWith("file://")) return img;
+                                                if (img.startsWith("/")) return "file://" + img;
+                                                return "image://icon/" + img;
+                                            }
+                                            sourceSize.width: 128
+                                            sourceSize.height: 128
+                                            fillMode: Image.PreserveAspectCrop
+                                            
+                                            onStatusChanged: {
+                                                if (status === Image.Error) {
+                                                    if (model.desktopEntry && source.toString() !== "image://icon/" + model.desktopEntry) {
+                                                        source = "image://icon/" + model.desktopEntry;
+                                                    } else if (model.appIcon && source.toString() !== "image://icon/" + model.appIcon) {
+                                                        source = "image://icon/" + model.appIcon;
+                                                    } else {
+                                                        var generic = "image://icon/dialog-information";
+                                                        if (source.toString() !== generic) source = generic;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    ColumnLayout {
+                                        Layout.fillWidth: true
+                                        spacing: 4
 
                                         RowLayout {
                                             Layout.fillWidth: true
@@ -376,6 +439,7 @@
                                             maximumLineCount: 3
                                             elide: Text.ElideRight
                                             visible: text !== ""
+                                        }
                                         }
                                     }
                                 }
