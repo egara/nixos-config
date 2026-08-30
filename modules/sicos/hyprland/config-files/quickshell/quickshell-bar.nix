@@ -12,6 +12,7 @@ let
   sysinfo = import ./components/sysinfo.nix { inherit config lib pkgs c fontName; };
   power = import ./components/power.nix { inherit config lib pkgs c fontName; };
   tray = import ./components/tray.nix { inherit config lib pkgs c fontName; };
+  progressOsd = import ./components/progressOsd.nix { inherit config lib pkgs c fontName; };
 in
 ''
 //@ pragma UseQApplication
@@ -61,6 +62,18 @@ PanelWindow {
     
     // Do not disturb mode
     property bool dndMode: false
+    
+    // Progress OSD State
+    property int progressOsdValue: 0
+    property string progressOsdType: ""
+    property bool progressOsdVisible: false
+    
+    Timer {
+        id: progressOsdTimer
+        interval: 2000
+        repeat: false
+        onTriggered: root.progressOsdVisible = false
+    }
 
     // Invisible background window to catch outside clicks for smooth exit animations
     PanelWindow {
@@ -113,6 +126,24 @@ PanelWindow {
         persistenceSupported: true
 
         onNotification: notif => {
+            if (notif.summary === "Volume" || notif.summary === "Brightness") {
+                var val = 0;
+                if (notif.hints && notif.hints["value"] !== undefined) {
+                    val = notif.hints["value"];
+                }
+                
+                var isMuted = notif.body && notif.body.toString().toLowerCase().indexOf("muted") !== -1;
+                if (isMuted) val = 0;
+                
+                root.progressOsdType = notif.summary;
+                root.progressOsdValue = val;
+                root.progressOsdVisible = true;
+                progressOsdTimer.restart();
+                
+                try { notif.dismiss(); } catch(e) {}
+                return;
+            }
+
             notif.tracked = true;
             
             var iconName = notif.image;
@@ -564,5 +595,7 @@ PanelWindow {
                 }
             }
         }
-    }
+    
+    ${progressOsd.widget}
+}
 ''
