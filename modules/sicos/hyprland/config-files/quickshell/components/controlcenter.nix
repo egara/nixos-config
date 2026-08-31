@@ -19,6 +19,17 @@
             width: parent.width
             height: parent.height
             color: "transparent"
+            // Global state properties
+            property bool appsExpanded: false
+            property bool brightnessExpanded: false
+            property bool isDraggingBrightness: false
+            property var brightnessDevices: []
+            property int mainBrightness: 0
+            
+            function setDeviceBrightness(name, p) {
+                brightnessSetProc.command = ["brightnessctl", "-d", name, "set", Math.round(p) + "%", "-q"];
+                brightnessSetProc.running = true;
+            }
             
             // Intercept all clicks
             MouseArea {
@@ -293,7 +304,7 @@
                 
                 // Sliders (Volume, Brightness)
                 ColumnLayout {
-                    property bool appsExpanded: false
+                    id: slidersColumn
                     property var currentAudioStreams: {
                         var arr = [];
                         var nodes = Pipewire.nodes.values;
@@ -307,6 +318,59 @@
                         }
                         return arr;
                     }
+                    
+                    Process {
+                        id: brightnessPollProc
+                        command: ["brightnessctl", "-l", "-m"]
+                        running: true
+                        stdout: StdioCollector {
+                            onStreamFinished: {
+                                var lines = text.trim().split("\n");
+                                var arr = [];
+                                var mainP = 0;
+                                for (var i = 0; i < lines.length; i++) {
+                                    var parts = lines[i].split(",");
+                                    if (parts.length >= 5) {
+                                        var name = parts[0];
+                                        var cls = parts[1];
+                                        var p = parseInt(parts[3].replace("%", ""));
+                                        if (cls === "backlight") {
+                                            mainP = p;
+                                            arr.push({ name: name, class: cls, percent: p });
+                                        } else if (name.toLowerCase().indexOf("kbd") !== -1 || name.toLowerCase().indexOf("keyboard") !== -1) {
+                                            // Ensure we only add ONE keyboard backlight if multiple exist
+                                            var alreadyHasKbd = false;
+                                            for (var j = 0; j < arr.length; j++) {
+                                                if (arr[j].name.toLowerCase().indexOf("kbd") !== -1 || arr[j].name.toLowerCase().indexOf("keyboard") !== -1) {
+                                                    alreadyHasKbd = true;
+                                                    break;
+                                                }
+                                            }
+                                            if (!alreadyHasKbd) {
+                                                arr.push({ name: name, class: cls, percent: p });
+                                            }
+                                        }
+                                    }
+                                }
+                                if (!popupContentCC.isDraggingBrightness) {
+                                    popupContentCC.brightnessDevices = arr;
+                                    popupContentCC.mainBrightness = mainP;
+                                }
+                            }
+                        }
+                    }
+                    
+                    Timer {
+                        interval: 2000
+                        running: root.controlcenterVisible && !popupContentCC.isDraggingBrightness
+                        repeat: true
+                        onTriggered: brightnessPollProc.running = true
+                    }
+                    
+                    Process {
+                        id: brightnessSetProc
+                    }
+                    
                     Layout.fillWidth: true
                     spacing: 16
                     
@@ -402,27 +466,27 @@
                                 width: 24
                                 height: 24
                                 radius: 12
-                                color: appsMouseArea.containsMouse ? "#33${c.base03}" : "transparent"
+                                color: appMouseArea.containsMouse ? "#33${c.base03}" : "transparent"
                                 Text {
                                     anchors.centerIn: parent
-                                    text: parent.parent.parent.parent.appsExpanded ? "" : ""
+                                    text: popupContentCC.appsExpanded ? "" : ""
                                     color: "#${c.base04}"
                                     font.family: "${fontName}"
                                     font.pixelSize: 16
                                 }
                                 MouseArea {
-                                    id: appsMouseArea
+                                    id: appMouseArea
                                     anchors.fill: parent
                                     hoverEnabled: true
                                     cursorShape: Qt.PointingHandCursor
-                                    onClicked: parent.parent.parent.parent.appsExpanded = !parent.parent.parent.parent.appsExpanded
+                                    onClicked: popupContentCC.appsExpanded = !popupContentCC.appsExpanded
                                 }
                             }
                         }
                         
                         ColumnLayout {
                             Layout.fillWidth: true
-                            visible: parent.parent.appsExpanded
+                            visible: popupContentCC.appsExpanded
                             spacing: 8
                             
                             Repeater {
@@ -554,104 +618,198 @@
                     }
                     
                     // Brightness Section
-                    RowLayout {
+                    ColumnLayout {
                         Layout.fillWidth: true
-                        spacing: 12
-                        
-                        Text {
-                            text: ""
-                            color: "#${c.base0D}"
-                            font.family: "${fontName}"
-                            font.pixelSize: 18
-                        }
-                        
-                        Item {
+                        spacing: 8
+                        RowLayout {
                             Layout.fillWidth: true
-                            Layout.preferredHeight: 24
-                            property real percent: 0.85 // Mock brightness
+                            spacing: 12
                             
-                            Rectangle {
-                                anchors.verticalCenter: parent.verticalCenter
-                                width: parent.width
-                                height: 8
-                                radius: 4
-                                color: "#33${c.base05}"
+                            Text {
+                                text: ""
+                                color: "#${c.base0D}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 18
+                            }
+                            
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 24
+                                property real percent: popupContentCC.mainBrightness / 100.0
                                 
                                 Rectangle {
-                                    width: parent.width * parent.parent.percent
-                                    height: parent.height
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: parent.width
+                                    height: 8
                                     radius: 4
-                                    color: "#${c.base0D}"
+                                    color: "#33${c.base05}"
+                                    
+                                    Rectangle {
+                                        width: parent.width * parent.parent.percent
+                                        height: parent.height
+                                        radius: 4
+                                        color: "#${c.base0D}"
+                                    }
+                                }
+                                
+                                Rectangle {
+                                    width: 16
+                                    height: 16
+                                    radius: 8
+                                    color: "#${c.base05}"
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
+                                }
+                                
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onPressedChanged: popupContentCC.isDraggingBrightness = pressed
+                                    function updateB(mouse) {
+                                        let p = Math.max(0, Math.min(1, mouse.x / width)) * 100;
+                                        // Update visual instantly for all backlight class devices
+                                        for (let i = 0; i < popupContentCC.brightnessDevices.length; i++) {
+                                            if (popupContentCC.brightnessDevices[i].class === "backlight") {
+                                                popupContentCC.brightnessDevices[i].percent = p;
+                                                popupContentCC.setDeviceBrightness(popupContentCC.brightnessDevices[i].name, p);
+                                            }
+                                        }
+                                        popupContentCC.mainBrightness = p;
+                                    }
+                                    onPressed: (mouse) => updateB(mouse)
+                                    onPositionChanged: (mouse) => { if (pressed) updateB(mouse); }
                                 }
                             }
                             
-                            Rectangle {
-                                width: 16
-                                height: 16
-                                radius: 8
+                            Text {
+                                text: Math.round(popupContentCC.mainBrightness) + "%"
                                 color: "#${c.base05}"
-                                anchors.verticalCenter: parent.verticalCenter
-                                x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                                Layout.preferredWidth: 40
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            
+                            Rectangle {
+                                width: 24
+                                height: 24
+                                radius: 12
+                                color: brightMouseArea.containsMouse ? "#33${c.base03}" : "transparent"
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: popupContentCC.brightnessExpanded ? "" : ""
+                                    color: "#${c.base04}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 16
+                                }
+                                MouseArea {
+                                    id: brightMouseArea
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: popupContentCC.brightnessExpanded = !popupContentCC.brightnessExpanded
+                                }
                             }
                         }
                         
-                        Text {
-                            text: "85%"
-                            color: "#${c.base05}"
-                            font.family: "${fontName}"
-                            font.pixelSize: 14
-                            Layout.preferredWidth: 40
-                            horizontalAlignment: Text.AlignRight
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            visible: popupContentCC.brightnessExpanded
+                            spacing: 8
+                            
+                            Repeater {
+                                model: popupContentCC.brightnessDevices
+                                delegate: RowLayout {
+                                    Layout.fillWidth: true
+                                    Layout.leftMargin: 24
+                                    spacing: 12
+                                    
+                                    Text {
+                                        text: modelData.class === "backlight" ? "" : ""
+                                        color: "#${c.base05}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 14
+                                    }
+                                    
+                                    Text {
+                                        text: {
+                                            let n = modelData.name.toLowerCase();
+                                            if (n.indexOf("kbd") !== -1 || n.indexOf("keyboard") !== -1) return "Keyboard";
+                                            return "Display";
+                                        }
+                                        color: "#${c.base05}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 13
+                                        Layout.preferredWidth: 80
+                                        Layout.minimumWidth: 80
+                                        Layout.maximumWidth: 80
+                                        elide: Text.ElideRight
+                                    }
+                                    
+                                    Item {
+                                        Layout.fillWidth: true
+                                        Layout.preferredHeight: 18
+                                        property real percent: modelData.percent / 100.0
+                                        
+                                        Rectangle {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            width: parent.width
+                                            height: 6
+                                            radius: 3
+                                            color: "#33${c.base05}"
+                                            
+                                            Rectangle {
+                                                width: parent.width * parent.parent.percent
+                                                height: parent.height
+                                                radius: 3
+                                                color: "#${c.base0D}"
+                                            }
+                                        }
+                                        
+                                        Rectangle {
+                                            width: 14
+                                            height: 14
+                                            radius: 7
+                                            color: "#${c.base05}"
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
+                                        }
+                                        
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            cursorShape: Qt.PointingHandCursor
+                                            onPressedChanged: popupContentCC.isDraggingBrightness = pressed
+                                            function updateDeviceB(mouse) {
+                                                let p = Math.max(0, Math.min(1, mouse.x / width)) * 100;
+                                                modelData.percent = p;
+                                                if (modelData.class === "backlight") {
+                                                    popupContentCC.mainBrightness = p;
+                                                }
+                                                // Avoid rewriting array during drag. Visual updates via modelData bind directly or on next poll.
+                                                parent.percent = p / 100.0;
+                                                popupContentCC.setDeviceBrightness(modelData.name, p);
+                                            }
+                                            onPressed: (mouse) => updateDeviceB(mouse)
+                                            onPositionChanged: (mouse) => { if (pressed) updateDeviceB(mouse); }
+                                        }
+                                    }
+                                    
+                                    Text {
+                                        text: Math.round(modelData.percent) + "%"
+                                        color: "#${c.base05}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 12
+                                        Layout.preferredWidth: 40
+                                        horizontalAlignment: Text.AlignRight
+                                    }
+                                    
+                                    Item { width: 24; height: 24 }
+                                }
+                            }
                         }
-                        
-                        Item { width: 24; height: 24 }
                     }
                 }
 
-                // Placeholder for hardware/devices
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 120
-                    radius: 12
-                    color: "#${c.base02}"
-                    border.color: "#33${c.base0D}" // Note: borders allowed in inner elements
-                    border.width: 1
-                    
-                    ColumnLayout {
-                        anchors.fill: parent
-                        anchors.margins: 16
-                        spacing: 8
-                        
-                        RowLayout {
-                            Layout.fillWidth: true
-                            Text { text: ""; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15 }
-                            Text { text: "eDP-1"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; Layout.fillWidth: true }
-                            Text { text: " Pin"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
-                        }
-                        
-                        Rectangle {
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 56
-                            radius: 10
-                            color: "#1A${c.base0D}"
-                            border.color: "#33${c.base0D}"
-                            border.width: 1
-                            
-                            RowLayout {
-                                anchors.fill: parent
-                                anchors.margins: 12
-                                Text { text: ""; color: "#${c.base0D}"; font.family: "${fontName}"; font.pixelSize: 20 }
-                                ColumnLayout {
-                                    spacing: 2
-                                    Layout.fillWidth: true
-                                    Text { text: "Backlight: Amdgpu Bl1"; color: "#${c.base05}"; font.family: "${fontName}"; font.bold: true; font.pixelSize: 13 }
-                                    Text { text: "Backlight device"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 11 }
-                                }
-                                Text { text: "55%"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12 }
-                            }
-                        }
-                    }
-                }
 
                 // Grid of Toggles
                 GridLayout {
