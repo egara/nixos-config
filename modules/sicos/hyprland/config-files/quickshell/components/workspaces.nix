@@ -8,6 +8,7 @@
             
             Rectangle {
                 id: workspacePill
+                visible: !modelData.name.startsWith("special:")
                 property bool isActive: Hyprland.focusedWorkspace != null && Hyprland.focusedWorkspace.id === modelData.id
                 
                 // Dynamically get the list of windows for this workspace

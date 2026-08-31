@@ -541,29 +541,5 @@
             }
         }
     }
-
-    // Power Menu Button
-    Rectangle {
-        width: 28; height: 28
-        radius: 14
-        color: powerMouseArea.containsMouse ? "#${c.base08}" : "#${c.base02}" // Red on hover
-        
-        Text {
-            anchors.centerIn: parent
-            text: "" // Power icon
-            color: powerMouseArea.containsMouse ? "#${c.base00}" : "#${c.base05}"
-            font.family: "${fontName}"
-            font.pixelSize: 14
-        }
-        
-        MouseArea {
-            id: powerMouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: {
-                cmdRunner.exec(["uwsm", "app", "--", "wlogout"])
-            }
-        }
-    }
   '';
 }
