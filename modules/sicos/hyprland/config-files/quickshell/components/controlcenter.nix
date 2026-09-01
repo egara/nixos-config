@@ -40,6 +40,13 @@
             property string netIp: "-"
             property string netGateway: "-"
             
+            // Bluetooth properties
+            property bool bluetoothExpanded: false
+            property var bluetoothList: []
+            property string activeBluetoothName: "Bluetooth"
+            property string activeBluetoothBattery: "Disconnected"
+            property string bluetoothStatus: "Off"
+            
             property bool isDraggingBrightness: false
             property var brightnessDevices: []
             property int mainBrightness: 0
@@ -216,7 +223,10 @@
                 interval: 5000
                 running: root.controlcenterVisible
                 repeat: true
-                onTriggered: networkPollProc.running = true
+                onTriggered: {
+                    networkPollProc.running = true;
+                    bluetoothPollProc.running = true;
+                }
             }
 
             Process {
@@ -258,8 +268,32 @@
                     }
                 }
             }
+            
+            Process {
+                id: bluetoothPollProc
+                command: ["sh", "-c", "if [ -f $HOME/.config/hypr/scripts/bluetooth-status.sh ]; then $HOME/.config/hypr/scripts/bluetooth-status.sh; else echo '{\"devices\":[],\"status\":\"Off\",\"active_name\":\"Bluetooth\",\"active_battery\":\"Disconnected\"}'; fi"]
+                running: false
+                stdout: StdioCollector {
+                    onStreamFinished: {
+                        if (text !== "") {
+                            try {
+                                let data = JSON.parse(text.trim());
+                                popupContentCC.bluetoothList = data.devices;
+                                popupContentCC.bluetoothStatus = data.status;
+                                popupContentCC.activeBluetoothName = data.active_name;
+                                popupContentCC.activeBluetoothBattery = data.active_battery;
+                            } catch (e) {
+                                console.log("Error parsing bluetooth JSON: " + e);
+                            }
+                        }
+                    }
+                }
+            }
 
-            Component.onCompleted: ccInfoProc.running = true
+            Component.onCompleted: {
+                ccInfoProc.running = true;
+                bluetoothPollProc.running = true;
+            }
             
             opacity: root.controlcenterVisible ? 1 : 0
             y: root.controlcenterVisible ? 0 : -20
@@ -359,7 +393,7 @@
                                 // Expand Indicator
                                 Text {
                                     text: ccData.profileExpanded ? "" : ""
-                                    color: "#${c.base04}"
+                                    color: "#${c.base0D}"
                                     font.family: "${fontName}"
                                     font.pixelSize: 14
                                 }
@@ -645,7 +679,7 @@
                                 Text {
                                     anchors.centerIn: parent
                                     text: popupContentCC.appsExpanded ? "" : ""
-                                    color: "#${c.base04}"
+                                    color: "#${c.base0D}"
                                     font.family: "${fontName}"
                                     font.pixelSize: 16
                                 }
@@ -889,7 +923,7 @@
                                 Text {
                                     anchors.centerIn: parent
                                     text: popupContentCC.micsExpanded ? "" : ""
-                                    color: "#${c.base04}"
+                                    color: "#${c.base0D}"
                                     font.family: "${fontName}"
                                     font.pixelSize: 16
                                 }
@@ -1120,7 +1154,7 @@
                                 Text {
                                     anchors.centerIn: parent
                                     text: popupContentCC.brightnessExpanded ? "" : ""
-                                    color: "#${c.base04}"
+                                    color: "#${c.base0D}"
                                     font.family: "${fontName}"
                                     font.pixelSize: 16
                                 }
@@ -1276,6 +1310,12 @@
                                 Text { text: popupContentCC.activeNetworkName; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; font.bold: true }
                                 Text { text: popupContentCC.activeNetworkSignal; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12 }
                             }
+                            Text {
+                                text: popupContentCC.networkExpanded ? "" : ""
+                                color: "#${c.base0D}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                            }
                         }
                         MouseArea {
                             anchors.fill: parent
@@ -1289,7 +1329,7 @@
                         Layout.fillWidth: true
                         Layout.preferredHeight: 64
                         radius: 16
-                        color: "#1a${c.base05}"
+                        color: popupContentCC.bluetoothExpanded ? "#33${c.base0D}" : "#1a${c.base05}"
                         
                         RowLayout {
                             anchors.fill: parent
@@ -1298,15 +1338,34 @@
                             
                             Rectangle {
                                 width: 40; height: 40; radius: 20
-                                color: "#33${c.base05}"
-                                Text { anchors.centerIn: parent; text: "󰂲"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 18 }
+                                color: (popupContentCC.bluetoothStatus === "Connected" || popupContentCC.bluetoothStatus === "On") ? "#${c.base0D}" : "#33${c.base05}"
+                                Text { 
+                                    anchors.centerIn: parent
+                                    text: ""
+                                    color: (popupContentCC.bluetoothStatus === "Connected" || popupContentCC.bluetoothStatus === "On") ? "#${c.base00}" : "#${c.base04}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 18
+                                }
                             }
                             ColumnLayout {
                                 Layout.fillWidth: true
                                 spacing: 4
-                                Text { text: "Wi-Fi"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; font.bold: true }
-                                Text { text: popupContentCC.wifiStatus; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12 }
+                                Text { text: popupContentCC.activeBluetoothName; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; font.bold: true; elide: Text.ElideRight }
+                                Text { text: popupContentCC.activeBluetoothBattery !== "" ? popupContentCC.activeBluetoothBattery : popupContentCC.bluetoothStatus; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12 }
                             }
+                            // Arrow
+                            Text {
+                                text: popupContentCC.bluetoothExpanded ? "" : ""
+                                color: "#${c.base0D}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                            }
+                        }
+                        
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: popupContentCC.bluetoothExpanded = !popupContentCC.bluetoothExpanded
                         }
                     }
                 }
@@ -1362,19 +1421,22 @@
                                 model: popupContentCC.networkTab === "ethernet" ? popupContentCC.ethernetList : popupContentCC.wifiList
                                 delegate: Rectangle {
                                     Layout.fillWidth: true
-                                    Layout.preferredHeight: 40
+                                    Layout.preferredHeight: 48
                                     radius: 8
-                                    color: modelData.active ? "#${c.base0D}" : "transparent"
+                                    color: netMouseArea.containsMouse ? "#33${c.base05}" : (modelData.active ? "#33${c.base0D}" : "transparent")
                                     
                                     RowLayout {
                                         anchors.fill: parent
-                                        anchors.margins: 8
+                                        anchors.leftMargin: 12
+                                        anchors.rightMargin: 12
                                         spacing: 12
-                                        Text { text: popupContentCC.networkTab === "ethernet" ? "󰈀" : "󰤨"; color: modelData.active ? "#${c.base00}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 16 }
-                                        Text { text: modelData.name; color: modelData.active ? "#${c.base00}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; Layout.fillWidth: true; elide: Text.ElideRight }
+                                        Text { text: popupContentCC.networkTab === "ethernet" ? "󰈀" : "󰤨"; color: modelData.active ? "#${c.base0D}" : "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 16 }
+                                        Text { text: modelData.name; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; Layout.fillWidth: true; elide: Text.ElideRight }
                                     }
                                     
                                     MouseArea {
+                                        id: netMouseArea
+                                        hoverEnabled: true
                                         anchors.fill: parent
                                         cursorShape: Qt.PointingHandCursor
                                         onClicked: {
@@ -1386,6 +1448,99 @@
                                         }
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+                
+                // Expanded Bluetooth Block
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: bluetoothCol.implicitHeight + 24
+                    radius: 16
+                    color: "#1a${c.base05}"
+                    visible: popupContentCC.bluetoothExpanded
+                    
+                    ColumnLayout {
+                        id: bluetoothCol
+                        anchors.fill: parent
+                        anchors.margins: 12
+                        spacing: 16
+
+                        // Header
+                        RowLayout {
+                            Layout.fillWidth: true
+                            Text { text: "Bluetooth Devices"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; font.bold: true; Layout.fillWidth: true }
+                            
+                            // Scan/Settings Button
+                            Rectangle {
+                                width: 28; height: 28; radius: 14
+                                color: "#33${c.base05}"
+                                Text { anchors.centerIn: parent; text: ""; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12 }
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        cmdRunner.exec(["uwsm", "app", "--", "blueman-manager"]);
+                                        root.controlcenterVisible = false;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // List
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 4
+                            
+                            Repeater {
+                                model: popupContentCC.bluetoothList
+                                delegate: Rectangle {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: 48
+                                    radius: 8
+                                    color: btMouseArea.containsMouse ? "#33${c.base05}" : (modelData.active ? "#33${c.base0D}" : "transparent")
+                                    
+                                    RowLayout {
+                                        anchors.fill: parent
+                                        anchors.leftMargin: 12
+                                        anchors.rightMargin: 12
+                                        spacing: 12
+                                        
+                                        Text { text: ""; color: modelData.active ? "#${c.base0D}" : "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 16 }
+                                        Text { text: modelData.name; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; Layout.fillWidth: true }
+                                        
+                                        // Battery if available
+                                        Text { 
+                                            text: modelData.battery !== "" ? modelData.battery : ""
+                                            color: "#${c.base04}"
+                                            font.family: "${fontName}"
+                                            font.pixelSize: 12
+                                            visible: modelData.battery !== ""
+                                        }
+                                    }
+                                    
+                                    MouseArea {
+                                        id: btMouseArea
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        cursorShape: Qt.PointingHandCursor
+                                        onClicked: {
+                                            cmdRunner.exec(["uwsm", "app", "--", "blueman-manager"]);
+                                            root.controlcenterVisible = false;
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            Text {
+                                visible: popupContentCC.bluetoothList.length === 0
+                                text: "No devices found."
+                                color: "#${c.base04}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 13
+                                Layout.alignment: Qt.AlignHCenter
+                                Layout.topMargin: 8
                             }
                         }
                     }
