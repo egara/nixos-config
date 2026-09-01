@@ -152,11 +152,12 @@
                 property string host: ""
                 property string os: ""
                 property string home: ""
+                property bool caffeineActive: false
             }
 
             Process {
                 id: ccInfoProc
-                property string script: "uptime_val=$(awk '{d=int($1/86400); h=int(($1%86400)/3600); m=int(($1%3600)/60); if(d>0) printf \"%dd %dh %dm\\n\", d, h, m; else if(h>0) printf \"%dh %dm\\n\", h, m; else printf \"%dm\\n\", m}' /proc/uptime); user_val=$(whoami); host_val=$(hostname); os_val=$(awk -F'=' '/^PRETTY_NAME/ {gsub(/\"/, \"\", $2); print $2}' /etc/os-release); echo \"{\\\"uptime\\\": \\\"$uptime_val\\\", \\\"user\\\": \\\"$user_val\\\", \\\"host\\\": \\\"$host_val\\\", \\\"os\\\": \\\"$os_val\\\", \\\"home\\\": \\\"$HOME\\\"}\""
+                property string script: "uptime_val=$(awk '{d=int($1/86400); h=int(($1%86400)/3600); m=int(($1%3600)/60); if(d>0) printf \"%dd %dh %dm\\n\", d, h, m; else if(h>0) printf \"%dh %dm\\n\", h, m; else printf \"%dm\\n\", m}' /proc/uptime); user_val=$(whoami); host_val=$(hostname); os_val=$(awk -F'=' '/^PRETTY_NAME/ {gsub(/\"/, \"\", $2); print $2}' /etc/os-release); if systemctl --user is-active --quiet hypridle.service; then caf=false; else caf=true; fi; echo \"{\\\"uptime\\\": \\\"$uptime_val\\\", \\\"user\\\": \\\"$user_val\\\", \\\"host\\\": \\\"$host_val\\\", \\\"os\\\": \\\"$os_val\\\", \\\"home\\\": \\\"$HOME\\\", \\\"caffeine\\\": $caf}\""
                 command: ["sh", "-c", script]
                 running: false
                 stdout: StdioCollector {
@@ -169,6 +170,7 @@
                                 ccData.host = data.host;
                                 ccData.os = data.os;
                                 ccData.home = data.home;
+                                ccData.caffeineActive = data.caffeine;
                             } catch (e) {
                                 console.log("Error parsing ccInfo JSON: " + e);
                             }
@@ -410,6 +412,29 @@
                         // Spacer to push the power button to the right
                         Item {
                             Layout.fillWidth: true
+                        }
+
+                        // Action Buttons (Caffeine)
+                        Rectangle {
+                            width: 36; height: 36; radius: 18
+                            color: ccData.caffeineActive ? "#33${c.base0D}" : (cafBtnArea.containsMouse ? "#${c.base03}" : "transparent")
+                            Text {
+                                anchors.centerIn: parent
+                                text: ""
+                                color: ccData.caffeineActive ? "#${c.base0D}" : "#${c.base05}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 16
+                            }
+                            MouseArea {
+                                id: cafBtnArea
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                onClicked: {
+                                    // Actualizar la UI inmediatamente (optimista)
+                                    ccData.caffeineActive = !ccData.caffeineActive;
+                                    cmdRunner.exec(["sh", "-c", "$HOME/.config/sicos/scripts/toggle-hypridle.sh"]);
+                                }
+                            }
                         }
 
                         // Action Buttons (Power)
