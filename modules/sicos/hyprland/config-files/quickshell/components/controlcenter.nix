@@ -26,6 +26,44 @@
             property var brightnessDevices: []
             property int mainBrightness: 0
             
+            // Pipewire dynamic properties
+            property int _pwUpdateTrigger: 0
+            Connections {
+                target: Pipewire.nodes
+                function onValuesChanged() { popupContentCC._pwUpdateTrigger += 1; }
+            }
+            
+            property var currentAudioStreams: {
+                var trigger = popupContentCC._pwUpdateTrigger;
+                var arr = [];
+                var nodes = Pipewire.nodes.values;
+                if (nodes) {
+                    for (var i = 0; i < nodes.length; i++) {
+                        var n = nodes[i];
+                        if (n && n.audio && n.isSink && n.isStream) {
+                            arr.push(n);
+                        }
+                    }
+                }
+                return arr;
+            }
+            
+            property bool micsExpanded: false
+            property var currentMics: {
+                var trigger = popupContentCC._pwUpdateTrigger;
+                var arr = [];
+                var nodes = Pipewire.nodes.values;
+                if (nodes) {
+                    for (var i = 0; i < nodes.length; i++) {
+                        var n = nodes[i];
+                        if (n && n.audio && !n.isSink && !n.isStream) {
+                            arr.push(n);
+                        }
+                    }
+                }
+                return arr;
+            }
+            
             function setDeviceBrightness(name, p) {
                 brightnessSetProc.command = ["brightnessctl", "-d", name, "set", Math.round(p) + "%", "-q"];
                 brightnessSetProc.running = true;
@@ -305,19 +343,6 @@
                 // Sliders (Volume, Brightness)
                 ColumnLayout {
                     id: slidersColumn
-                    property var currentAudioStreams: {
-                        var arr = [];
-                        var nodes = Pipewire.nodes.values;
-                        if (nodes) {
-                            for (var i = 0; i < nodes.length; i++) {
-                                var n = nodes[i];
-                                if (n && n.audio && n.isSink && n.isStream) {
-                                    arr.push(n);
-                                }
-                            }
-                        }
-                        return arr;
-                    }
                     
                     Process {
                         id: brightnessPollProc
@@ -374,8 +399,25 @@
                     Layout.fillWidth: true
                     spacing: 16
                     
-                    // Volume Section
-                    ColumnLayout {
+                    // Audio Pill
+                    Item {
+                        Layout.fillWidth: true
+                        implicitHeight: audioPillLayout.implicitHeight + 24
+                        
+                        Rectangle {
+                            anchors.fill: parent
+                            color: "#1A${c.base03}"
+                            radius: 12
+                        }
+                        
+                        ColumnLayout {
+                            id: audioPillLayout
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            spacing: 16
+                            
+                            // Volume Section
+                            ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 8
                         
@@ -490,7 +532,7 @@
                             spacing: 8
                             
                             Repeater {
-                                model: parent.parent.parent.currentAudioStreams
+                                model: popupContentCC.currentAudioStreams
                                 delegate: RowLayout {
                                     Layout.fillWidth: true
                                     Layout.leftMargin: 24
@@ -617,8 +659,229 @@
                         }
                     }
                     
-                    // Brightness Section
+                    // Mic Section
                     ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+                        
+                        PwObjectTracker {
+                            objects: Pipewire.defaultAudioSource ? [Pipewire.defaultAudioSource] : []
+                        }
+                        
+                        RowLayout {
+                            Layout.fillWidth: true
+                            spacing: 12
+                            
+                            Text {
+                                text: (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio.muted) ? "" : ""
+                                color: (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio.muted) ? "#${c.base08}" : "#${c.base0D}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 18
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: if (Pipewire.defaultAudioSource) Pipewire.defaultAudioSource.audio.muted = !Pipewire.defaultAudioSource.audio.muted
+                                }
+                            }
+                            
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 24
+                                property real percent: Pipewire.defaultAudioSource ? Math.max(0, Math.min(1.0, Pipewire.defaultAudioSource.audio.volume / 2.0)) : 0
+                                
+                                Rectangle {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: parent.width
+                                    height: 8
+                                    radius: 4
+                                    color: "#33${c.base05}"
+                                    
+                                    Rectangle {
+                                        width: parent.width * parent.parent.percent
+                                        height: parent.height
+                                        radius: 4
+                                        color: (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio.volume > 1.005) ? "#${c.base08}" : "#${c.base0D}"
+                                    }
+                                }
+                                
+                                Rectangle {
+                                    width: 16
+                                    height: 16
+                                    radius: 8
+                                    color: "#${c.base05}"
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
+                                }
+                                
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    function updateMicV(mouse) {
+                                        if (Pipewire.defaultAudioSource) {
+                                            let p = Math.max(0, Math.min(1, mouse.x / width));
+                                            Pipewire.defaultAudioSource.audio.volume = p * 2.0;
+                                            if (p > 0) Pipewire.defaultAudioSource.audio.muted = false;
+                                        }
+                                    }
+                                    onPressed: (mouse) => updateMicV(mouse)
+                                    onPositionChanged: (mouse) => { if (pressed) updateMicV(mouse); }
+                                }
+                            }
+                            
+                            Text {
+                                text: Pipewire.defaultAudioSource ? Math.round(Pipewire.defaultAudioSource.audio.volume * 100) + "%" : "0%"
+                                color: "#${c.base05}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                                Layout.preferredWidth: 40
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            
+                            Rectangle {
+                                width: 24
+                                height: 24
+                                radius: 12
+                                color: micMouseArea.containsMouse ? "#33${c.base03}" : "transparent"
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: popupContentCC.micsExpanded ? "" : ""
+                                    color: "#${c.base04}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 16
+                                }
+                                MouseArea {
+                                    id: micMouseArea
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: popupContentCC.micsExpanded = !popupContentCC.micsExpanded
+                                }
+                            }
+                        }
+                        
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            visible: popupContentCC.micsExpanded
+                            spacing: 8
+                            
+                            Repeater {
+                                model: popupContentCC.currentMics
+                                delegate: RowLayout {
+                                    Layout.fillWidth: true
+                                    Layout.leftMargin: 24
+                                    spacing: 12
+                                    
+                                    Rectangle {
+                                        width: 24
+                                        height: 24
+                                        radius: 12
+                                        color: "transparent"
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: (modelData.audio && modelData.audio.muted) ? "" : ""
+                                            color: (modelData.audio && modelData.audio.muted) ? "#${c.base08}" : "#${c.base05}"
+                                            font.family: "${fontName}"
+                                            font.pixelSize: 14
+                                        }
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            cursorShape: Qt.PointingHandCursor
+                                            onClicked: if (modelData.audio) modelData.audio.muted = !modelData.audio.muted
+                                        }
+                                    }
+                                    
+                                    Text {
+                                        text: modelData.properties["node.description"] || modelData.name
+                                        color: "#${c.base05}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 13
+                                        Layout.preferredWidth: 80
+                                        Layout.minimumWidth: 80
+                                        Layout.maximumWidth: 80
+                                        elide: Text.ElideRight
+                                    }
+                                    
+                                    Item {
+                                        Layout.fillWidth: true
+                                        Layout.preferredHeight: 18
+                                        property real percent: modelData.audio ? Math.max(0, Math.min(1.0, modelData.audio.volume / 2.0)) : 0
+                                        
+                                        Rectangle {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            width: parent.width
+                                            height: 6
+                                            radius: 3
+                                            color: "#33${c.base05}"
+                                            
+                                            Rectangle {
+                                                width: parent.width * parent.parent.percent
+                                                height: parent.height
+                                                radius: 3
+                                                color: (modelData.audio && modelData.audio.volume > 1.005) ? "#${c.base08}" : "#${c.base0D}"
+                                            }
+                                        }
+                                        
+                                        Rectangle {
+                                            width: 12
+                                            height: 12
+                                            radius: 6
+                                            color: "#${c.base05}"
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
+                                        }
+                                        
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            cursorShape: Qt.PointingHandCursor
+                                            function updateAppMicV(mouse) {
+                                                if (modelData.audio) {
+                                                    let p = Math.max(0, Math.min(1, mouse.x / width));
+                                                    modelData.audio.volume = p * 2.0;
+                                                    if (p > 0) modelData.audio.muted = false;
+                                                }
+                                            }
+                                            onPressed: (mouse) => updateAppMicV(mouse)
+                                            onPositionChanged: (mouse) => { if (pressed) updateAppMicV(mouse); }
+                                        }
+                                    }
+                                    
+                                    Text {
+                                        text: modelData.audio ? Math.round(modelData.audio.volume * 100) + "%" : "0%"
+                                        color: "#${c.base05}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 12
+                                        Layout.preferredWidth: 40
+                                        horizontalAlignment: Text.AlignRight
+                                    }
+                                    
+                                    Item { width: 24; height: 24 }
+                                    
+                                    PwObjectTracker { objects: [modelData] }
+                                }
+                            }
+                        }
+                    }
+                        } // end audioPillLayout
+                    } // end Audio Pill
+                    
+                    // Brightness Pill
+                    Item {
+                        Layout.fillWidth: true
+                        implicitHeight: brightnessPillLayout.implicitHeight + 24
+                        
+                        Rectangle {
+                            anchors.fill: parent
+                            color: "#1A${c.base03}"
+                            radius: 12
+                        }
+                        
+                        ColumnLayout {
+                            id: brightnessPillLayout
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            spacing: 16
+                            
+                            // Brightness Section
+                            ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 8
                         RowLayout {
@@ -808,6 +1071,8 @@
                             }
                         }
                     }
+                        } // end brightnessPillLayout
+                    } // end Brightness Pill
                 }
 
 
@@ -821,9 +1086,7 @@
                     Repeater {
                         model: [
                             { icon: "", title: "Hobbiton", subtitle: "59%", active: true },
-                            { icon: "", title: "Disabled", subtitle: "Off", active: false },
-                            { icon: "", title: "Ryzen HD Audio...", subtitle: "65%", active: true },
-                            { icon: "", title: "Ryzen HD Audio...", subtitle: "45%", active: true }
+                            { icon: "", title: "Disabled", subtitle: "Off", active: false }
                         ]
                         delegate: Rectangle {
                             Layout.fillWidth: true
