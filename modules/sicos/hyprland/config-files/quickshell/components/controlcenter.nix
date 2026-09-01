@@ -414,6 +414,28 @@
                             Layout.fillWidth: true
                         }
 
+                        // Action Buttons (Info)
+                        Rectangle {
+                            width: 36; height: 36; radius: 18
+                            color: infoBtnArea.containsMouse ? "#${c.base03}" : "transparent"
+                            Text {
+                                anchors.centerIn: parent
+                                text: "󰙎"
+                                color: "#${c.base05}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 18
+                            }
+                            MouseArea {
+                                id: infoBtnArea
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                onClicked: {
+                                    root.controlcenterVisible = false;
+                                    cmdRunner.exec(["sh", "-c", "hyprctl eval 'sicos_about_rule1 = hl.window_rule({ match = { class = \"sicos-about\" }, float = true }); sicos_about_rule2 = hl.window_rule({ match = { class = \"sicos-about\" }, size = { 1600, 900 } }); sicos_about_rule3 = hl.window_rule({ match = { class = \"sicos-about\" }, center = true })'; uwsm app -- kitty --class sicos-about sh -c $HOME/.config/sicos/scripts/fastfetch-about.sh"]);
+                                }
+                            }
+                        }
+
                         // Action Buttons (Caffeine)
                         Rectangle {
                             width: 36; height: 36; radius: 18
