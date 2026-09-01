@@ -429,7 +429,10 @@
                             Layout.fillWidth: true
                             spacing: 12
                             
-                            Text {
+                            Item {
+                                        Layout.preferredWidth: 32
+                                        Layout.preferredHeight: 24
+                                        Text {
                                 text: (Pipewire.defaultAudioSink && Pipewire.defaultAudioSink.audio.muted) ? "" : ""
                                 color: (Pipewire.defaultAudioSink && Pipewire.defaultAudioSink.audio.muted) ? "#${c.base08}" : "#${c.base0D}"
                                 font.family: "${fontName}"
@@ -439,6 +442,7 @@
                                     onClicked: if (Pipewire.defaultAudioSink) Pipewire.defaultAudioSink.audio.muted = !Pipewire.defaultAudioSink.audio.muted
                                 }
                             }
+                                    }
                             
                             Item {
                                 Layout.fillWidth: true
@@ -448,8 +452,8 @@
                                 Rectangle {
                                     anchors.verticalCenter: parent.verticalCenter
                                     width: parent.width
-                                    height: 8
-                                    radius: 4
+                                    height: 12
+                                    radius: 6
                                     color: "#33${c.base05}"
                                     
                                     Rectangle {
@@ -470,9 +474,9 @@
                                 
                                 // Thumb (Pelotita)
                                 Rectangle {
-                                    width: 16
-                                    height: 16
-                                    radius: 8
+                                    width: 20
+                                    height: 20
+                                    radius: 10
                                     color: "#${c.base05}"
                                     anchors.verticalCenter: parent.verticalCenter
                                     x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
@@ -535,10 +539,16 @@
                                 model: popupContentCC.currentAudioStreams
                                 delegate: RowLayout {
                                     Layout.fillWidth: true
-                                    Layout.leftMargin: 24
+                                    Item { width: 12 }
                                     spacing: 12
                                     
-                                    Image {
+                                    Item {
+                                                Layout.preferredWidth: 126
+                                                Layout.preferredHeight: 24
+                                                RowLayout {
+                                                    anchors.fill: parent
+                                                    spacing: 12
+                                                    Image {
                                         width: 14
                                         height: 14
                                         sourceSize.width: 14
@@ -582,11 +592,13 @@
                                         color: "#${c.base05}"
                                         font.family: "${fontName}"
                                         font.pixelSize: 13
-                                        Layout.preferredWidth: 80
-                                        Layout.minimumWidth: 80
-                                        Layout.maximumWidth: 80
+                                        Layout.fillWidth: true
+                                        
+                                        
                                         elide: Text.ElideRight
                                     }
+                                                }
+                                            }
                                     
                                     Item {
                                         Layout.fillWidth: true
@@ -672,7 +684,10 @@
                             Layout.fillWidth: true
                             spacing: 12
                             
-                            Text {
+                            Item {
+                                        Layout.preferredWidth: 32
+                                        Layout.preferredHeight: 24
+                                        Text {
                                 text: (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio.muted) ? "" : ""
                                 color: (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio.muted) ? "#${c.base08}" : "#${c.base0D}"
                                 font.family: "${fontName}"
@@ -682,6 +697,7 @@
                                     onClicked: if (Pipewire.defaultAudioSource) Pipewire.defaultAudioSource.audio.muted = !Pipewire.defaultAudioSource.audio.muted
                                 }
                             }
+                                    }
                             
                             Item {
                                 Layout.fillWidth: true
@@ -691,8 +707,8 @@
                                 Rectangle {
                                     anchors.verticalCenter: parent.verticalCenter
                                     width: parent.width
-                                    height: 8
-                                    radius: 4
+                                    height: 12
+                                    radius: 6
                                     color: "#33${c.base05}"
                                     
                                     Rectangle {
@@ -704,9 +720,9 @@
                                 }
                                 
                                 Rectangle {
-                                    width: 16
-                                    height: 16
-                                    radius: 8
+                                    width: 20
+                                    height: 20
+                                    radius: 10
                                     color: "#${c.base05}"
                                     anchors.verticalCenter: parent.verticalCenter
                                     x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
@@ -767,10 +783,16 @@
                                 model: popupContentCC.currentMics
                                 delegate: RowLayout {
                                     Layout.fillWidth: true
-                                    Layout.leftMargin: 24
+                                    Item { width: 12 }
                                     spacing: 12
                                     
-                                    Rectangle {
+                                    Item {
+                                                Layout.preferredWidth: 126
+                                                Layout.preferredHeight: 24
+                                                RowLayout {
+                                                    anchors.fill: parent
+                                                    spacing: 12
+                                                    Rectangle {
                                         width: 24
                                         height: 24
                                         radius: 12
@@ -794,11 +816,13 @@
                                         color: "#${c.base05}"
                                         font.family: "${fontName}"
                                         font.pixelSize: 13
-                                        Layout.preferredWidth: 80
-                                        Layout.minimumWidth: 80
-                                        Layout.maximumWidth: 80
+                                        Layout.fillWidth: true
+                                        
+                                        
                                         elide: Text.ElideRight
                                     }
+                                                }
+                                            }
                                     
                                     Item {
                                         Layout.fillWidth: true
@@ -888,11 +912,17 @@
                             Layout.fillWidth: true
                             spacing: 12
                             
-                            Text {
-                                text: ""
-                                color: "#${c.base0D}"
-                                font.family: "${fontName}"
-                                font.pixelSize: 18
+                            Item {
+                                Layout.preferredWidth: 32
+                                Layout.preferredHeight: 24
+                                Text {
+                                    anchors.left: parent.left
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: ""
+                                    color: "#${c.base0D}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 18
+                                }
                             }
                             
                             Item {
@@ -903,8 +933,8 @@
                                 Rectangle {
                                     anchors.verticalCenter: parent.verticalCenter
                                     width: parent.width
-                                    height: 8
-                                    radius: 4
+                                    height: 12
+                                    radius: 6
                                     color: "#33${c.base05}"
                                     
                                     Rectangle {
@@ -916,9 +946,9 @@
                                 }
                                 
                                 Rectangle {
-                                    width: 16
-                                    height: 16
-                                    radius: 8
+                                    width: 20
+                                    height: 20
+                                    radius: 10
                                     color: "#${c.base05}"
                                     anchors.verticalCenter: parent.verticalCenter
                                     x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
@@ -984,29 +1014,38 @@
                                 model: popupContentCC.brightnessDevices
                                 delegate: RowLayout {
                                     Layout.fillWidth: true
-                                    Layout.leftMargin: 24
+                                    Item { width: 12 }
                                     spacing: 12
                                     
-                                    Text {
-                                        text: modelData.class === "backlight" ? "" : ""
-                                        color: "#${c.base05}"
-                                        font.family: "${fontName}"
-                                        font.pixelSize: 14
-                                    }
-                                    
-                                    Text {
-                                        text: {
-                                            let n = modelData.name.toLowerCase();
-                                            if (n.indexOf("kbd") !== -1 || n.indexOf("keyboard") !== -1) return "Keyboard";
-                                            return "Display";
+                                    Item {
+                                        Layout.preferredWidth: 126
+                                        Layout.preferredHeight: 24
+                                        RowLayout {
+                                            anchors.fill: parent
+                                            spacing: 12
+                                            
+                                            Text {
+                                                text: modelData.class === "backlight" ? "" : ""
+                                                color: "#${c.base05}"
+                                                font.family: "${fontName}"
+                                                font.pixelSize: 14
+                                            }
+                                            
+                                            Text {
+                                                text: {
+                                                    let n = modelData.name.toLowerCase();
+                                                    if (n.indexOf("kbd") !== -1 || n.indexOf("keyboard") !== -1) return "Keyboard";
+                                                    return "Display";
+                                                }
+                                                color: "#${c.base05}"
+                                                font.family: "${fontName}"
+                                                font.pixelSize: 13
+                                                Layout.fillWidth: true
+                                                
+                                                
+                                                elide: Text.ElideRight
+                                            }
                                         }
-                                        color: "#${c.base05}"
-                                        font.family: "${fontName}"
-                                        font.pixelSize: 13
-                                        Layout.preferredWidth: 80
-                                        Layout.minimumWidth: 80
-                                        Layout.maximumWidth: 80
-                                        elide: Text.ElideRight
                                     }
                                     
                                     Item {
