@@ -414,6 +414,28 @@
                             Layout.fillWidth: true
                         }
 
+                        // Action Buttons (Keybindings)
+                        Rectangle {
+                            width: 36; height: 36; radius: 18
+                            color: keybindsBtnArea.containsMouse ? "#${c.base03}" : "transparent"
+                            Text {
+                                anchors.centerIn: parent
+                                text: "󰋖"
+                                color: "#${c.base05}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 16
+                            }
+                            MouseArea {
+                                id: keybindsBtnArea
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                onClicked: {
+                                    root.controlcenterVisible = false;
+                                    cmdRunner.exec(["sh", "-c", "nohup $HOME/.config/sicos/scripts/show-hyprland-keybindings.sh >/dev/null 2>&1 &"]);
+                                }
+                            }
+                        }
+
                         // Action Buttons (Info)
                         Rectangle {
                             width: 36; height: 36; radius: 18
@@ -423,7 +445,7 @@
                                 text: "󰙎"
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 18
+                                font.pixelSize: 16
                             }
                             MouseArea {
                                 id: infoBtnArea

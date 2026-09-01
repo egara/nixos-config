@@ -307,6 +307,7 @@ in
         # catppuccin-sddm
 
         # Other tools
+        wtype
         udiskie # Automount USB devices
         awww # for wallpapers
         feh # Image viewer
