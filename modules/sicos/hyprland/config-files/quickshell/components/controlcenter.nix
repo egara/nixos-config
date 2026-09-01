@@ -22,6 +22,24 @@
             // Global state properties
             property bool appsExpanded: false
             property bool brightnessExpanded: false
+            property bool networkExpanded: false
+            property string networkTab: "ethernet"
+            property var ethernetList: []
+            property var wifiList: []
+            property string ethStatus: "Disconnected"
+            property string wifiStatus: "Disconnected"
+            property string activeNetworkName: "Network"
+            property string activeNetworkSignal: "Disconnected"
+            property string activeNetworkType: "none"
+            property string netPing: "-"
+            property string netLoss: "-"
+            property string netRxSpeed: "-"
+            property string netTxSpeed: "-"
+            property string netRxTotal: "-"
+            property string netTxTotal: "-"
+            property string netIp: "-"
+            property string netGateway: "-"
+            
             property bool isDraggingBrightness: false
             property var brightnessDevices: []
             property int mainBrightness: 0
@@ -164,6 +182,79 @@
                 function onControlcenterVisibleChanged() {
                     if (root.controlcenterVisible) {
                         ccInfoProc.running = true;
+                        networkPollProc.running = true;
+                    }
+                }
+            }
+
+            Process {
+                id: networkPollProc
+                command: ["sh", "-c", "if [ -f $HOME/.config/hypr/scripts/network-status.sh ]; then $HOME/.config/hypr/scripts/network-status.sh; else echo '{\"ethernet\":[],\"wifi\":[],\"eth_status\":\"Disconnected\",\"wifi_status\":\"Disconnected\"}'; fi"]
+                running: false
+                stdout: StdioCollector {
+                    onStreamFinished: {
+                        if (text !== "") {
+                            try {
+                                let data = JSON.parse(text.trim());
+                                popupContentCC.ethernetList = data.ethernet;
+                                popupContentCC.wifiList = data.wifi;
+                                popupContentCC.ethStatus = data.eth_status;
+                                popupContentCC.wifiStatus = data.wifi_status;
+                                popupContentCC.activeNetworkName = data.active_name;
+                                popupContentCC.activeNetworkSignal = data.active_signal;
+                                popupContentCC.activeNetworkType = data.active_type;
+                                // Removed auto-switch tab to prevent overriding user selection
+                            } catch (e) {
+                                console.log("Error parsing network JSON: " + e);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            Timer {
+                interval: 5000
+                running: root.controlcenterVisible
+                repeat: true
+                onTriggered: networkPollProc.running = true
+            }
+
+            Process {
+                id: networkStatsProc
+                command: ["sh", "-c", "if [ -f $HOME/.config/hypr/scripts/network-stats.sh ]; then $HOME/.config/hypr/scripts/network-stats.sh; fi"]
+                running: false
+                stdout: StdioCollector {
+                    onStreamFinished: {
+                        if (text !== "") {
+                            try {
+                                let data = JSON.parse(text.trim());
+                                popupContentCC.netPing = data.ping;
+                                popupContentCC.netLoss = data.loss;
+                                popupContentCC.netRxSpeed = data.rx_speed;
+                                popupContentCC.netTxSpeed = data.tx_speed;
+                                popupContentCC.netRxTotal = data.rx_total;
+                                popupContentCC.netTxTotal = data.tx_total;
+                                popupContentCC.netIp = data.ip;
+                                popupContentCC.netGateway = data.gateway;
+                            } catch (e) {
+                                console.log("Error parsing network stats JSON: " + e);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            Timer {
+                interval: 2000
+                running: root.controlcenterVisible && ccData.profileExpanded
+                repeat: true
+                onTriggered: networkStatsProc.running = true
+            }
+            Connections {
+                target: ccData
+                function onProfileExpandedChanged() {
+                    if (ccData.profileExpanded && root.controlcenterVisible) {
+                        networkStatsProc.running = true;
                     }
                 }
             }
@@ -175,13 +266,18 @@
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
             Behavior on y { NumberAnimation { duration: 250; easing.type: Easing.OutBack } }
 
-            ColumnLayout {
+            ScrollView {
                 anchors.fill: parent
                 anchors.topMargin: 32
                 anchors.leftMargin: 20
                 anchors.rightMargin: 20
                 anchors.bottomMargin: 20
-                spacing: 16
+                contentWidth: availableWidth
+                clip: true
+                
+                ColumnLayout {
+                    width: parent.width
+                    spacing: 16
 
                 // Top Header: User Profile (Expandable)
                 ColumnLayout {
@@ -305,12 +401,12 @@
                         }
                     }
 
-                    // Expanded Content (Host & Distro)
+                    // Expanded Content (Host & Distro & Network Stats)
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: ccData.profileExpanded ? expandedContentCol.implicitHeight + 16 : 0
                         opacity: ccData.profileExpanded ? 1 : 0
-                        visible: opacity > 0 // This avoids layout calculations when closed
+                        visible: opacity > 0
                         clip: true
                         color: "#1A${c.base03}"
                         radius: 8
@@ -324,17 +420,50 @@
                             anchors.right: parent.right
                             anchors.top: parent.top
                             anchors.margins: 8
-                            spacing: 4
+                            spacing: 12
                             
+                            // System info
                             RowLayout {
                                 Layout.fillWidth: true
-                                Text { text: ""; color: "#${c.base0D}"; font.family: "${fontName}"; font.pixelSize: 14; Layout.preferredWidth: 24 }
-                                Text { text: ccData.host !== "" ? ccData.host : "Hostname"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true }
+                                spacing: 16
+                                RowLayout {
+                                    Text { text: ""; color: "#${c.base0D}"; font.family: "${fontName}"; font.pixelSize: 14 }
+                                    Text { text: ccData.host !== "" ? ccData.host : "Hostname"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; elide: Text.ElideRight; Layout.maximumWidth: 100 }
+                                }
+                                RowLayout {
+                                    Text { text: ""; color: "#${c.base0D}"; font.family: "${fontName}"; font.pixelSize: 14 }
+                                    Text { text: ccData.os !== "" ? ccData.os : "Linux"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13; elide: Text.ElideRight; Layout.fillWidth: true }
+                                }
                             }
-                            RowLayout {
+                            
+                            Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: "#33${c.base03}" }
+                            
+                            // Omarchy-style Network Stats
+                            GridLayout {
                                 Layout.fillWidth: true
-                                Text { text: ""; color: "#${c.base0D}"; font.family: "${fontName}"; font.pixelSize: 14; Layout.preferredWidth: 24 }
-                                Text { text: ccData.os !== "" ? ccData.os : "Linux"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13; Layout.fillWidth: true }
+                                columns: 4
+                                rowSpacing: 8
+                                columnSpacing: 12
+                                
+                                Text { text: "Ping"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12 }
+                                Text { text: popupContentCC.netPing; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                Text { text: "Packet Loss"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12 }
+                                Text { text: popupContentCC.netLoss; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                
+                                Text { text: "Receiving"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12 }
+                                Text { text: popupContentCC.netRxSpeed; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                Text { text: "Sending"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12 }
+                                Text { text: popupContentCC.netTxSpeed; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                
+                                Text { text: "Downloaded"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12 }
+                                Text { text: popupContentCC.netRxTotal; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                Text { text: "Uploaded"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12 }
+                                Text { text: popupContentCC.netTxTotal; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                
+                                Text { text: "IP Address"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12 }
+                                Text { text: popupContentCC.netIp; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                Text { text: "Gateway"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12 }
+                                Text { text: popupContentCC.netGateway; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
                             }
                         }
                     }
@@ -1115,53 +1244,146 @@
                 }
 
 
-                // Grid of Toggles
-                GridLayout {
+                // Quick Toggles
+                
+                // Quick Toggles
+                RowLayout {
                     Layout.fillWidth: true
-                    columns: 2
-                    rowSpacing: 16
-                    columnSpacing: 16
+                    spacing: 16
                     
-                    Repeater {
-                        model: [
-                            { icon: "", title: "Hobbiton", subtitle: "59%", active: true },
-                            { icon: "", title: "Disabled", subtitle: "Off", active: false }
-                        ]
-                        delegate: Rectangle {
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 64
-                            radius: 14
-                            color: modelData.active ? "#33${c.base0D}" : "#${c.base02}"
-                            border.color: modelData.active ? "#33${c.base0D}" : "transparent"
-                            border.width: 1
+                    // Network Quick Toggle
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 64
+                        radius: 16
+                        color: "#1a${c.base05}"
+                        border.color: popupContentCC.networkExpanded ? "#${c.base0D}" : "transparent"
+                        border.width: popupContentCC.networkExpanded ? 1 : 0
+                        
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            spacing: 12
                             
-                            RowLayout {
-                                anchors.fill: parent
-                                anchors.margins: 16
-                                spacing: 14
-                                Text {
-                                    text: modelData.icon
-                                    color: modelData.active ? "#${c.base0D}" : "#${c.base05}"
-                                    font.family: "${fontName}"
-                                    font.pixelSize: 22
-                                }
-                                ColumnLayout {
-                                    Layout.fillWidth: true
-                                    spacing: 4
-                                    Text {
-                                        text: modelData.title
-                                        color: modelData.active ? "#${c.base05}" : "#${c.base05}"
-                                        font.family: "${fontName}"
-                                        font.pixelSize: 14
-                                        font.bold: true
-                                        elide: Text.ElideRight
-                                        Layout.fillWidth: true
+                            Rectangle {
+                                width: 40; height: 40; radius: 20
+                                color: "#${c.base0D}"
+                                Text { anchors.centerIn: parent; text: popupContentCC.activeNetworkType === "ethernet" ? "󰈀" : (popupContentCC.activeNetworkType === "none" ? "󰤭" : ""); color: "#${c.base00}"; font.family: "${fontName}"; font.pixelSize: 18 }
+                            }
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 4
+                                Text { text: popupContentCC.activeNetworkName; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; font.bold: true }
+                                Text { text: popupContentCC.activeNetworkSignal; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12 }
+                            }
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: popupContentCC.networkExpanded = !popupContentCC.networkExpanded
+                        }
+                    }
+
+                    // Bluetooth Quick Toggle
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 64
+                        radius: 16
+                        color: "#1a${c.base05}"
+                        
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            spacing: 12
+                            
+                            Rectangle {
+                                width: 40; height: 40; radius: 20
+                                color: "#33${c.base05}"
+                                Text { anchors.centerIn: parent; text: "󰂲"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 18 }
+                            }
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 4
+                                Text { text: "Wi-Fi"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; font.bold: true }
+                                Text { text: popupContentCC.wifiStatus; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12 }
+                            }
+                        }
+                    }
+                }
+                
+                // Expanded Network Block
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: networkCol.implicitHeight + 24
+                    radius: 16
+                    color: "#1a${c.base05}"
+                    visible: popupContentCC.networkExpanded
+                    
+                    ColumnLayout {
+                        id: networkCol
+                        anchors.fill: parent
+                        anchors.margins: 12
+                        spacing: 16
+
+                        // Header
+                        RowLayout {
+                            Layout.fillWidth: true
+                            Text { text: "Network"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; font.bold: true; Layout.fillWidth: true }
+                            
+                            // Segmented Control (Ethernet / WiFi)
+                            Rectangle {
+                                width: 160; height: 32; radius: 16
+                                color: "#1a${c.base05}"
+                                RowLayout {
+                                    anchors.fill: parent
+                                    spacing: 0
+                                    Rectangle {
+                                        Layout.fillWidth: true; Layout.fillHeight: true; radius: 16
+                                        color: popupContentCC.networkTab === "ethernet" ? "#${c.base0D}" : "transparent"
+                                        Text { anchors.centerIn: parent; text: popupContentCC.networkTab === "ethernet" ? "✓ Ethernet" : "Ethernet"; color: popupContentCC.networkTab === "ethernet" ? "#${c.base00}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12; font.bold: popupContentCC.networkTab === "ethernet" }
+                                        MouseArea { anchors.fill: parent; onClicked: popupContentCC.networkTab = "ethernet" }
                                     }
-                                    Text {
-                                        text: modelData.subtitle
-                                        color: "#${c.base04}"
-                                        font.family: "${fontName}"
-                                        font.pixelSize: 12
+                                    Rectangle {
+                                        Layout.fillWidth: true; Layout.fillHeight: true; radius: 16
+                                        color: popupContentCC.networkTab === "wifi" ? "#${c.base0D}" : "transparent"
+                                        Text { anchors.centerIn: parent; text: popupContentCC.networkTab === "wifi" ? "✓ WiFi" : "WiFi"; color: popupContentCC.networkTab === "wifi" ? "#${c.base00}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12; font.bold: popupContentCC.networkTab === "wifi" }
+                                        MouseArea { anchors.fill: parent; onClicked: popupContentCC.networkTab = "wifi" }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Network List
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 8
+                            
+                            Repeater {
+                                model: popupContentCC.networkTab === "ethernet" ? popupContentCC.ethernetList : popupContentCC.wifiList
+                                delegate: Rectangle {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: 40
+                                    radius: 8
+                                    color: modelData.active ? "#${c.base0D}" : "transparent"
+                                    
+                                    RowLayout {
+                                        anchors.fill: parent
+                                        anchors.margins: 8
+                                        spacing: 12
+                                        Text { text: popupContentCC.networkTab === "ethernet" ? "󰈀" : "󰤨"; color: modelData.active ? "#${c.base00}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 16 }
+                                        Text { text: modelData.name; color: modelData.active ? "#${c.base00}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; Layout.fillWidth: true; elide: Text.ElideRight }
+                                    }
+                                    
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        cursorShape: Qt.PointingHandCursor
+                                        onClicked: {
+                                            if (!modelData.active) {
+                                                // Abre la GUI de NetworkManager para gestionar conexiones complejas (contraseñas, etc)
+                                                cmdRunner.exec(["uwsm", "app", "--", "nm-connection-editor"]);
+                                                root.controlcenterVisible = false;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -1190,6 +1412,7 @@
             }
         }
     }
+}
   '';
 
   widget = ''
