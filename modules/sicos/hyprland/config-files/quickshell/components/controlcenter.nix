@@ -920,6 +920,12 @@
                         PwObjectTracker {
                             objects: Pipewire.defaultAudioSource ? [Pipewire.defaultAudioSource] : []
                         }
+
+                        PwNodePeakMonitor {
+                            id: inputPeakMonitor
+                            node: Pipewire.defaultAudioSource
+                            enabled: !!Pipewire.defaultAudioSource
+                        }
                         
                         RowLayout {
                             Layout.fillWidth: true
@@ -951,6 +957,13 @@
                                     height: 12
                                     radius: 6
                                     color: "#33${c.base05}"
+                                    
+                                    Rectangle {
+                                        width: parent.width * Math.max(0, Math.min(1.0, inputPeakMonitor.peak))
+                                        height: parent.height
+                                        radius: 6
+                                        color: (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio.muted) ? "transparent" : "#55${c.base0D}"
+                                    }
                                     
                                     Rectangle {
                                         width: parent.width * parent.parent.percent
