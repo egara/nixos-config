@@ -784,12 +784,16 @@
                                                 RowLayout {
                                                     anchors.fill: parent
                                                     spacing: 12
-                                                    Image {
-                                        width: 14
-                                        height: 14
-                                        sourceSize.width: 14
-                                        sourceSize.height: 14
-                                        fillMode: Image.PreserveAspectFit
+                                                    Item {
+                                                        Layout.preferredWidth: 24
+                                                        Layout.preferredHeight: 24
+                                                        Image {
+                                                            anchors.centerIn: parent
+                                                            width: 16
+                                                            height: 16
+                                                            sourceSize.width: 16
+                                                            sourceSize.height: 16
+                                                            fillMode: Image.PreserveAspectFit
                                         source: {
                                             let p = modelData.properties;
                                             if (!p) return "image://icon/audio-x-generic";
@@ -813,10 +817,11 @@
                                             return "image://icon/audio-x-generic";
                                         }
                                         opacity: modelData.audio.muted ? 0.5 : 1.0
-                                        MouseArea {
-                                            anchors.fill: parent
-                                            cursorShape: Qt.PointingHandCursor
-                                            onClicked: modelData.audio.muted = !modelData.audio.muted
+                                            MouseArea {
+                                                anchors.fill: parent
+                                                cursorShape: Qt.PointingHandCursor
+                                                onClicked: modelData.audio.muted = !modelData.audio.muted
+                                            }
                                         }
                                     }
                                     
@@ -1029,8 +1034,8 @@
                                                     anchors.fill: parent
                                                     spacing: 12
                                                     Rectangle {
-                                        width: 24
-                                        height: 24
+                                        Layout.preferredWidth: 24
+                                        Layout.preferredHeight: 24
                                         radius: 12
                                         color: "transparent"
                                         Text {
@@ -1038,7 +1043,7 @@
                                             text: (modelData.audio && modelData.audio.muted) ? "" : ""
                                             color: (modelData.audio && modelData.audio.muted) ? "#${c.base08}" : "#${c.base05}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 14
+                                            font.pixelSize: 16
                                         }
                                         MouseArea {
                                             anchors.fill: parent
@@ -1260,11 +1265,16 @@
                                             anchors.fill: parent
                                             spacing: 12
                                             
-                                            Text {
-                                                text: modelData.class === "backlight" ? "" : ""
-                                                color: "#${c.base05}"
-                                                font.family: "${fontName}"
-                                                font.pixelSize: 14
+                                            Item {
+                                                Layout.preferredWidth: 24
+                                                Layout.preferredHeight: 24
+                                                Text {
+                                                    anchors.centerIn: parent
+                                                    text: modelData.class === "backlight" ? "" : ""
+                                                    color: "#${c.base05}"
+                                                    font.family: "${fontName}"
+                                                    font.pixelSize: 16
+                                                }
                                             }
                                             
                                             Text {
