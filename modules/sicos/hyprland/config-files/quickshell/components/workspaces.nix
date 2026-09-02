@@ -114,7 +114,14 @@
                 MouseArea {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
-                    onClicked: Hyprland.dispatch("hl.dsp.focus({ workspace = " + modelData.id + " })")
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+                    onClicked: mouse => {
+                        if (mouse.button === Qt.RightButton) {
+                            overviewActive = !overviewActive;
+                        } else {
+                            Hyprland.dispatch("hl.dsp.focus({ workspace = " + modelData.id + " })")
+                        }
+                    }
                 }
             }
         }

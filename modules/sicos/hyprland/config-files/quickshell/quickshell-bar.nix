@@ -14,6 +14,7 @@ let
   controlcenter = import ./components/controlcenter.nix { inherit config lib pkgs c fontName; };
   tray = import ./components/tray.nix { inherit config lib pkgs c fontName; };
   progressOsd = import ./components/progressOsd.nix { inherit config lib pkgs c fontName; };
+  overview = import ./components/overview.nix { inherit config lib pkgs c fontName; };
 in
 ''
 //@ pragma UseQApplication
@@ -33,6 +34,7 @@ import Qt5Compat.GraphicalEffects
 import "Model.js" as Model
 
 Scope {
+    property bool overviewActive: false
 
 PanelWindow {
     id: root
@@ -611,5 +613,7 @@ PanelWindow {
         }
     
     ${progressOsd.widget}
+    
+    ${overview}
 }
 ''
