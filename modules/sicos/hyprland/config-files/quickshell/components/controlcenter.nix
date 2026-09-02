@@ -153,24 +153,26 @@
                 property string os: ""
                 property string home: ""
                 property bool caffeineActive: false
+                property bool nightlightActive: false
             }
 
             Process {
                 id: ccInfoProc
-                property string script: "uptime_val=$(awk '{d=int($1/86400); h=int(($1%86400)/3600); m=int(($1%3600)/60); if(d>0) printf \"%dd %dh %dm\\n\", d, h, m; else if(h>0) printf \"%dh %dm\\n\", h, m; else printf \"%dm\\n\", m}' /proc/uptime); user_val=$(whoami); host_val=$(hostname); os_val=$(awk -F'=' '/^PRETTY_NAME/ {gsub(/\"/, \"\", $2); print $2}' /etc/os-release); if systemctl --user is-active --quiet hypridle.service; then caf=false; else caf=true; fi; echo \"{\\\"uptime\\\": \\\"$uptime_val\\\", \\\"user\\\": \\\"$user_val\\\", \\\"host\\\": \\\"$host_val\\\", \\\"os\\\": \\\"$os_val\\\", \\\"home\\\": \\\"$HOME\\\", \\\"caffeine\\\": $caf}\""
+                property string script: "uptime_val=$(awk '{d=int($1/86400); h=int(($1%86400)/3600); m=int(($1%3600)/60); if(d>0) printf \"%dd %dh %dm\\n\", d, h, m; else if(h>0) printf \"%dh %dm\\n\", h, m; else printf \"%dm\\n\", m}' /proc/uptime); user_val=$(whoami); host_val=$(hostname); os_val=$(awk -F'=' '/^PRETTY_NAME/ {gsub(/\"/, \"\", $2); print $2}' /etc/os-release); if systemctl --user is-active --quiet hypridle.service; then caf=false; else caf=true; fi; if pgrep -x hyprsunset > /dev/null; then nl=true; else nl=false; fi; echo \"{\\\"uptime\\\": \\\"$uptime_val\\\", \\\"user\\\": \\\"$user_val\\\", \\\"host\\\": \\\"$host_val\\\", \\\"os\\\": \\\"$os_val\\\", \\\"home\\\": \\\"$HOME\\\", \\\"caffeine\\\": $caf, \\\"nightlight\\\": $nl}\""
                 command: ["sh", "-c", script]
                 running: false
                 stdout: StdioCollector {
                     onStreamFinished: {
                         if (text !== "") {
                             try {
-                                let data = JSON.parse(text.trim());
+                                let data = JSON.parse(text);
                                 ccData.user = data.user;
                                 ccData.uptime = data.uptime;
                                 ccData.host = data.host;
                                 ccData.os = data.os;
                                 ccData.home = data.home;
                                 ccData.caffeineActive = data.caffeine;
+                                ccData.nightlightActive = data.nightlight;
                             } catch (e) {
                                 console.log("Error parsing ccInfo JSON: " + e);
                             }
@@ -459,27 +461,7 @@
                         }
 
                         // Action Buttons (Caffeine)
-                        Rectangle {
-                            width: 36; height: 36; radius: 18
-                            color: ccData.caffeineActive ? "#33${c.base0D}" : (cafBtnArea.containsMouse ? "#${c.base03}" : "transparent")
-                            Text {
-                                anchors.centerIn: parent
-                                text: ""
-                                color: ccData.caffeineActive ? "#${c.base0D}" : "#${c.base05}"
-                                font.family: "${fontName}"
-                                font.pixelSize: 16
-                            }
-                            MouseArea {
-                                id: cafBtnArea
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                onClicked: {
-                                    // Actualizar la UI inmediatamente (optimista)
-                                    ccData.caffeineActive = !ccData.caffeineActive;
-                                    cmdRunner.exec(["sh", "-c", "$HOME/.config/sicos/scripts/toggle-hypridle.sh"]);
-                                }
-                            }
-                        }
+
 
                         // Action Buttons (Power)
                         Rectangle {
@@ -1615,7 +1597,7 @@
                     }
                 }
                 
-                // Bottom actions (Night Mode)
+                // Bottom actions (Caffeine & Night Mode)
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: 16
@@ -1624,12 +1606,43 @@
                         Layout.fillWidth: true
                         Layout.preferredHeight: 56
                         radius: 12
-                        color: "#33${c.base0D}"
+                        color: ccData.caffeineActive ? "#33${c.base0D}" : (cafBottomBtnArea.containsMouse ? "#${c.base03}" : "#${c.base02}")
                         RowLayout {
                             anchors.centerIn: parent
                             spacing: 10
-                            Text { text: ""; color: "#${c.base0D}"; font.family: "${fontName}"; font.pixelSize: 16 }
-                            Text { text: "Night Mode"; color: "#${c.base05}"; font.family: "${fontName}"; font.bold: true; font.pixelSize: 14 }
+                            Text { text: ""; color: ccData.caffeineActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 16 }
+                            Text { text: "Caffeine"; color: ccData.caffeineActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.bold: true; font.pixelSize: 14 }
+                        }
+                        MouseArea {
+                            id: cafBottomBtnArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: {
+                                ccData.caffeineActive = !ccData.caffeineActive;
+                                cmdRunner.exec(["sh", "-c", "$HOME/.config/sicos/scripts/toggle-hypridle.sh"]);
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 56
+                        radius: 12
+                        color: ccData.nightlightActive ? "#33${c.base0D}" : (nightModeArea.containsMouse ? "#${c.base03}" : "#${c.base02}")
+                        RowLayout {
+                            anchors.centerIn: parent
+                            spacing: 10
+                            Text { text: ""; color: ccData.nightlightActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 16 }
+                            Text { text: "Night Mode"; color: ccData.nightlightActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.bold: true; font.pixelSize: 14 }
+                        }
+                        MouseArea {
+                            id: nightModeArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: {
+                                ccData.nightlightActive = !ccData.nightlightActive;
+                                cmdRunner.exec(["sh", "-c", "$HOME/.config/sicos/scripts/toggle-nightlight.sh"]);
+                            }
                         }
                     }
                 }

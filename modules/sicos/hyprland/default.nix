@@ -276,6 +276,7 @@ in
         hyprland
         hyprlock
         hypridle
+        hyprsunset
         nautilus # File manager
         hyprland-qtutils
         wlogout
