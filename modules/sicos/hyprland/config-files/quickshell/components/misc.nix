@@ -292,43 +292,46 @@
                     Text {
                         Layout.fillWidth: true
                         horizontalAlignment: Text.AlignHCenter
-                        text: miscPopup.activePlayer && miscPopup.activePlayer.metadata && miscPopup.activePlayer.metadata["xesam:title"] ? miscPopup.activePlayer.metadata["xesam:title"].toString() : "Unknown Track"
-                        color: "#${c.base05}"
+                        text: miscPopup.activePlayer && miscPopup.activePlayer.metadata && miscPopup.activePlayer.metadata["xesam:artist"] ? miscPopup.activePlayer.metadata["xesam:artist"].toString() : "Unknown Artist"
+                        color: "#${c.base04}"
                         font.family: "${fontName}"
-                        font.pixelSize: 16
-                        font.bold: true
+                        font.pixelSize: 14
                         elide: Text.ElideRight
-                        wrapMode: Text.Wrap
-                        maximumLineCount: 2
                     }
-                    // Fake EQ
+                    
+                    // Real-ish EQ based on Pipewire peak
+                    PwNodePeakMonitor {
+                        id: outputPeakMonitor
+                        node: Pipewire.defaultAudioSink
+                        enabled: root.miscVisible && miscPopup.activePlayer && miscPopup.activePlayer.playbackState === 1
+                    }
+                    
                     Row {
                         Layout.alignment: Qt.AlignHCenter
                         Layout.preferredHeight: 16
                         spacing: 3
                         Repeater {
-                            model: 4
+                            model: 8
                             delegate: Rectangle {
                                 width: 3
-                                height: 3
                                 radius: 1
                                 color: "#${c.base0D}"
                                 anchors.verticalCenter: parent.verticalCenter
-                                Behavior on height { NumberAnimation { duration: 350; easing.type: Easing.InOutQuad } }
-                                Timer {
-                                    interval: 350
-                                    running: root.miscVisible && miscPopup.activePlayer && miscPopup.activePlayer.playbackState === 1
-                                    repeat: true
-                                    onTriggered: parent.height = (Math.random() * 12 + 4)
+                                
+                                height: {
+                                    if (!miscPopup.activePlayer || miscPopup.activePlayer.playbackState !== 1) return 3;
+                                    
+                                    let p = outputPeakMonitor.peak || 0;
+                                    let factor = 1.0;
+                                    let factors = [0.7, 1.2, 1.1, 0.9, 1.3, 0.8, 1.1, 0.8];
+                                    if (index >= 0 && index < factors.length) factor = factors[index];
+                                    
+                                    let targetHeight = 3 + (p * 14 * factor);
+                                    return Math.min(16, targetHeight);
                                 }
-                                Connections {
-                                    target: miscPopup.activePlayer
-                                    ignoreUnknownSignals: true
-                                    function onPlaybackStateChanged() {
-                                        if (!miscPopup.activePlayer || miscPopup.activePlayer.playbackState !== 1) {
-                                            parent.height = 3;
-                                        }
-                                    }
+                                
+                                Behavior on height { 
+                                    NumberAnimation { duration: 75; easing.type: Easing.OutQuad } 
                                 }
                             }
                         }
@@ -337,11 +340,14 @@
                     Text {
                         Layout.fillWidth: true
                         horizontalAlignment: Text.AlignHCenter
-                        text: miscPopup.activePlayer && miscPopup.activePlayer.metadata && miscPopup.activePlayer.metadata["xesam:artist"] ? miscPopup.activePlayer.metadata["xesam:artist"].toString() : "Unknown Artist"
-                        color: "#${c.base04}"
+                        text: miscPopup.activePlayer && miscPopup.activePlayer.metadata && miscPopup.activePlayer.metadata["xesam:title"] ? miscPopup.activePlayer.metadata["xesam:title"].toString() : "Unknown Track"
+                        color: "#${c.base05}"
                         font.family: "${fontName}"
-                        font.pixelSize: 14
+                        font.pixelSize: 16
+                        font.bold: true
                         elide: Text.ElideRight
+                        wrapMode: Text.Wrap
+                        maximumLineCount: 2
                     }
                 }
 
