@@ -24,6 +24,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
+import Quickshell.Widgets
 import Quickshell.Services.UPower
 import Quickshell.Services.Mpris
 import Quickshell.Services.Pipewire

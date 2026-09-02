@@ -105,8 +105,8 @@
                                 border.color: (Hyprland.focusedWorkspace != null && Hyprland.focusedWorkspace.id === wsId) ? "#${c.base0D}" : "#44${c.base05}"
                                 border.width: (Hyprland.focusedWorkspace != null && Hyprland.focusedWorkspace.id === wsId) ? 2 : 1
                                 
-                                // Ocultar clip al arrastrar para que la ventana viaje libremente, reactivarlo al soltar
-                                clip: !overviewWindow.draggingActive
+                                // Mantener el clip SIEMPRE activo para que las ventanas de Scroller no se desborden
+                                clip: true
                                 
                                 // Workspace Label Background
                                 Text {
@@ -157,9 +157,12 @@
                                 }
                                 
                                 // Windows in this workspace
-                                Item {
+                                ClippingRectangle {
+                                    id: wsWinContainer
                                     anchors.fill: parent
                                     anchors.margins: 12
+                                    radius: 6 // Or slightly smaller than wsRect to fit nicely
+                                    color: "transparent"
                                     
                                     Repeater {
                                         model: {
@@ -240,6 +243,13 @@
                                                 cursorShape = Qt.ClosedHandCursor
                                                 wsRect.z = 100
                                                 winItem.z = 100
+                                                
+                                                // Mapear coordenadas y reparentar al contenedor global (modalCard)
+                                                // para escapar del clip del workspace sin desactivarlo globalmente.
+                                                var globalPos = winItem.mapToItem(modalCard, 0, 0);
+                                                winItem.parent = modalCard;
+                                                winItem.x = globalPos.x;
+                                                winItem.y = globalPos.y;
                                             }
                                             
                                             onReleased: {
@@ -247,7 +257,11 @@
                                                 cursorShape = Qt.OpenHandCursor
                                                 wsRect.z = 0
                                                 winItem.z = 0
-                                                winItem.Drag.drop()
+                                                
+                                                // Devolver la ventana a su contenedor original
+                                                winItem.parent = wsWinContainer;
+                                                winItem.x = winItem.originalX;
+                                                winItem.y = winItem.originalY;
                                                 
                                                 var targetWs = overviewWindow.draggingTargetWorkspace;
                                                 if (targetWs !== -1 && targetWs !== wsRect.wsId) {
@@ -260,9 +274,6 @@
                                                     });
                                                 }
                                                 
-                                                // Always snap back
-                                                winItem.x = Qt.binding(function() { return winItem.originalX })
-                                                winItem.y = Qt.binding(function() { return winItem.originalY })
                                                 overviewWindow.draggingTargetWorkspace = -1;
                                             }
                                             
