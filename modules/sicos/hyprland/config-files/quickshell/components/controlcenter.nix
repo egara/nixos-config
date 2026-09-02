@@ -1681,12 +1681,38 @@
         radius: 14
         color: ccMouseArea.containsMouse ? "#${c.base03}" : (root.controlcenterVisible ? "#${c.base02}" : "#${c.base02}")
         
+        Rectangle {
+            id: ccBtnAvatarMask
+            anchors.centerIn: parent
+            width: 24; height: 24; radius: 12
+            color: "black"
+            visible: false
+        }
+        
+        Image {
+            id: ccBtnAvatarImage
+            anchors.centerIn: parent
+            width: 24; height: 24
+            source: "file:///home/egarcia/.config/hypr/user.jpg"
+            fillMode: Image.PreserveAspectCrop
+            visible: false
+        }
+        
+        OpacityMask {
+            anchors.centerIn: parent
+            width: 24; height: 24
+            source: ccBtnAvatarImage
+            maskSource: ccBtnAvatarMask
+            visible: ccBtnAvatarImage.status === Image.Ready
+        }
+        
         Text {
             anchors.centerIn: parent
-            text: "" // Sliders icon
+            text: "" // Fallback icon
             color: root.controlcenterVisible ? "#${c.base0D}" : "#${c.base05}"
             font.family: "${fontName}"
             font.pixelSize: 14
+            visible: ccBtnAvatarImage.status !== Image.Ready
         }
         
         MouseArea {
