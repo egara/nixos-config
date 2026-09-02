@@ -416,6 +416,28 @@
                             Layout.fillWidth: true
                         }
 
+                        // Action Buttons (Screenshot)
+                        Rectangle {
+                            width: 36; height: 36; radius: 18
+                            color: screenshotBtnArea.containsMouse ? "#${c.base03}" : "transparent"
+                            Text {
+                                anchors.centerIn: parent
+                                text: ""
+                                color: "#${c.base05}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 16
+                            }
+                            MouseArea {
+                                id: screenshotBtnArea
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                onClicked: {
+                                    root.controlcenterVisible = false;
+                                    cmdRunner.exec(["sh", "-c", "sleep 0.5 && hyprshot -m region --raw | satty --filename - --early-exit --copy-command wl-copy --initial-tool arrow --output-filename $HOME/Pictures/screenshot-$(date '+%Y%m%d-%H:%M:%S').png"]);
+                                }
+                            }
+                        }
+
                         // Action Buttons (Keybindings)
                         Rectangle {
                             width: 36; height: 36; radius: 18
