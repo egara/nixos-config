@@ -12,6 +12,16 @@
             visible: overviewActive || (modalCard.opacity > 0)
             
             property int draggingTargetWorkspace: -1
+            property bool draggingActive: false
+            
+            // Refrescar IPC cuando se abre el overview (vital para detectar cambios Dwindle/Scrolling)
+            property bool isOverviewOpen: overviewActive
+            onIsOverviewOpenChanged: {
+                if (isOverviewOpen) {
+                    Hyprland.refreshToplevels();
+                    Hyprland.refreshWorkspaces();
+                }
+            }
             
             anchors {
                 top: true
@@ -95,6 +105,9 @@
                                 border.color: (Hyprland.focusedWorkspace != null && Hyprland.focusedWorkspace.id === wsId) ? "#${c.base0D}" : "#44${c.base05}"
                                 border.width: (Hyprland.focusedWorkspace != null && Hyprland.focusedWorkspace.id === wsId) ? 2 : 1
                                 
+                                // Ocultar clip al arrastrar para que la ventana viaje libremente, reactivarlo al soltar
+                                clip: !overviewWindow.draggingActive
+                                
                                 // Workspace Label Background
                                 Text {
                                     text: hyprWs ? hyprWs.name : wsId.toString()
@@ -105,6 +118,29 @@
                                     anchors.centerIn: parent
                                     opacity: 0.25
                                     z: 10 // Poner encima de las ventanas para que se vea
+                                }
+                                
+                                // Monitor label
+                                Rectangle {
+                                    anchors.right: parent.right
+                                    anchors.top: parent.top
+                                    anchors.margins: 8
+                                    width: monText.contentWidth + 12
+                                    height: monText.contentHeight + 6
+                                    radius: 6
+                                    color: "#66000000"
+                                    visible: hyprWs && hyprWs.monitor
+                                    z: 11
+                                    
+                                    Text {
+                                        id: monText
+                                        anchors.centerIn: parent
+                                        text: (hyprWs && hyprWs.monitor) ? hyprWs.monitor.name : ""
+                                        color: "#${c.base05}"
+                                        font.family: fontName
+                                        font.pixelSize: 10
+                                        font.bold: true
+                                    }
                                 }
                                 
                                 // Drag and Drop support
@@ -145,15 +181,23 @@
                                             
                                             property var geom: (modelData && modelData.lastIpcObject && modelData.lastIpcObject.size) ? modelData.lastIpcObject.size : [800, 600]
                                             property var pos: (modelData && modelData.lastIpcObject && modelData.lastIpcObject.at) ? modelData.lastIpcObject.at : [0, 0]
-                                            property real scaleFactor: (280 - 24) / 1920 
+                                            
+                                            property var mon: modelData.monitor || overviewWindow.screen
+                                            property real screenW: mon ? mon.width : 1920
+                                            property real screenH: mon ? mon.height : 1080
+                                            property real scaleFactorX: (280 - 24) / screenW
+                                            property real scaleFactorY: (175 - 24) / screenH
+                                            
+                                            property real monitorX: mon ? mon.x : 0
+                                            property real monitorY: mon ? mon.y : 0
                                         
-                                        property real originalX: (pos[0] % 1920) * scaleFactor
-                                        property real originalY: (pos[1] % 1080) * scaleFactor
+                                        property real originalX: (pos[0] - monitorX) * scaleFactorX
+                                        property real originalY: (pos[1] - monitorY) * scaleFactorY
                                         
                                         x: originalX
                                         y: originalY
-                                        width: geom[0] * scaleFactor
-                                        height: geom[1] * scaleFactor
+                                        width: geom[0] * scaleFactorX
+                                        height: geom[1] * scaleFactorY
                                         
                                         Drag.active: winMouse.drag.active
                                         Drag.source: winItem
@@ -187,12 +231,14 @@
                                             drag.axis: Drag.XAndYAxis
                                             
                                             onPressed: {
+                                                overviewWindow.draggingActive = true;
                                                 cursorShape = Qt.ClosedHandCursor
                                                 wsRect.z = 100
                                                 winItem.z = 100
                                             }
                                             
                                             onReleased: {
+                                                overviewWindow.draggingActive = false;
                                                 cursorShape = Qt.OpenHandCursor
                                                 wsRect.z = 0
                                                 winItem.z = 0
@@ -202,6 +248,11 @@
                                                 if (targetWs !== -1 && targetWs !== wsRect.wsId) {
                                                     var addrFormatted = "0x" + modelData.address.replace("0x", "");
                                                     Hyprland.dispatch("hl.dsp.window.move({ workspace = " + targetWs + ", window = 'address:" + addrFormatted + "', follow = false })");
+                                                    
+                                                    Qt.callLater(() => {
+                                                        Hyprland.refreshToplevels();
+                                                        Hyprland.refreshWorkspaces();
+                                                    });
                                                 }
                                                 
                                                 // Always snap back
