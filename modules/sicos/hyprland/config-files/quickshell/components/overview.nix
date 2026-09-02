@@ -183,13 +183,18 @@
                                             property var pos: (modelData && modelData.lastIpcObject && modelData.lastIpcObject.at) ? modelData.lastIpcObject.at : [0, 0]
                                             
                                             property var mon: modelData.monitor || overviewWindow.screen
-                                            property real screenW: mon ? mon.width : 1920
-                                            property real screenH: mon ? mon.height : 1080
+                                            property var monIpc: mon && mon.lastIpcObject ? mon.lastIpcObject : null
+                                            property real monScale: (monIpc && monIpc.scale) ? monIpc.scale : 1.0
+                                            
+                                            // The IPC monitor width/height are physical, so divide by scale to get logical.
+                                            property real screenW: (monIpc && monIpc.width) ? (monIpc.width / monScale) : (mon ? mon.width : 1920)
+                                            property real screenH: (monIpc && monIpc.height) ? (monIpc.height / monScale) : (mon ? mon.height : 1080)
                                             property real scaleFactorX: (280 - 24) / screenW
                                             property real scaleFactorY: (175 - 24) / screenH
                                             
-                                            property real monitorX: mon ? mon.x : 0
-                                            property real monitorY: mon ? mon.y : 0
+                                            // IPC monitor x/y are logical.
+                                            property real monitorX: monIpc ? monIpc.x : (mon ? mon.x : 0)
+                                            property real monitorY: monIpc ? monIpc.y : (mon ? mon.y : 0)
                                         
                                         property real originalX: (pos[0] - monitorX) * scaleFactorX
                                         property real originalY: (pos[1] - monitorY) * scaleFactorY
