@@ -920,12 +920,6 @@
                         PwObjectTracker {
                             objects: Pipewire.defaultAudioSource ? [Pipewire.defaultAudioSource] : []
                         }
-
-                        PwNodePeakMonitor {
-                            id: inputPeakMonitor
-                            node: Pipewire.defaultAudioSource
-                            enabled: !!Pipewire.defaultAudioSource
-                        }
                         
                         RowLayout {
                             Layout.fillWidth: true
@@ -957,13 +951,6 @@
                                     height: 12
                                     radius: 6
                                     color: "#33${c.base05}"
-                                    
-                                    Rectangle {
-                                        width: parent.width * Math.max(0, Math.min(1.0, inputPeakMonitor.peak))
-                                        height: parent.height
-                                        radius: 6
-                                        color: (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio.muted) ? "transparent" : "#55${c.base0D}"
-                                    }
                                     
                                     Rectangle {
                                         width: parent.width * parent.parent.percent
@@ -1037,6 +1024,13 @@
                                 model: popupContentCC.currentMics
                                 delegate: RowLayout {
                                     Layout.fillWidth: true
+                                    
+                                    PwNodePeakMonitor {
+                                        id: itemPeakMonitor
+                                        node: modelData
+                                        enabled: popupContentCC.micsExpanded && !!modelData
+                                    }
+                                    
                                     Item { width: 12 }
                                     spacing: 12
                                     
@@ -1089,6 +1083,13 @@
                                             height: 6
                                             radius: 3
                                             color: "#33${c.base05}"
+                                            
+                                            Rectangle {
+                                                width: parent.width * Math.max(0, Math.min(1.0, itemPeakMonitor.peak))
+                                                height: parent.height
+                                                radius: 3
+                                                color: (modelData.audio && modelData.audio.muted) ? "transparent" : "#55${c.base0D}"
+                                            }
                                             
                                             Rectangle {
                                                 width: parent.width * parent.parent.percent
