@@ -10,7 +10,7 @@
         anchor.rect.height: 1
         anchor.edges: Edges.Bottom | Edges.Left
         visible: root.sysinfoVisible || popupSysContent.opacity > 0
-        implicitWidth: 400
+        implicitWidth: 600
         implicitHeight: 480
         color: "transparent"
 
