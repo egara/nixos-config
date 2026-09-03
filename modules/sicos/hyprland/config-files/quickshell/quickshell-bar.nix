@@ -393,45 +393,45 @@ PanelWindow {
         border.color: "#${c.base02}"
         border.width: 1
 
+        // ==========================================
+        // LEFT WIDGETS
+        // ==========================================
         RowLayout {
-            anchors.fill: parent
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
             anchors.margins: 6
-            spacing: 8
+            spacing: 12
 
-            // ==========================================
-            // LEFT WIDGETS
-            // ==========================================
-            RowLayout {
-                Layout.alignment: Qt.AlignLeft
-                spacing: 12
+            ${system}
+            ${sysinfo.widget}
+            ${workspaces}
+        }
 
-                ${system}
-                ${sysinfo.widget}
-                ${workspaces}
-            }
+        // ==========================================
+        // CENTER WIDGETS
+        // ==========================================
+        RowLayout {
+            anchors.centerIn: parent
+            
+            ${clock.widget}
+        }
 
-            // ==========================================
-            // CENTER WIDGETS
-            // ==========================================
-            RowLayout {
-                Layout.alignment: Qt.AlignCenter
-                
-                ${clock.widget}
-            }
+        // ==========================================
+        // RIGHT WIDGETS
+        // ==========================================
+        RowLayout {
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.margins: 6
+            spacing: 12
 
-            // ==========================================
-            // RIGHT WIDGETS
-            // ==========================================
-            RowLayout {
-                Layout.alignment: Qt.AlignRight
-                spacing: 12
+            ${tray}
 
-                ${tray}
-
-                ${battery.widget}
-                ${misc.widget}
-                ${controlcenter.widget}
-            }
+            ${battery.widget}
+            ${misc.widget}
+            ${controlcenter.widget}
         }
     }
 }

@@ -756,16 +756,37 @@
             anchors.centerIn: parent
             spacing: 8
             
-            Text {
-                text: root.dndMode ? "󰂛" : (notificationModel.count > 0 ? "󰂚" : "󰂜")
-                color: root.dndMode ? "#80${c.base05}" : (notificationModel.count > 0 ? "#${c.base0D}" : "#${c.base05}")
-                font.family: "${fontName}"
-                font.pixelSize: 17
+            Rectangle {
+                Layout.preferredWidth: 28
+                Layout.preferredHeight: 28
+                radius: 14
+                color: bellMouseArea.containsMouse ? "#44${c.base05}" : "transparent"
+                
+                Text {
+                    anchors.centerIn: parent
+                    text: root.dndMode ? "󰂛" : (notificationModel.count > 0 ? "󰂚" : "󰂜")
+                    color: root.dndMode ? "#80${c.base05}" : (notificationModel.count > 0 ? "#${c.base0D}" : "#${c.base05}")
+                    font.family: "${fontName}"
+                    font.pixelSize: 18
+                }
                 
                 MouseArea {
+                    id: bellMouseArea
                     anchors.fill: parent
-                    onClicked: root.dndMode = !root.dndMode
+                    hoverEnabled: true
+                    onClicked: {
+                        root.dndMode = !root.dndMode
+                    }
                 }
+            }
+
+            Rectangle {
+                Layout.preferredWidth: 2
+                Layout.preferredHeight: 18
+                radius: 1
+                color: "#33${c.base05}"
+                Layout.leftMargin: 0
+                Layout.rightMargin: 4
             }
 
             Text {
