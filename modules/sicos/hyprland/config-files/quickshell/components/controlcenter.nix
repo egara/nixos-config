@@ -1703,7 +1703,9 @@
         id: ccButton
         width: 36; height: 36
         radius: 18
-        color: ccMouseArea.containsMouse ? "#${c.base03}" : (root.controlcenterVisible ? "#${c.base02}" : "#${c.base02}")
+        border.width: 1
+        border.color: "white"
+        color: ccMouseArea.containsMouse ? "#${c.base03}" : (root.controlcenterVisible ? "#${c.base02}" : "#${c.base01}")
         
         Rectangle {
             id: ccBtnAvatarMask

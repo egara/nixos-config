@@ -66,13 +66,13 @@
 
                 // Dynamic width based on active state and number of apps
                 width: {
-                    var baseWidth = isActive ? 32 : 24;
-                    var appsWidth = wsWindows.length > 0 ? (wsWindows.length * 18 + 6) : 0;
+                    var baseWidth = isActive ? 44 : 36;
+                    var appsWidth = wsWindows.length > 0 ? (wsWindows.length * 24 + 6) : 0;
                     return baseWidth + appsWidth;
                 }
-                height: 24
-                radius: 12
-                color: isActive ? "#${c.base0D}" : "#${c.base02}"
+                height: 36
+                radius: 18
+                color: isActive ? "#${c.base0D}" : "#${c.base01}"
                 anchors.verticalCenter: parent.verticalCenter
                 
                 Behavior on width { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
@@ -80,14 +80,14 @@
 
                 Row {
                     anchors.centerIn: parent
-                    spacing: 6
+                    spacing: 8
 
                     // Workspace Number/Name
                     Text {
                         text: modelData.name
                         color: isActive ? "#${c.base00}" : "#${c.base05}"
                         font.family: "${fontName}"
-                        font.pixelSize: 15
+                        font.pixelSize: 18
                         font.bold: true
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -100,10 +100,10 @@
                             model: workspacePill.wsWindows
                             Image {
                                 source: "image://icon/" + workspacePill.resolveIconName(modelData.class, modelData.title)
-                                width: 14
-                                height: 14
-                                sourceSize.width: 14
-                                sourceSize.height: 14
+                                width: 20
+                                height: 20
+                                sourceSize.width: 20
+                                sourceSize.height: 20
                                 fillMode: Image.PreserveAspectFit
                                 anchors.verticalCenter: parent.verticalCenter
                             }

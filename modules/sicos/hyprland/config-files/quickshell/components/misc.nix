@@ -446,7 +446,7 @@
     // Miscellaneous Island
     Rectangle {
         id: miscIslandMain
-        color: miscIslandArea.containsMouse ? "#${c.base03}" : (root.miscVisible ? "#${c.base02}" : "#${c.base02}")
+        color: miscIslandArea.containsMouse ? "#${c.base03}" : (root.miscVisible ? "#${c.base02}" : "#${c.base01}")
         radius: 14
         Layout.preferredHeight: 36
         Layout.preferredWidth: miscLayout.implicitWidth + 24

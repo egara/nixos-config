@@ -4,6 +4,8 @@
     Rectangle {
         width: 36; height: 36
         radius: 18
+        border.width: 1
+        border.color: "white"
         color: launcherMouseArea.containsMouse ? "#${c.base03}" : "#${c.base0D}"
         
         Text {
