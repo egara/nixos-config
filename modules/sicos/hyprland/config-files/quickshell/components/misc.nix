@@ -460,35 +460,43 @@
             running: true
             repeat: true
             onTriggered: {
-                locksProc.exec(["sh", "-c", "hyprctl devices -j | awk -F'[:,]' '/\"capsLock\"/{c=$2} /\"numLock\"/{n=$2} /\"main\": true/{print \"CAPS:\"c\" NUM:\"n}' | tr -d ' \\t\\r\\n'"])
+                locksProc.running = true;
             }
         }
         
         Process {
             id: locksProc
-            onStdout: function(stdout) {
-                var str = stdout.toString();
-                var newCaps = str.indexOf("CAPS:true") !== -1;
-                var newNum = str.indexOf("NUM:true") !== -1;
-                
-                if (!miscIslandMain.firstLockCheck) {
-                    if (newCaps !== miscIslandMain.capsLockOn) {
-                        root.progressOsdType = "Caps Lock";
-                        root.progressOsdValue = newCaps ? 1 : 0;
-                        root.progressOsdVisible = true;
-                        Qt.createQmlObject(timerCode, root, "capsTimer" + Math.random().toString().replace(".", ""));
+            command: ["sh", "-c", "hyprctl devices -j | awk -F'[:,]' '/\"capsLock\"/{c=$2} /\"numLock\"/{n=$2} /\"main\": true/{print \"CAPS:\"c\" NUM:\"n}' | tr -d ' \\t\\r\\n'"]
+            running: true
+            
+            stdout: StdioCollector {
+                onStreamFinished: {
+                    if (text === "") return;
+                    var str = text;
+                    var newCaps = str.indexOf("CAPS:true") !== -1;
+                    var newNum = str.indexOf("NUM:true") !== -1;
+                    
+                    if (!miscIslandMain.firstLockCheck) {
+                        if (newCaps !== miscIslandMain.capsLockOn) {
+                            root.progressOsdType = "Caps Lock";
+                            root.progressOsdValue = newCaps ? 1 : 0;
+                            root.progressOsdVisible = true;
+                            var timerCode = 'import QtQuick; Timer { interval: 2000; running: true; repeat: false; onTriggered: { root.progressOsdVisible = false; this.destroy(); } }';
+                            Qt.createQmlObject(timerCode, root, "capsTimer" + Math.random().toString().replace(".", ""));
+                        }
+                        if (newNum !== miscIslandMain.numLockOn) {
+                            root.progressOsdType = "Num Lock";
+                            root.progressOsdValue = newNum ? 1 : 0;
+                            root.progressOsdVisible = true;
+                            var timerCodeNum = 'import QtQuick; Timer { interval: 2000; running: true; repeat: false; onTriggered: { root.progressOsdVisible = false; this.destroy(); } }';
+                            Qt.createQmlObject(timerCodeNum, root, "numTimer" + Math.random().toString().replace(".", ""));
+                        }
                     }
-                    if (newNum !== miscIslandMain.numLockOn) {
-                        root.progressOsdType = "Num Lock";
-                        root.progressOsdValue = newNum ? 1 : 0;
-                        root.progressOsdVisible = true;
-                        Qt.createQmlObject(timerCodeNum, root, "numTimer" + Math.random().toString().replace(".", ""));
-                    }
+                    
+                    miscIslandMain.capsLockOn = newCaps;
+                    miscIslandMain.numLockOn = newNum;
+                    miscIslandMain.firstLockCheck = false;
                 }
-                
-                miscIslandMain.capsLockOn = newCaps;
-                miscIslandMain.numLockOn = newNum;
-                miscIslandMain.firstLockCheck = false;
             }
         }
         
@@ -525,13 +533,13 @@
             Rectangle {
                 width: 28; height: 28
                 radius: 14
-                color: "transparent"
+                color: "#${c.base08}"
                 visible: miscIslandMain.capsLockOn
                 
                 Text {
                     anchors.centerIn: parent
                     text: "󰘲"
-                    color: "#${c.base08}"
+                    color: "#${c.base00}"
                     font.family: "${fontName}"
                     font.pixelSize: 18
                 }
@@ -541,13 +549,13 @@
             Rectangle {
                 width: 28; height: 28
                 radius: 14
-                color: "transparent"
+                color: "#${c.base0A}"
                 visible: miscIslandMain.numLockOn
                 
                 Text {
                     anchors.centerIn: parent
                     text: "󰎦"
-                    color: "#${c.base0A}"
+                    color: "#${c.base00}"
                     font.family: "${fontName}"
                     font.pixelSize: 18
                 }
