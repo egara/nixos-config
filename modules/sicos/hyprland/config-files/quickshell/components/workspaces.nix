@@ -56,7 +56,7 @@
                 }
                 height: 36
                 radius: 18
-                color: isActive ? "#${c.base0D}" : "#${c.base01}"
+                color: isActive ? "#E6${c.base0D}" : "#CC${c.base01}"
                 anchors.verticalCenter: parent.verticalCenter
                 
                 Behavior on width { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }

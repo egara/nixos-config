@@ -401,7 +401,7 @@
     // SysInfo Island (CPU & RAM)
     Rectangle {
         id: sysinfoWidgetContainer
-        color: sysMouseArea.containsMouse ? "#${c.base03}" : "#${c.base01}"
+        color: sysMouseArea.containsMouse ? "#${c.base03}" : "#CC${c.base01}"
         radius: 14 // Pill style
         Layout.preferredHeight: 36
         Layout.preferredWidth: 120

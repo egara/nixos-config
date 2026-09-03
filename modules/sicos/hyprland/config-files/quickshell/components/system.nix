@@ -6,7 +6,7 @@
         radius: 18
         border.width: 1
         border.color: "white"
-        color: launcherMouseArea.containsMouse ? "#${c.base03}" : "#${c.base0D}"
+        color: launcherMouseArea.containsMouse ? "#${c.base03}" : "#E6${c.base0D}"
         
         Text {
             anchors.centerIn: parent

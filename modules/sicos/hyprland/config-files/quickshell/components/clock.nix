@@ -751,7 +751,7 @@
   widget = ''
     Rectangle {
         id: clockWidgetContainer
-        color: clockMouseArea.containsMouse ? "#${c.base03}" : (root.clockVisible ? "#${c.base02}" : "#${c.base01}")
+        color: clockMouseArea.containsMouse ? "#${c.base03}" : (root.clockVisible ? "#E6${c.base02}" : "#CC${c.base01}")
         radius: 14 // Pill style
         Layout.preferredHeight: 36
         Layout.preferredWidth: clockLayout.implicitWidth + 24

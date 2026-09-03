@@ -2,7 +2,7 @@
 ''
     Rectangle {
         id: trayIsland
-        color: "#${c.base01}"
+        color: "#CC${c.base01}"
         radius: 14
         Layout.preferredHeight: 36
         Layout.minimumWidth: trayLayout.width + 16

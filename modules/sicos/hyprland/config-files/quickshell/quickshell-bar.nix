@@ -388,7 +388,7 @@ PanelWindow {
 
     Rectangle {
         anchors.fill: parent
-        color: "#CC${c.base00}" // Stylix background with some transparency (CC = 80%)
+        color: "#99${c.base00}" // Stylix background with some transparency (99 = 60%)
         radius: 12
         border.color: "#${c.base02}"
         border.width: 1
