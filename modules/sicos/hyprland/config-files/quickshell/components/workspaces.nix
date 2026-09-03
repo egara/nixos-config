@@ -30,22 +30,36 @@
                     return wins;
                 }
 
-                function resolveIconName(cls, title) {
-                    var c = (cls || "").toLowerCase();
+                function resolveIconSource(cls, title) {
+                    var original = cls || "";
+                    var c = original.toLowerCase();
                     var t = (title || "").toLowerCase();
                     
+                    if (c === "?") return "image://icon/application-x-executable";
+                    
                     // Known class overrides
-                    if (c === "dev.zed.zed") return "zed";
+                    if (c === "dev.zed.zed" || c === "zed") return "image://icon/zed";
                     
                     // Check terminal window titles for specific TUI apps
                     if (c === "kitty" || c === "alacritty" || c.indexOf("terminal") !== -1) {
-                        if (t.indexOf("yazi") !== -1) return "yazi";
-                        if (t.indexOf("btop") !== -1) return "btop";
-                        if (t.indexOf("nvim") !== -1 || t.indexOf("neovim") !== -1) return "nvim";
-                        if (t.indexOf("vim") !== -1) return "vim";
+                        if (t.indexOf("yazi") !== -1) return "image://icon/yazi";
+                        if (t.indexOf("btop") !== -1) return "image://icon/btop";
+                        if (t.indexOf("nvim") !== -1 || t.indexOf("neovim") !== -1) return "image://icon/nvim";
+                        if (t.indexOf("vim") !== -1) return "image://icon/vim";
                     }
                     
-                    return c;
+                    // Test exact match (org.gnome.Calculator)
+                    if (Quickshell.iconPath(original, true)) return "image://icon/" + original;
+                    // Test lowercase match
+                    if (Quickshell.iconPath(c, true)) return "image://icon/" + c;
+                    
+                    // Test domain stripped match (Calculator -> calculator)
+                    if (c.indexOf(".") !== -1) {
+                        var lastPart = c.split(".").pop();
+                        if (Quickshell.iconPath(lastPart, true)) return "image://icon/" + lastPart;
+                    }
+                    
+                    return "image://icon/application-x-executable";
                 }
 
                 // Dynamic width based on active state and number of apps
@@ -83,7 +97,7 @@
                         Repeater {
                             model: workspacePill.wsWindows
                             Image {
-                                source: "image://icon/" + workspacePill.resolveIconName(modelData.class, modelData.title)
+                                source: workspacePill.resolveIconSource(modelData.class, modelData.title)
                                 width: 20
                                 height: 20
                                 sourceSize.width: 20
