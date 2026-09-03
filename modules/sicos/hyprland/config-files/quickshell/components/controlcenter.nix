@@ -425,7 +425,7 @@
                                 text: ""
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 19
+                                font.pixelSize: 20
                             }
                             MouseArea {
                                 id: screenshotBtnArea
@@ -447,7 +447,7 @@
                                 text: "󰋖"
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 19
+                                font.pixelSize: 15
                             }
                             MouseArea {
                                 id: keybindsBtnArea
@@ -469,7 +469,7 @@
                                 text: "󰙎"
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 19
+                                font.pixelSize: 15
                             }
                             MouseArea {
                                 id: infoBtnArea

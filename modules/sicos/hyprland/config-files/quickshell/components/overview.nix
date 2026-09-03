@@ -137,7 +137,7 @@
                                         anchors.centerIn: parent
                                         text: (hyprWs && hyprWs.monitor) ? hyprWs.monitor.name : ""
                                         color: "#${c.base05}"
-                                        font.family: fontName
+                                        font.family: "${fontName}"
                                         font.pixelSize: 13
                                         font.bold: true
                                     }

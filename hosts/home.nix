@@ -512,6 +512,7 @@ in
   };
 
   # Configuring xdg-utils to use some default applications
+  xdg.userDirs.setSessionVariables = true;
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {

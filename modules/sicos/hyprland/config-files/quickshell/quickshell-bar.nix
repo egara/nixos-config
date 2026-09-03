@@ -51,16 +51,16 @@ PanelWindow {
     
     // Add some margins for a floating look
     margins {
-        top: 8
+        top: 2
         left: 12
         right: 12
     }
     
-    implicitHeight: 48
+    implicitHeight: 44
     color: "transparent"
     
     // Exclusive zone so windows don't overlap
-    exclusiveZone: 48
+    exclusiveZone: 44
 
     // Popup visibility state for smooth animations
     property bool batteryVisible: false
@@ -398,9 +398,8 @@ PanelWindow {
         // ==========================================
         RowLayout {
             anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.margins: 6
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: 6
             spacing: 12
 
             ${system}
@@ -422,9 +421,8 @@ PanelWindow {
         // ==========================================
         RowLayout {
             anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.margins: 6
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.rightMargin: 6
             spacing: 12
 
             ${tray}
