@@ -8,7 +8,7 @@
         anchor.edges: Edges.Bottom
         anchor.gravity: Edges.Bottom
         visible: root.clockVisible || popupContentClock.opacity > 0
-        implicitWidth: 700
+        implicitWidth: 800
         implicitHeight: 480
         color: "transparent"
 
@@ -238,6 +238,11 @@
                                         if (appImg && appImg !== "") {
                                             if (appImg.startsWith("/")) return "file://" + appImg;
                                             return "image://icon/" + appImg;
+                                        }
+                                        
+                                        var appNameLower = model.appName ? model.appName.toLowerCase().replace(/\s+/g, '-') : "";
+                                        if (appNameLower && appNameLower !== "sistema") {
+                                            return "image://icon/" + appNameLower;
                                         }
                                         
                                         var img = model.iconName.toString();

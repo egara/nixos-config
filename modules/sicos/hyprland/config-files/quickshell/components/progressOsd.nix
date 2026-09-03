@@ -44,7 +44,9 @@
                 spacing: 16
                 
                 Text {
-                    text: root.progressOsdType === "Volume" ? (root.progressOsdValue === 0 ? "󰝟" : (root.progressOsdValue < 50 ? "󰖀" : "󰕾")) : "󰃠"
+                    text: root.progressOsdType === "Caps Lock" ? "󰘲" :
+                          root.progressOsdType === "Num Lock" ? "󰎦" :
+                          root.progressOsdType === "Volume" ? (root.progressOsdValue === 0 ? "󰝟" : (root.progressOsdValue < 50 ? "󰖀" : "󰕾")) : "󰃠"
                     color: "#${c.base0D}"
                     font.family: "${fontName}"
                     font.pixelSize: 27
@@ -52,6 +54,7 @@
                 }
                 
                 Rectangle {
+                    visible: root.progressOsdType === "Volume" || root.progressOsdType === "Brightness"
                     Layout.fillWidth: true
                     Layout.preferredHeight: 12
                     Layout.alignment: Qt.AlignVCenter
@@ -72,13 +75,13 @@
                 }
                 
                 Text {
-                    text: root.progressOsdValue + "%"
+                    text: (root.progressOsdType === "Caps Lock" || root.progressOsdType === "Num Lock") ? (root.progressOsdValue === 1 ? "ON" : "OFF") : (root.progressOsdValue + "%")
                     color: "#${c.base05}"
                     font.family: "${fontName}"
                     font.pixelSize: 17
                     font.bold: true
                     Layout.alignment: Qt.AlignVCenter
-                    Layout.preferredWidth: 36
+                    Layout.preferredWidth: (root.progressOsdType === "Caps Lock" || root.progressOsdType === "Num Lock") ? 60 : 36
                     horizontalAlignment: Text.AlignRight
                 }
             }

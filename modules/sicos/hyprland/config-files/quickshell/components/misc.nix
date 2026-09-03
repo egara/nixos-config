@@ -451,6 +451,47 @@
         Layout.preferredHeight: 36
         Layout.preferredWidth: miscLayout.implicitWidth + 24
         
+        property bool capsLockOn: false
+        property bool numLockOn: false
+        property bool firstLockCheck: true
+
+        Timer {
+            interval: 500
+            running: true
+            repeat: true
+            onTriggered: {
+                locksProc.exec(["sh", "-c", "hyprctl devices -j | awk -F'[:,]' '/\"capsLock\"/{c=$2} /\"numLock\"/{n=$2} /\"main\": true/{print \"CAPS:\"c\" NUM:\"n}' | tr -d ' \\t\\r\\n'"])
+            }
+        }
+        
+        Process {
+            id: locksProc
+            onStdout: function(stdout) {
+                var str = stdout.toString();
+                var newCaps = str.indexOf("CAPS:true") !== -1;
+                var newNum = str.indexOf("NUM:true") !== -1;
+                
+                if (!miscIslandMain.firstLockCheck) {
+                    if (newCaps !== miscIslandMain.capsLockOn) {
+                        root.progressOsdType = "Caps Lock";
+                        root.progressOsdValue = newCaps ? 1 : 0;
+                        root.progressOsdVisible = true;
+                        Qt.createQmlObject(timerCode, root, "capsTimer" + Math.random().toString().replace(".", ""));
+                    }
+                    if (newNum !== miscIslandMain.numLockOn) {
+                        root.progressOsdType = "Num Lock";
+                        root.progressOsdValue = newNum ? 1 : 0;
+                        root.progressOsdVisible = true;
+                        Qt.createQmlObject(timerCodeNum, root, "numTimer" + Math.random().toString().replace(".", ""));
+                    }
+                }
+                
+                miscIslandMain.capsLockOn = newCaps;
+                miscIslandMain.numLockOn = newNum;
+                miscIslandMain.firstLockCheck = false;
+            }
+        }
+        
         property var activePlayer: {
             var players = Mpris.players.values;
             if (!players || players.length === 0) return null;
@@ -479,6 +520,38 @@
             id: miscLayout
             anchors.centerIn: parent
             spacing: 12
+
+            // Caps Lock Indicator
+            Rectangle {
+                width: 28; height: 28
+                radius: 14
+                color: "transparent"
+                visible: miscIslandMain.capsLockOn
+                
+                Text {
+                    anchors.centerIn: parent
+                    text: "󰘲"
+                    color: "#${c.base08}"
+                    font.family: "${fontName}"
+                    font.pixelSize: 18
+                }
+            }
+
+            // Num Lock Indicator
+            Rectangle {
+                width: 28; height: 28
+                radius: 14
+                color: "transparent"
+                visible: miscIslandMain.numLockOn
+                
+                Text {
+                    anchors.centerIn: parent
+                    text: "󰎦"
+                    color: "#${c.base0A}"
+                    font.family: "${fontName}"
+                    font.pixelSize: 18
+                }
+            }
 
             // MPRIS Media Icon
             Rectangle {
