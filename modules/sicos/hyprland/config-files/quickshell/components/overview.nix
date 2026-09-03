@@ -260,8 +260,8 @@
                                                 
                                                 // Devolver la ventana a su contenedor original
                                                 winItem.parent = wsWinContainer;
-                                                winItem.x = winItem.originalX;
-                                                winItem.y = winItem.originalY;
+                                                winItem.x = Qt.binding(function() { return winItem.originalX; });
+                                                winItem.y = Qt.binding(function() { return winItem.originalY; });
                                                 
                                                 var targetWs = overviewWindow.draggingTargetWorkspace;
                                                 if (targetWs !== -1 && targetWs !== wsRect.wsId) {
