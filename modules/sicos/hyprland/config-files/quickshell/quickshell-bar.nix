@@ -455,12 +455,12 @@ PanelWindow {
         WlrLayershell.layer: WlrLayer.Overlay
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
         
-        implicitWidth: 420
+        implicitWidth: 480
         implicitHeight: osdList.height
         
         ListView {
             id: osdList
-            width: 420
+            width: 480
             height: Math.min(contentHeight, 800)
             spacing: 8
             interactive: false
@@ -477,8 +477,8 @@ PanelWindow {
             
             model: osdModel
             delegate: Rectangle {
-                    width: 420
-                    implicitHeight: Math.max(90, osdCol.implicitHeight + 32)
+                    width: 480
+                    implicitHeight: Math.max(120, osdCol.implicitHeight + 40)
                     color: "#F0${c.base01}"
                     radius: 16
                     border.color: "#33${c.base05}"
@@ -516,7 +516,7 @@ PanelWindow {
                             }
                             sourceSize.width: 128
                             sourceSize.height: 128
-                            fillMode: Image.PreserveAspectCrop
+                            fillMode: Image.PreserveAspectFit
                             
                             onStatusChanged: {
                                 if (status === Image.Error) {
@@ -604,7 +604,7 @@ PanelWindow {
                             font.pixelSize: 17
                             Layout.fillWidth: true
                             wrapMode: Text.Wrap
-                            maximumLineCount: 3
+                            maximumLineCount: 5
                             elide: Text.ElideRight
                             visible: text !== ""
                         }
