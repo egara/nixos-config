@@ -417,13 +417,13 @@
                     text: ""
                     color: "#${c.base05}" // Same as power icon
                     font.family: "${fontName}"
-                    font.pixelSize: 17
+                    font.pixelSize: 18
                 }
                 Text {
                     text: sysData.cpu + "%"
                     color: "#${c.base05}"
                     font.family: "${fontName}"
-                    font.pixelSize: 15
+                    font.pixelSize: 16
                     font.bold: true
                 }
             }
@@ -435,13 +435,13 @@
                     text: ""
                     color: "#${c.base05}" // Same as power icon
                     font.family: "${fontName}"
-                    font.pixelSize: 16
+                    font.pixelSize: 18
                 }
                 Text {
                     text: sysData.ram + "%"
                     color: "#${c.base05}"
                     font.family: "${fontName}"
-                    font.pixelSize: 15
+                    font.pixelSize: 16
                     font.bold: true
                 }
             }

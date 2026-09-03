@@ -13,7 +13,7 @@
             text: "" // NixOS icon (Nerd Fonts)
             color: "#${c.base00}"
             font.family: "${fontName}"
-            font.pixelSize: 21
+            font.pixelSize: 18
         }
         
         MouseArea {
