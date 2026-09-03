@@ -2,8 +2,8 @@
 ''
     // Launcher Button
     Rectangle {
-        width: 28; height: 28
-        radius: 14
+        width: 36; height: 36
+        radius: 18
         color: launcherMouseArea.containsMouse ? "#${c.base03}" : "#${c.base0D}"
         
         Text {
@@ -11,7 +11,7 @@
             text: "" // NixOS icon (Nerd Fonts)
             color: "#${c.base00}"
             font.family: "${fontName}"
-            font.pixelSize: 18
+            font.pixelSize: 21
         }
         
         MouseArea {

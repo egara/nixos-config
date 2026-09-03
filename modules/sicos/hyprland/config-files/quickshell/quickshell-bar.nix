@@ -56,7 +56,7 @@ PanelWindow {
         right: 12
     }
     
-    implicitHeight: 40
+    implicitHeight: 48
     color: "transparent"
     
     // Exclusive zone so windows don't overlap
@@ -547,7 +547,7 @@ PanelWindow {
                                 text: model.appName
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 14
+                                font.pixelSize: 17
                                 font.bold: true
                                 Layout.fillWidth: true
                                 elide: Text.ElideRight
@@ -556,7 +556,7 @@ PanelWindow {
                                 text: model.timeStr
                                 color: "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 12
+                                font.pixelSize: 15
                             }
                             
                             Rectangle {
@@ -570,7 +570,7 @@ PanelWindow {
                                     text: "󰅖"
                                     color: osdCloseHover.hovered ? "#${c.base08}" : "#${c.base05}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 14
+                                    font.pixelSize: 17
                                 }
                                 
                                 HoverHandler {
@@ -589,7 +589,7 @@ PanelWindow {
                             text: model.summary
                             color: "#${c.base05}"
                             font.family: "${fontName}"
-                            font.pixelSize: 15
+                            font.pixelSize: 18
                             font.bold: true
                             Layout.fillWidth: true
                             wrapMode: Text.Wrap
@@ -601,7 +601,7 @@ PanelWindow {
                             text: model.body
                             color: "#${c.base04}"
                             font.family: "${fontName}"
-                            font.pixelSize: 14
+                            font.pixelSize: 17
                             Layout.fillWidth: true
                             wrapMode: Text.Wrap
                             maximumLineCount: 3

@@ -4,7 +4,7 @@
         id: trayIsland
         color: "#${c.base01}"
         radius: 14
-        Layout.preferredHeight: 28
+        Layout.preferredHeight: 36
         Layout.minimumWidth: trayLayout.width + 16
         
         PopupWindow {
@@ -103,7 +103,7 @@
                                 text: "← Volver"
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 13
+                                font.pixelSize: 16
                             }
                         }
 
@@ -192,7 +192,7 @@
                                         anchors.centerIn: parent
                                         text: "✔"
                                         color: "#${c.base0D}"
-                                        font.pixelSize: 11
+                                        font.pixelSize: 14
                                         visible: modelData && modelData.checkState === 1
                                     }
                                 }
@@ -213,7 +213,7 @@
                                     }
                                     color: (modelData && modelData.enabled === false) ? "#${c.base04}" : "#${c.base05}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 13
+                                    font.pixelSize: 16
                                     elide: Text.ElideRight
                                 }
 
@@ -221,7 +221,7 @@
                                     visible: modelData && modelData.hasChildren
                                     text: "▶"
                                     color: "#${c.base04}"
-                                    font.pixelSize: 10
+                                    font.pixelSize: 13
                                 }
                             }
 
@@ -279,16 +279,16 @@
                 model: SystemTray.items.values
                 
                 delegate: Rectangle {
-                    width: 24
-                    height: 24
-                    radius: 12
+                    width: 32
+                    height: 32
+                    radius: 16
                     color: trayMouseArea.containsMouse ? "#44${c.base03}" : "transparent"
                     
                     Image {
                         anchors.centerIn: parent
                         source: trayLayout.trayIconSourceFor(modelData)
-                        width: 16
-                        height: 16
+                        width: 20
+                        height: 20
                         fillMode: Image.PreserveAspectFit
                         sourceSize: Qt.size(32, 32)
                         asynchronous: true

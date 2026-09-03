@@ -112,7 +112,7 @@
                                 Text {
                                     text: hyprWs ? hyprWs.name : wsId.toString()
                                     color: "#${c.base05}"
-                                    font.pixelSize: 80
+                                    font.pixelSize: 83
                                     font.family: "${fontName}"
                                     font.bold: true
                                     anchors.centerIn: parent
@@ -138,7 +138,7 @@
                                         text: (hyprWs && hyprWs.monitor) ? hyprWs.monitor.name : ""
                                         color: "#${c.base05}"
                                         font.family: fontName
-                                        font.pixelSize: 10
+                                        font.pixelSize: 13
                                         font.bold: true
                                     }
                                 }

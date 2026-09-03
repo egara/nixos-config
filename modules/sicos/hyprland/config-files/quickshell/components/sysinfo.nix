@@ -84,20 +84,8 @@
                         text: "System Monitor"
                         color: "#${c.base05}"
                         font.family: "${fontName}"
-                        font.pixelSize: 18
+                        font.pixelSize: 21
                         Layout.fillWidth: true
-                    }
-                    Text {
-                        text: "✕"
-                        color: sysCloseArea.containsMouse ? "#${c.base05}" : "#${c.base04}"
-                        font.family: "${fontName}"
-                        font.pixelSize: 18
-                        MouseArea {
-                            id: sysCloseArea
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            onClicked: root.sysinfoVisible = false
-                        }
                     }
                 }
 
@@ -157,7 +145,7 @@
                                     text: Math.round(parent.percentage) + "%"
                                     color: "#${c.base05}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 15
+                                    font.pixelSize: 18
                                     font.bold: true
                                 }
                             }
@@ -165,7 +153,7 @@
                                 text: "Top CPU"
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 13
+                                font.pixelSize: 16
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             ListView {
@@ -198,7 +186,7 @@
                                             text: model.name
                                             color: "#${c.base05}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 12
+                                            font.pixelSize: 15
                                             Layout.fillWidth: true
                                             elide: Text.ElideRight
                                         }
@@ -206,13 +194,13 @@
                                             text: model.usage + "%"
                                             color: "#${c.base04}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 12
+                                            font.pixelSize: 15
                                         }
                                         Text {
                                             text: ""
                                             color: "#${c.base08}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 12
+                                            font.pixelSize: 15
                                             visible: rowAreaCpu.containsMouse
                                         }
                                     }
@@ -271,7 +259,7 @@
                                     text: Math.round(parent.percentage) + "%"
                                     color: "#${c.base05}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 15
+                                    font.pixelSize: 18
                                     font.bold: true
                                 }
                             }
@@ -279,7 +267,7 @@
                                 text: "Top RAM"
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 13
+                                font.pixelSize: 16
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             ListView {
@@ -312,7 +300,7 @@
                                             text: model.name
                                             color: "#${c.base05}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 12
+                                            font.pixelSize: 15
                                             Layout.fillWidth: true
                                             elide: Text.ElideRight
                                         }
@@ -320,13 +308,13 @@
                                             text: model.usage + "%"
                                             color: "#${c.base04}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 12
+                                            font.pixelSize: 15
                                         }
                                         Text {
                                             text: ""
                                             color: "#${c.base08}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 12
+                                            font.pixelSize: 15
                                             visible: rowAreaRam.containsMouse
                                         }
                                     }
@@ -348,7 +336,7 @@
                         text: "Launch Full Monitor (Btop)"
                         color: "#${c.base04}"
                         font.family: "${fontName}"
-                        font.pixelSize: 14
+                        font.pixelSize: 17
                     }
                     MouseArea {
                         id: btopArea
@@ -415,7 +403,7 @@
         id: sysinfoWidgetContainer
         color: sysMouseArea.containsMouse ? "#${c.base03}" : "#${c.base01}"
         radius: 14 // Pill style
-        Layout.preferredHeight: 28
+        Layout.preferredHeight: 36
         Layout.preferredWidth: 120
         
         RowLayout {
@@ -429,13 +417,13 @@
                     text: ""
                     color: "#${c.base05}" // Same as power icon
                     font.family: "${fontName}"
-                    font.pixelSize: 14
+                    font.pixelSize: 17
                 }
                 Text {
                     text: sysData.cpu + "%"
                     color: "#${c.base05}"
                     font.family: "${fontName}"
-                    font.pixelSize: 12
+                    font.pixelSize: 15
                     font.bold: true
                 }
             }
@@ -447,13 +435,13 @@
                     text: ""
                     color: "#${c.base05}" // Same as power icon
                     font.family: "${fontName}"
-                    font.pixelSize: 13
+                    font.pixelSize: 16
                 }
                 Text {
                     text: sysData.ram + "%"
                     color: "#${c.base05}"
                     font.family: "${fontName}"
-                    font.pixelSize: 12
+                    font.pixelSize: 15
                     font.bold: true
                 }
             }

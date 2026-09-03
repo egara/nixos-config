@@ -47,7 +47,7 @@
                     text: root.progressOsdType === "Volume" ? (root.progressOsdValue === 0 ? "󰝟" : (root.progressOsdValue < 50 ? "󰖀" : "󰕾")) : "󰃠"
                     color: "#${c.base0D}"
                     font.family: "${fontName}"
-                    font.pixelSize: 24
+                    font.pixelSize: 27
                     Layout.alignment: Qt.AlignVCenter
                 }
                 
@@ -75,7 +75,7 @@
                     text: root.progressOsdValue + "%"
                     color: "#${c.base05}"
                     font.family: "${fontName}"
-                    font.pixelSize: 14
+                    font.pixelSize: 17
                     font.bold: true
                     Layout.alignment: Qt.AlignVCenter
                     Layout.preferredWidth: 36

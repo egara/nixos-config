@@ -86,7 +86,7 @@
                             text: "Notificaciones"
                             color: "#${c.base05}"
                             font.family: "${fontName}"
-                            font.pixelSize: 18
+                            font.pixelSize: 21
                             font.bold: true
                             Layout.fillWidth: true
                         }
@@ -103,7 +103,7 @@
                                 text: "󰂛"
                                 color: root.dndMode ? "#${c.base0D}" : "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 16
+                                font.pixelSize: 19
                             }
                             HoverHandler {
                                 id: dndHover
@@ -125,7 +125,7 @@
                                 text: "󰎟" // Trash icon or clear all
                                 color: "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 16
+                                font.pixelSize: 19
                             }
                             HoverHandler {
                                 id: clearHover
@@ -150,14 +150,14 @@
                                 text: "󰂚"
                                 color: "#40${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 48
+                                font.pixelSize: 51
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             Text {
                                 text: "No hay notificaciones nuevas"
                                 color: "#80${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 14
+                                font.pixelSize: 17
                                 Layout.alignment: Qt.AlignHCenter
                             }
                         }
@@ -278,7 +278,7 @@
                                     text: model.appName
                                     color: "#${c.base0D}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 13
+                                    font.pixelSize: 16
                                     font.bold: true
                                     Layout.fillWidth: true
                                     elide: Text.ElideRight
@@ -287,7 +287,7 @@
                                 // Group expand button
                                 Rectangle {
                                     Layout.preferredWidth: 20
-                                    Layout.preferredHeight: 20
+                                    Layout.preferredHeight: 24
                                     radius: 10
                                     color: groupExpandHover.hovered ? "#33${c.base05}" : "transparent"
                                     visible: delegateRoot.hasMultiple
@@ -298,7 +298,7 @@
                                         rotation: delegateRoot.isExpanded ? 180 : 0
                                         color: "#${c.base05}"
                                         font.family: "${fontName}"
-                                        font.pixelSize: 14
+                                        font.pixelSize: 17
                                         
                                         Behavior on rotation {
                                             NumberAnimation { duration: 300; easing.type: Easing.OutBack }
@@ -319,7 +319,7 @@
                                 // Group close button
                                 Rectangle {
                                     Layout.preferredWidth: 20
-                                    Layout.preferredHeight: 20
+                                    Layout.preferredHeight: 24
                                     radius: 10
                                     color: groupCloseHover.hovered ? "#${c.base08}" : "transparent"
                                     
@@ -328,7 +328,7 @@
                                         text: "󰅖"
                                         color: groupCloseHover.hovered ? "#${c.base00}" : "#${c.base05}"
                                         font.family: "${fontName}"
-                                        font.pixelSize: 14
+                                        font.pixelSize: 17
                                     }
                                     
                                     HoverHandler {
@@ -419,7 +419,7 @@
                                                 text: model.summary
                                                 color: "#${c.base05}"
                                                 font.family: "${fontName}"
-                                                font.pixelSize: 14
+                                                font.pixelSize: 17
                                                 font.bold: true
                                                 Layout.fillWidth: true
                                                 wrapMode: Text.Wrap
@@ -431,14 +431,14 @@
                                                 text: model.timeStr
                                                 color: "#${c.base04}"
                                                 font.family: "${fontName}"
-                                                font.pixelSize: 11
+                                                font.pixelSize: 14
                                                 Layout.alignment: Qt.AlignTop
                                             }
 
                                             // Close button
                                             Rectangle {
                                                 Layout.preferredWidth: 20
-                                                Layout.preferredHeight: 20
+                                                Layout.preferredHeight: 24
                                                 Layout.alignment: Qt.AlignTop
                                                 radius: 10
                                                 color: closeHover.hovered ? "#${c.base08}" : "transparent"
@@ -449,7 +449,7 @@
                                                     text: "󰅖"
                                                     color: closeHover.hovered ? "#${c.base00}" : "#${c.base05}"
                                                     font.family: "${fontName}"
-                                                    font.pixelSize: 14
+                                                    font.pixelSize: 17
                                                 }
                                                 
                                                 HoverHandler {
@@ -468,7 +468,7 @@
                                             text: model.body
                                             color: "#${c.base04}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 13
+                                            font.pixelSize: 16
                                             Layout.fillWidth: true
                                             wrapMode: Text.Wrap
                                             maximumLineCount: 3
@@ -541,7 +541,7 @@
                         Rectangle {
                             width: 28; height: 28; radius: 14
                             color: prevHover.containsMouse ? "#${c.base03}" : "transparent"
-                            Text { anchors.centerIn: parent; text: "󰅁"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 16 }
+                            Text { anchors.centerIn: parent; text: "󰅁"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 19 }
                             MouseArea { id: prevHover; anchors.fill: parent; hoverEnabled: true; onClicked: calendarRoot.moveMonth(-1) }
                         }
 
@@ -554,7 +554,7 @@
                                 text: titleHover.containsMouse && !calendarRoot.viewingCurrentMonth ? "BACK TO TODAY" : Qt.formatDate(calendarRoot.viewDate, "MMMM yyyy").toUpperCase()
                                 color: titleHover.containsMouse && !calendarRoot.viewingCurrentMonth ? "#${c.base0D}" : "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 15
+                                font.pixelSize: 18
                                 font.bold: true
                                 font.letterSpacing: 1
                             }
@@ -570,7 +570,7 @@
                         Rectangle {
                             width: 28; height: 28; radius: 14
                             color: nextHover.containsMouse ? "#${c.base03}" : "transparent"
-                            Text { anchors.centerIn: parent; text: "󰅂"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 16 }
+                            Text { anchors.centerIn: parent; text: "󰅂"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 19 }
                             MouseArea { id: nextHover; anchors.fill: parent; hoverEnabled: true; onClicked: calendarRoot.moveMonth(1) }
                         }
                     }
@@ -587,13 +587,13 @@
                             
                             RowLayout {
                                 anchors.fill: parent
-                                Text { text: calendarRoot.today.getFullYear(); color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 11; font.letterSpacing: 1 }
+                                Text { text: calendarRoot.today.getFullYear(); color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 14; font.letterSpacing: 1 }
                                 Rectangle {
                                     Layout.fillWidth: true; Layout.leftMargin: 8; Layout.rightMargin: 8
                                     height: 4; radius: 2; color: "#22${c.base05}"
                                     Rectangle { width: parent.width * calendarRoot.yearDone; height: parent.height; radius: parent.radius; color: "#${c.base0D}" }
                                 }
-                                Text { text: calendarRoot.yearDonePercent + "%"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 11 }
+                                Text { text: calendarRoot.yearDonePercent + "%"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14 }
                             }
                         }
                         
@@ -607,19 +607,19 @@
                             RowLayout {
                                 anchors.fill: parent
                                 visible: !calendarRoot.editingLife
-                                Text { text: "LIFE"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 11; font.letterSpacing: 1 }
+                                Text { text: "LIFE"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 14; font.letterSpacing: 1 }
                                 Rectangle {
                                     Layout.fillWidth: true; Layout.leftMargin: 8; Layout.rightMargin: 8
                                     height: 4; radius: 2; color: "#22${c.base05}"
                                     Rectangle { width: parent.width * calendarRoot.lifeDone; height: parent.height; radius: parent.radius; color: "#${c.base08}" }
                                 }
-                                Text { text: calendarRoot.lifeDonePercent + "%"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 11 }
+                                Text { text: calendarRoot.lifeDonePercent + "%"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14 }
                             }
                             
                             RowLayout {
                                 anchors.fill: parent
                                 visible: calendarRoot.editingLife
-                                Text { text: "BORN"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 11 }
+                                Text { text: "BORN"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 14 }
                                 
                                 Rectangle {
                                     Layout.preferredWidth: 60
@@ -636,7 +636,7 @@
                                         text: calendarRoot.birthYear > 0 ? calendarRoot.birthYear.toString() : ""
                                         color: "#${c.base05}"
                                         font.family: "${fontName}"
-                                        font.pixelSize: 12
+                                        font.pixelSize: 15
                                         onAccepted: { calendarRoot.birthYear = parseInt(text); calendarRoot.editingLife = false; }
                                         onVisibleChanged: {
                                             if (visible) {
@@ -666,7 +666,7 @@
                                 text: { var days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"]; return days[modelData]; }
                                 color: "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 11
+                                font.pixelSize: 14
                                 font.bold: true
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
@@ -690,7 +690,7 @@
                                     text: weekData.week
                                     color: "#${c.base03}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 11
+                                    font.pixelSize: 14
                                     Layout.preferredWidth: 24
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
@@ -712,7 +712,7 @@
                                             text: dayData.day
                                             color: dayData.inMonth ? (dayData.weekend ? "#${c.base04}" : "#${c.base05}") : "#${c.base03}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 13
+                                            font.pixelSize: 16
                                             font.bold: dayData.today
                                         }
                                         
@@ -748,7 +748,7 @@
         id: clockWidgetContainer
         color: clockMouseArea.containsMouse ? "#${c.base03}" : (root.clockVisible ? "#${c.base02}" : "#${c.base01}")
         radius: 14 // Pill style
-        Layout.preferredHeight: 28
+        Layout.preferredHeight: 36
         Layout.preferredWidth: clockLayout.implicitWidth + 24
         
         RowLayout {
@@ -760,7 +760,7 @@
                 text: root.dndMode ? "󰂛" : (notificationModel.count > 0 ? "󰂚" : "󰂜")
                 color: root.dndMode ? "#80${c.base05}" : (notificationModel.count > 0 ? "#${c.base0D}" : "#${c.base05}")
                 font.family: "${fontName}"
-                font.pixelSize: 14
+                font.pixelSize: 17
                 
                 MouseArea {
                     anchors.fill: parent
@@ -773,7 +773,7 @@
                 text: Qt.formatDateTime(new Date(), "ddd d MMM  hh:mm")
                 color: "#${c.base05}"
                 font.family: "${fontName}"
-                font.pixelSize: 13
+                font.pixelSize: 16
                 font.bold: true
                 
                 Timer {

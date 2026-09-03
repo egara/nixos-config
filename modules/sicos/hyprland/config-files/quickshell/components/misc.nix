@@ -176,7 +176,7 @@
                                     }
                                     color: miscPopup.activePlayer === modelData ? "#${c.base0D}" : "#${c.base05}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 18
+                                    font.pixelSize: 21
                                 }
                                 MouseArea {
                                     id: sourceMouseArea
@@ -188,20 +188,6 @@
                         }
                     }
 
-                    Text {
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "✕"
-                        color: closeAreaMisc.containsMouse ? "#${c.base05}" : "#${c.base04}"
-                        font.family: "${fontName}"
-                        font.pixelSize: 18
-                        MouseArea {
-                            id: closeAreaMisc
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            onClicked: root.miscVisible = false
-                        }
-                    }
                 }
 
                 // Album Art Vinyl and Glow
@@ -279,7 +265,7 @@
                                 text: ""
                                 color: "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 48
+                                font.pixelSize: 51
                             }
                         }
                     }
@@ -295,7 +281,7 @@
                         text: miscPopup.activePlayer && miscPopup.activePlayer.metadata && miscPopup.activePlayer.metadata["xesam:artist"] ? miscPopup.activePlayer.metadata["xesam:artist"].toString() : "Unknown Artist"
                         color: "#${c.base04}"
                         font.family: "${fontName}"
-                        font.pixelSize: 14
+                        font.pixelSize: 17
                         elide: Text.ElideRight
                     }
                     
@@ -343,7 +329,7 @@
                         text: miscPopup.activePlayer && miscPopup.activePlayer.metadata && miscPopup.activePlayer.metadata["xesam:title"] ? miscPopup.activePlayer.metadata["xesam:title"].toString() : "Unknown Track"
                         color: "#${c.base05}"
                         font.family: "${fontName}"
-                        font.pixelSize: 16
+                        font.pixelSize: 19
                         font.bold: true
                         elide: Text.ElideRight
                         wrapMode: Text.Wrap
@@ -390,7 +376,7 @@
                         }
                         color: "#${c.base04}"
                         font.family: "${fontName}"
-                        font.pixelSize: 12
+                        font.pixelSize: 15
                     }
                 }
 
@@ -406,7 +392,7 @@
                             anchors.centerIn: parent
                             text: "󰙣"
                             color: "#${c.base05}"
-                            font.pixelSize: 20
+                            font.pixelSize: 23
                             font.family: "${fontName}"
                         }
                         MouseArea {
@@ -424,7 +410,7 @@
                             anchors.centerIn: parent
                             text: miscPopup.activePlayer && miscPopup.activePlayer.playbackState === 1 ? "󰏥" : ""
                             color: "#${c.base00}"
-                            font.pixelSize: 24
+                            font.pixelSize: 27
                             font.family: "${fontName}"
                         }
                         MouseArea {
@@ -440,7 +426,7 @@
                             anchors.centerIn: parent
                             text: "󰙡"
                             color: "#${c.base05}"
-                            font.pixelSize: 20
+                            font.pixelSize: 23
                             font.family: "${fontName}"
                         }
                         MouseArea {
@@ -462,7 +448,7 @@
         id: miscIslandMain
         color: miscIslandArea.containsMouse ? "#${c.base03}" : (root.miscVisible ? "#${c.base02}" : "#${c.base02}")
         radius: 14
-        Layout.preferredHeight: 28
+        Layout.preferredHeight: 36
         Layout.preferredWidth: miscLayout.implicitWidth + 24
         
         property var activePlayer: {
@@ -497,8 +483,8 @@
             // MPRIS Media Icon
             Rectangle {
                 id: musicIconRect
-                width: 20; height: 20
-                radius: 10
+                width: 28; height: 28
+                radius: 14
                 color: "transparent"
                 visible: parent.parent.activePlayer !== null
                 
@@ -507,22 +493,22 @@
                     text: "" // Music icon
                     color: parent.parent.parent.activePlayer && parent.parent.parent.activePlayer.playbackState === 1 ? "#${c.base0D}" : "#${c.base05}"
                     font.family: "${fontName}"
-                    font.pixelSize: 14
+                    font.pixelSize: 17
                 }
             }
 
             // Power Profile Indicator
             Rectangle {
                 color: "transparent"
-                Layout.preferredHeight: 20
-                Layout.preferredWidth: 20
+                Layout.preferredHeight: 28
+                Layout.preferredWidth: 28
                 
                 Text {
                     anchors.centerIn: parent
                     text: PowerProfiles.profile === 0 ? "" : (PowerProfiles.profile === 1 ? "" : "")
                     color: PowerProfiles.profile === 0 ? "#${c.base0B}" : (PowerProfiles.profile === 1 ? "#${c.base0D}" : "#${c.base08}")
                     font.family: "${fontName}"
-                    font.pixelSize: 14
+                    font.pixelSize: 17
                 }
                 
                 // Allow direct clicking for power profiles even if misc area is large

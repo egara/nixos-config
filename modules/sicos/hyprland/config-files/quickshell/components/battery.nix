@@ -135,30 +135,18 @@
                         text: ""
                         color: "#${c.base0D}" // Cyan
                         font.family: "${fontName}"
-                        font.pixelSize: 22
+                        font.pixelSize: 25
                     }
                     
                     Text {
                         text: "<font color='#${c.base05}'><b>" + (UPower.displayDevice != null ? Math.round(UPower.displayDevice.percentage * 100) : 0) + "%</b></font> <font color='#${c.base04}'>" + batteryPopup.getBatteryStateString() + "</font>"
                         font.family: "${fontName}"
-                        font.pixelSize: 18
+                        font.pixelSize: 21
                         textFormat: Text.RichText
                         Layout.fillWidth: true
                         Layout.leftMargin: 8
                     }
                     
-                    Text {
-                        text: "✕"
-                        color: closeArea.containsMouse ? "#${c.base05}" : "#${c.base04}"
-                        font.family: "${fontName}"
-                        font.pixelSize: 18
-                        MouseArea {
-                            id: closeArea
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            onClicked: root.batteryVisible = false
-                        }
-                    }
                 }
 
                 // Middle Row: Cards
@@ -179,7 +167,7 @@
                                 text: "Health"
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 13
+                                font.pixelSize: 16
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             Text {
@@ -187,7 +175,7 @@
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
                                 font.bold: true
-                                font.pixelSize: 20
+                                font.pixelSize: 23
                                 Layout.alignment: Qt.AlignHCenter
                             }
                         }
@@ -206,7 +194,7 @@
                                 text: "Capacity"
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 13
+                                font.pixelSize: 16
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             Text {
@@ -214,7 +202,7 @@
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
                                 font.bold: true
-                                font.pixelSize: 20
+                                font.pixelSize: 23
                                 Layout.alignment: Qt.AlignHCenter
                             }
                         }
@@ -234,7 +222,7 @@
                                 text: "Time"
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 13
+                                font.pixelSize: 16
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             Text {
@@ -242,7 +230,7 @@
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
                                 font.bold: true
-                                font.pixelSize: 20
+                                font.pixelSize: 23
                                 Layout.alignment: Qt.AlignHCenter
                             }
                         }
@@ -264,7 +252,7 @@
                             text: "Hardware Charge Limit"
                             color: "#${c.base0D}"
                             font.family: "${fontName}"
-                            font.pixelSize: 13
+                            font.pixelSize: 16
                             Layout.fillWidth: true
                         }
                         Text {
@@ -272,7 +260,7 @@
                             color: "#${c.base05}"
                             font.family: "${fontName}"
                             font.bold: true
-                            font.pixelSize: 16
+                            font.pixelSize: 19
                         }
                     }
                 }
@@ -301,7 +289,7 @@
                                 text: modelData.name
                                 color: PowerProfiles.profile === modelData.enumVal ? "#${c.base00}" : "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 14
+                                font.pixelSize: 17
                                 font.bold: PowerProfiles.profile === modelData.enumVal
                             }
                             
@@ -331,7 +319,7 @@
         property bool showPercent: UPower.displayDevice != null && UPower.displayDevice.state !== 4 && UPower.displayDevice.state !== 5
         color: batteryMouseArea.containsMouse ? "#${c.base03}" : (root.batteryVisible ? "#${c.base02}" : "#${c.base01}")
         radius: 14 // Fully rounded pill
-        Layout.preferredHeight: 28
+        Layout.preferredHeight: 36
         Layout.preferredWidth: showPercent ? 70 : 42
         visible: UPower.displayDevice != null && UPower.displayDevice.isPresent
         
@@ -352,7 +340,7 @@
                     if (UPower.displayDevice.percentage < 0.2) return "#${c.base08}"; // Red when low
                     return "#${c.base0B}"; // Green when discharging
                 }
-                font.pixelSize: 13
+                font.pixelSize: 16
                 font.family: "${fontName}"
             }
             Text {
@@ -360,7 +348,7 @@
                 visible: batteryWidgetContainer.showPercent
                 color: "#${c.base05}"
                 font.family: "${fontName}"
-                font.pixelSize: 13
+                font.pixelSize: 16
                 font.bold: true
             }
         }

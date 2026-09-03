@@ -87,7 +87,7 @@
                         text: modelData.name
                         color: isActive ? "#${c.base00}" : "#${c.base05}"
                         font.family: "${fontName}"
-                        font.pixelSize: 12
+                        font.pixelSize: 15
                         font.bold: true
                         anchors.verticalCenter: parent.verticalCenter
                     }
