@@ -574,7 +574,7 @@
                     text: "" // Music icon
                     color: parent.parent.parent.activePlayer && parent.parent.parent.activePlayer.playbackState === 1 ? "#${c.base0D}" : "#${c.base05}"
                     font.family: "${fontName}"
-                    font.pixelSize: 18
+                    font.pixelSize: 20
                 }
             }
 
@@ -589,7 +589,7 @@
                     text: PowerProfiles.profile === 0 ? "" : (PowerProfiles.profile === 1 ? "" : "")
                     color: PowerProfiles.profile === 0 ? "#${c.base0B}" : (PowerProfiles.profile === 1 ? "#${c.base0D}" : "#${c.base08}")
                     font.family: "${fontName}"
-                    font.pixelSize: 18
+                    font.pixelSize: PowerProfiles.profile === 2 ? 18 : 23
                 }
                 
                 // Allow direct clicking for power profiles even if misc area is large

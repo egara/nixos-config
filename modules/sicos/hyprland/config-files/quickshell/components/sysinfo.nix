@@ -417,7 +417,7 @@
                     text: ""
                     color: "#${c.base05}" // Same as power icon
                     font.family: "${fontName}"
-                    font.pixelSize: 18
+                    font.pixelSize: 23
                 }
                 Text {
                     text: sysData.cpu + "%"
@@ -435,7 +435,7 @@
                     text: ""
                     color: "#${c.base05}" // Same as power icon
                     font.family: "${fontName}"
-                    font.pixelSize: 18
+                    font.pixelSize: 20
                 }
                 Text {
                     text: sysData.ram + "%"

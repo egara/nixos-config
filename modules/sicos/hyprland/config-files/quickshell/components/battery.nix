@@ -340,7 +340,13 @@
                     if (UPower.displayDevice.percentage < 0.2) return "#${c.base08}"; // Red when low
                     return "#${c.base0B}"; // Green when discharging
                 }
-                font.pixelSize: 18
+                font.pixelSize: {
+                    if (!UPower.displayDevice) return 16;
+                    let s = UPower.displayDevice.state;
+                    if (s === 4 || s === 5) return 17;
+                    if (s === 1) return 16;
+                    return 16;
+                }
                 font.family: "${fontName}"
             }
             Text {
