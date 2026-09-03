@@ -18,29 +18,13 @@
                     if (Hyprland.toplevels === undefined) return wins;
                     var toplevels = Array.from(Hyprland.toplevels.values);
                     
-                    var seenClasses = {}; // To group multiple instances of same app
-                    
                     for (var i = 0; i < toplevels.length; i++) {
                         var w = toplevels[i];
                         if (w && w.workspace && w.workspace.id === modelData.id) {
                             var cls = w.initialClass || w["class"] || (w.wayland ? w.wayland.appId : null) || "?";
                             var title = w.title || w.initialTitle || "";
                             
-                            // If it's a terminal, we might want to group by title instead if running specific TUI apps
-                            var groupKey = cls;
-                            var c_lower = cls.toLowerCase();
-                            var t_lower = title.toLowerCase();
-                            
-                            if (c_lower === "kitty" || c_lower === "alacritty" || c_lower.indexOf("terminal") !== -1) {
-                                if (t_lower.indexOf("yazi") !== -1) groupKey = "yazi";
-                                else if (t_lower.indexOf("btop") !== -1) groupKey = "btop";
-                                else if (t_lower.indexOf("nvim") !== -1 || t_lower.indexOf("neovim") !== -1) groupKey = "nvim";
-                            }
-                            
-                            if (!seenClasses[groupKey]) {
-                                wins.push({ "class": cls, "title": title });
-                                seenClasses[groupKey] = true;
-                            }
+                            wins.push({ "class": cls, "title": title });
                         }
                     }
                     return wins;
