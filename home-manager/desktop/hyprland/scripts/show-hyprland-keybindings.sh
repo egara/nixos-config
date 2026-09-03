@@ -45,19 +45,4 @@ processed_list=$(echo "$all_binds" | jq -r '
 display_menu=$(echo "$processed_list" | sed 's/󰇘.*//' | sort -u)
 
 # 4. Show the menu to the user
-selected=$(echo "$display_menu" | walker --dmenu --placeholder "Search keyboard shortcuts..." --width 1000)
-
-# 5. If the user selected something, find the corresponding command and execute it
-if [ -n "$selected" ]; then
-    # Search for the original line that starts exactly with the selection followed by the separator
-    # Use grep -F to treat the text literally (due to special characters)
-    match=$(echo "$processed_list" | grep -F "${selected}󰇘" | head -n 1)
-    
-    if [ -n "$match" ]; then
-        # Extract the dispatcher and arguments using the hidden separator
-        dispatcher=$(echo "$match" | awk -F'󰇘' '{print $2}')
-        arg=$(echo "$match" | awk -F'󰇘' '{print $3}')
-        
-        hyprctl dispatch "$dispatcher" "$arg"
-    fi
-fi
+echo "$display_menu" | walker --dmenu --placeholder "Search keyboard shortcuts..." --width 1000

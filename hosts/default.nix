@@ -64,8 +64,9 @@ let
             {
               # SicOS module options configuration
               programs.sicos.hyprland.enable = true;
-              programs.sicos.hyprland.shell = "dank-material-shell";
+              # programs.sicos.hyprland.shell = "dank-material-shell";
               #programs.sicos.hyprland.shell = "waybar";
+              programs.sicos.hyprland.shell = "sicos-bar";
               programs.sicos.hyprland.theming.enable = true;
               programs.sicos.hyprland.theming.mode = themeMode;
               programs.sicos.hyprland.theming.base16Scheme = themeScheme;

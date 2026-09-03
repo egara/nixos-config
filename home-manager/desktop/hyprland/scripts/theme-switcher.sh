@@ -121,6 +121,17 @@ if systemctl --user is-active --quiet dms.service; then
     systemctl --user restart dms.service
 fi
 
+# Restart QuickShell if active
+if command -v quickshell &> /dev/null; then
+    # Only restart if it's actually running
+    if pgrep quickshell > /dev/null; then
+        echo "Restarting QuickShell to apply new theme..."
+        pkill quickshell || true
+        sleep 1
+        nohup uwsm app -- quickshell > /dev/null 2>&1 &
+    fi
+fi
+
 # Restart Walker to apply theme changes
 if command -v walker &> /dev/null; then
     echo "Restarting Walker to apply new theme..."

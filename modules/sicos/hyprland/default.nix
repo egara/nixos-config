@@ -26,7 +26,7 @@ in
 
     # Shell
     shell = lib.mkOption {
-      type = lib.types.enum [ "waybar" "dank-material-shell" ];
+      type = lib.types.enum [ "waybar" "dank-material-shell" "sicos-bar" ];
       default = "waybar";
       description = "Which shell to use (waybar or dank-material-shell).";
     };
@@ -276,6 +276,7 @@ in
         hyprland
         hyprlock
         hypridle
+        hyprsunset
         nautilus # File manager
         hyprland-qtutils
         wlogout
@@ -307,6 +308,7 @@ in
         # catppuccin-sddm
 
         # Other tools
+        wtype
         udiskie # Automount USB devices
         awww # for wallpapers
         feh # Image viewer
@@ -333,7 +335,6 @@ in
         libinput
 
         # Optional features for shell components
-        cava
         matugen
         gnome-menus
 
@@ -343,6 +344,17 @@ in
       ] ++ lib.optionals (cfg.shell == "dank-material-shell") [
         inputs.dankmaterialshell.packages.${pkgs.system}.default
         quickshell
+      ] ++ lib.optionals (cfg.shell == "sicos-bar") [
+        (pkgs.symlinkJoin {
+          name = "quickshell-wrapped";
+          paths = [ pkgs.quickshell ];
+          buildInputs = [ pkgs.makeWrapper ];
+          postBuild = ''
+            wrapProgram $out/bin/quickshell \
+              --prefix QML2_IMPORT_PATH : "${pkgs.qt6.qt5compat}/${pkgs.qt6.qtbase.qtQmlPrefix}" \
+              --prefix QT_PLUGIN_PATH : "${pkgs.kdePackages.qtimageformats}/${pkgs.qt6.qtbase.qtPluginPrefix}:${pkgs.kdePackages.kimageformats}/${pkgs.qt6.qtbase.qtPluginPrefix}"
+          '';
+        })
       ];
     };
 }
