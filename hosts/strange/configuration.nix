@@ -105,10 +105,11 @@
     #teams-for-linux
     opencode
     #pkgs-stable.jdk8
-    kdePackages.kdenlive
+    #kdePackages.kdenlive
     #obsidian
     #chatbox
-    rpi-imager # Run: sudo -E rpi-imager
+    #rpi-imager # Run: sudo -E rpi-imager
+    python3
   ];
 
   # Mounting openjdk8 via bind mount so Eclipse properly recognizes it as a static path without symlink issues
