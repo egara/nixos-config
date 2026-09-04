@@ -1488,7 +1488,7 @@
                             
                             // Segmented Control (Ethernet / WiFi)
                             Rectangle {
-                                width: 160; height: 32; radius: 16
+                                width: 190; height: 32; radius: 16
                                 color: "#1a${c.base05}"
                                 RowLayout {
                                     anchors.fill: parent
@@ -1496,13 +1496,13 @@
                                     Rectangle {
                                         Layout.fillWidth: true; Layout.fillHeight: true; radius: 16
                                         color: popupContentCC.networkTab === "ethernet" ? "#${c.base0D}" : "transparent"
-                                        Text { anchors.centerIn: parent; text: popupContentCC.networkTab === "ethernet" ? "✓ Ethernet" : "Ethernet"; color: popupContentCC.networkTab === "ethernet" ? "#${c.base00}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: popupContentCC.networkTab === "ethernet" }
+                                        Text { anchors.centerIn: parent; text: "Ethernet"; color: popupContentCC.networkTab === "ethernet" ? "#${c.base00}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; font.bold: popupContentCC.networkTab === "ethernet" }
                                         MouseArea { anchors.fill: parent; onClicked: popupContentCC.networkTab = "ethernet" }
                                     }
                                     Rectangle {
                                         Layout.fillWidth: true; Layout.fillHeight: true; radius: 16
                                         color: popupContentCC.networkTab === "wifi" ? "#${c.base0D}" : "transparent"
-                                        Text { anchors.centerIn: parent; text: popupContentCC.networkTab === "wifi" ? "✓ WiFi" : "WiFi"; color: popupContentCC.networkTab === "wifi" ? "#${c.base00}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: popupContentCC.networkTab === "wifi" }
+                                        Text { anchors.centerIn: parent; text: "WiFi"; color: popupContentCC.networkTab === "wifi" ? "#${c.base00}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; font.bold: popupContentCC.networkTab === "wifi" }
                                         MouseArea { anchors.fill: parent; onClicked: popupContentCC.networkTab = "wifi" }
                                     }
                                 }
