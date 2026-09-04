@@ -599,21 +599,27 @@
                                             mainP = p;
                                             arr.push({ name: name, class: cls, percent: p });
                                         } else if (name.toLowerCase().indexOf("kbd") !== -1 || name.toLowerCase().indexOf("keyboard") !== -1) {
-                                            // Ensure we only add ONE keyboard backlight if multiple exist
-                                            var alreadyHasKbd = false;
-                                            for (var j = 0; j < arr.length; j++) {
-                                                if (arr[j].name.toLowerCase().indexOf("kbd") !== -1 || arr[j].name.toLowerCase().indexOf("keyboard") !== -1) {
-                                                    alreadyHasKbd = true;
-                                                    break;
-                                                }
-                                            }
-                                            if (!alreadyHasKbd) {
-                                                arr.push({ name: name, class: cls, percent: p });
-                                            }
+                                            // Keyboard backlight devices
+                                            arr.push({ name: name, class: cls, percent: p });
                                         }
                                     }
                                 }
                                 if (!popupContentCC.isDraggingBrightness) {
+                                    // Deduplicate: remove generic chromeos::kbd_backlight if a more specific
+                                    // keyboard backlight exists (e.g. framework_laptop::kbd_backlight)
+                                    var hasNonChromeosKbd = false;
+                                    var chromeosKbdIdx = -1;
+                                    for (var k = 0; k < arr.length; k++) {
+                                        if (arr[k].name.indexOf("kbd_backlight") !== -1 && arr[k].name.indexOf("chromeos::") === -1) {
+                                            hasNonChromeosKbd = true;
+                                        }
+                                        if (arr[k].name === "chromeos::kbd_backlight") {
+                                            chromeosKbdIdx = k;
+                                        }
+                                    }
+                                    if (hasNonChromeosKbd && chromeosKbdIdx >= 0) {
+                                        arr.splice(chromeosKbdIdx, 1);
+                                    }
                                     popupContentCC.brightnessDevices = arr;
                                     popupContentCC.mainBrightness = mainP;
                                 }
