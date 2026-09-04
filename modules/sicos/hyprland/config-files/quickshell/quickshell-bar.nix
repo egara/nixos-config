@@ -66,13 +66,18 @@ PanelWindow {
 
     // Popup visibility state for smooth animations
     property bool batteryVisible: false
+    property bool batteryHovering: false
     property bool sysinfoVisible: false
+    property bool sysinfoHovering: false
     property bool trayMenuVisible: false
     property bool clockVisible: false
+    property bool clockHovering: false
     property bool miscVisible: false
     property real miscButtonX: 0
+    property bool miscHovering: false
     property bool controlcenterVisible: false
     property real controlcenterButtonX: 0
+    property bool controlcenterHovering: false
     
     // Do not disturb mode
     property bool dndMode: false

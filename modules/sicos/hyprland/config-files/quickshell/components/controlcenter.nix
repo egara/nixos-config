@@ -1692,10 +1692,31 @@
                         }
                     }
                 }
+                }
+            }
+
+            // Hover tracker using HoverHandler (Qt 6)
+            HoverHandler {
+                id: popupHoverCC
+                onHoveredChanged: {
+                    if (hovered) {
+                        root.controlcenterHovering = true;
+                        ccCloseTimer.stop();
+                    } else {
+                        root.controlcenterHovering = false;
+                        ccCloseTimer.start();
+                    }
+                }
+            }
+            
+            Timer {
+                id: ccCloseTimer
+                interval: 400
+                repeat: false
+                onTriggered: if (!root.controlcenterHovering) root.controlcenterVisible = false
             }
         }
     }
-}
   '';
 
   widget = ''
@@ -1705,7 +1726,7 @@
         radius: 18
         border.width: 1
         border.color: "white"
-        color: ccMouseArea.containsMouse ? "#${c.base03}" : (root.controlcenterVisible ? "#E6${c.base02}" : "#CC${c.base01}")
+        color: hoverCC.hovered ? "#${c.base03}" : (root.controlcenterVisible ? "#E6${c.base02}" : "#CC${c.base01}")
         
         Rectangle {
             id: ccBtnAvatarMask
@@ -1741,14 +1762,37 @@
             visible: ccBtnAvatarImage.status !== Image.Ready
         }
         
-        MouseArea {
-            id: ccMouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: {
-                root.controlcenterButtonX = ccButton.mapToItem(null, ccButton.width / 2, 0).x;
-                root.controlcenterVisible = !root.controlcenterVisible;
+        // Hover tracker using HoverHandler (Qt 6)
+        HoverHandler {
+            id: hoverCC
+            onHoveredChanged: {
+                if (hovered) {
+                    root.controlcenterHovering = true;
+                    ccCloseTimerWidget.stop();
+                    ccOpenTimer.start();
+                } else {
+                    root.controlcenterHovering = false;
+                    ccOpenTimer.stop();
+                    ccCloseTimerWidget.start();
+                }
             }
+        }
+        
+        Timer {
+            id: ccOpenTimer
+            interval: 200
+            repeat: false
+            onTriggered: {
+                root.controlcenterButtonX = ccButton.mapToItem(null, ccButton.width / 2, 0).x;
+                root.controlcenterVisible = true;
+            }
+        }
+        
+        Timer {
+            id: ccCloseTimerWidget
+            interval: 400
+            repeat: false
+            onTriggered: if (!root.controlcenterHovering) root.controlcenterVisible = false
         }
     }
   '';

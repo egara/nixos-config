@@ -308,6 +308,27 @@
                     }
                 }
             }
+
+            // Hover tracker using HoverHandler (Qt 6)
+            HoverHandler {
+                id: popupHoverBattery
+                onHoveredChanged: {
+                    if (hovered) {
+                        root.batteryHovering = true;
+                        batteryCloseTimer.stop();
+                    } else {
+                        root.batteryHovering = false;
+                        batteryCloseTimer.start();
+                    }
+                }
+            }
+            
+            Timer {
+                id: batteryCloseTimer
+                interval: 400
+                repeat: false
+                onTriggered: if (!root.batteryHovering) root.batteryVisible = false
+            }
         }
     }
   '';
@@ -317,7 +338,7 @@
     Rectangle {
         id: batteryWidgetContainer
         property bool showPercent: UPower.displayDevice != null && UPower.displayDevice.state !== 4 && UPower.displayDevice.state !== 5
-        color: batteryMouseArea.containsMouse ? "#${c.base03}" : (root.batteryVisible ? "#E6${c.base02}" : "#CC${c.base01}")
+        color: hoverBattery.hovered ? "#${c.base03}" : (root.batteryVisible ? "#E6${c.base02}" : "#CC${c.base01}")
         radius: 14 // Fully rounded pill
         Layout.preferredHeight: 36
         Layout.preferredWidth: showPercent ? 70 : 42
@@ -342,7 +363,7 @@
                 }
                 font.pixelSize: {
                     if (!UPower.displayDevice) return 16;
-                    let s = UPower.displayDevice.state;
+                    let s = Uower.displayDevice.state;
                     if (s === 4 || s === 5) return 17;
                     if (s === 1) return 16;
                     return 16;
@@ -359,13 +380,34 @@
             }
         }
 
-        MouseArea {
-            id: batteryMouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: {
-                root.batteryVisible = !root.batteryVisible
+        // Hover tracker using HoverHandler (Qt 6)
+        HoverHandler {
+            id: hoverBattery
+            onHoveredChanged: {
+                if (hovered) {
+                    root.batteryHovering = true;
+                    batteryCloseTimerWidget.stop();
+                    batteryOpenTimer.start();
+                } else {
+                    root.batteryHovering = false;
+                    batteryOpenTimer.stop();
+                    batteryCloseTimerWidget.start();
+                }
             }
+        }
+        
+        Timer {
+            id: batteryOpenTimer
+            interval: 200
+            repeat: false
+            onTriggered: root.batteryVisible = true
+        }
+        
+        Timer {
+            id: batteryCloseTimerWidget
+            interval: 400
+            repeat: false
+            onTriggered: if (!root.batteryHovering) root.batteryVisible = false
         }
     }
   '';

@@ -55,13 +55,6 @@
             height: parent.height
             color: "transparent"
             
-            // Intercept all clicks to prevent them from passing through to Hyprland windows below
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                onWheel: {} // intercept scroll events too
-            }
-            
             // Ambient Background Mask (Body + Beak)
             Item {
                 id: popupBgMask
@@ -438,6 +431,36 @@
                     }
                 }
             }
+
+            // Hover tracker using HoverHandler (Qt 6) - does NOT interfere with child buttons
+            // Unlike MouseArea, HoverHandler doesn't steal hover from child MouseAreas
+            HoverHandler {
+                id: popupHoverHandler
+                onHoveredChanged: {
+                    if (hovered) {
+                        root.miscHovering = true;
+                        popupCloseTimer.stop();
+                    } else {
+                        root.miscHovering = false;
+                        popupCloseTimer.start();
+                    }
+                }
+            }
+
+            // Wheel interceptor (separate from hover tracking)
+            // acceptedButtons: Qt.NoButton ensures clicks pass through to child buttons
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.NoButton
+                onWheel: {}
+            }
+            
+            Timer {
+                id: popupCloseTimer
+                interval: 400
+                repeat: false
+                onTriggered: if (!root.miscHovering) root.miscVisible = false
+            }
         }
     }
   '';
@@ -446,7 +469,7 @@
     // Miscellaneous Island
     Rectangle {
         id: miscIslandMain
-        color: miscIslandArea.containsMouse ? "#${c.base03}" : (root.miscVisible ? "#E6${c.base02}" : "#CC${c.base01}")
+        color: hoverWidget.hovered ? "#${c.base03}" : (root.miscVisible ? "#E6${c.base02}" : "#CC${c.base01}")
         radius: 14
         Layout.preferredHeight: 36
         Layout.preferredWidth: miscLayout.implicitWidth + 24
@@ -509,19 +532,6 @@
                 }
             }
             return players[0];
-        }
-
-        MouseArea {
-            id: miscIslandArea
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: {
-                if (parent.activePlayer) {
-                    // Calculate exactly when clicked! Layout is 100% finished and accurate.
-                    root.miscButtonX = musicIconRect.mapToItem(null, musicIconRect.width / 2, 0).x;
-                    root.miscVisible = !root.miscVisible;
-                }
-            }
         }
 
         RowLayout {
@@ -612,6 +622,42 @@
                     id: indicatorProc
                 }
             }
+        }
+
+        // Hover tracker using HoverHandler (Qt 6) - does NOT interfere with child buttons
+        // Unlike MouseArea, HoverHandler doesn't steal hover from child MouseAreas
+        HoverHandler {
+            id: hoverWidget
+            onHoveredChanged: {
+                if (hovered) {
+                    root.miscHovering = true;
+                    widgetCloseTimer.stop();
+                    if (miscIslandMain.activePlayer) miscOpenTimer.start();
+                } else {
+                    root.miscHovering = false;
+                    miscOpenTimer.stop();
+                    widgetCloseTimer.start();
+                }
+            }
+        }
+        
+        Timer {
+            id: miscOpenTimer
+            interval: 200
+            repeat: false
+            onTriggered: {
+                if (miscIslandMain.activePlayer) {
+                    root.miscButtonX = musicIconRect.mapToItem(null, musicIconRect.width / 2, 0).x;
+                    root.miscVisible = true;
+                }
+            }
+        }
+        
+        Timer {
+            id: widgetCloseTimer
+            interval: 400
+            repeat: false
+            onTriggered: if (!root.miscHovering) root.miscVisible = false
         }
     }
   '';

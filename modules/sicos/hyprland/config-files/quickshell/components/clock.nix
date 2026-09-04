@@ -744,6 +744,27 @@
                     Item { Layout.fillHeight: true } // Push everything up
                 }
             }
+
+            // Hover tracker using HoverHandler (Qt 6)
+            HoverHandler {
+                id: popupHoverClock
+                onHoveredChanged: {
+                    if (hovered) {
+                        root.clockHovering = true;
+                        clockCloseTimer.stop();
+                    } else {
+                        root.clockHovering = false;
+                        clockCloseTimer.start();
+                    }
+                }
+            }
+            
+            Timer {
+                id: clockCloseTimer
+                interval: 400
+                repeat: false
+                onTriggered: if (!root.clockHovering) root.clockVisible = false
+            }
         }
     }
   '';
@@ -751,7 +772,7 @@
   widget = ''
     Rectangle {
         id: clockWidgetContainer
-        color: clockMouseArea.containsMouse ? "#${c.base03}" : (root.clockVisible ? "#E6${c.base02}" : "#CC${c.base01}")
+        color: hoverClock.hovered ? "#${c.base03}" : (root.clockVisible ? "#E6${c.base02}" : "#CC${c.base01}")
         radius: 14 // Pill style
         Layout.preferredHeight: 36
         Layout.preferredWidth: clockLayout.implicitWidth + 24
@@ -811,11 +832,34 @@
             }
         }
 
-        MouseArea {
-            id: clockMouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: root.clockVisible = !root.clockVisible
+        // Hover tracker using HoverHandler (Qt 6)
+        HoverHandler {
+            id: hoverClock
+            onHoveredChanged: {
+                if (hovered) {
+                    root.clockHovering = true;
+                    clockCloseTimerWidget.stop();
+                    clockOpenTimer.start();
+                } else {
+                    root.clockHovering = false;
+                    clockOpenTimer.stop();
+                    clockCloseTimerWidget.start();
+                }
+            }
+        }
+        
+        Timer {
+            id: clockOpenTimer
+            interval: 200
+            repeat: false
+            onTriggered: root.clockVisible = true
+        }
+        
+        Timer {
+            id: clockCloseTimerWidget
+            interval: 400
+            repeat: false
+            onTriggered: if (!root.clockHovering) root.clockVisible = false
         }
     }
   '';

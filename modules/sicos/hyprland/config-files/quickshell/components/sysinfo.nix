@@ -350,6 +350,27 @@
                     }
                 }
             }
+
+            // Hover tracker using HoverHandler (Qt 6)
+            HoverHandler {
+                id: popupHoverSysinfo
+                onHoveredChanged: {
+                    if (hovered) {
+                        root.sysinfoHovering = true;
+                        sysinfoCloseTimer.stop();
+                    } else {
+                        root.sysinfoHovering = false;
+                        sysinfoCloseTimer.start();
+                    }
+                }
+            }
+            
+            Timer {
+                id: sysinfoCloseTimer
+                interval: 400
+                repeat: false
+                onTriggered: if (!root.sysinfoHovering) root.sysinfoVisible = false
+            }
         }
         
         Process { id: killProc; running: false }
@@ -401,7 +422,7 @@
     // SysInfo Island (CPU & RAM)
     Rectangle {
         id: sysinfoWidgetContainer
-        color: sysMouseArea.containsMouse ? "#${c.base03}" : "#CC${c.base01}"
+        color: hoverSysinfo.hovered ? "#${c.base03}" : "#CC${c.base01}"
         radius: 14 // Pill style
         Layout.preferredHeight: 36
         Layout.preferredWidth: 120
@@ -447,13 +468,34 @@
             }
         }
 
-        MouseArea {
-            id: sysMouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: {
-                root.sysinfoVisible = !root.sysinfoVisible
+        // Hover tracker using HoverHandler (Qt 6)
+        HoverHandler {
+            id: hoverSysinfo
+            onHoveredChanged: {
+                if (hovered) {
+                    root.sysinfoHovering = true;
+                    sysinfoCloseTimerWidget.stop();
+                    sysinfoOpenTimer.start();
+                } else {
+                    root.sysinfoHovering = false;
+                    sysinfoOpenTimer.stop();
+                    sysinfoCloseTimerWidget.start();
+                }
             }
+        }
+        
+        Timer {
+            id: sysinfoOpenTimer
+            interval: 200
+            repeat: false
+            onTriggered: root.sysinfoVisible = true
+        }
+        
+        Timer {
+            id: sysinfoCloseTimerWidget
+            interval: 400
+            repeat: false
+            onTriggered: if (!root.sysinfoHovering) root.sysinfoVisible = false
         }
         
         QtObject {
