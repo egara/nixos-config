@@ -225,7 +225,22 @@
                         }
                     }
                     if (!found) selectedIndex = 0;
-                    focusScope.forceActiveFocus();
+                    
+                    // Small delay to ensure Wayland has mapped the surface before requesting focus
+                    focusTimer.start();
+                }
+            }
+
+            Timer {
+                id: focusTimer
+                interval: 50
+                repeat: false
+                onTriggered: focusScope.forceActiveFocus()
+            }
+
+            onAllWindowsChanged: {
+                if (windowSwitcherActive && allWindows.length === 0) {
+                    windowSwitcherActive = false;
                 }
             }
 

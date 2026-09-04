@@ -623,12 +623,26 @@ PanelWindow {
     // FIFO listener for Hyprland -> Quickshell window switcher toggle
     Process {
         id: switcherFifo
-        command: ["bash", "-c", "FIFO=/tmp/sicos-switcher-fifo; [ -p $FIFO ] || mkfifo $FIFO 2>/dev/null; while true; do read cmd < $FIFO; echo $cmd; done"]
+        command: ["bash", "-c", "FIFO=/tmp/sicos-switcher-fifo; rm -f $FIFO; mkfifo $FIFO; tail -f $FIFO"]
         running: true
         stdout: SplitParser {
             onRead: function(line) {
                 if (line.trim() === "toggle") {
-                    windowSwitcherActive = !windowSwitcherActive;
+                    var count = 0;
+                    if (typeof Hyprland !== "undefined" && Hyprland.toplevels) {
+                        var toplevels = Array.from(Hyprland.toplevels.values);
+                        for (var i = 0; i < toplevels.length; i++) {
+                            var w = toplevels[i];
+                            if (w && w.workspace && !w.workspace.name.startsWith("special:")) {
+                                count++;
+                            }
+                        }
+                    }
+                    if (count > 0) {
+                        windowSwitcherActive = !windowSwitcherActive;
+                    } else {
+                        windowSwitcherActive = false;
+                    }
                 }
             }
         }
