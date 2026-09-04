@@ -2,6 +2,11 @@
 {
   popup = ''
     PopupWindow {
+            HyprlandFocusGrab {
+                active: root.controlcenterVisible
+                windows: [ccPopup, root]
+                onCleared: root.controlcenterVisible = false
+            }
         id: ccPopup
         anchor.window: root
         anchor.rect.x: root.width - 10

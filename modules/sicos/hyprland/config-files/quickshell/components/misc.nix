@@ -2,6 +2,11 @@
 {
   popup = ''
     PopupWindow {
+            HyprlandFocusGrab {
+                active: root.miscVisible
+                windows: [miscPopup, root]
+                onCleared: root.miscVisible = false
+            }
         id: miscPopup
         anchor.window: root
         anchor.rect.x: root.width - 20

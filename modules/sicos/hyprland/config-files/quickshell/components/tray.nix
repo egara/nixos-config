@@ -12,7 +12,11 @@
             anchor.window: root
             anchor.edges: Edges.Bottom
             visible: root.trayMenuVisible
-            grabFocus: true
+            HyprlandFocusGrab {
+                active: root.trayMenuVisible
+                windows: [trayMenuPopup, root]
+                onCleared: root.trayMenuVisible = false
+            }
             onVisibleChanged: {
                 if (!visible && root.trayMenuVisible) {
                     root.trayMenuVisible = false;
@@ -51,13 +55,6 @@
                     menuModel.aboutToShow();
                 }
                 
-                submenuHydrator.menu = menuModel;
-                try {
-                    submenuHydrator.open();
-                    Qt.callLater(() => {
-                        try { submenuHydrator.close(); } catch(e) {}
-                    });
-                } catch(e) {}
             }
 
             function popMenu() {
@@ -122,10 +119,6 @@
                         visible: trayMenuPopup.menuStack.length > 1
                     }
 
-                    QsMenuAnchor {
-                        id: submenuHydrator
-                        anchor.window: trayMenuPopup
-                    }
 
                     QsMenuOpener {
                         id: rootOpener
