@@ -60,3 +60,13 @@ This document contains a historical record of all features, modules, and integra
 ### 10. Network & Connectivity
 - **Real-time Network Statistics:** Real-time upload and download speed metrics dynamically displayed, scaled in Kbps/Mbps.
 - **Visual State Indicators:** Active interface icons updating based on connectivity status (WiFi signal strength icons, Ethernet wired icon, or disconnected state), fully integrated into the system tray area.
+
+### 11. Window Switcher (Alt + Tab Overlay)
+- **Visual Window Switcher:** A full-screen overlay triggered by `ALT + Tab` showing live thumbnails of **all windows across all workspaces and monitors**.
+- **Live Previews:** Each window card renders a real-time clone via `ScreencopyView` with `scaleToFit` scaling, centered in the card while maintaining aspect ratio.
+- **Keyboard Navigation:** `Left`/`Right` arrow keys or `Tab`/`Shift+Tab` cycle the selection. `Enter` confirms and focuses the selected window. `Escape` dismisses the switcher without changing focus.
+- **Mouse Interaction:** Hover highlights a card, click focuses the window and closes the switcher. Clicking outside the modal dismisses it.
+- **Auto-selection:** The currently focused window is automatically selected when the switcher opens.
+- **Hyprland Integration:** Communicates with Hyprland via a FIFO pipe (`/tmp/sicos-switcher-fifo`), triggered by the `toggle-switcher.sh` script bound to `ALT + Tab` in `hyprland.lua`.
+- **Keyboard Focus Strategy:** Uses `WlrKeyboardFocus.OnDemand` (not `Exclusive`) so that the overlay can receive keyboard input while still allowing Hyprland to transfer focus to other windows when a selection is made.
+- **Consistent Theming:** Uses the same Stylix color palette, animations (`OutBack`/`OutCubic`), and border-radius patterns as the Workspace Overview and other Premium UX modals.

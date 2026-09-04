@@ -67,7 +67,31 @@ To avoid this, we use a hybrid popup anchoring system:
    - SysInfo: `anchor.rect.x: 10`, `anchor.edges: Edges.Bottom | Edges.Left`
    - Since the modal is "frozen" and will never jump when pushed, the *Beak* is pushed individually and statically in the file (`anchors.leftMargin` or `rightMargin`) until its X falls mathematically on the visual center of the corresponding icon in the current bar layout.
 
-## 6. References & Documentation
+## 6. Overlay Modals and Keyboard Focus Management
+
+### The Window Switcher Pattern
+The Window Switcher (`windowswitcher.nix`) is a full-screen overlay modal that displays live thumbnails of all open windows across all workspaces. It follows the same architectural patterns as the Workspace Overview but with a horizontal row layout instead of a grid.
+
+**Key Implementation Details:**
+- Uses `Variants` over `Quickshell.screens` to render on all monitors.
+- `WlrLayershell.layer: WlrLayer.Overlay` places it above all other windows.
+- `WlrKeyboardFocus.OnDemand` is critical — see below.
+- Communicates with Hyprland via a FIFO pipe (`/tmp/sicos-switcher-fifo`) since Quickshell cannot register global hotkeys directly.
+- The Hyprland binding in `hyprland.lua` executes `toggle-switcher.sh`, which writes `toggle\n` to the FIFO.
+- A persistent `Process` with `SplitParser` in `quickshell-bar.nix` listens to the FIFO and toggles `windowSwitcherActive`.
+
+### Keyboard Focus: OnDemand vs Exclusive
+When building overlay modals that need to **transfer focus to other windows** (like a window switcher), the keyboard focus mode is critical:
+
+- **`WlrKeyboardFocus.Exclusive`**: Blocks all other applications from receiving keyboard focus. This is ideal for modals that are purely informational (like the Calendar or System Monitor). However, **it prevents Hyprland from transferring focus to other windows** while the overlay is visible. If you try to dispatch `focuswindow` while an Exclusive overlay is open, Hyprland may move the cursor but cannot change the keyboard focus.
+
+- **`WlrKeyboardFocus.OnDemand`**: The overlay receives keyboard input when the user interacts with it, but **does not block** the compositor from focusing other windows. This is essential for interactive overlays like the Window Switcher, where selecting a window must immediately transfer focus to it.
+
+**Golden Rule:**
+- Use `Exclusive` for modals that are "read-only" or "self-contained" (Calendar, System Info, Battery).
+- Use `OnDemand` for modals that need to **act on other windows** (Window Switcher, any future window management UI).
+
+## 7. References & Documentation
 - **Official Quickshell Documentation (v0.1.0):** [https://quickshell.org/docs/v0.1.0/guide/](https://quickshell.org/docs/v0.1.0/guide/)
 - **Local Reference Projects (Source Code):**
   - **DankMaterialShell (DMS):** `/home/egarcia/Development/git/DankMaterialShell`

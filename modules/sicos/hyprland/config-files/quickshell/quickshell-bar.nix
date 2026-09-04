@@ -15,6 +15,7 @@ let
   tray = import ./components/tray.nix { inherit config lib pkgs c fontName; };
   progressOsd = import ./components/progressOsd.nix { inherit config lib pkgs c fontName; };
   overview = import ./components/overview.nix { inherit config lib pkgs c fontName; };
+  windowSwitcher = import ./components/windowswitcher.nix { inherit config lib pkgs c fontName; };
 in
 ''
 //@ pragma UseQApplication
@@ -36,6 +37,7 @@ import "Model.js" as Model
 
 Scope {
     property bool overviewActive: false
+    property bool windowSwitcherActive: false
 
 PanelWindow {
     id: root
@@ -613,6 +615,21 @@ PanelWindow {
     
     ${progressOsd.widget}
     
+    // FIFO listener for Hyprland -> Quickshell window switcher toggle
+    Process {
+        id: switcherFifo
+        command: ["bash", "-c", "FIFO=/tmp/sicos-switcher-fifo; [ -p $FIFO ] || mkfifo $FIFO 2>/dev/null; while true; do read cmd < $FIFO; echo $cmd; done"]
+        running: true
+        stdout: SplitParser {
+            onRead: function(line) {
+                if (line.trim() === "toggle") {
+                    windowSwitcherActive = !windowSwitcherActive;
+                }
+            }
+        }
+    }
+
     ${overview}
+    ${windowSwitcher}
 }
 ''
