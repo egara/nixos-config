@@ -482,8 +482,10 @@ PanelWindow {
             
             model: osdModel
             delegate: Rectangle {
+                    id: osdRect
+                    property bool expanded: false
                     width: 480
-                    implicitHeight: Math.max(120, osdCol.implicitHeight + 40)
+                    implicitHeight: Math.max(90, osdCol.implicitHeight + 30)
                     color: "#F0${c.base01}"
                     radius: 16
                     border.color: "#33${c.base05}"
@@ -568,6 +570,34 @@ PanelWindow {
                                 Layout.preferredWidth: 24
                                 Layout.preferredHeight: 24
                                 radius: 12
+                                color: osdExpandHover.hovered ? "#33${c.base08}" : "transparent"
+                                visible: bodyText.truncated || osdRect.expanded
+                                
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: osdRect.expanded ? "󰅃" : "󰅀"
+                                    color: osdExpandHover.hovered ? "#${c.base08}" : "#${c.base05}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 17
+                                }
+                                
+                                HoverHandler {
+                                    id: osdExpandHover
+                                }
+                                
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        osdRect.expanded = !osdRect.expanded
+                                    }
+                                }
+                            }
+                            
+                            Rectangle {
+                                Layout.preferredWidth: 24
+                                Layout.preferredHeight: 24
+                                radius: 12
                                 color: osdCloseHover.hovered ? "#33${c.base08}" : "transparent"
                                 
                                 Text {
@@ -582,8 +612,10 @@ PanelWindow {
                                     id: osdCloseHover
                                 }
                                 
-                                TapHandler {
-                                    onTapped: {
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
                                         root.forceDismissNotification(model.notifId)
                                     }
                                 }
@@ -603,13 +635,14 @@ PanelWindow {
                         }
 
                         Text {
+                            id: bodyText
                             text: model.body
                             color: "#${c.base04}"
                             font.family: "${fontName}"
                             font.pixelSize: 17
                             Layout.fillWidth: true
                             wrapMode: Text.Wrap
-                            maximumLineCount: 5
+                            maximumLineCount: osdRect.expanded ? 100 : 2
                             elide: Text.ElideRight
                             visible: text !== ""
                         }
