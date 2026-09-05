@@ -51,9 +51,10 @@ SicOS provides a complete, themed desktop experience. It is split into two parts
 
 **Key Options:**
 - `enable`: Activate the module.
+- `shell`: Choice of desktop shell (`"waybar"`, `"dank-material-shell"`, or `"sicos-bar"`).
 - `theming.mode`: `"light"` or `"dark"`.
 - `theming.base16Scheme`: Base16 color scheme name (e.g., `"catppuccin-mocha"`).
-- `powerManagement.enable`: System optimizations and Waybar power modules.
+- `powerManagement.enable`: System optimizations and Waybar/SicOS-Bar power modules.
 - `kanshi.enable`: Automated monitor layout management.
 - `insync.enable`: Google Drive sync integration.
 
@@ -73,6 +74,27 @@ Theming is a core feature of SicOS, managed by **Stylix** and the `theme-switche
 - **Ironman (`ironman`)**: Laptop (Intel/Nvidia).
 - **Taskmaster (`taskmaster`)**: Work Laptop.
 - **Strange (`strange`)**: Framework Laptop 13 (AMD Ryzen AI 300).
+
+### 3.4. SicOS-Bar (QuickShell Desktop Shell)
+**SicOS-Bar** is a native, custom QML-based desktop shell built on **QuickShell**, designed as a first-class alternative to `waybar` and `dank-material-shell`.
+
+- **Pill-Style Floating Architecture:** Modular QML islands including Workspaces (with class/title app icon heuristics), Clock & Memento Mori calendar, System Tray (`SystemTray`), MPRIS Media Player with blurred album covers, System Monitor (CPU/RAM Canvas rings), Battery (`UPower`), and App Launcher/Power buttons.
+- **Interactive Control Center (`controlcenter.nix`):** Centralized macOS/iOS-style control modal containing:
+  - **User Profile Header:** Username, host, avatar, uptime, and real-time network speed telemetry (Rx/Tx speeds, Ping, Packet Loss).
+  - **Sliders:** System volume and screen brightness sliders with mute/brightness toggles.
+  - **Monitor Scaling Pill:** Collapsible monitor scale module (`󰍹`) with `-`/`+` step buttons and continuous slider, integrated with `sicos-monitor-scale.sh` for real-time and persistent scaling via Kanshi.
+  - **Quick Toggles:** Caffeine (`hypridle` inhibitor) and Night Mode (`hyprsunset` color temperature).
+  - **Action Buttons:** Fastfetch spec modal, region screenshot (`hyprshot` + `satty`), keybindings cheatsheet (`walker`), and session menu (`wlogout`).
+- **Window Switcher Overlay (`windowswitcher.nix`):** Alt+Tab overlay rendering real-time screen thumbnails (`ScreencopyView`) using `WlrKeyboardFocus.OnDemand` for seamless window focusing.
+- **Stylix Integration:** Theme colors (`c.base00` to `c.base0F`) and monospace fonts are injected dynamically from Stylix with zero hardcoded CSS or colors.
+
+### 3.5. Dynamic Monitor Scaling & Kanshi Integration
+- **Helper Script:** `home-manager/desktop/hyprland/scripts/sicos-monitor-scale.sh` (and synced to `modules/sicos/hyprland/scripts/sicos-monitor-scale.sh`).
+- **UI Integration:** Integrated into QuickShell Control Center (`controlcenter.nix`), featuring a collapsible Monitor Scale Pill with custom Nerdfont icon (`󰍹`), display monitor name and current scale, expand to show slider/buttons, and `-` / `+` step buttons.
+- **Dynamic & Persistent Scaling Mechanics:**
+  1. **Nix Store Bypass:** Function `sync_local_kanshi_config` replaces read-only `/nix/store` symlinks at `~/.config/kanshi/config` with a direct symlink to `home-manager/desktop/hyprland/programs/kanshi/config`.
+  2. **Hostname-Filtered Persistence:** Python parser updates output scale lines specifically within Kanshi profile blocks corresponding to the active `hostname` (e.g., `home-strange`).
+  3. **Live Output Reload:** If `kanshi` daemon is active, triggers `kanshictl reload` so Kanshi loads the updated profile from disk into memory and applies live scaling; if `kanshi` is inactive, applies scale directly via `hyprctl eval "hl.monitor(...)"`.
 
 ## 4. Operational Workflows for the Agent
 

@@ -52,6 +52,7 @@ This document contains a historical record of all features, modules, and integra
 - **Snapshot Utility:** Dedicated "Camera" action button that closes the control center and triggers `hyprshot` with `satty` for on-the-fly region screenshotting and annotation.
 - **Keybindings Cheatsheet:** Dedicated "Keybindings" action button that invokes a clean, read-only `walker` menu containing an automatically parsed list of all active Hyprland keybindings (`show-hyprland-keybindings.sh`).
 - **Power Menu:** Quick access to the system shutdown/reboot menu via `wlogout`.
+- **Monitor Scaling Pill:** Collapsible monitor scaling module inside the Control Center. Displays a stylized Nerdfont monitor icon (`󰍹`), current monitor name, and scale. Expanding reveals step buttons (`-`/`+`) and a continuous slider to dynamically adjust resolution scaling. Integrates with `sicos-monitor-scale.sh` to update scale in real-time and persist changes to Kanshi configurations (`home-manager/desktop/hyprland/programs/kanshi/config`) while bypassing `/nix/store` read-only symlinks.
 
 ### 9. Audio & Brightness Controls
 - **Volume Management:** Real-time volume slider integration via Quickshell's internal services. Mute toggle on interaction and dynamic icon updating (speaker waves) based on the volume percentage.

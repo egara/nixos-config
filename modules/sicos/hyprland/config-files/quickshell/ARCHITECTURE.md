@@ -20,6 +20,7 @@ To avoid maintaining a monolithic `.qml` file with thousands of lines (which wou
   - **`battery.nix`**: Advanced battery logic (`UPower`), remaining time calculation, 80% BIOS limit detection, and Popout Window animations.
   - **`clock.nix`**: Real-time central clock (`Qt.formatDateTime`) and Calendar/Memento Mori modal.
   - **`misc.nix`**: Miscellaneous island hosting the dynamic Power Profiles selector, session buttons (`powerprofilesctl`), and the interactive MPRIS player.
+  - **`controlcenter.nix`**: Centralized QuickShell Control Center hub containing user stats, network traffic telemetry, system volume/brightness sliders, and the **Monitor Scale Control Pill** (collapsible QML slider communicating with `sicos-monitor-scale.sh` for live and persistent scale management via Kanshi).
   - **`system.nix`**: App launcher button (`walker`) and system monitor (CPU/RAM ring charts).
   - **`workspaces.nix`**: Native two-way integration with Hyprland (`Quickshell.Hyprland`). Dynamically identifies open windows, rendering their system icons using a heuristic based on *class* and *title*.
   - Component files are imported into `hm-module.nix` and passed as arguments to `quickshell-bar.nix`.

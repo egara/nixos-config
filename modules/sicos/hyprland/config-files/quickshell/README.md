@@ -22,6 +22,7 @@ La integración se realiza directamente en los módulos de NixOS y Home Manager 
 - [x] **Módulo Lanzador y Apagado:** Botones funcionales con íconos, usando `Quickshell.Io (Process)` para invocar `walker` y `wlogout`.
 - [x] **Módulo Workspaces:** Integración nativa con `Quickshell.Hyprland`. Detecta escritorios activos, permite clics para navegar entre ellos (`Hyprland.dispatch`) e incluye animaciones dinámicas.
 - [x] **Módulo Batería:** Integración nativa con `Quickshell.Services.UPower`. Lee el estado y porcentaje real de la batería (multiplicando `percentage * 100` por ser un float 0.0-1.0). Se oculta en dispositivos de sobremesa.
+- [x] **Módulo Escalado de Monitor (Control Center):** Integración en el centro de control (`controlcenter.nix`) de un pill desplegable con icono Nerdfont (`󰍹`), nombre/escala de monitores detectados, botones `-`/`+` y slider continuo. Ejecuta `sicos-monitor-scale.sh` para aplicar cambios en vivo en Hyprland/Kanshi y persistirlos dinámicamente en el repositorio sin requerir `nixos-rebuild switch`.
 
 ## 🚧 Siguientes Pasos
 1. **Módulo de Sistema (CPU/RAM):** Diseñar un sistema para leer `/proc/stat` y `/proc/meminfo` (o ejecutar comandos `free` / `top` periódicamente vía `Process`) para mostrar el uso real.
