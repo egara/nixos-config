@@ -37,5 +37,5 @@ profile undocked-strange {
 
 profile home-strange {
   output "eDP-1" disable
-  output "DP-2" enable mode 1920x1080 position 0,0 scale 0.8
+  output "DP-2" enable mode 1920x1080 position 0,0 scale 1
 }
