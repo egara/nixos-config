@@ -87,8 +87,7 @@ function GetEntries()
             Preview = preview_path,
             PreviewType = "file",
             Actions = {
-              activate = "kitty --hold sh -c '~/.config/sicos/scripts/theme-switcher.sh " .. mode .. " " .. base_name .. "'",
-              -- activate = "omarchy-theme-set " .. theme_name,
+              activate = "hyprctl eval 'sicos_ts_rule1 = hl.window_rule({ match = { class = \"sicos-theme-switch\" }, float = true }); sicos_ts_rule2 = hl.window_rule({ match = { class = \"sicos-theme-switch\" }, size = { 1600, 900 } }); sicos_ts_rule3 = hl.window_rule({ match = { class = \"sicos-theme-switch\" }, center = true })'; uwsm app -- kitty --class sicos-theme-switch --hold bash -c \"~/.config/sicos/scripts/theme-switcher.sh " .. mode .. " " .. base_name .. "\"",
             },
           })
         end

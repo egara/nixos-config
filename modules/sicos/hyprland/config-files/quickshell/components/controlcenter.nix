@@ -364,7 +364,7 @@
             }
 
             function applyFontSize(sizeVal) {
-                var hyprRules = "hyprctl eval 'sicos_ts_rule1 = hl.window_rule({ match = { class = \"sicos-theme-switch\" }, float = true }); sicos_ts_rule2 = hl.window_rule({ match = { class = \"sicos-theme-switch\" }, size = { 1000, 650 } }); sicos_ts_rule3 = hl.window_rule({ match = { class = \"sicos-theme-switch\" }, center = true })'; ";
+                var hyprRules = "hyprctl eval 'sicos_ts_rule1 = hl.window_rule({ match = { class = \"sicos-theme-switch\" }, float = true }); sicos_ts_rule2 = hl.window_rule({ match = { class = \"sicos-theme-switch\" }, size = { 1600, 900 } }); sicos_ts_rule3 = hl.window_rule({ match = { class = \"sicos-theme-switch\" }, center = true })'; ";
                 var scriptCmd = hyprRules + "if [ -f $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/theme-switcher.sh ]; then uwsm app -- kitty --class sicos-theme-switch --hold bash -c \"$HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/theme-switcher.sh --size " + sizeVal + "\"; else uwsm app -- kitty --class sicos-theme-switch --hold bash -c \"$HOME/.config/sicos/scripts/theme-switcher.sh --size " + sizeVal + "\"; fi";
                 cmdRunner.exec(["sh", "-c", scriptCmd]);
             }
