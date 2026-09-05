@@ -113,6 +113,37 @@ mon_model = sys.argv[5]
 new_scale = float(sys.argv[6])
 hostname = socket.gethostname().lower()
 
+def check_match(line):
+    if not line.strip().startswith("output "):
+        return False
+    
+    match = re.search(r'^output\s+["\']?([^"\'+]+?)["\']?\s+', line.strip())
+    if not match:
+        parts = line.strip().split()
+        if len(parts) >= 2:
+            criteria = parts[1]
+        else:
+            return False
+    else:
+        criteria = match.group(1).strip()
+    
+    clean_criteria = re.sub(r'(\s+Unknown|\*)+$', '', criteria, flags=re.IGNORECASE).strip()
+    clean_desc = re.sub(r'(\s+Unknown|\*)+$', '', mon_desc, flags=re.IGNORECASE).strip()
+
+    if criteria == mon_name or clean_criteria == mon_name:
+        return True
+    if clean_criteria and clean_desc and (clean_criteria == clean_desc):
+        return True
+    if clean_criteria and clean_desc and (clean_criteria in clean_desc or clean_desc in clean_criteria):
+        return True
+
+    if mon_make and mon_model:
+        make_model = f"{mon_make} {mon_model}".strip()
+        if clean_criteria in make_model or make_model in clean_criteria:
+            return True
+
+    return False
+
 with open(config_path, 'r') as f:
     lines = f.readlines()
 
@@ -129,16 +160,7 @@ for line in lines:
     elif stripped == "}":
         in_matching_profile = False
     elif in_matching_profile and stripped.startswith("output "):
-        matches_name = f'"{mon_name}"' in line
-        matches_desc = False
-        if mon_desc:
-            desc_parts = mon_desc.split()
-            if len(desc_parts) >= 2:
-                sub_desc = f"{desc_parts[0]} {desc_parts[1]}"
-                if sub_desc in line:
-                    matches_desc = True
-
-        if matches_name or matches_desc:
+        if check_match(line):
             if "scale " in line:
                 line = re.sub(r'(scale\s+)[0-9.]+', r'\g<1>' + f"{new_scale:.6f}".rstrip('0').rstrip('.'), line)
                 updated = True
@@ -148,22 +170,13 @@ for line in lines:
 
     new_lines.append(line)
 
-# Fallback Pass 2: If no profile matched hostname, update any output line matching mon_name/desc
+# Fallback Pass 2: If no profile matched hostname, update any output line matching criteria
 if not updated:
     new_lines = []
     for line in lines:
         stripped = line.strip()
         if stripped.startswith("output "):
-            matches_name = f'"{mon_name}"' in line
-            matches_desc = False
-            if mon_desc:
-                desc_parts = mon_desc.split()
-                if len(desc_parts) >= 2:
-                    sub_desc = f"{desc_parts[0]} {desc_parts[1]}"
-                    if sub_desc in line:
-                        matches_desc = True
-
-            if matches_name or matches_desc:
+            if check_match(line):
                 if "scale " in line:
                     line = re.sub(r'(scale\s+)[0-9.]+', r'\g<1>' + f"{new_scale:.6f}".rstrip('0').rstrip('.'), line)
                     updated = True
@@ -195,20 +208,24 @@ case "${1:-}" in
 
         sync_local_kanshi_config
 
-        # 1. Update Kanshi config files on disk
-        update_kanshi_config "$KANSHI_REPO_CONFIG" "$MONITOR_NAME" "$SCALE_VALUE" || true
-        update_kanshi_config "$KANSHI_MODULE_CONFIG" "$MONITOR_NAME" "$SCALE_VALUE" || true
+        # 1. Apply requested scale live via Hyprland IPC
+        apply_live_scale "$MONITOR_NAME" "$SCALE_VALUE"
+
+        # 2. Query Hyprland IPC for the actual accepted scale (Hyprland rounds invalid scales to nearest valid fractional divisor)
+        ACTUAL_SCALE=$(hyprctl monitors -j | jq -r ".[] | select(.name == \"$MONITOR_NAME\") | .scale // empty" 2>/dev/null || true)
+        PERSIST_SCALE="${ACTUAL_SCALE:-$SCALE_VALUE}"
+
+        # 3. Update Kanshi config files on disk with actual applied scale
+        update_kanshi_config "$KANSHI_REPO_CONFIG" "$MONITOR_NAME" "$PERSIST_SCALE" || true
+        update_kanshi_config "$KANSHI_MODULE_CONFIG" "$MONITOR_NAME" "$PERSIST_SCALE" || true
         update_kanshi_config "$KANSHI_LOCAL_CONFIG" "$MONITOR_NAME" "$SCALE_VALUE" || true
 
-        # 2. If Kanshi daemon is active, trigger kanshictl reload so Kanshi loads the updated profile into memory and applies it
+        # 4. If Kanshi daemon is active, trigger kanshictl reload so Kanshi loads the actual applied scale into memory
         if pgrep -x kanshi >/dev/null 2>&1 || systemctl --user is-active --quiet kanshi.service 2>/dev/null; then
             kanshictl reload 2>/dev/null || systemctl --user reload kanshi.service 2>/dev/null || true
-        else
-            # 3. If Kanshi is not active, apply scale directly via Hyprland IPC
-            apply_live_scale "$MONITOR_NAME" "$SCALE_VALUE"
         fi
 
-        echo "Applied scale $SCALE_VALUE for $MONITOR_NAME."
+        echo "Applied scale $PERSIST_SCALE (requested: $SCALE_VALUE) for $MONITOR_NAME."
         ;;
     *)
         echo "Usage: $0 {--list|--set <MONITOR_NAME> <SCALE_VALUE>}" >&2
