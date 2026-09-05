@@ -9,6 +9,8 @@ This module handles the installation and configuration of all necessary componen
 
 ## Features
 
+- **Desktop Shell Choices (SicOS-Bar, Waybar, DankMaterialShell)**: Choose your desktop status bar via `programs.sicos.hyprland.shell`. By default, SicOS activates **SicOS-Bar**—a native, QML-based desktop shell built on QuickShell. It features floating pill-style islands, interactive MPRIS music player, workspace app icon heuristics, an Alt+Tab Window Switcher overlay with live window thumbnails, and a macOS-style Control Center featuring Volume/Brightness sliders, real-time Network Telemetry, Caffeine/Night Mode toggles, and a **Monitor Scaling Pill** for live and persistent resolution adjustments via Kanshi.
+
 - **Power Management**: If activated, this option is ideal for laptops. It provides three power profiles (`performance`, `balanced`, and `power-saver`). The system automatically switches to `power-saver` mode when the AC adapter is disconnected and returns to `balanced` mode when reconnected.
 
 - **Default Hyprland Keybindings**: A sensible set of default keybindings for common actions is included:
@@ -109,6 +111,7 @@ Below is a complete example of a `flake.nix` file:
           {
             programs.sicos.hyprland = {
               enable = true; # Enable SicOS
+              shell = "sicos-bar"; # Select desktop shell: sicos-bar (default), waybar, or dank-material-shell
               theming.enable = true; # Enable default theming (recommended)
               theming.mode = "dark"; # Set theme mode to dark or light
               theming.base16Scheme = "catppuccin-mocha"; # Set theme base16 schema
@@ -147,6 +150,7 @@ The SicOS module offers several options to customize your environment. All optio
 | Option | Type | Default Value | Description |
 | --- | --- | --- | --- |
 | `enable` | boolean | `false` | Enables or disables the SicOS module entirely. |
+| `shell` | string | `"sicos-bar"` | Selects the desktop status bar/shell. Options: `"sicos-bar"` (default native QuickShell bar with Control Center and Window Switcher), `"waybar"`, or `"dank-material-shell"`. |
 | `theming.enable` | boolean | `true` | Enables theme configuration (GTK, Qt, icons, cursors) through Home Manager and Stylix. |
 | `theming.mode` | string | `"dark"` | Sets the theme to either `"dark"` or `"light"`. |
 | `theming.base16Scheme` | string | `"catppuccin-mocha"` | Selects the Base16 color scheme for Stylix. It can be set to `catppuccin-mocha`, `equilibrium-light`, `everforest`, `gruvbox-dark`, `gruvbox-light-soft` and many more. Plese, read **Note on Theming** for more information |

@@ -27,8 +27,8 @@ in
     # Shell
     shell = lib.mkOption {
       type = lib.types.enum [ "waybar" "dank-material-shell" "sicos-bar" ];
-      default = "waybar";
-      description = "Which shell to use (waybar or dank-material-shell).";
+      default = "sicos-bar";
+      description = "Which shell to use (waybar, dank-material-shell, or sicos-bar).";
     };
 
     # Group lock and idle configs
