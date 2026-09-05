@@ -253,24 +253,33 @@ def set_monitor_scale(monitor_name, requested_scale_str):
     # 1. Calculate nearest valid scale divisor for Hyprland
     valid_scale = get_closest_valid_scale(requested_scale, width, height)
 
-    # 2. Apply live scale via Hyprland IPC
+    # 2. Update Kanshi configs on disk FIRST so Kanshi daemon does not revert to old disk scale
+    update_kanshi_config(KANSHI_REPO_CONFIG, monitor_name, valid_scale)
+    update_kanshi_config(KANSHI_MODULE_CONFIG, monitor_name, valid_scale)
+    update_kanshi_config(KANSHI_LOCAL_CONFIG, monitor_name, valid_scale)
+
+    # 3. Apply live scale via Hyprland IPC
     apply_live_scale(monitor_name, valid_scale)
+
+    # 4. Reload Kanshi if running so its in-memory state matches disk
+    reload_kanshi_if_running()
 
     time.sleep(0.05)
 
-    # 3. Read actual applied scale factor from Hyprland IPC if settled
+    # 5. Read actual applied scale factor from Hyprland IPC if settled/adjusted by Hyprland
     settled_monitors = get_monitors()
     settled_mon = next((m for m in settled_monitors if m.get("name") == monitor_name), None)
     actual_scale = settled_mon.get("scale") if settled_mon else valid_scale
-    persist_scale = actual_scale if actual_scale is not None else valid_scale
 
-    # 4. Update Kanshi configs on disk with valid applied scale
-    update_kanshi_config(KANSHI_REPO_CONFIG, monitor_name, persist_scale)
-    update_kanshi_config(KANSHI_MODULE_CONFIG, monitor_name, persist_scale)
-    update_kanshi_config(KANSHI_LOCAL_CONFIG, monitor_name, persist_scale)
-
-    # 5. Reload Kanshi if running
-    reload_kanshi_if_running()
+    if actual_scale is not None and abs(actual_scale - valid_scale) > 0.0001:
+        # Hyprland adjusted the scale further (e.g. rounding), persist actual estimated scale
+        update_kanshi_config(KANSHI_REPO_CONFIG, monitor_name, actual_scale)
+        update_kanshi_config(KANSHI_MODULE_CONFIG, monitor_name, actual_scale)
+        update_kanshi_config(KANSHI_LOCAL_CONFIG, monitor_name, actual_scale)
+        reload_kanshi_if_running()
+        persist_scale = actual_scale
+    else:
+        persist_scale = valid_scale
 
     print(f"Applied and persisted scale {persist_scale} (requested: {requested_scale}) for {monitor_name}.")
 
