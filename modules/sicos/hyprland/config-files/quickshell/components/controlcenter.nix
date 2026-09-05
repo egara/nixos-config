@@ -55,6 +55,12 @@
             property bool isDraggingBrightness: false
             property var brightnessDevices: []
             property int mainBrightness: 0
+
+            // Monitor Scale properties
+            property bool monitorExpanded: false
+            property var monitorList: []
+            property int selectedMonitorIndex: 0
+            property real currentMonitorScale: 1.0
             
             // Pipewire dynamic properties
             property int _pwUpdateTrigger: 0
@@ -199,6 +205,7 @@
                     if (root.controlcenterVisible) {
                         ccInfoProc.running = true;
                         networkPollProc.running = true;
+                        monitorPollProc.running = true;
                     }
                 }
             }
@@ -299,9 +306,44 @@
                 }
             }
 
+            Process {
+                id: monitorPollProc
+                command: ["sh", "-c", "if [ -f $HOME/.config/sicos/scripts/sicos-monitor-scale.sh ]; then $HOME/.config/sicos/scripts/sicos-monitor-scale.sh --list; elif [ -f $HOME/Zero/nixos-config/modules/sicos/hyprland/scripts/sicos-monitor-scale.sh ]; then $HOME/Zero/nixos-config/modules/sicos/hyprland/scripts/sicos-monitor-scale.sh --list; else echo '[]'; fi"]
+                running: false
+                stdout: StdioCollector {
+                    onStreamFinished: {
+                        if (text !== "") {
+                            try {
+                                let list = JSON.parse(text.trim());
+                                popupContentCC.monitorList = list;
+                                if (list.length > 0) {
+                                    if (popupContentCC.selectedMonitorIndex >= list.length) {
+                                        popupContentCC.selectedMonitorIndex = 0;
+                                    }
+                                    let activeMon = list[popupContentCC.selectedMonitorIndex];
+                                    popupContentCC.currentMonitorScale = activeMon.scale;
+                                }
+                            } catch (e) {
+                                console.log("Error parsing monitor scale JSON: " + e);
+                            }
+                        }
+                    }
+                }
+            }
+
+            Process {
+                id: monitorScaleSetProc
+            }
+
+            function setMonitorScale(monName, scaleVal) {
+                monitorScaleSetProc.command = ["sh", "-c", "if [ -f $HOME/.config/sicos/scripts/sicos-monitor-scale.sh ]; then $HOME/.config/sicos/scripts/sicos-monitor-scale.sh --set " + monName + " " + scaleVal + "; else $HOME/Zero/nixos-config/modules/sicos/hyprland/scripts/sicos-monitor-scale.sh --set " + monName + " " + scaleVal + "; fi"];
+                monitorScaleSetProc.running = true;
+            }
+
             Component.onCompleted: {
                 ccInfoProc.running = true;
                 bluetoothPollProc.running = true;
+                monitorPollProc.running = true;
             }
             
             opacity: root.controlcenterVisible ? 1 : 0
@@ -1383,6 +1425,249 @@
                     }
                         } // end brightnessPillLayout
                     } // end Brightness Pill
+
+                    // Monitor Scale Pill
+                    Item {
+                        Layout.fillWidth: true
+                        implicitHeight: monitorPillLayout.implicitHeight + 24
+                        visible: popupContentCC.monitorList.length > 0
+
+                        Rectangle {
+                            anchors.fill: parent
+                            color: "#1A${c.base03}"
+                            radius: 12
+                        }
+
+                        ColumnLayout {
+                            id: monitorPillLayout
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            spacing: 12
+
+                            // Main Collapsed / Header Row
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: 12
+
+                                Item {
+                                    Layout.preferredWidth: 32
+                                    Layout.preferredHeight: 24
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: "󰍹"
+                                        color: "#${c.base0D}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 21
+                                    }
+                                }
+
+                                Text {
+                                    text: {
+                                        if (popupContentCC.monitorList.length > 0 && popupContentCC.selectedMonitorIndex < popupContentCC.monitorList.length) {
+                                            let mon = popupContentCC.monitorList[popupContentCC.selectedMonitorIndex];
+                                            return mon.name + (mon.model ? (" (" + mon.model + ")") : "");
+                                        }
+                                        return "Display";
+                                    }
+                                    color: "#${c.base05}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 16
+                                    font.bold: true
+                                    Layout.fillWidth: true
+                                    elide: Text.ElideRight
+                                }
+
+                                Text {
+                                    text: popupContentCC.currentMonitorScale.toFixed(2) + "x"
+                                    color: "#${c.base05}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 17
+                                    Layout.preferredWidth: 48
+                                    horizontalAlignment: Text.AlignRight
+                                }
+
+                                Rectangle {
+                                    width: 24
+                                    height: 24
+                                    radius: 12
+                                    color: monExpandMouseArea.containsMouse ? "#33${c.base03}" : "transparent"
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: popupContentCC.monitorExpanded ? "" : ""
+                                        color: "#${c.base0D}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 19
+                                    }
+                                    MouseArea {
+                                        id: monExpandMouseArea
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        cursorShape: Qt.PointingHandCursor
+                                        onClicked: popupContentCC.monitorExpanded = !popupContentCC.monitorExpanded
+                                    }
+                                }
+                            }
+
+                            // Expanded Section (Sliders and Monitor switch)
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                visible: popupContentCC.monitorExpanded
+                                spacing: 12
+
+                                // Switch monitor row if multiple exist
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    visible: popupContentCC.monitorList.length > 1
+                                    spacing: 8
+
+                                    Text {
+                                        text: "Switch Monitor:"
+                                        color: "#${c.base04}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 14
+                                        Layout.fillWidth: true
+                                    }
+
+                                    Rectangle {
+                                        width: 28; height: 28; radius: 14
+                                        color: monSelectArea.containsMouse ? "#33${c.base03}" : "#1A${c.base02}"
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: "󰓡"
+                                            color: "#${c.base0D}"
+                                            font.family: "${fontName}"
+                                            font.pixelSize: 16
+                                        }
+                                        MouseArea {
+                                            id: monSelectArea
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            cursorShape: Qt.PointingHandCursor
+                                            onClicked: {
+                                                let nextIdx = (popupContentCC.selectedMonitorIndex + 1) % popupContentCC.monitorList.length;
+                                                popupContentCC.selectedMonitorIndex = nextIdx;
+                                                let mon = popupContentCC.monitorList[nextIdx];
+                                                popupContentCC.currentMonitorScale = mon.scale;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // Scale adjustment controls
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 12
+
+                                    // Decrement button (-)
+                                    Rectangle {
+                                        width: 28; height: 28; radius: 14
+                                        color: decScaleArea.containsMouse ? "#33${c.base03}" : "#1A${c.base02}"
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: "-"
+                                            color: "#${c.base05}"
+                                            font.family: "${fontName}"
+                                            font.pixelSize: 18
+                                            font.bold: true
+                                        }
+                                        MouseArea {
+                                            id: decScaleArea
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            cursorShape: Qt.PointingHandCursor
+                                            onClicked: {
+                                                if (popupContentCC.monitorList.length > 0) {
+                                                    let mon = popupContentCC.monitorList[popupContentCC.selectedMonitorIndex];
+                                                    let newS = Math.max(0.75, Math.round((popupContentCC.currentMonitorScale - 0.05) * 100) / 100);
+                                                    popupContentCC.currentMonitorScale = newS;
+                                                    popupContentCC.setMonitorScale(mon.name, newS.toString());
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    // Scale visual Slider
+                                    Item {
+                                        Layout.fillWidth: true
+                                        Layout.preferredHeight: 24
+                                        property real percent: Math.max(0, Math.min(1.0, (popupContentCC.currentMonitorScale - 0.75) / (2.25 - 0.75)))
+
+                                        Rectangle {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            width: parent.width
+                                            height: 12
+                                            radius: 6
+                                            color: "#33${c.base05}"
+
+                                            Rectangle {
+                                                width: parent.width * parent.parent.percent
+                                                height: parent.height
+                                                radius: 6
+                                                color: "#${c.base0D}"
+                                            }
+                                        }
+
+                                        // Thumb
+                                        Rectangle {
+                                            width: 20; height: 20; radius: 10
+                                            color: "#${c.base05}"
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
+                                        }
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            cursorShape: Qt.PointingHandCursor
+                                            function updateScaleFromMouse(mouse) {
+                                                if (popupContentCC.monitorList.length > 0) {
+                                                    let p = Math.max(0, Math.min(1, mouse.x / width));
+                                                    let newS = Math.round((0.75 + p * (2.25 - 0.75)) * 20) / 20; // steps of 0.05
+                                                    popupContentCC.currentMonitorScale = newS;
+                                                }
+                                            }
+                                            function commitScale() {
+                                                if (popupContentCC.monitorList.length > 0) {
+                                                    let mon = popupContentCC.monitorList[popupContentCC.selectedMonitorIndex];
+                                                    popupContentCC.setMonitorScale(mon.name, popupContentCC.currentMonitorScale.toString());
+                                                }
+                                            }
+                                            onPressed: (mouse) => updateScaleFromMouse(mouse)
+                                            onPositionChanged: (mouse) => { if (pressed) updateScaleFromMouse(mouse); }
+                                            onReleased: commitScale()
+                                        }
+                                    }
+
+                                    // Increment button (+)
+                                    Rectangle {
+                                        width: 28; height: 28; radius: 14
+                                        color: incScaleArea.containsMouse ? "#33${c.base03}" : "#1A${c.base02}"
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: "+"
+                                            color: "#${c.base05}"
+                                            font.family: "${fontName}"
+                                            font.pixelSize: 18
+                                            font.bold: true
+                                        }
+                                        MouseArea {
+                                            id: incScaleArea
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            cursorShape: Qt.PointingHandCursor
+                                            onClicked: {
+                                                if (popupContentCC.monitorList.length > 0) {
+                                                    let mon = popupContentCC.monitorList[popupContentCC.selectedMonitorIndex];
+                                                    let newS = Math.min(2.25, Math.round((popupContentCC.currentMonitorScale + 0.05) * 100) / 100);
+                                                    popupContentCC.currentMonitorScale = newS;
+                                                    popupContentCC.setMonitorScale(mon.name, newS.toString());
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
 

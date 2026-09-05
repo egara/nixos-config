@@ -1,12 +1,12 @@
 # Taskmaster
 profile office-taskmaster {
-  output "DP-2" enable mode 1920x1080 position 0,0 scale 1.000000
+  output "DP-2" enable mode 1920x1080 position 0,0 scale 1.15
   output "DP-1" enable mode 1920x1080 position 1920,0 scale 1.000000
   output "AU Optronics 0xC48A Unknown" disable
 }
 
 profile meeting-room-taskmaster {
-  output "DP-2" enable mode 1920x1080 position 0,0 scale 1.000000
+  output "DP-2" enable mode 1920x1080 position 0,0 scale 1.15
   output "AU Optronics 0xC48A Unknown" enable mode 1920x1080 position 1920,0 scale 1.000000
 }
 
@@ -32,10 +32,10 @@ profile undocked-ironman {
 
 # Strange
 profile undocked-strange {
-  output "BOE 0x0BCA Unknown" enable mode 2256x1504 position 0,0 scale 1.175
+  output "BOE 0x0BCA Unknown" enable mode 2256x1504 position 0,0 scale 1.25
 }
 
 profile home-strange {
   output "eDP-1" disable
-  output "DP-2" enable mode 1920x1080 position 0,0 scale 1.000000
+  output "DP-2" enable mode 1920x1080 position 0,0 scale 0.8
 }
