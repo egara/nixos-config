@@ -328,7 +328,8 @@ in
         system-config-printer # CUPs GUI
         fastfetch # For system information
 
-        # Tools for the screensaver
+        # Tools for the screensaver and helper scripts
+        python3
         terminaltexteffects
         jq
         socat

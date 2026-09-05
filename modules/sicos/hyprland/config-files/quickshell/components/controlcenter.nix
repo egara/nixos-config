@@ -308,7 +308,7 @@
 
             Process {
                 id: monitorPollProc
-                command: ["sh", "-c", "if [ -f $HOME/.config/sicos/scripts/sicos-monitor-scale.sh ]; then $HOME/.config/sicos/scripts/sicos-monitor-scale.sh --list; elif [ -f $HOME/Zero/nixos-config/modules/sicos/hyprland/scripts/sicos-monitor-scale.sh ]; then $HOME/Zero/nixos-config/modules/sicos/hyprland/scripts/sicos-monitor-scale.sh --list; else echo '[]'; fi"]
+                command: ["sh", "-c", "if [ -f $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/sicos-monitor-scale.py ]; then $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/sicos-monitor-scale.py --list; elif [ -f $HOME/.config/sicos/scripts/sicos-monitor-scale.py ]; then $HOME/.config/sicos/scripts/sicos-monitor-scale.py --list; else $HOME/Zero/nixos-config/modules/sicos/hyprland/scripts/sicos-monitor-scale.py --list; fi"]
                 running: false
                 stdout: StdioCollector {
                     onStreamFinished: {
@@ -331,13 +331,9 @@
                 }
             }
 
-            Process {
-                id: monitorScaleSetProc
-            }
-
             function setMonitorScale(monName, scaleVal) {
-                monitorScaleSetProc.command = ["sh", "-c", "if [ -f $HOME/.config/sicos/scripts/sicos-monitor-scale.sh ]; then $HOME/.config/sicos/scripts/sicos-monitor-scale.sh --set " + monName + " " + scaleVal + "; else $HOME/Zero/nixos-config/modules/sicos/hyprland/scripts/sicos-monitor-scale.sh --set " + monName + " " + scaleVal + "; fi"];
-                monitorScaleSetProc.running = true;
+                var scriptCmd = "if [ -f $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/sicos-monitor-scale.py ]; then $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/sicos-monitor-scale.py --set " + monName + " " + scaleVal + "; elif [ -f $HOME/.config/sicos/scripts/sicos-monitor-scale.py ]; then $HOME/.config/sicos/scripts/sicos-monitor-scale.py --set " + monName + " " + scaleVal + "; else $HOME/Zero/nixos-config/modules/sicos/hyprland/scripts/sicos-monitor-scale.py --set " + monName + " " + scaleVal + "; fi";
+                cmdRunner.exec(["sh", "-c", scriptCmd]);
             }
 
             Component.onCompleted: {

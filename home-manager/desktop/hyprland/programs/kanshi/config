@@ -38,5 +38,5 @@ profile home-strange {
   # Important!: As you can see here, there are some times (Acer external monitor) when Unknown is not
   # needed at all. In fact it has to be removed in order to work properly
   output "BOE 0x0BCA Unknown" disable
-  output "Acer Technologies Acer P243W LAF040067221" enable mode 1920x1080 position 0,0 scale 1
+  output "Acer Technologies Acer P243W LAF040067221" enable mode 1920x1080 position 0,0 scale 0.833333
 }
