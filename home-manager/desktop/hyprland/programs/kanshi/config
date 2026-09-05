@@ -16,11 +16,6 @@ profile undocked-taskmaster {
 
 # Ironman
 profile home-ironman {
-  # According to this information https://www.reddit.com/r/hyprland/comments/1dfvmss/how_to_address_monitor_in_kanshi/
-  # Using hyprctl monitors to list all the monitors attached and using description
-  # instead of ID "eDP-1" is allowd but you need to add a suffix "Unknown" as you
-  # can see here
-
   output "BOE 0x0687 Unknown" disable
   output "HDMI-A-2" enable mode 1920x1080 position 0,0 scale 1.000000
 }
@@ -36,6 +31,12 @@ profile undocked-strange {
 }
 
 profile home-strange {
-  output "eDP-1" disable
-  output "Acer Technologies Acer P243W LAF040067221 Unknown" enable mode 1920x1080 position 0,0 scale 1
+  # According to this information https://www.reddit.com/r/hyprland/comments/1dfvmss/how_to_address_monitor_in_kanshi/
+  # Using hyprctl monitors to list all the monitors attached and using description
+  # instead of ID "eDP-1" is allowed but you need to add a suffix "Unknown" as you
+  # can see here
+  # Important!: As you can see here, there are some times (Acer external monitor) when Unknown is not
+  # needed at all. In fact it has to be removed in order to work properly
+  output "BOE 0x0BCA Unknown" disable
+  output "Acer Technologies Acer P243W LAF040067221" enable mode 1920x1080 position 0,0 scale 1
 }
