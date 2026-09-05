@@ -60,6 +60,7 @@ let
             let
               themeMode = "dark";
               themeScheme = "gruvbox-dark";
+              themeFontSize = 11;
             in
             {
               # SicOS module options configuration
@@ -70,6 +71,7 @@ let
               programs.sicos.hyprland.theming.enable = true;
               programs.sicos.hyprland.theming.mode = themeMode;
               programs.sicos.hyprland.theming.base16Scheme = themeScheme;
+              programs.sicos.hyprland.theming.fontSize = themeFontSize;
               programs.sicos.hyprland.powerManagement.enable = true;
               programs.sicos.hyprland.insync.enable = true;
               programs.sicos.hyprland.insync.package = pkgs-stable.insync;

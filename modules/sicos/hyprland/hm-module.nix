@@ -290,10 +290,10 @@ in
                   name = "Noto Color Emoji";
                 };
                 sizes = {
-                  applications = 10;
-                  desktop = 10;
-                  popups = 10;
-                  terminal = 10;
+                  applications = cfg.theming.fontSize;
+                  desktop = cfg.theming.fontSize;
+                  popups = cfg.theming.fontSize;
+                  terminal = cfg.theming.fontSize;
                 };
               };
             targets = {

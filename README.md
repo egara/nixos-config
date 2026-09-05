@@ -38,7 +38,7 @@ This module handles the installation and configuration of all necessary componen
 
 - **Customized SDDM Theme**: A minimalist, terminal-inspired SDDM theme. It features a dynamic clock, user selection, and power management buttons (shutdown/reboot). It includes two static versions (light and dark) that are automatically selected based on the system's `theming.mode` setting.
 
-- **base16Scheme**: The module offers full system integration for color base16Scheme via Stylix too. More information below.
+- **base16Scheme & Font Sizing**: The module offers full system integration for Base16 color schemes and global font sizing via Stylix. Font sizes are propagated consistently to applications, terminal, popups, and desktop interfaces. More information below.
 
 ## Prerequisites
 
@@ -115,6 +115,7 @@ Below is a complete example of a `flake.nix` file:
               theming.enable = true; # Enable default theming (recommended)
               theming.mode = "dark"; # Set theme mode to dark or light
               theming.base16Scheme = "catppuccin-mocha"; # Set theme base16 schema
+              theming.fontSize = 10; # Set global font size for Stylix (default: 10)
               powerManagement.enable = true; # Enable power management for laptops
               insync.enable = true; # Enable Insync integration
               kanshi.enable = true; # Enable monitor profile management
@@ -154,6 +155,7 @@ The SicOS module offers several options to customize your environment. All optio
 | `theming.enable` | boolean | `true` | Enables theme configuration (GTK, Qt, icons, cursors) through Home Manager and Stylix. |
 | `theming.mode` | string | `"dark"` | Sets the theme to either `"dark"` or `"light"`. |
 | `theming.base16Scheme` | string | `"catppuccin-mocha"` | Selects the Base16 color scheme for Stylix. It can be set to `catppuccin-mocha`, `equilibrium-light`, `everforest`, `gruvbox-dark`, `gruvbox-light-soft` and many more. Plese, read **Note on Theming** for more information |
+| `theming.fontSize` | integer | `10` | Sets the global font size configured in Stylix across applications, desktop, popups, and terminal. |
 | `powerManagement.enable` | boolean | `true` | Enables power management for laptops, using `power-profiles-daemon` and automatically adjusting brightness and power profiles when plugging/unplugging the AC adapter. |
 | `insync.enable` | boolean | `false` | Enables integration with Insync, including a Waybar status indicator. |
 | `insync.package` | package | `pkgs.insync` | Allows specifying a different Insync package version (e.g., from `pkgs-stable`). |

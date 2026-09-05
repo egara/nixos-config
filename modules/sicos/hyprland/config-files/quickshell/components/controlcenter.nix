@@ -61,6 +61,11 @@
             property var monitorList: []
             property int selectedMonitorIndex: 0
             property real currentMonitorScale: 1.0
+
+            // Font Size properties
+            property bool fontExpanded: false
+            property int currentFontSize: 10
+            property int pendingFontSize: 10
             
             // Pipewire dynamic properties
             property int _pwUpdateTrigger: 0
@@ -206,6 +211,7 @@
                         ccInfoProc.running = true;
                         networkPollProc.running = true;
                         monitorPollProc.running = true;
+                        fontPollProc.running = true;
                     }
                 }
             }
@@ -336,10 +342,38 @@
                 cmdRunner.exec(["sh", "-c", scriptCmd]);
             }
 
+            Process {
+                id: fontPollProc
+                command: ["sh", "-c", "if [ -f $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/theme-switcher.sh ]; then $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/theme-switcher.sh --get-size; elif [ -f $HOME/.config/sicos/scripts/theme-switcher.sh ]; then $HOME/.config/sicos/scripts/theme-switcher.sh --get-size; else echo '10'; fi"]
+                running: false
+                stdout: StdioCollector {
+                    onStreamFinished: {
+                        if (text !== "") {
+                            try {
+                                let s = parseInt(text.trim());
+                                if (!isNaN(s) && s > 0) {
+                                    popupContentCC.currentFontSize = s;
+                                    popupContentCC.pendingFontSize = s;
+                                }
+                            } catch (e) {
+                                console.log("Error parsing font size: " + e);
+                            }
+                        }
+                    }
+                }
+            }
+
+            function applyFontSize(sizeVal) {
+                var hyprRules = "hyprctl eval 'sicos_ts_rule1 = hl.window_rule({ match = { class = \"sicos-theme-switch\" }, float = true }); sicos_ts_rule2 = hl.window_rule({ match = { class = \"sicos-theme-switch\" }, size = { 1000, 650 } }); sicos_ts_rule3 = hl.window_rule({ match = { class = \"sicos-theme-switch\" }, center = true })'; ";
+                var scriptCmd = hyprRules + "if [ -f $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/theme-switcher.sh ]; then uwsm app -- kitty --class sicos-theme-switch --hold bash -c \"$HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/theme-switcher.sh --size " + sizeVal + "\"; else uwsm app -- kitty --class sicos-theme-switch --hold bash -c \"$HOME/.config/sicos/scripts/theme-switcher.sh --size " + sizeVal + "\"; fi";
+                cmdRunner.exec(["sh", "-c", scriptCmd]);
+            }
+
             Component.onCompleted: {
                 ccInfoProc.running = true;
                 bluetoothPollProc.running = true;
                 monitorPollProc.running = true;
+                fontPollProc.running = true;
             }
             
             opacity: root.controlcenterVisible ? 1 : 0
@@ -1664,8 +1698,324 @@
                             }
                         }
                     }
-                }
+                } // end Monitor Scale Pill
 
+                // Font Size Pill
+                    Item {
+                        Layout.fillWidth: true
+                        implicitHeight: fontPillLayout.implicitHeight + 24
+
+                        Rectangle {
+                            anchors.fill: parent
+                            color: "#1A${c.base03}"
+                            radius: 12
+                        }
+
+                        ColumnLayout {
+                            id: fontPillLayout
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            spacing: 12
+
+                            // Main Collapsed / Header Row
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: 12
+
+                                Item {
+                                    Layout.preferredWidth: 32
+                                    Layout.preferredHeight: 24
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: ""
+                                        color: "#${c.base0D}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 20
+                                    }
+                                }
+
+                                Text {
+                                    text: "Font Size"
+                                    color: "#${c.base05}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 16
+                                    font.bold: true
+                                    Layout.fillWidth: true
+                                    elide: Text.ElideRight
+                                }
+
+                                Text {
+                                    text: popupContentCC.pendingFontSize + " pt" + (popupContentCC.pendingFontSize !== popupContentCC.currentFontSize ? " *" : "")
+                                    color: popupContentCC.pendingFontSize !== popupContentCC.currentFontSize ? "#${c.base0A}" : "#${c.base05}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 16
+                                    font.bold: popupContentCC.pendingFontSize !== popupContentCC.currentFontSize
+                                    Layout.preferredWidth: 60
+                                    horizontalAlignment: Text.AlignRight
+                                }
+
+                                Rectangle {
+                                    width: 24
+                                    height: 24
+                                    radius: 12
+                                    color: fontExpandMouseArea.containsMouse ? "#33${c.base03}" : "transparent"
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: popupContentCC.fontExpanded ? "" : ""
+                                        color: "#${c.base0D}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 19
+                                    }
+                                    MouseArea {
+                                        id: fontExpandMouseArea
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        cursorShape: Qt.PointingHandCursor
+                                        onClicked: popupContentCC.fontExpanded = !popupContentCC.fontExpanded
+                                    }
+                                }
+                            }
+
+                            // Expanded Section (Stepper, Quick Presets, and Apply Button)
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                visible: popupContentCC.fontExpanded
+                                spacing: 12
+
+                                // Quick presets row
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 6
+
+                                    Text {
+                                        text: "Presets:"
+                                        color: "#${c.base04}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 13
+                                    }
+
+                                    Repeater {
+                                        model: [8, 9, 10, 11, 12, 14, 15]
+                                        delegate: Rectangle {
+                                            Layout.preferredWidth: 28
+                                            Layout.preferredHeight: 24
+                                            radius: 6
+                                            color: popupContentCC.pendingFontSize === modelData ? "#${c.base0D}" : (presetMouseArea.containsMouse ? "#33${c.base03}" : "#1A${c.base02}")
+                                            border.color: popupContentCC.currentFontSize === modelData ? "#${c.base0B}" : "transparent"
+                                            border.width: 1
+
+                                            Text {
+                                                anchors.centerIn: parent
+                                                text: modelData.toString()
+                                                color: popupContentCC.pendingFontSize === modelData ? "#${c.base00}" : "#${c.base05}"
+                                                font.family: "${fontName}"
+                                                font.pixelSize: 12
+                                                font.bold: popupContentCC.pendingFontSize === modelData
+                                            }
+
+                                            MouseArea {
+                                                id: presetMouseArea
+                                                anchors.fill: parent
+                                                hoverEnabled: true
+                                                cursorShape: Qt.PointingHandCursor
+                                                onClicked: popupContentCC.pendingFontSize = modelData
+                                            }
+                                        }
+                                    }
+
+                                    Item { Layout.fillWidth: true }
+                                }
+
+                                // Dynamic Live Preview Box
+                                Rectangle {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: 44
+                                    radius: 8
+                                    color: "#20${c.base00}"
+                                    border.color: "#30${c.base05}"
+                                    border.width: 1
+                                    clip: true
+
+                                    RowLayout {
+                                        anchors.fill: parent
+                                        anchors.leftMargin: 12
+                                        anchors.rightMargin: 12
+                                        spacing: 12
+
+                                        Rectangle {
+                                            Layout.preferredWidth: 36
+                                            Layout.preferredHeight: 30
+                                            radius: 6
+                                            color: "#26${c.base0D}"
+                                            border.color: "#4D${c.base0D}"
+                                            border.width: 1
+
+                                            Text {
+                                                anchors.centerIn: parent
+                                                text: "Aa"
+                                                color: "#${c.base0D}"
+                                                font.family: "${fontName}"
+                                                font.pointSize: popupContentCC.pendingFontSize + 2
+                                                font.bold: true
+                                            }
+                                        }
+
+                                        Rectangle {
+                                            Layout.preferredWidth: 1
+                                            Layout.preferredHeight: 20
+                                            color: "#33${c.base05}"
+                                        }
+
+                                        Text {
+                                            text: "Typography"
+                                            color: "#${c.base05}"
+                                            font.family: "${fontName}"
+                                            font.pointSize: popupContentCC.pendingFontSize
+                                            elide: Text.ElideRight
+                                            Layout.fillWidth: true
+                                        }
+                                    }
+                                }
+
+                                // Stepper and Slider
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 12
+
+                                    // Decrement button (-)
+                                    Rectangle {
+                                        width: 28; height: 28; radius: 14
+                                        color: decFontArea.containsMouse ? "#33${c.base03}" : "#1A${c.base02}"
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: "-"
+                                            color: "#${c.base05}"
+                                            font.family: "${fontName}"
+                                            font.pixelSize: 18
+                                            font.bold: true
+                                        }
+                                        MouseArea {
+                                            id: decFontArea
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            cursorShape: Qt.PointingHandCursor
+                                            onClicked: {
+                                                if (popupContentCC.pendingFontSize > 7) {
+                                                    popupContentCC.pendingFontSize -= 1;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    // Visual Slider
+                                    Item {
+                                        Layout.fillWidth: true
+                                        Layout.preferredHeight: 24
+                                        property real percent: Math.max(0, Math.min(1.0, (popupContentCC.pendingFontSize - 7) / (18 - 7)))
+
+                                        Rectangle {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            width: parent.width
+                                            height: 12
+                                            radius: 6
+                                            color: "#33${c.base05}"
+
+                                            Rectangle {
+                                                width: parent.width * parent.parent.percent
+                                                height: parent.height
+                                                radius: 6
+                                                color: "#${c.base0D}"
+                                            }
+                                        }
+
+                                        // Thumb
+                                        Rectangle {
+                                            width: 20; height: 20; radius: 10
+                                            color: "#${c.base05}"
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
+                                        }
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            cursorShape: Qt.PointingHandCursor
+                                            function updateFontFromMouse(mouse) {
+                                                let p = Math.max(0, Math.min(1, mouse.x / width));
+                                                let newS = Math.round(7 + p * (18 - 7));
+                                                popupContentCC.pendingFontSize = Math.max(7, Math.min(18, newS));
+                                            }
+                                            onPressed: (mouse) => updateFontFromMouse(mouse)
+                                            onPositionChanged: (mouse) => { if (pressed) updateFontFromMouse(mouse); }
+                                        }
+                                    }
+
+                                    // Increment button (+)
+                                    Rectangle {
+                                        width: 28; height: 28; radius: 14
+                                        color: incFontArea.containsMouse ? "#33${c.base03}" : "#1A${c.base02}"
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: "+"
+                                            color: "#${c.base05}"
+                                            font.family: "${fontName}"
+                                            font.pixelSize: 18
+                                            font.bold: true
+                                        }
+                                        MouseArea {
+                                            id: incFontArea
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            cursorShape: Qt.PointingHandCursor
+                                            onClicked: {
+                                                if (popupContentCC.pendingFontSize < 18) {
+                                                    popupContentCC.pendingFontSize += 1;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // Apply Action Button
+                                Rectangle {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: 34
+                                    radius: 8
+                                    color: applyFontArea.containsMouse ? "#${c.base0D}" : "#26${c.base0D}"
+                                    border.color: "#${c.base0D}"
+                                    border.width: 1
+
+                                    RowLayout {
+                                        anchors.centerIn: parent
+                                        spacing: 8
+                                        Text {
+                                            text: "󰑓"
+                                            color: applyFontArea.containsMouse ? "#${c.base00}" : "#${c.base0D}"
+                                            font.family: "${fontName}"
+                                            font.pixelSize: 15
+                                        }
+                                        Text {
+                                            text: popupContentCC.pendingFontSize !== popupContentCC.currentFontSize ? "Apply & Rebuild (" + popupContentCC.pendingFontSize + "pt)" : "Reapply Current Font (" + popupContentCC.currentFontSize + "pt)"
+                                            color: applyFontArea.containsMouse ? "#${c.base00}" : "#${c.base05}"
+                                            font.family: "${fontName}"
+                                            font.pixelSize: 14
+                                            font.bold: true
+                                        }
+                                    }
+
+                                    MouseArea {
+                                        id: applyFontArea
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        cursorShape: Qt.PointingHandCursor
+                                        onClicked: {
+                                            root.controlcenterVisible = false;
+                                            popupContentCC.applyFontSize(popupContentCC.pendingFontSize);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                 // Quick Toggles
                 

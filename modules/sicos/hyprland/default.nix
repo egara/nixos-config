@@ -141,6 +141,12 @@ in
         default = "catppuccin-mocha";
         description = "Set the base16 scheme for Stylix.";
       };
+
+      fontSize = lib.mkOption {
+        type = lib.types.int;
+        default = 10;
+        description = "Set the font size for Stylix.";
+      };
     };
 
     # Power Management using power profiles daemon

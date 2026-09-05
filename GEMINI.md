@@ -54,6 +54,7 @@ SicOS provides a complete, themed desktop experience. It is split into two parts
 - `shell`: Choice of desktop shell (`"waybar"`, `"dank-material-shell"`, or `"sicos-bar"`).
 - `theming.mode`: `"light"` or `"dark"`.
 - `theming.base16Scheme`: Base16 color scheme name (e.g., `"catppuccin-mocha"`).
+- `theming.fontSize`: Font size for Stylix (default: `10`).
 - `powerManagement.enable`: System optimizations and Waybar/SicOS-Bar power modules.
 - `kanshi.enable`: Automated monitor layout management.
 - `insync.enable`: Google Drive sync integration.
