@@ -22,10 +22,10 @@
             id: popupContentClock
             width: parent.width
             height: parent.height
-            
+
             opacity: root.clockVisible ? 1 : 0
             y: root.clockVisible ? 0 : -20
-            
+
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
             Behavior on y { NumberAnimation { duration: 250; easing.type: Easing.OutBack } }
 
@@ -90,28 +90,6 @@
                             font.bold: true
                             Layout.fillWidth: true
                         }
-                        
-                        // DND Button
-                        Rectangle {
-                            width: 32
-                            height: 32
-                            radius: 16
-                            color: dndHover.hovered ? "#${c.base03}" : (root.dndMode ? "#20${c.base0D}" : "transparent")
-                            
-                            Text {
-                                anchors.centerIn: parent
-                                text: "󰂛"
-                                color: root.dndMode ? "#${c.base0D}" : "#${c.base04}"
-                                font.family: "${fontName}"
-                                font.pixelSize: 19
-                            }
-                            HoverHandler {
-                                id: dndHover
-                            }
-                            TapHandler {
-                                onTapped: root.dndMode = !root.dndMode
-                            }
-                        }
 
                         // Clear all button
                         Rectangle {
@@ -119,7 +97,7 @@
                             height: 32
                             radius: 16
                             color: clearHover.hovered ? "#${c.base03}" : "transparent"
-                            
+
                             Text {
                                 anchors.centerIn: parent
                                 text: "󰎟" // Trash icon or clear all
@@ -134,6 +112,28 @@
                                 onTapped: root.clearNotifications()
                             }
                         }
+
+                        // DND (Do Not Disturb) Button
+                        Rectangle {
+                            width: 32
+                            height: 32
+                            radius: 16
+                            color: dndHover.hovered ? "#${c.base03}" : (root.dndMode ? "#20${c.base0D}" : "transparent")
+
+                            Text {
+                                anchors.centerIn: parent
+                                text: "󰂛"
+                                color: root.dndMode ? "#${c.base0D}" : "#${c.base04}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 19
+                            }
+                            HoverHandler {
+                                id: dndHover
+                            }
+                            TapHandler {
+                                onTapped: root.dndMode = !root.dndMode
+                            }
+                        }
                     }
 
                     // Empty State
@@ -142,7 +142,7 @@
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         color: "transparent"
-                        
+
                         ColumnLayout {
                             anchors.centerIn: parent
                             spacing: 8
@@ -154,7 +154,7 @@
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             Text {
-                                text: "No hay notificaciones nuevas"
+                                text: "You don't have notifications"
                                 color: "#80${c.base05}"
                                 font.family: "${fontName}"
                                 font.pixelSize: 17
@@ -182,18 +182,18 @@
                         add: Transition {
                             NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 200; easing.type: Easing.OutCubic }
                         }
-                        
+
                         remove: Transition {
                             ParallelAnimation {
                                 NumberAnimation { property: "x"; to: notifList.width; duration: 300; easing.type: Easing.OutCubic }
                                 NumberAnimation { property: "opacity"; to: 0; duration: 250; easing.type: Easing.OutCubic }
                             }
                         }
-                        
+
                         addDisplaced: Transition {
                             NumberAnimation { properties: "y"; duration: 200; easing.type: Easing.OutCubic }
                         }
-                        
+
                         removeDisplaced: Transition {
                             NumberAnimation { properties: "y"; duration: 200; easing.type: Easing.OutCubic }
                         }
@@ -201,18 +201,18 @@
                         delegate: ColumnLayout {
                             id: delegateRoot
                             width: notifList.width
-                            
+
                             readonly property bool isFirstInGroup: delegateRoot.ListView.previousSection !== delegateRoot.ListView.section
                             readonly property bool hasMultiple: delegateRoot.ListView.nextSection === delegateRoot.ListView.section || !isFirstInGroup
                             readonly property bool isExpanded: root.expandedGroups[model.appName] === true
                             readonly property bool shouldShow: isFirstInGroup || isExpanded
-                            
+
                             visible: opacity > 0
                             opacity: shouldShow ? 1 : 0
                             height: shouldShow ? implicitHeight : 0
                             spacing: shouldShow ? 6 : 0
                             clip: true
-                            
+
                             Behavior on height {
                                 NumberAnimation { duration: 300; easing.type: Easing.OutQuart }
                             }
@@ -234,17 +234,17 @@
                                     source: {
                                         var appImg = model.desktopEntry;
                                         if (!appImg || appImg === "") appImg = model.appIcon;
-                                        
+
                                         if (appImg && appImg !== "") {
                                             if (appImg.startsWith("/")) return "file://" + appImg;
                                             return "image://icon/" + appImg;
                                         }
-                                        
+
                                         var appNameLower = model.appName ? model.appName.toLowerCase().replace(/\s+/g, '-') : "";
                                         if (appNameLower && appNameLower !== "sistema") {
                                             return "image://icon/" + appNameLower;
                                         }
-                                        
+
                                         var img = model.iconName.toString();
                                         if (img && img !== "") {
                                             if (img.startsWith("image://") || img.startsWith("file://")) return img;
@@ -258,18 +258,18 @@
                                     Layout.preferredWidth: 24
                                     Layout.preferredHeight: 24
                                     fillMode: Image.PreserveAspectCrop
-                                    
+
                                     onStatusChanged: {
                                         if (status === Image.Error) {
                                             var img = model.iconName.toString();
                                             var fallbackSource = "image://icon/dialog-information";
-                                            
+
                                             if (img && img !== "") {
                                                 if (img.startsWith("image://") || img.startsWith("file://")) fallbackSource = img;
                                                 else if (img.startsWith("/")) fallbackSource = "file://" + img;
                                                 else fallbackSource = "image://icon/" + img;
                                             }
-                                            
+
                                             if (source.toString() !== fallbackSource) {
                                                 source = fallbackSource;
                                             } else if (source.toString() !== "image://icon/dialog-information") {
@@ -296,7 +296,7 @@
                                     radius: 10
                                     color: groupExpandHover.hovered ? "#33${c.base05}" : "transparent"
                                     visible: delegateRoot.hasMultiple
-                                    
+
                                     Text {
                                         anchors.centerIn: parent
                                         text: "󰅂"
@@ -304,16 +304,16 @@
                                         color: "#${c.base05}"
                                         font.family: "${fontName}"
                                         font.pixelSize: 17
-                                        
+
                                         Behavior on rotation {
                                             NumberAnimation { duration: 300; easing.type: Easing.OutBack }
                                         }
                                     }
-                                    
+
                                     HoverHandler {
                                         id: groupExpandHover
                                     }
-                                    
+
                                     TapHandler {
                                         onTapped: {
                                             root.toggleGroup(model.appName)
@@ -327,7 +327,7 @@
                                     Layout.preferredHeight: 24
                                     radius: 10
                                     color: groupCloseHover.hovered ? "#${c.base08}" : "transparent"
-                                    
+
                                     Text {
                                         anchors.centerIn: parent
                                         text: "󰅖"
@@ -335,11 +335,11 @@
                                         font.family: "${fontName}"
                                         font.pixelSize: 17
                                     }
-                                    
+
                                     HoverHandler {
                                         id: groupCloseHover
                                     }
-                                    
+
                                     TapHandler {
                                         onTapped: {
                                             root.dismissNotificationGroup(model.appName)
@@ -398,7 +398,7 @@
                                             sourceSize.width: 128
                                             sourceSize.height: 128
                                             fillMode: Image.PreserveAspectCrop
-                                            
+
                                             onStatusChanged: {
                                                 if (status === Image.Error) {
                                                     if (model.desktopEntry && source.toString() !== "image://icon/" + model.desktopEntry) {
@@ -420,7 +420,7 @@
 
                                         RowLayout {
                                             Layout.fillWidth: true
-                                            
+
                                             Text {
                                                 text: model.summary
                                                 color: "#${c.base05}"
@@ -432,7 +432,7 @@
                                                 maximumLineCount: 2
                                                 elide: Text.ElideRight
                                             }
-                                            
+
                                             Text {
                                                 text: model.timeStr
                                                 color: "#${c.base04}"
@@ -451,7 +451,7 @@
                                                 border.color: expandMouseArea.containsMouse ? "#66${c.base0D}" : "#33${c.base0D}"
                                                 border.width: 1
                                                 visible: cardBodyText.truncated || cardItem.expanded
-                                                
+
                                                 Text {
                                                     anchors.centerIn: parent
                                                     text: cardItem.expanded ? "󰅃" : "󰅀"
@@ -459,7 +459,7 @@
                                                     font.family: "${fontName}"
                                                     font.pixelSize: 17
                                                 }
-                                                
+
                                                 MouseArea {
                                                     id: expandMouseArea
                                                     anchors.fill: parent
@@ -481,7 +481,7 @@
                                                 color: closeMouseArea.containsMouse ? "#33${c.base08}" : "#1A${c.base08}"
                                                 border.color: closeMouseArea.containsMouse ? "#66${c.base08}" : "#33${c.base08}"
                                                 border.width: 1
-                                                
+
                                                 Text {
                                                     anchors.centerIn: parent
                                                     text: "󰅖"
@@ -489,7 +489,7 @@
                                                     font.family: "${fontName}"
                                                     font.pixelSize: 17
                                                 }
-                                                
+
                                                 MouseArea {
                                                     id: closeMouseArea
                                                     anchors.fill: parent
@@ -536,7 +536,7 @@
                     Layout.fillHeight: true
                     Layout.preferredWidth: 330
                     spacing: 8
-                    
+
                     // State and logic
                     property date today: new Date()
                     property string todayKey: Model.keyForDate(today)
@@ -577,7 +577,7 @@
                         Layout.fillWidth: true
                         Layout.topMargin: 4
                         Layout.bottomMargin: 8
-                        
+
                         Rectangle {
                             width: 28; height: 28; radius: 14
                             color: prevHover.containsMouse ? "#${c.base03}" : "transparent"
@@ -588,7 +588,7 @@
                         Item {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
-                            
+
                             Text {
                                 anchors.centerIn: parent
                                 text: titleHover.containsMouse && !calendarRoot.viewingCurrentMonth ? "BACK TO TODAY" : Qt.formatDate(calendarRoot.viewDate, "MMMM yyyy").toUpperCase()
@@ -598,7 +598,7 @@
                                 font.bold: true
                                 font.letterSpacing: 1
                             }
-                            
+
                             MouseArea {
                                 id: titleHover
                                 anchors.fill: parent
@@ -619,12 +619,12 @@
                     ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 6
-                        
+
                         MouseArea {
                             Layout.fillWidth: true
                             height: 20
                             onDoubleClicked: calendarRoot.editingLife = true
-                            
+
                             RowLayout {
                                 anchors.fill: parent
                                 Text { text: calendarRoot.today.getFullYear(); color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 14; font.letterSpacing: 1 }
@@ -636,14 +636,14 @@
                                 Text { text: calendarRoot.yearDonePercent + "%"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14 }
                             }
                         }
-                        
+
                         // Life progress
                         Item {
                             Layout.fillWidth: true
                             height: calendarRoot.editingLife || calendarRoot.birthYear > 0 ? 20 : 0
                             visible: height > 0
                             clip: true
-                            
+
                             RowLayout {
                                 anchors.fill: parent
                                 visible: !calendarRoot.editingLife
@@ -655,19 +655,19 @@
                                 }
                                 Text { text: calendarRoot.lifeDonePercent + "%"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14 }
                             }
-                            
+
                             RowLayout {
                                 anchors.fill: parent
                                 visible: calendarRoot.editingLife
                                 Text { text: "BORN"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 14 }
-                                
+
                                 Rectangle {
                                     Layout.preferredWidth: 60
                                     Layout.preferredHeight: 18
                                     color: "#22${c.base05}"
                                     radius: 4
-                                    
-                                    TextInput { 
+
+                                    TextInput {
                                         id: birthInput
                                         anchors.fill: parent
                                         anchors.leftMargin: 6
@@ -690,16 +690,16 @@
                             }
                         }
                     }
-                    
+
                     Item { Layout.preferredHeight: 4 } // Spacer
 
                     // Weekdays Header
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 2
-                        
+
                         Item { Layout.preferredWidth: 24; Layout.preferredHeight: 24 } // W gutter
-                        
+
                         Repeater {
                             model: calendarRoot.weekdays
                             Text {
@@ -714,18 +714,18 @@
                             }
                         }
                     }
-                    
+
                     // Calendar Grid
                     ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 4
-                        
+
                         Repeater {
                             model: calendarRoot.weeks
                             RowLayout {
                                 property var weekData: modelData
                                 spacing: 2
-                                
+
                                 Text {
                                     text: weekData.week
                                     color: "#${c.base03}"
@@ -735,7 +735,7 @@
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                 }
-                                
+
                                 Repeater {
                                     model: weekData.days
                                     Rectangle {
@@ -746,7 +746,7 @@
                                         color: "transparent"
                                         border.width: dayData.today ? 1 : 0
                                         border.color: "#${c.base0D}"
-                                        
+
                                         Text {
                                             anchors.centerIn: parent
                                             text: dayData.day
@@ -755,7 +755,7 @@
                                             font.pixelSize: 16
                                             font.bold: dayData.today
                                         }
-                                        
+
                                         MouseArea {
                                             anchors.fill: parent
                                             hoverEnabled: true
@@ -763,7 +763,7 @@
                                                 if (dayData.today) calendarRoot.goToToday();
                                             }
                                         }
-                                        
+
                                         Rectangle {
                                             anchors.fill: parent
                                             color: parent.children[1].containsMouse ? "#1A${c.base0D}" : "transparent"
@@ -775,7 +775,7 @@
                             }
                         }
                     }
-                    
+
                     Item { Layout.fillHeight: true } // Push everything up
                 }
             }
@@ -793,7 +793,7 @@
                     }
                 }
             }
-            
+
             Timer {
                 id: clockCloseTimer
                 interval: 400
@@ -811,18 +811,18 @@
         radius: 14 // Pill style
         Layout.preferredHeight: 36
         Layout.preferredWidth: clockLayout.implicitWidth + 24
-        
+
         RowLayout {
             id: clockLayout
             anchors.centerIn: parent
             spacing: 8
-            
+
             Rectangle {
                 Layout.preferredWidth: 28
                 Layout.preferredHeight: 28
                 radius: 14
                 color: bellMouseArea.containsMouse ? "#44${c.base05}" : "transparent"
-                
+
                 Text {
                     anchors.centerIn: parent
                     text: root.dndMode ? "󰂛" : (notificationModel.count > 0 ? "󰂚" : "󰂜")
@@ -830,7 +830,7 @@
                     font.family: "${fontName}"
                     font.pixelSize: 18
                 }
-                
+
                 MouseArea {
                     id: bellMouseArea
                     anchors.fill: parent
@@ -857,7 +857,7 @@
                 font.family: "${fontName}"
                 font.pixelSize: 16
                 font.bold: true
-                
+
                 Timer {
                     interval: 1000
                     running: true
@@ -882,14 +882,14 @@
                 }
             }
         }
-        
+
         Timer {
             id: clockOpenTimer
             interval: 200
             repeat: false
             onTriggered: root.clockVisible = true
         }
-        
+
         Timer {
             id: clockCloseTimerWidget
             interval: 400
