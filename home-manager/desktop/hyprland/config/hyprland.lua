@@ -392,7 +392,7 @@ hl.window_rule({
 })
 
 hl.window_rule({
-    match = { class = "^(Qmmp|buttermanager|es-estoes-wallpaperDownloader-Main|quickgui|SshAskpass|com.gabm.satty)$" },
+    match = { class = "^(Qmmp|buttermanager|es-estoes-wallpaperDownloader-Main|quickgui|SshAskpass|com.gabm.satty|spotify)$" },
     float = true,
     center = true,
 })
