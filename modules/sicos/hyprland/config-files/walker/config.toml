@@ -1,7 +1,7 @@
 force_keyboard_focus = false
 close_when_open = true
 click_to_close = true
-selection_wrap = false
+selection_wrap = true
 global_argument_delimiter = "#"
 exact_search_prefix = "'"
 theme = "stylix"

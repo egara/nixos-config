@@ -27,7 +27,9 @@ elif [[ "$output" == *"Hyprland"* ]]; then
 elif [[ "$output" == *"Screenshots"* ]]; then
     hyprshot -m region --raw | satty --filename - --early-exit --copy-command wl-copy --initial-tool arrow --output-filename ~/Pictures/screenshot-$(date '+%Y%m%d-%H:%M:%S').png
 elif [[ "$output" == *"Info"* ]]; then
-    kitty --hold sh -c 'fastfetch -c all.jsonc'
+    # Dynamically define window rules to float, size, and center the info window
+    hyprctl eval 'sicos_about_rule1 = hl.window_rule({ match = { class = "sicos-about" }, float = true }); sicos_about_rule2 = hl.window_rule({ match = { class = "sicos-about" }, size = { 1600, 900 } }); sicos_about_rule3 = hl.window_rule({ match = { class = "sicos-about" }, center = true })'
+    uwsm app -- kitty --class sicos-about sh -c ~/.config/sicos/scripts/fastfetch-about.sh
 else
     echo "Select an option"
 fi
