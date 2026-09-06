@@ -7,14 +7,14 @@
 # @email: eloy.garcia.pca@gmail.com
 # ------------------------------------------
 
-items="󱓟\u00A0\u00A0\u00A0\u00A0Applications\n⏻\u00A0\u00A0\u00A0\u00A0Power\n\u00A0\u00A0\u00A0\u00A0Clean\n󱕅\u00A0\u00A0\u00A0\u00A0Screensaver\n󰸉\u00A0\u00A0\u00A0\u00A0Wallpapers\n󰋖\u00A0\u00A0\u00A0\u00A0Hyprland Keybindings\n\u00A0\u00A0\u00A0\u00A0Screenshots\n󰙎\u00A0\u00A0\u00A0\u00A0Info"
+items="⏻\u00A0\u00A0\u00A0\u00A0Power\n󱓟\u00A0\u00A0\u00A0\u00A0Applications\n\u00A0\u00A0\u00A0\u00A0Clean\n󱕅\u00A0\u00A0\u00A0\u00A0Screensaver\n󰸉\u00A0\u00A0\u00A0\u00A0Wallpapers\n󰋖\u00A0\u00A0\u00A0\u00A0Hyprland Keybindings\n\u00A0\u00A0\u00A0\u00A0Screenshots\n󰙎\u00A0\u00A0\u00A0\u00A0Info"
 
 output=$(echo -e $items | walker --dmenu -H -n -N)
 
-if [[ "$output" == *"Applications"* ]]; then
-    uwsm app -- walker
-elif [[ "$output" == *"Power"* ]]; then
+if [[ "$output" == *"Power"* ]]; then
     wlogout --protocol layer-shell -b 6
+elif [[ "$output" == *"Applications"* ]]; then
+    uwsm app -- walker
 elif [[ "$output" == *"Clean"* ]]; then
     kitty --hold sh -c "~/.config/sicos/scripts/nixos-clean.sh"
 elif [[ "$output" == *"Screensaver"* ]]; then
