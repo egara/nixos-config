@@ -1,5 +1,5 @@
 # /home/egarcia/Zero/nixos-config/modules/sicos/hyprland/default.nix
-{ config, pkgs, lib, sicos-source-path, username, inputs, ... }:
+{ config, pkgs, lib, sicos-source-path, inputs, ... }:
 
 let
   cfg = config.programs.sicos.hyprland;
@@ -216,7 +216,7 @@ in
         udisks2.enable = true;
 
         dbus.enable = true;
-        
+
         # Accountsservice for user avatars and info
         accounts-daemon.enable = true;
 
