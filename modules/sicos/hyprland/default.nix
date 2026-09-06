@@ -263,11 +263,18 @@ in
           waybar = super.waybar.overrideAttrs (oldAttrs: {
             mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
           });
-          # Patch satty so notification thumbnails are not deleted on early-exit
-          satty = super.satty.overrideAttrs (oldAttrs: {
-            patches = (oldAttrs.patches or [ ]) ++ [
-              ./patches/satty-notification-thumbnail.patch
-            ];
+          # Test upstream PR 635 (https://github.com/Satty-org/Satty/pull/635)
+          satty = super.satty.overrideAttrs (oldAttrs: rec {
+            src = super.fetchFromGitHub {
+              owner = "Satty-org";
+              repo = "Satty";
+              rev = "0ea19eb2c63a8f6e3031704c24106502dc11e760";
+              hash = "sha256-WoJahjOQFnQ7BQgqbiliu1hBWLYkPJ/RY53CY5qG1wE=";
+            };
+            cargoDeps = super.rustPlatform.importCargoLock {
+              lockFile = "${src}/Cargo.lock";
+            };
+            patches = [ ];
           });
         })
       ];
