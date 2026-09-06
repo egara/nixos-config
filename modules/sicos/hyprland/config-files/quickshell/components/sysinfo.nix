@@ -11,7 +11,7 @@
         anchor.edges: Edges.Bottom | Edges.Left
         visible: root.sysinfoVisible || popupSysContent.opacity > 0
         implicitWidth: 600
-        implicitHeight: 480
+        implicitHeight: 520
         color: "transparent"
 
         HyprlandFocusGrab {
@@ -75,16 +75,19 @@
                 anchors.fill: parent
                 anchors.margins: 20
                 anchors.topMargin: 32
-                spacing: 16
+                spacing: 14
                 
                 // Header
                 RowLayout {
                     Layout.fillWidth: true
+                    Layout.fillHeight: false
+                    Layout.preferredHeight: 28
+                    Layout.maximumHeight: 28
                     Text {
                         text: "System Monitor"
                         color: "#${c.base05}"
                         font.family: "${fontName}"
-                        font.pixelSize: 21
+                        font.pixelSize: 20
                         Layout.fillWidth: true
                     }
                 }
@@ -324,28 +327,105 @@
                     }
                 }
 
-                // Premium Button (Btop)
-                Rectangle {
+                // Action Buttons (Btop & Force Kill Window)
+                RowLayout {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 40
-                    radius: 20
-                    color: btopArea.containsMouse ? "#${c.base03}" : "#${c.base02}"
-                    
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Launch Full Monitor (Btop)"
-                        color: "#${c.base04}"
-                        font.family: "${fontName}"
-                        font.pixelSize: 17
+                    Layout.fillHeight: false
+                    Layout.preferredHeight: 36
+                    Layout.minimumHeight: 36
+                    Layout.maximumHeight: 36
+                    spacing: 12
+
+                    // Btop Button
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: false
+                        Layout.preferredHeight: 36
+                        Layout.maximumHeight: 36
+                        height: 36
+                        radius: 18
+                        color: btopArea.containsMouse ? "#${c.base03}" : "#${c.base02}"
+
+                        Row {
+                            anchors.centerIn: parent
+                            spacing: 8
+
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: ""
+                                color: "#${c.base0D}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                            }
+
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: "Launch Btop"
+                                color: "#${c.base04}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                            }
+                        }
+
+                        MouseArea {
+                            id: btopArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                root.sysinfoVisible = false
+                                cmdRunner.command = ["uwsm", "app", "--", "kitty", "--class", "btop", "-e", "btop"]
+                                cmdRunner.running = true
+                            }
+                        }
                     }
-                    MouseArea {
-                        id: btopArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: {
-                            root.sysinfoVisible = false
-                            cmdRunner.command = ["uwsm", "app", "--", "kitty", "--class", "btop", "-e", "btop"]
-                            cmdRunner.running = true
+
+                    // Force Kill Window Button
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: false
+                        Layout.preferredHeight: 36
+                        Layout.maximumHeight: 36
+                        height: 36
+                        radius: 18
+                        color: killBtnArea.containsMouse ? "#33${c.base08}" : "#${c.base02}"
+                        border.color: killBtnArea.containsMouse ? "#${c.base08}" : "transparent"
+                        border.width: 1
+
+                        Behavior on color { ColorAnimation { duration: 150 } }
+                        Behavior on border.color { ColorAnimation { duration: 150 } }
+
+                        Row {
+                            anchors.centerIn: parent
+                            spacing: 8
+
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: "󰚌"
+                                color: "#${c.base08}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                            }
+
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: "Kill Window"
+                                color: killBtnArea.containsMouse ? "#${c.base08}" : "#${c.base04}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                                font.bold: killBtnArea.containsMouse
+                            }
+                        }
+
+                        MouseArea {
+                            id: killBtnArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                root.sysinfoVisible = false
+                                windowKillerActive = true
+                            }
                         }
                     }
                 }

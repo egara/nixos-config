@@ -27,7 +27,7 @@ profile undocked-ironman {
 
 # Strange
 profile undocked-strange {
-  output "BOE 0x0BCA Unknown" enable mode 2256x1504 position 0,0 scale 1.25
+  output "BOE 0x0BCA Unknown" enable mode 2256x1504 position 0,0 scale 1.333333
 }
 
 profile home-strange {

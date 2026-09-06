@@ -71,3 +71,10 @@ This document contains a historical record of all features, modules, and integra
 - **Hyprland Integration:** Communicates with Hyprland via a FIFO pipe (`/tmp/sicos-switcher-fifo`), triggered by the `toggle-switcher.sh` script bound to `ALT + Tab` in `hyprland.lua`.
 - **Keyboard Focus Strategy:** Uses `WlrKeyboardFocus.OnDemand` (not `Exclusive`) so that the overlay can receive keyboard input while still allowing Hyprland to transfer focus to other windows when a selection is made.
 - **Consistent Theming:** Uses the same Stylix color palette, animations (`OutBack`/`OutCubic`), and border-radius patterns as the Workspace Overview and other Premium UX modals.
+
+### 12. Force Kill Window Overlay (Window Killer)
+- **Interactive Process & Window Killer:** A specialized overlay modal designed to forcibly terminate (`SIGKILL` / `kill -9`) frozen, uncooperative, or rogue applications directly from the GUI.
+- **Sysinfo Launcher Button:** Triggered directly from the System Monitor pill popup (`sysinfo.nix`), positioned side-by-side with the Btop launcher with a skull icon (`󰚌`) and danger red hover effects (`#${c.base08}`).
+- **Skull Badges & Visual Cues:** Every open window thumbnail features a prominent skull tab (`󰚌 KILL`), PID indicator, window icon, and app title. Hovering over any window transitions the card with red danger border and tint animations.
+- **Reliable Process Termination:** Automatically extracts the window's PID (`modelData.lastIpcObject.pid` or `modelData.pid`) from Hyprland IPC and sends `kill -9 <pid>` via `Quickshell.Io (Process)`, followed by instant Hyprland toplevel synchronization.
+- **Full Keyboard Navigation:** Arrow keys, `Tab`, `Enter`/`Delete` to kill selected, and `Escape` to cancel.

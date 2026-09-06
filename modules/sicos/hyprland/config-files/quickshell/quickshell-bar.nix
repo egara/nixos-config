@@ -16,6 +16,7 @@ let
   progressOsd = import ./components/progressOsd.nix { inherit config lib pkgs c fontName; };
   overview = import ./components/overview.nix { inherit config lib pkgs c fontName; };
   windowSwitcher = import ./components/windowswitcher.nix { inherit config lib pkgs c fontName; };
+  windowKiller = import ./components/windowkiller.nix { inherit config lib pkgs c fontName; };
 in
 ''
 //@ pragma UseQApplication
@@ -38,6 +39,7 @@ import "Model.js" as Model
 Scope {
     property bool overviewActive: false
     property bool windowSwitcherActive: false
+    property bool windowKillerActive: false
 
 PanelWindow {
     id: root
@@ -683,5 +685,6 @@ PanelWindow {
 
     ${overview}
     ${windowSwitcher}
+    ${windowKiller}
 }
 ''

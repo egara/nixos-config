@@ -23,6 +23,8 @@ To avoid maintaining a monolithic `.qml` file with thousands of lines (which wou
   - **`controlcenter.nix`**: Centralized QuickShell Control Center hub containing user stats, network traffic telemetry, system volume/brightness sliders, and the **Monitor Scale Control Pill** (collapsible QML slider communicating with `sicos-monitor-scale.sh` for live and persistent scale management via Kanshi).
   - **`system.nix`**: App launcher button (`walker`) and system monitor (CPU/RAM ring charts).
   - **`workspaces.nix`**: Native two-way integration with Hyprland (`Quickshell.Hyprland`). Dynamically identifies open windows, rendering their system icons using a heuristic based on *class* and *title*.
+  - **`windowswitcher.nix`**: Full-screen overlay modal for live window switching (`ALT+Tab`) using `ScreencopyView` and `WlrKeyboardFocus.OnDemand`.
+  - **`windowkiller.nix`**: Full-screen overlay modal for visual force-killing of frozen/rogue applications (`SIGKILL` / `kill -9`) with skull tabs and live previews.
   - Component files are imported into `hm-module.nix` and passed as arguments to `quickshell-bar.nix`.
 - **Theme Injection:** The main HM module reads colors from `config.lib.stylix.colors` and passes them (`c.base01`, `c.base05`, etc.) into the QML strings. There is no hardcoded CSS.
 
