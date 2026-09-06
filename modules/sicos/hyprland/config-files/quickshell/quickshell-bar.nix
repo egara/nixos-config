@@ -494,13 +494,12 @@ PanelWindow {
                     border.width: 1
                     clip: true
                     
-                    HoverHandler {
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                    }
-                    
-                    TapHandler {
-                        onTapped: {
-                            root.invokeDefaultAction(model.notifId)
+                        onClicked: {
+                            root.invokeDefaultAction(model.notifId);
                         }
                     }
 
@@ -568,57 +567,61 @@ PanelWindow {
                                 font.pixelSize: 15
                             }
                             
+                            // Expand button
                             Rectangle {
                                 Layout.preferredWidth: 24
                                 Layout.preferredHeight: 24
-                                radius: 12
-                                color: osdExpandHover.hovered ? "#33${c.base08}" : "transparent"
+                                radius: 8
+                                color: osdExpandArea.containsMouse ? "#33${c.base0D}" : "#1A${c.base0D}"
+                                border.color: osdExpandArea.containsMouse ? "#66${c.base0D}" : "#33${c.base0D}"
+                                border.width: 1
                                 visible: bodyText.truncated || osdRect.expanded
                                 
                                 Text {
                                     anchors.centerIn: parent
                                     text: osdRect.expanded ? "󰅃" : "󰅀"
-                                    color: osdExpandHover.hovered ? "#${c.base08}" : "#${c.base05}"
+                                    color: "#${c.base0D}"
                                     font.family: "${fontName}"
                                     font.pixelSize: 17
                                 }
                                 
-                                HoverHandler {
-                                    id: osdExpandHover
-                                }
-                                
                                 MouseArea {
+                                    id: osdExpandArea
                                     anchors.fill: parent
+                                    hoverEnabled: true
                                     cursorShape: Qt.PointingHandCursor
-                                    onClicked: {
-                                        osdRect.expanded = !osdRect.expanded
+                                    onClicked: (mouse) => {
+                                        mouse.accepted = true;
+                                        osdRect.expanded = !osdRect.expanded;
                                     }
                                 }
                             }
                             
+                            // Close button
                             Rectangle {
                                 Layout.preferredWidth: 24
                                 Layout.preferredHeight: 24
-                                radius: 12
-                                color: osdCloseHover.hovered ? "#33${c.base08}" : "transparent"
+                                radius: 8
+                                color: osdCloseArea.containsMouse ? "#33${c.base08}" : "#1A${c.base08}"
+                                border.color: osdCloseArea.containsMouse ? "#66${c.base08}" : "#33${c.base08}"
+                                border.width: 1
                                 
                                 Text {
                                     anchors.centerIn: parent
                                     text: "󰅖"
-                                    color: osdCloseHover.hovered ? "#${c.base08}" : "#${c.base05}"
+                                    color: "#${c.base08}"
                                     font.family: "${fontName}"
                                     font.pixelSize: 17
                                 }
                                 
-                                HoverHandler {
-                                    id: osdCloseHover
-                                }
-                                
                                 MouseArea {
+                                    id: osdCloseArea
                                     anchors.fill: parent
+                                    hoverEnabled: true
                                     cursorShape: Qt.PointingHandCursor
-                                    onClicked: {
-                                        root.forceDismissNotification(model.notifId)
+                                    onClicked: (mouse) => {
+                                        mouse.accepted = true;
+                                        root.forceDismissNotification(model.notifId, false);
                                     }
                                 }
                             }

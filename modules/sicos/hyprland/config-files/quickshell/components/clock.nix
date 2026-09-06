@@ -350,25 +350,26 @@
 
                             // Notification Card
                             Item {
+                                id: cardItem
+                                property bool expanded: false
                                 Layout.fillWidth: true
                                 implicitHeight: cardContent.implicitHeight + 20
 
                                 Rectangle {
                                     anchors.fill: parent
-                                    color: notifHover.hovered ? "#${c.base03}" : "#40${c.base02}"
+                                    color: notifMouseArea.containsMouse || expandMouseArea.containsMouse || closeMouseArea.containsMouse ? "#${c.base03}" : "#40${c.base02}"
                                     radius: 10
                                     border.color: "#33${c.base05}"
                                     border.width: 1
                                 }
 
-                                HoverHandler {
-                                    id: notifHover
+                                MouseArea {
+                                    id: notifMouseArea
+                                    anchors.fill: parent
+                                    hoverEnabled: true
                                     cursorShape: Qt.PointingHandCursor
-                                }
-
-                                TapHandler {
-                                    onTapped: {
-                                        root.invokeDefaultAction(model.notifId)
+                                    onClicked: {
+                                        root.invokeDefaultAction(model.notifId);
                                     }
                                 }
 
@@ -440,52 +441,86 @@
                                                 Layout.alignment: Qt.AlignTop
                                             }
 
-                                            // Close button
+                                            // Expand button
                                             Rectangle {
-                                                Layout.preferredWidth: 20
+                                                Layout.preferredWidth: 24
                                                 Layout.preferredHeight: 24
                                                 Layout.alignment: Qt.AlignTop
-                                                radius: 10
-                                                color: closeHover.hovered ? "#${c.base08}" : "transparent"
-                                                visible: notifHover.hovered
+                                                radius: 8
+                                                color: expandMouseArea.containsMouse ? "#33${c.base0D}" : "#1A${c.base0D}"
+                                                border.color: expandMouseArea.containsMouse ? "#66${c.base0D}" : "#33${c.base0D}"
+                                                border.width: 1
+                                                visible: cardBodyText.truncated || cardItem.expanded
                                                 
                                                 Text {
                                                     anchors.centerIn: parent
-                                                    text: "󰅖"
-                                                    color: closeHover.hovered ? "#${c.base00}" : "#${c.base05}"
+                                                    text: cardItem.expanded ? "󰅃" : "󰅀"
+                                                    color: "#${c.base0D}"
                                                     font.family: "${fontName}"
                                                     font.pixelSize: 17
                                                 }
                                                 
-                                                HoverHandler {
-                                                    id: closeHover
+                                                MouseArea {
+                                                    id: expandMouseArea
+                                                    anchors.fill: parent
+                                                    hoverEnabled: true
+                                                    cursorShape: Qt.PointingHandCursor
+                                                    onClicked: (mouse) => {
+                                                        mouse.accepted = true;
+                                                        cardItem.expanded = !cardItem.expanded;
+                                                    }
+                                                }
+                                            }
+
+                                            // Close button
+                                            Rectangle {
+                                                Layout.preferredWidth: 24
+                                                Layout.preferredHeight: 24
+                                                Layout.alignment: Qt.AlignTop
+                                                radius: 8
+                                                color: closeMouseArea.containsMouse ? "#33${c.base08}" : "#1A${c.base08}"
+                                                border.color: closeMouseArea.containsMouse ? "#66${c.base08}" : "#33${c.base08}"
+                                                border.width: 1
+                                                
+                                                Text {
+                                                    anchors.centerIn: parent
+                                                    text: "󰅖"
+                                                    color: "#${c.base08}"
+                                                    font.family: "${fontName}"
+                                                    font.pixelSize: 17
                                                 }
                                                 
-                                                TapHandler {
-                                                    onTapped: {
-                                                        root.forceDismissNotification(model.notifId, false)
+                                                MouseArea {
+                                                    id: closeMouseArea
+                                                    anchors.fill: parent
+                                                    hoverEnabled: true
+                                                    cursorShape: Qt.PointingHandCursor
+                                                    onClicked: (mouse) => {
+                                                        mouse.accepted = true;
+                                                        root.forceDismissNotification(model.notifId, false);
                                                     }
                                                 }
                                             }
                                         }
 
                                         Text {
+                                            id: cardBodyText
                                             text: model.body
                                             color: "#${c.base04}"
                                             font.family: "${fontName}"
                                             font.pixelSize: 16
                                             Layout.fillWidth: true
                                             wrapMode: Text.Wrap
-                                            maximumLineCount: 3
+                                            maximumLineCount: cardItem.expanded ? 100 : 3
                                             elide: Text.ElideRight
                                             visible: text !== ""
-                                        }
                                         }
                                     }
                                 }
                             }
                         }
                     }
+                }
 
                 // Divider
                 Rectangle {
