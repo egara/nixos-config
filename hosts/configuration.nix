@@ -3,7 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 {
-  config,
   pkgs,
   pkgs-stable,
   inputs,
@@ -198,9 +197,6 @@
       "kvm"
       "render"
     ];
-    packages = with pkgs; [
-      #firefox
-    ];
   };
 
   # Increase inotify limits to prevent "No space left on device" errors
@@ -304,7 +300,8 @@
     pkgs-stable.wireshark
     killall
     proton-vpn
-    inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-cli
+    antigravity-cli
+    herdr
     #gradia
     posting
     k9s

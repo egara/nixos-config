@@ -257,11 +257,17 @@ in
         };
       };
 
-      # Waybar overlay for experimental features
+      # Waybar and Satty overlays for experimental features and bugfixes
       nixpkgs.overlays = [
         (self: super: {
           waybar = super.waybar.overrideAttrs (oldAttrs: {
             mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+          });
+          # Patch satty so notification thumbnails are not deleted on early-exit
+          satty = super.satty.overrideAttrs (oldAttrs: {
+            patches = (oldAttrs.patches or [ ]) ++ [
+              ./patches/satty-notification-thumbnail.patch
+            ];
           });
         })
       ];

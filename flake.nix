@@ -97,13 +97,6 @@
       url = "github:noamsto/nix-amd-ai";
     };
 
-    # Antigravity tools
-    # https://github.com/jacopone/antigravity-nix
-    antigravity-nix = {
-      url = "github:jacopone/antigravity-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # DankMaterialShell
     dankmaterialshell = {
       url = "github:AvengeMedia/DankMaterialShell";
@@ -134,7 +127,7 @@
   };
 
   # Function that tells my flake which to use and what do what to do with the dependencies.
-  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, nix-amd-ai, antigravity-nix, dankmaterialshell, ... }:
+  outputs = inputs @ { self, disko, nixpkgs, nixpkgs-stable, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, nix-amd-ai, dankmaterialshell, ... }:
   {
     nixosModules = {
       sicos-hyprland = {
@@ -164,7 +157,7 @@
         # to be defined anymore.
         # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
         # inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix walker;
-        inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader autofirma-nix stylix walker nixos-hardware nix-flatpak nix-amd-ai antigravity-nix dankmaterialshell self;
+        inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader autofirma-nix stylix walker nixos-hardware nix-flatpak nix-amd-ai dankmaterialshell self;
       }
     );
   };

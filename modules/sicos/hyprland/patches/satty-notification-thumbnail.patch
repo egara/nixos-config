@@ -1,0 +1,51 @@
+diff --git a/src/notification.rs b/src/notification.rs
+index b52ab48..4fc8eb9 100644
+--- a/src/notification.rs
++++ b/src/notification.rs
+@@ -1,7 +1,5 @@
+ use relm4::gtk::gio::{FileIcon, Icon};
+ use relm4::gtk::gio::{Notification, prelude::ApplicationExt};
+-
+-use crate::TEMP_DIR;
+ use crate::configuration::APP_CONFIG;
+ use relm4::gtk::gdk_pixbuf::{InterpType, Pixbuf};
+ use relm4::gtk::prelude::Cast;
+@@ -47,26 +45,20 @@ pub fn log_result_with_pixbuf(msg: &str, pixbuf: Pixbuf) {
+     // we can't just use a tempfile here because we need the path for the FileIcon.
+     // Also, we can't just use NamedTempFile with cleanup, because it gets dropped
+     // at the end of this function, which can be too early for the notification daemon.
+-    let tempfile: Option<NamedTempFile> = match TEMP_DIR.read() {
+-        Ok(guard) => match &*guard {
+-            Some(d) if pixbuf.is_some() => {
+-                if let Ok(tf) = tempfile::Builder::new()
+-                    .disable_cleanup(true)
+-                    .suffix(".png")
+-                    .tempfile_in(d.path())
+-                {
+-                    Some(tf)
+-                } else {
+-                    eprintln!("Could not create temporary file");
+-                    None
+-                }
+-            }
+-            _ => None,
+-        },
+-        Err(e) => {
+-            eprintln!("Error acquiring read guard for temp directory: {}", e);
++    let tempfile: Option<NamedTempFile> = if pixbuf.is_some() {
++        if let Ok(tf) = tempfile::Builder::new()
++            .prefix("satty-thumb-")
++            .suffix(".png")
++            .disable_cleanup(true)
++            .tempfile()
++        {
++            Some(tf)
++        } else {
++            eprintln!("Could not create temporary file");
+             None
+         }
++    } else {
++        None
+     };
+ 
+     let icon = match tempfile.as_ref() {

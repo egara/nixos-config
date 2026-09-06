@@ -1,5 +1,5 @@
 #Variables
-{ lib, inputs, nixpkgs, nixpkgs-stable, disko, home-manager, wallpaperdownloader, autofirma-nix, stylix, walker, nixos-hardware, nix-flatpak, nix-amd-ai, antigravity-nix, dankmaterialshell, self, ... }:
+{ inputs, nixpkgs, nixpkgs-stable, disko, home-manager, stylix, nixos-hardware, nix-flatpak, nix-amd-ai, dankmaterialshell, self, ... }:
 let
   # Main user
   username = "egarcia";
@@ -48,7 +48,7 @@ let
 
         # Desktop Environment modules
         # It is a module itself!
-        ({ config, lib, host, ... }: {
+        ({ lib, host, ... }: {
           imports =
             lib.optionals (host.desktop == "plasma") [ ../modules/desktop/plasma.nix ] ++
             lib.optionals (host.desktop == "cosmic") [ ../modules/desktop/cosmic.nix ] ++
