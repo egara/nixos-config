@@ -218,7 +218,7 @@
 
             Process {
                 id: networkPollProc
-                command: ["sh", "-c", "if [ -f $HOME/.config/hypr/scripts/network-status.sh ]; then $HOME/.config/hypr/scripts/network-status.sh; else echo '{\"ethernet\":[],\"wifi\":[],\"eth_status\":\"Disconnected\",\"wifi_status\":\"Disconnected\"}'; fi"]
+                command: ["sh", "-c", "if [ -f $HOME/.config/sicos/scripts/network-status.sh ]; then $HOME/.config/sicos/scripts/network-status.sh; else echo '{\"ethernet\":[],\"wifi\":[],\"eth_status\":\"Disconnected\",\"wifi_status\":\"Disconnected\",\"active_name\":\"Network\",\"active_signal\":\"Disconnected\",\"active_type\":\"none\"}'; fi"]
                 running: false
                 stdout: StdioCollector {
                     onStreamFinished: {
@@ -253,7 +253,7 @@
 
             Process {
                 id: networkStatsProc
-                command: ["sh", "-c", "if [ -f $HOME/.config/hypr/scripts/network-stats.sh ]; then $HOME/.config/hypr/scripts/network-stats.sh; fi"]
+                command: ["sh", "-c", "if [ -f $HOME/.config/sicos/scripts/network-stats.sh ]; then $HOME/.config/sicos/scripts/network-stats.sh; fi"]
                 running: false
                 stdout: StdioCollector {
                     onStreamFinished: {
@@ -293,7 +293,7 @@
             
             Process {
                 id: bluetoothPollProc
-                command: ["sh", "-c", "if [ -f $HOME/.config/hypr/scripts/bluetooth-status.sh ]; then $HOME/.config/hypr/scripts/bluetooth-status.sh; else echo '{\"devices\":[],\"status\":\"Off\",\"active_name\":\"Bluetooth\",\"active_battery\":\"Disconnected\"}'; fi"]
+                command: ["sh", "-c", "if [ -f $HOME/.config/sicos/scripts/bluetooth-status.sh ]; then $HOME/.config/sicos/scripts/bluetooth-status.sh; else echo '{\"devices\":[],\"status\":\"Off\",\"active_name\":\"Bluetooth\",\"active_battery\":\"Disconnected\"}'; fi"]
                 running: false
                 stdout: StdioCollector {
                     onStreamFinished: {
