@@ -79,3 +79,12 @@ This document contains a historical record of all features, modules, and integra
 - **Skull Badges & Visual Cues:** Every open window thumbnail features a prominent skull tab (`󰚌 KILL`), PID indicator, window icon, and app title. Hovering over any window transitions the card with red danger border and tint animations.
 - **Reliable Process Termination:** Automatically extracts the window's PID (`modelData.lastIpcObject.pid` or `modelData.pid`) from Hyprland IPC and sends `kill -9 <pid>` via `Quickshell.Io (Process)`, followed by instant Hyprland toplevel synchronization.
 - **Full Keyboard Navigation:** Arrow keys, `Tab`, `Enter`/`Delete` to kill selected, and `Escape` to cancel.
+
+### 13. Display & Monitor Manager (Super + K Overlay)
+- **Interactive 2D Drag & Drop Placement:** Visual canvas allowing seamless multi-monitor repositioning in 2D space (horizontal, vertical stacked, T-shaped arrangements) with collision-free snapping.
+- **Dynamic Live Resolution & Refresh Rate Selector:** Dropdown selector populated dynamically with all hardware-supported modes for each display, with preselection of currently active resolution.
+- **Toggle Enable / Disable:** Per-monitor toggle switches with border state indicators and unified Stylix accent colors (`#${c.base0D}`), safely calculating fallback positions upon activation.
+- **Automatic Kanshi Profile Generation:** Automatically generates a default profile (`profile default-<hostname> { ... }`) when Kanshi is enabled but no profile is defined or matched, ensuring zero-configuration setups.
+- **Robust Port ID & EDID Matching:** Multi-tiered output resolution supporting both physical connector IDs (`DP-1`, `DP-2`) and EDID descriptions, automatically differentiating identical multi-monitor setups at work or home.
+- **Persistent Synchronization:** Modifies Kanshi configuration files directly (`home-manager/desktop/hyprland/programs/kanshi/config`) bypassing Nix Store read-only symlinks and reloads Kanshi live via `kanshictl reload`.
+- **Hyprland Keybinding:** Seamless toggle via `Super + K` communicating through `/tmp/sicos-monitors-fifo`.

@@ -129,6 +129,7 @@ hl.bind(mainMod .. " + ALT + Left", hl.dsp.window.resize({ x = -20, y = 0, relat
 hl.bind(mainMod .. " + ALT + Up", hl.dsp.window.resize({ x = 0, y = -20, relative = true }), { repeating = true, description = "Resize Current Window (Up)" })
 hl.bind(mainMod .. " + ALT + Down", hl.dsp.window.resize({ x = 0, y = 20, relative = true }), { repeating = true, description = "Resize Current Window (Down)" })
 hl.bind("ALT + Tab", hl.dsp.exec_cmd("~/.config/sicos/scripts/toggle-switcher.sh"), { description = "Open Window Switcher" })
+hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("~/.config/sicos/scripts/toggle-monitormanager.sh"), { description = "Monitor Manager (Kanshi)" })
 
 -- Layouts
 hl.bind(mainMod .. " + F1", function()

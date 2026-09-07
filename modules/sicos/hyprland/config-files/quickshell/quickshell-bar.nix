@@ -17,6 +17,7 @@ let
   overview = import ./components/overview.nix { inherit config lib pkgs c fontName; };
   windowSwitcher = import ./components/windowswitcher.nix { inherit config lib pkgs c fontName; };
   windowKiller = import ./components/windowkiller.nix { inherit config lib pkgs c fontName; };
+  monitorManager = import ./components/monitormanager.nix { inherit config lib pkgs c fontName; };
 in
 ''
 //@ pragma UseQApplication
@@ -41,6 +42,7 @@ Scope {
     property bool overviewActive: false
     property bool windowSwitcherActive: false
     property bool windowKillerActive: false
+    property bool monitorManagerActive: false
 
     // Progress OSD State (global across screens)
     property int progressOsdValue: 0
@@ -697,8 +699,23 @@ PanelWindow {
         }
     }
 
+    // FIFO listener for Hyprland -> Quickshell monitor manager toggle
+    Process {
+        id: monitorManagerFifo
+        command: ["bash", "-c", "FIFO=/tmp/sicos-monitors-fifo; rm -f $FIFO; mkfifo $FIFO; tail -f $FIFO"]
+        running: true
+        stdout: SplitParser {
+            onRead: function(line) {
+                if (line.trim() === "toggle") {
+                    monitorManagerActive = !monitorManagerActive;
+                }
+            }
+        }
+    }
+
     ${overview}
     ${windowSwitcher}
     ${windowKiller}
+    ${monitorManager}
 }
 ''

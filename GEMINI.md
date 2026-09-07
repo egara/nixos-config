@@ -87,15 +87,24 @@ Theming is a core feature of SicOS, managed by **Stylix** and the `theme-switche
   - **Quick Toggles:** Caffeine (`hypridle` inhibitor) and Night Mode (`hyprsunset` color temperature).
   - **Action Buttons:** Fastfetch spec modal, region screenshot (`hyprshot` + `satty`), keybindings cheatsheet (`walker`), and session menu (`wlogout`).
 - **Window Switcher Overlay (`windowswitcher.nix`):** Alt+Tab overlay rendering real-time screen thumbnails (`ScreencopyView`) using `WlrKeyboardFocus.OnDemand` for seamless window focusing.
+- **Display & Monitor Manager (`monitormanager.nix`):** Full-screen interactive overlay triggered by `Super + K` for visual multi-monitor configuration:
+  - **2D Drag & Drop Layout Canvas:** Visual drag & drop arrangement supporting horizontal, vertical stacked, and multi-directional layouts with non-overlapping pixel calculation (`scale * resolution`).
+  - **Dynamic Resolution & Refresh Rate Selector:** Live dropdown populated from Hyprland monitor modes with preselected active mode.
+  - **Power & Status Controls:** Per-display enable/disable toggles with non-switching Stylix accent borders and status pills.
+  - **Auto-Profile Generation:** Automatically creates default profile (`profile default-<hostname> { ... }`) when Kanshi is active without existing profiles.
+  - **Port ID & EDID Resolution:** Prioritizes connector IDs (`DP-1`, `DP-2`) to disambiguate identical multi-monitor setups at work or home.
 - **Stylix Integration:** Theme colors (`c.base00` to `c.base0F`) and monospace fonts are injected dynamically from Stylix with zero hardcoded CSS or colors.
 
-### 3.5. Dynamic Monitor Scaling & Kanshi Integration
-- **Helper Script:** `home-manager/desktop/hyprland/scripts/sicos-monitor-scale.sh` (and synced to `modules/sicos/hyprland/scripts/sicos-monitor-scale.sh`).
-- **UI Integration:** Integrated into QuickShell Control Center (`controlcenter.nix`), featuring a collapsible Monitor Scale Pill with custom Nerdfont icon (`󰍹`), display monitor name and current scale, expand to show slider/buttons, and `-` / `+` step buttons.
+### 3.5. Dynamic Monitor Management & Kanshi Integration
+- **Helper Scripts:**
+  - `home-manager/desktop/hyprland/scripts/sicos-monitor-scale.sh`: Live and persistent scale control via Control Center.
+  - `home-manager/desktop/hyprland/scripts/sicos-monitors.py`: Monitor discovery, 2D layout solver, mode switching, profile generation, and Kanshi synchronization.
+  - Synced to `modules/sicos/hyprland/scripts/`.
+- **UI Integration:** Integrated into QuickShell Control Center (`controlcenter.nix`) and Monitor Manager (`monitormanager.nix`).
 - **Dynamic & Persistent Scaling Mechanics:**
   1. **Nix Store Bypass:** Function `sync_local_kanshi_config` replaces read-only `/nix/store` symlinks at `~/.config/kanshi/config` with a direct symlink to `home-manager/desktop/hyprland/programs/kanshi/config`.
-  2. **Hostname-Filtered Persistence:** Python parser updates output scale lines specifically within Kanshi profile blocks corresponding to the active `hostname` (e.g., `home-strange`).
-  3. **Live Output Reload:** If `kanshi` daemon is active, triggers `kanshictl reload` so Kanshi loads the updated profile from disk into memory and applies live scaling; if `kanshi` is inactive, applies scale directly via `hyprctl eval "hl.monitor(...)"`.
+  2. **Hostname-Filtered Persistence & Auto-Profile:** Python parser updates output scale, mode, status, and position lines specifically within Kanshi profile blocks corresponding to the active `hostname`, generating a default profile if none exists.
+  3. **Live Output Reload:** Triggers `kanshictl reload` so Kanshi loads the updated profile from disk into memory and applies live configuration; fallback to Hyprland IPC if Kanshi daemon is not running.
 
 ## 4. Operational Workflows for the Agent
 

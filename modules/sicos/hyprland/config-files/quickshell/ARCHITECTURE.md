@@ -83,6 +83,18 @@ The Window Switcher (`windowswitcher.nix`) is a full-screen overlay modal that d
 - The Hyprland binding in `hyprland.lua` executes `toggle-switcher.sh`, which writes `toggle\n` to the FIFO.
 - A persistent `Process` with `SplitParser` in `quickshell-bar.nix` listens to the FIFO and toggles `windowSwitcherActive`.
 
+### The Monitor Manager Pattern (Kanshi Integration)
+The Monitor Manager (`monitormanager.nix`) provides dynamic screen enabling/disabling, 2D visual drag & drop positioning, resolution switching, and Kanshi profile synchronization invoked via `Super + K`:
+- Uses `Variants` over `Quickshell.screens` with centered modal card (`radius: 28`).
+- Communicates via FIFO (`/tmp/sicos-monitors-fifo`) triggered by `toggle-monitormanager.sh`.
+- Integrates with `sicos-monitors.py` (`--status`, `--toggle <output>`, `--set <output> <enable|disable>`, `--set-mode <output> <mode>`, `--reorder <out1,out2,...>`, `--reorder-2d <out1:x:y,out2:x:y,...>`).
+- **Interactive 2D Drag & Drop Placement:** Free-form visual arrangement canvas allowing users to arrange monitors horizontally, vertically stacked, or in multi-row/column matrices. Calculates accurate pixel offsets (`scale * resolution`) and guarantees zero overlapping.
+- **Resolution Selector:** Dynamic dropdown displaying all hardware modes supported by Hyprland EDID, preselecting active mode and persisting changes to Kanshi.
+- **Auto-profile Generation:** Automatically provisions and writes a default profile (`profile default-<hostname> { ... }`) if Kanshi is enabled without pre-existing or matched profiles.
+- **Port ID & EDID Disambiguation:** Resolves physical connector IDs (`DP-1`, `DP-2`) with priority over descriptions, allowing identical monitor setups (e.g. dual office displays) to configure independently.
+- **Direct Kanshi Persistence:** Directly updates `home-manager/desktop/hyprland/programs/kanshi/config` bypassing read-only `/nix/store` symlinks and invokes `kanshictl reload`.
+- Gracefully displays a clean informative notice if Kanshi is disabled in the NixOS config.
+
 ### Keyboard Focus: OnDemand vs Exclusive
 When building overlay modals that need to **transfer focus to other windows** (like a window switcher), the keyboard focus mode is critical:
 
