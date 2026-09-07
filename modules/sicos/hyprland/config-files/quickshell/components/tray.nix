@@ -3,9 +3,9 @@
     Rectangle {
         id: trayIsland
         color: "#CC${c.base01}"
-        radius: 14
-        Layout.preferredHeight: 36
-        Layout.minimumWidth: trayLayout.width + 16
+        radius: 12
+        Layout.preferredHeight: 32
+        Layout.minimumWidth: trayLayout.width + 14
         
         PopupWindow {
             id: trayMenuPopup
@@ -22,8 +22,8 @@
                     root.trayMenuVisible = false;
                 }
             }
-            implicitWidth: 260
-            implicitHeight: Math.min(450, menuColumn.contentHeight + (trayMenuPopup.menuStack.length > 1 ? 50 : 20))
+            implicitWidth: 240
+            implicitHeight: Math.min(400, menuColumn.contentHeight + (trayMenuPopup.menuStack.length > 1 ? 44 : 18))
             color: "transparent"
 
             property var rootMenuModel: null
@@ -88,19 +88,19 @@
 
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 30
+                        Layout.preferredHeight: 26
                         visible: trayMenuPopup.menuStack.length > 1
                         color: backMouseArea.containsMouse ? "#33${c.base03}" : "transparent"
                         radius: 6
 
                         RowLayout {
                             anchors.fill: parent
-                            anchors.margins: 8
+                            anchors.margins: 6
                             Text {
                                 text: "← Volver"
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 16
+                                font.pixelSize: 14
                             }
                         }
 
@@ -148,7 +148,7 @@
                         delegate: Rectangle {
                             property bool isSep: modelData && modelData.isSeparator
                             width: menuColumn.width
-                            height: isSep ? 1 : 32
+                            height: isSep ? 1 : 28
                             color: isSep ? "#33${c.base03}" : (itemMouseArea.containsMouse ? "#33${c.base03}" : "transparent")
                             radius: isSep ? 0 : 6
                             visible: modelData && modelData.visible !== false
@@ -206,7 +206,7 @@
                                     }
                                     color: (modelData && modelData.enabled === false) ? "#${c.base04}" : "#${c.base05}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 16
+                                    font.pixelSize: 14
                                     elide: Text.ElideRight
                                 }
 
@@ -214,7 +214,7 @@
                                     visible: modelData && modelData.hasChildren
                                     text: "▶"
                                     color: "#${c.base04}"
-                                    font.pixelSize: 13
+                                    font.pixelSize: 12
                                 }
                             }
 
@@ -272,18 +272,18 @@
                 model: SystemTray.items.values
                 
                 delegate: Rectangle {
-                    width: 32
-                    height: 32
-                    radius: 16
+                    width: 28
+                    height: 28
+                    radius: 14
                     color: trayMouseArea.containsMouse ? "#44${c.base03}" : "transparent"
                     
                     Image {
                         anchors.centerIn: parent
                         source: trayLayout.trayIconSourceFor(modelData)
-                        width: 20
-                        height: 20
+                        width: 18
+                        height: 18
                         fillMode: Image.PreserveAspectFit
-                        sourceSize: Qt.size(32, 32)
+                        sourceSize: Qt.size(28, 28)
                         asynchronous: true
                     }
                     

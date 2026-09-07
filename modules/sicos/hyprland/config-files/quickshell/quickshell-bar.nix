@@ -352,11 +352,11 @@ PanelWindow {
         right: 12
     }
     
-    implicitHeight: 44
+    implicitHeight: 40
     color: "transparent"
     
     // Exclusive zone so windows don't overlap
-    exclusiveZone: 44
+    exclusiveZone: 40
 
     // Popup visibility state for smooth animations
     property bool batteryVisible: false
@@ -418,8 +418,8 @@ PanelWindow {
         RowLayout {
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: 6
-            spacing: 12
+            anchors.leftMargin: 4
+            spacing: 10
 
             ${system}
             ${sysinfo.widget}
@@ -441,8 +441,8 @@ PanelWindow {
         RowLayout {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            anchors.rightMargin: 6
-            spacing: 12
+            anchors.rightMargin: 4
+            spacing: 10
 
             ${tray}
 
@@ -473,14 +473,14 @@ PanelWindow {
         WlrLayershell.layer: WlrLayer.Overlay
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
         
-        implicitWidth: 480
+        implicitWidth: 440
         implicitHeight: osdList.height
         
         ListView {
             id: osdList
-            width: 480
-            height: Math.min(contentHeight, 800)
-            spacing: 8
+            width: 440
+            height: Math.min(contentHeight, 700)
+            spacing: 6
             interactive: false
             
             add: Transition {
@@ -497,10 +497,10 @@ PanelWindow {
             delegate: Rectangle {
                     id: osdRect
                     property bool expanded: false
-                    width: 480
-                    implicitHeight: Math.max(90, osdCol.implicitHeight + 30)
+                    width: 440
+                    implicitHeight: Math.max(78, osdCol.implicitHeight + 24)
                     color: "#F0${c.base01}"
-                    radius: 16
+                    radius: 14
                     border.color: "#33${c.base05}"
                     border.width: 1
                     clip: true
@@ -519,8 +519,8 @@ PanelWindow {
                         anchors.left: parent.left
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        anchors.margins: 12
-                        width: 66
+                        anchors.margins: 10
+                        width: 56
                         radius: 8
                         color: "transparent"
                         clip: true
@@ -557,8 +557,8 @@ PanelWindow {
                         anchors.left: osdIcon.right
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.margins: 16
-                        spacing: 6
+                        anchors.margins: 12
+                        spacing: 4
 
                         RowLayout {
                             Layout.fillWidth: true
@@ -566,7 +566,7 @@ PanelWindow {
                                 text: model.appName
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 17
+                                font.pixelSize: 15
                                 font.bold: true
                                 Layout.fillWidth: true
                                 elide: Text.ElideRight
@@ -575,14 +575,14 @@ PanelWindow {
                                 text: model.timeStr
                                 color: "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 15
+                                font.pixelSize: 13
                             }
                             
                             // Expand button
                             Rectangle {
-                                Layout.preferredWidth: 24
-                                Layout.preferredHeight: 24
-                                radius: 8
+                                Layout.preferredWidth: 22
+                                Layout.preferredHeight: 22
+                                radius: 6
                                 color: osdExpandArea.containsMouse ? "#33${c.base0D}" : "#1A${c.base0D}"
                                 border.color: osdExpandArea.containsMouse ? "#66${c.base0D}" : "#33${c.base0D}"
                                 border.width: 1
@@ -593,7 +593,7 @@ PanelWindow {
                                     text: osdRect.expanded ? "󰅃" : "󰅀"
                                     color: "#${c.base0D}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 17
+                                    font.pixelSize: 15
                                 }
                                 
                                 MouseArea {
@@ -610,9 +610,9 @@ PanelWindow {
                             
                             // Close button
                             Rectangle {
-                                Layout.preferredWidth: 24
-                                Layout.preferredHeight: 24
-                                radius: 8
+                                Layout.preferredWidth: 22
+                                Layout.preferredHeight: 22
+                                radius: 6
                                 color: osdCloseArea.containsMouse ? "#33${c.base08}" : "#1A${c.base08}"
                                 border.color: osdCloseArea.containsMouse ? "#66${c.base08}" : "#33${c.base08}"
                                 border.width: 1
@@ -622,7 +622,7 @@ PanelWindow {
                                     text: "󰅖"
                                     color: "#${c.base08}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 17
+                                    font.pixelSize: 15
                                 }
                                 
                                 MouseArea {
@@ -642,7 +642,7 @@ PanelWindow {
                             text: model.summary
                             color: "#${c.base05}"
                             font.family: "${fontName}"
-                            font.pixelSize: 18
+                            font.pixelSize: 16
                             font.bold: true
                             Layout.fillWidth: true
                             wrapMode: Text.Wrap
@@ -655,7 +655,7 @@ PanelWindow {
                             text: model.body
                             color: "#${c.base04}"
                             font.family: "${fontName}"
-                            font.pixelSize: 17
+                            font.pixelSize: 14
                             Layout.fillWidth: true
                             wrapMode: Text.Wrap
                             maximumLineCount: osdRect.expanded ? 100 : 2

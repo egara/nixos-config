@@ -15,8 +15,8 @@
         anchor.rect.height: 1
         anchor.edges: Edges.Bottom | Edges.Right
         visible: root.controlcenterVisible || popupContentCC.opacity > 0
-        implicitWidth: 480
-        implicitHeight: 580
+        implicitWidth: 440
+        implicitHeight: 520
         color: "transparent"
 
         Rectangle {
@@ -383,16 +383,16 @@
 
             ScrollView {
                 anchors.fill: parent
-                anchors.topMargin: 32
-                anchors.leftMargin: 20
-                anchors.rightMargin: 20
-                anchors.bottomMargin: 20
+                anchors.topMargin: 28
+                anchors.leftMargin: 16
+                anchors.rightMargin: 16
+                anchors.bottomMargin: 16
                 contentWidth: availableWidth
                 clip: true
                 
                 ColumnLayout {
                     width: parent.width
-                    spacing: 16
+                    spacing: 14
 
                 // Top Header: User Profile (Expandable)
                 ColumnLayout {
@@ -405,45 +405,45 @@
                         
                         // Avatar and Info area (Clickable)
                         Rectangle {
-                            Layout.preferredHeight: 48
-                            Layout.preferredWidth: profileContent.implicitWidth + 16
+                            Layout.preferredHeight: 40
+                            Layout.preferredWidth: profileContent.implicitWidth + 14
                             color: profileMouseArea.containsMouse ? "#1A${c.base05}" : "transparent"
-                            radius: 12
+                            radius: 10
                             
                             RowLayout {
                                 id: profileContent
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.left: parent.left
                                 anchors.leftMargin: 4
-                                spacing: 12
+                                spacing: 10
                                 
                                 Item {
-                                    width: 48; height: 48
+                                    width: 40; height: 40
                                     
                                     Rectangle {
                                         id: avatarMask
-                                        width: 48; height: 48; radius: 24
+                                        width: 40; height: 40; radius: 20
                                         color: "black"
                                         visible: false
                                     }
                                     
                                     Image {
                                         id: avatarImage
-                                        width: 48; height: 48
+                                        width: 40; height: 40
                                         source: ccData.home !== "" ? "file://" + ccData.home + "/.config/hypr/user.jpg" : ""
                                         fillMode: Image.PreserveAspectCrop
                                         visible: false
                                     }
                                     
                                     OpacityMask {
-                                        width: 48; height: 48
+                                        width: 40; height: 40
                                         source: avatarImage
                                         maskSource: avatarMask
                                         visible: avatarImage.status === Image.Ready
                                     }
                                     
                                     Rectangle {
-                                        width: 48; height: 48; radius: 24
+                                        width: 40; height: 40; radius: 20
                                         color: "#${c.base02}"
                                         visible: avatarImage.status !== Image.Ready
                                         Text {
@@ -451,7 +451,7 @@
                                             text: ""
                                             color: "#${c.base05}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 27
+                                            font.pixelSize: 22
                                         }
                                     }
                                 }
@@ -461,14 +461,14 @@
                                         text: ccData.user !== "" ? ccData.user : "User"
                                         color: "#${c.base05}"
                                         font.family: "${fontName}"
-                                        font.pixelSize: 21
+                                        font.pixelSize: 18
                                         font.bold: true
                                     }
                                     Text {
                                         text: ccData.uptime !== "" ? "up " + ccData.uptime : "up 0 minutes"
                                         color: "#${c.base04}"
                                         font.family: "${fontName}"
-                                        font.pixelSize: 16
+                                        font.pixelSize: 14
                                     }
                                 }
                                 // Expand Indicator
@@ -476,7 +476,7 @@
                                     text: ccData.profileExpanded ? "" : ""
                                     color: "#${c.base0D}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 17
+                                    font.pixelSize: 15
                                 }
                             }
                             
@@ -495,14 +495,14 @@
 
                         // Action Buttons (Screenshot)
                         Rectangle {
-                            width: 36; height: 36; radius: 18
+                            width: 32; height: 32; radius: 16
                             color: screenshotBtnArea.containsMouse ? "#${c.base03}" : "transparent"
                             Text {
                                 anchors.centerIn: parent
                                 text: ""
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 20
+                                font.pixelSize: 18
                             }
                             MouseArea {
                                 id: screenshotBtnArea
@@ -517,14 +517,14 @@
 
                         // Action Buttons (Keybindings)
                         Rectangle {
-                            width: 36; height: 36; radius: 18
+                            width: 32; height: 32; radius: 16
                             color: keybindsBtnArea.containsMouse ? "#${c.base03}" : "transparent"
                             Text {
                                 anchors.centerIn: parent
                                 text: "󰋖"
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 15
+                                font.pixelSize: 13
                             }
                             MouseArea {
                                 id: keybindsBtnArea
@@ -539,14 +539,14 @@
 
                         // Action Buttons (Info)
                         Rectangle {
-                            width: 36; height: 36; radius: 18
+                            width: 32; height: 32; radius: 16
                             color: infoBtnArea.containsMouse ? "#${c.base03}" : "transparent"
                             Text {
                                 anchors.centerIn: parent
                                 text: "󰙎"
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 15
+                                font.pixelSize: 13
                             }
                             MouseArea {
                                 id: infoBtnArea
@@ -564,14 +564,14 @@
 
                         // Action Buttons (Power)
                         Rectangle {
-                            width: 36; height: 36; radius: 18
+                            width: 32; height: 32; radius: 16
                             color: btnArea.containsMouse ? "#${c.base03}" : "transparent"
                             Text {
                                 anchors.centerIn: parent
                                 text: ""
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 19
+                                font.pixelSize: 17
                             }
                             MouseArea {
                                 id: btnArea
@@ -588,7 +588,7 @@
                     // Expanded Content (Host & Distro & Network Stats)
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: ccData.profileExpanded ? expandedContentCol.implicitHeight + 16 : 0
+                        Layout.preferredHeight: ccData.profileExpanded ? expandedContentCol.implicitHeight + 14 : 0
                         opacity: ccData.profileExpanded ? 1 : 0
                         visible: opacity > 0
                         clip: true
@@ -603,20 +603,20 @@
                             anchors.left: parent.left
                             anchors.right: parent.right
                             anchors.top: parent.top
-                            anchors.margins: 8
-                            spacing: 12
+                            anchors.margins: 6
+                            spacing: 10
                             
                             // System info
                             RowLayout {
                                 Layout.fillWidth: true
-                                spacing: 16
+                                spacing: 14
                                 RowLayout {
-                                    Text { text: ""; color: "#${c.base0D}"; font.family: "${fontName}"; font.pixelSize: 17 }
-                                    Text { text: ccData.host !== "" ? ccData.host : "Hostname"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 16; font.bold: true; elide: Text.ElideRight; Layout.maximumWidth: 100 }
+                                    Text { text: ""; color: "#${c.base0D}"; font.family: "${fontName}"; font.pixelSize: 15 }
+                                    Text { text: ccData.host !== "" ? ccData.host : "Hostname"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; font.bold: true; elide: Text.ElideRight; Layout.maximumWidth: 90 }
                                 }
                                 RowLayout {
-                                    Text { text: ""; color: "#${c.base0D}"; font.family: "${fontName}"; font.pixelSize: 17 }
-                                    Text { text: ccData.os !== "" ? ccData.os : "Linux"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 16; elide: Text.ElideRight; Layout.fillWidth: true }
+                                    Text { text: ""; color: "#${c.base0D}"; font.family: "${fontName}"; font.pixelSize: 15 }
+                                    Text { text: ccData.os !== "" ? ccData.os : "Linux"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 14; elide: Text.ElideRight; Layout.fillWidth: true }
                                 }
                             }
                             
@@ -626,28 +626,28 @@
                             GridLayout {
                                 Layout.fillWidth: true
                                 columns: 4
-                                rowSpacing: 8
-                                columnSpacing: 12
+                                rowSpacing: 6
+                                columnSpacing: 10
                                 
-                                Text { text: "Ping"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 15 }
-                                Text { text: popupContentCC.netPing; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                                Text { text: "Packet Loss"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 15 }
-                                Text { text: popupContentCC.netLoss; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                Text { text: "Ping"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
+                                Text { text: popupContentCC.netPing; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                Text { text: "Packet Loss"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
+                                Text { text: popupContentCC.netLoss; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
                                 
-                                Text { text: "Receiving"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 15 }
-                                Text { text: popupContentCC.netRxSpeed; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                                Text { text: "Sending"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 15 }
-                                Text { text: popupContentCC.netTxSpeed; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                Text { text: "Receiving"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
+                                Text { text: popupContentCC.netRxSpeed; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                Text { text: "Sending"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
+                                Text { text: popupContentCC.netTxSpeed; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
                                 
-                                Text { text: "Downloaded"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 15 }
-                                Text { text: popupContentCC.netRxTotal; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                                Text { text: "Uploaded"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 15 }
-                                Text { text: popupContentCC.netTxTotal; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                Text { text: "Downloaded"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
+                                Text { text: popupContentCC.netRxTotal; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                Text { text: "Uploaded"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
+                                Text { text: popupContentCC.netTxTotal; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
                                 
-                                Text { text: "IP Address"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 15 }
-                                Text { text: popupContentCC.netIp; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                                Text { text: "Gateway"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 15 }
-                                Text { text: popupContentCC.netGateway; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                Text { text: "IP Address"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
+                                Text { text: popupContentCC.netIp; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                                Text { text: "Gateway"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
+                                Text { text: popupContentCC.netGateway; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
                             }
                         }
                     }
@@ -749,13 +749,13 @@
                             spacing: 12
                             
                             Item {
-                                        Layout.preferredWidth: 32
-                                        Layout.preferredHeight: 24
+                                        Layout.preferredWidth: 28
+                                        Layout.preferredHeight: 22
                                         Text {
                                 text: (Pipewire.defaultAudioSink && Pipewire.defaultAudioSink.audio.muted) ? "" : ""
                                 color: (Pipewire.defaultAudioSink && Pipewire.defaultAudioSink.audio.muted) ? "#${c.base08}" : "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 21
+                                font.pixelSize: 18
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: if (Pipewire.defaultAudioSink) Pipewire.defaultAudioSink.audio.muted = !Pipewire.defaultAudioSink.audio.muted
@@ -822,22 +822,22 @@
                                 text: (Pipewire.defaultAudioSink ? Math.round(Pipewire.defaultAudioSink.audio.volume * 100) : 0) + "%"
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 17
-                                Layout.preferredWidth: 40
+                                font.pixelSize: 15
+                                Layout.preferredWidth: 36
                                 horizontalAlignment: Text.AlignRight
                             }
                             
                             Rectangle {
-                                width: 24
-                                height: 24
-                                radius: 12
+                                width: 22
+                                height: 22
+                                radius: 11
                                 color: appMouseArea.containsMouse ? "#33${c.base03}" : "transparent"
                                 Text {
                                     anchors.centerIn: parent
                                     text: popupContentCC.appsExpanded ? "" : ""
                                     color: "#${c.base0D}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 19
+                                    font.pixelSize: 16
                                 }
                                 MouseArea {
                                     id: appMouseArea
@@ -915,7 +915,7 @@
                                         }
                                         color: "#${c.base05}"
                                         font.family: "${fontName}"
-                                        font.pixelSize: 16
+                                        font.pixelSize: 14
                                         Layout.fillWidth: true
                                         
                                         
@@ -982,8 +982,8 @@
                                         text: Math.round(modelData.audio.volume * 100) + "%"
                                         color: "#${c.base05}"
                                         font.family: "${fontName}"
-                                        font.pixelSize: 15
-                                        Layout.preferredWidth: 40
+                                        font.pixelSize: 13
+                                        Layout.preferredWidth: 36
                                         horizontalAlignment: Text.AlignRight
                                     }
                                     
@@ -1009,13 +1009,13 @@
                             spacing: 12
                             
                             Item {
-                                        Layout.preferredWidth: 32
-                                        Layout.preferredHeight: 24
+                                        Layout.preferredWidth: 28
+                                        Layout.preferredHeight: 22
                                         Text {
                                 text: (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio.muted) ? "" : ""
                                 color: (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio.muted) ? "#${c.base08}" : "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 21
+                                font.pixelSize: 18
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: if (Pipewire.defaultAudioSource) Pipewire.defaultAudioSource.audio.muted = !Pipewire.defaultAudioSource.audio.muted
@@ -1071,22 +1071,22 @@
                                 text: Pipewire.defaultAudioSource ? Math.round(Pipewire.defaultAudioSource.audio.volume * 100) + "%" : "0%"
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 17
-                                Layout.preferredWidth: 40
+                                font.pixelSize: 15
+                                Layout.preferredWidth: 36
                                 horizontalAlignment: Text.AlignRight
                             }
                             
                             Rectangle {
-                                width: 24
-                                height: 24
-                                radius: 12
+                                width: 22
+                                height: 22
+                                radius: 11
                                 color: micMouseArea.containsMouse ? "#33${c.base03}" : "transparent"
                                 Text {
                                     anchors.centerIn: parent
                                     text: popupContentCC.micsExpanded ? "" : ""
                                     color: "#${c.base0D}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 19
+                                    font.pixelSize: 16
                                 }
                                 MouseArea {
                                     id: micMouseArea
@@ -1130,10 +1130,10 @@
                                         color: "transparent"
                                         Text {
                                             anchors.centerIn: parent
-                                            text: (modelData.audio && modelData.audio.muted) ? "" : ""
-                                            color: (modelData.audio && modelData.audio.muted) ? "#${c.base08}" : "#${c.base05}"
-                                            font.family: "${fontName}"
-                                            font.pixelSize: 19
+                                         text: (modelData.audio && modelData.audio.muted) ? "" : ""
+                                             color: (modelData.audio && modelData.audio.muted) ? "#${c.base08}" : "#${c.base05}"
+                                             font.family: "${fontName}"
+                                             font.pixelSize: 16
                                         }
                                         MouseArea {
                                             anchors.fill: parent
@@ -1146,7 +1146,7 @@
                                         text: modelData.properties["node.description"] || modelData.name
                                         color: "#${c.base05}"
                                         font.family: "${fontName}"
-                                        font.pixelSize: 16
+                                        font.pixelSize: 14
                                         Layout.fillWidth: true
                                         
                                         
@@ -1210,8 +1210,8 @@
                                         text: modelData.audio ? Math.round(modelData.audio.volume * 100) + "%" : "0%"
                                         color: "#${c.base05}"
                                         font.family: "${fontName}"
-                                        font.pixelSize: 15
-                                        Layout.preferredWidth: 40
+                                        font.pixelSize: 13
+                                        Layout.preferredWidth: 36
                                         horizontalAlignment: Text.AlignRight
                                     }
                                     
@@ -1251,15 +1251,15 @@
                             spacing: 12
                             
                             Item {
-                                Layout.preferredWidth: 32
-                                Layout.preferredHeight: 24
+                                Layout.preferredWidth: 28
+                                Layout.preferredHeight: 22
                                 Text {
                                     anchors.left: parent.left
                                     anchors.verticalCenter: parent.verticalCenter
                                     text: ""
                                     color: "#${c.base0D}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 21
+                                    font.pixelSize: 18
                                 }
                             }
                             
@@ -1316,22 +1316,22 @@
                                 text: Math.round(popupContentCC.mainBrightness) + "%"
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 17
-                                Layout.preferredWidth: 40
+                                font.pixelSize: 15
+                                Layout.preferredWidth: 36
                                 horizontalAlignment: Text.AlignRight
                             }
                             
                             Rectangle {
-                                width: 24
-                                height: 24
-                                radius: 12
+                                width: 22
+                                height: 22
+                                radius: 11
                                 color: brightMouseArea.containsMouse ? "#33${c.base03}" : "transparent"
                                 Text {
                                     anchors.centerIn: parent
                                     text: popupContentCC.brightnessExpanded ? "" : ""
                                     color: "#${c.base0D}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 19
+                                    font.pixelSize: 16
                                 }
                                 MouseArea {
                                     id: brightMouseArea
@@ -1367,23 +1367,23 @@
                                                 Layout.preferredHeight: 24
                                                 Text {
                                                     anchors.centerIn: parent
-                                                    text: modelData.class === "backlight" ? "" : ""
-                                                    color: "#${c.base05}"
-                                                    font.family: "${fontName}"
-                                                    font.pixelSize: 19
+                                                     text: modelData.class === "backlight" ? "" : ""
+                                                     color: "#${c.base05}"
+                                                     font.family: "${fontName}"
+                                                     font.pixelSize: 16
                                                 }
                                             }
                                             
-                                            Text {
-                                                text: {
-                                                    let n = modelData.name.toLowerCase();
-                                                    if (n.indexOf("kbd") !== -1 || n.indexOf("keyboard") !== -1) return "Keyboard";
-                                                    return "Display";
-                                                }
-                                                color: "#${c.base05}"
-                                                font.family: "${fontName}"
-                                                font.pixelSize: 16
-                                                Layout.fillWidth: true
+                                             Text {
+                                                 text: {
+                                                     let n = modelData.name.toLowerCase();
+                                                     if (n.indexOf("kbd") !== -1 || n.indexOf("keyboard") !== -1) return "Keyboard";
+                                                     return "Display";
+                                                 }
+                                                 color: "#${c.base05}"
+                                                 font.family: "${fontName}"
+                                                 font.pixelSize: 14
+                                                 Layout.fillWidth: true
                                                 
                                                 
                                                 elide: Text.ElideRight
@@ -1443,8 +1443,8 @@
                                         text: Math.round(modelData.percent) + "%"
                                         color: "#${c.base05}"
                                         font.family: "${fontName}"
-                                        font.pixelSize: 15
-                                        Layout.preferredWidth: 40
+                                        font.pixelSize: 13
+                                        Layout.preferredWidth: 36
                                         horizontalAlignment: Text.AlignRight
                                     }
                                     
@@ -1480,14 +1480,14 @@
                                 spacing: 12
 
                                 Item {
-                                    Layout.preferredWidth: 32
-                                    Layout.preferredHeight: 24
+                                    Layout.preferredWidth: 28
+                                    Layout.preferredHeight: 22
                                     Text {
                                         anchors.centerIn: parent
                                         text: "󰍹"
                                         color: "#${c.base0D}"
                                         font.family: "${fontName}"
-                                        font.pixelSize: 21
+                                        font.pixelSize: 18
                                     }
                                 }
 
@@ -1501,7 +1501,7 @@
                                     }
                                     color: "#${c.base05}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 16
+                                    font.pixelSize: 14
                                     font.bold: true
                                     Layout.fillWidth: true
                                     elide: Text.ElideRight
@@ -1511,8 +1511,8 @@
                                     text: popupContentCC.currentMonitorScale.toFixed(2) + "x"
                                     color: "#${c.base05}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 17
-                                    Layout.preferredWidth: 48
+                                    font.pixelSize: 15
+                                    Layout.preferredWidth: 44
                                     horizontalAlignment: Text.AlignRight
                                 }
 
@@ -1523,10 +1523,10 @@
                                     color: monExpandMouseArea.containsMouse ? "#33${c.base03}" : "transparent"
                                     Text {
                                         anchors.centerIn: parent
-                                        text: popupContentCC.monitorExpanded ? "" : ""
-                                        color: "#${c.base0D}"
-                                        font.family: "${fontName}"
-                                        font.pixelSize: 19
+                                         text: popupContentCC.monitorExpanded ? "" : ""
+                                         color: "#${c.base0D}"
+                                         font.family: "${fontName}"
+                                         font.pixelSize: 16
                                     }
                                     MouseArea {
                                         id: monExpandMouseArea
@@ -1723,14 +1723,14 @@
                                 spacing: 12
 
                                 Item {
-                                    Layout.preferredWidth: 32
-                                    Layout.preferredHeight: 24
+                                    Layout.preferredWidth: 28
+                                    Layout.preferredHeight: 22
                                     Text {
                                         anchors.centerIn: parent
                                         text: ""
                                         color: "#${c.base0D}"
                                         font.family: "${fontName}"
-                                        font.pixelSize: 20
+                                        font.pixelSize: 18
                                     }
                                 }
 
@@ -1738,7 +1738,7 @@
                                     text: "Font Size"
                                     color: "#${c.base05}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 16
+                                    font.pixelSize: 14
                                     font.bold: true
                                     Layout.fillWidth: true
                                     elide: Text.ElideRight
@@ -1748,9 +1748,9 @@
                                     text: popupContentCC.pendingFontSize + " pt" + (popupContentCC.pendingFontSize !== popupContentCC.currentFontSize ? " *" : "")
                                     color: popupContentCC.pendingFontSize !== popupContentCC.currentFontSize ? "#${c.base0A}" : "#${c.base05}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 16
+                                    font.pixelSize: 14
                                     font.bold: popupContentCC.pendingFontSize !== popupContentCC.currentFontSize
-                                    Layout.preferredWidth: 60
+                                    Layout.preferredWidth: 56
                                     horizontalAlignment: Text.AlignRight
                                 }
 
@@ -1761,10 +1761,10 @@
                                     color: fontExpandMouseArea.containsMouse ? "#33${c.base03}" : "transparent"
                                     Text {
                                         anchors.centerIn: parent
-                                        text: popupContentCC.fontExpanded ? "" : ""
-                                        color: "#${c.base0D}"
-                                        font.family: "${fontName}"
-                                        font.pixelSize: 19
+                                         text: popupContentCC.fontExpanded ? "" : ""
+                                         color: "#${c.base0D}"
+                                         font.family: "${fontName}"
+                                         font.pixelSize: 16
                                     }
                                     MouseArea {
                                         id: fontExpandMouseArea
@@ -2027,33 +2027,33 @@
                     // Network Quick Toggle
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 64
-                        radius: 16
+                        Layout.preferredHeight: 56
+                        radius: 14
                         color: "#1a${c.base05}"
                         border.color: popupContentCC.networkExpanded ? "#${c.base0D}" : "transparent"
                         border.width: popupContentCC.networkExpanded ? 1 : 0
                         
                         RowLayout {
                             anchors.fill: parent
-                            anchors.margins: 12
-                            spacing: 12
+                            anchors.margins: 10
+                            spacing: 10
                             
                             Rectangle {
-                                width: 40; height: 40; radius: 20
+                                width: 32; height: 32; radius: 16
                                 color: "#${c.base0D}"
-                                Text { anchors.centerIn: parent; text: popupContentCC.activeNetworkType === "ethernet" ? "󰈀" : (popupContentCC.activeNetworkType === "none" ? "󰤭" : ""); color: "#${c.base00}"; font.family: "${fontName}"; font.pixelSize: 21 }
+                                Text { anchors.centerIn: parent; text: popupContentCC.activeNetworkType === "ethernet" ? "󰈀" : (popupContentCC.activeNetworkType === "none" ? "󰤭" : ""); color: "#${c.base00}"; font.family: "${fontName}"; font.pixelSize: 16 }
                             }
                             ColumnLayout {
                                 Layout.fillWidth: true
-                                spacing: 4
-                                Text { text: popupContentCC.activeNetworkName; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 17; font.bold: true }
-                                Text { text: popupContentCC.activeNetworkSignal; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 15 }
+                                spacing: 3
+                                Text { text: popupContentCC.activeNetworkName; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: true }
+                                Text { text: popupContentCC.activeNetworkSignal; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
                             }
                             Text {
                                 text: popupContentCC.networkExpanded ? "" : ""
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 17
+                                font.pixelSize: 15
                             }
                         }
                         MouseArea {
@@ -2066,38 +2066,38 @@
                     // Bluetooth Quick Toggle
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 64
-                        radius: 16
+                        Layout.preferredHeight: 56
+                        radius: 14
                         color: popupContentCC.bluetoothExpanded ? "#33${c.base0D}" : "#1a${c.base05}"
                         
                         RowLayout {
                             anchors.fill: parent
-                            anchors.margins: 12
-                            spacing: 12
+                            anchors.margins: 10
+                            spacing: 10
                             
                             Rectangle {
-                                width: 40; height: 40; radius: 20
+                                width: 32; height: 32; radius: 16
                                 color: (popupContentCC.bluetoothStatus === "Connected" || popupContentCC.bluetoothStatus === "On") ? "#${c.base0D}" : "#33${c.base05}"
                                 Text { 
                                     anchors.centerIn: parent
                                     text: ""
                                     color: (popupContentCC.bluetoothStatus === "Connected" || popupContentCC.bluetoothStatus === "On") ? "#${c.base00}" : "#${c.base04}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 21
+                                    font.pixelSize: 16
                                 }
                             }
                             ColumnLayout {
                                 Layout.fillWidth: true
-                                spacing: 4
-                                Text { text: popupContentCC.activeBluetoothName; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 17; font.bold: true; elide: Text.ElideRight }
-                                Text { text: popupContentCC.activeBluetoothBattery !== "" ? popupContentCC.activeBluetoothBattery : popupContentCC.bluetoothStatus; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 15 }
+                                spacing: 3
+                                Text { text: popupContentCC.activeBluetoothName; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: true; elide: Text.ElideRight }
+                                Text { text: popupContentCC.activeBluetoothBattery !== "" ? popupContentCC.activeBluetoothBattery : popupContentCC.bluetoothStatus; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
                             }
                             // Arrow
                             Text {
                                 text: popupContentCC.bluetoothExpanded ? "" : ""
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 17
+                                font.pixelSize: 15
                             }
                         }
                         
@@ -2112,39 +2112,39 @@
                 // Expanded Network Block
                 Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: networkCol.implicitHeight + 24
-                    radius: 16
+                    Layout.preferredHeight: networkCol.implicitHeight + 20
+                    radius: 14
                     color: "#1a${c.base05}"
                     visible: popupContentCC.networkExpanded
                     
                     ColumnLayout {
                         id: networkCol
                         anchors.fill: parent
-                        anchors.margins: 12
-                        spacing: 16
+                        anchors.margins: 10
+                        spacing: 14
 
                         // Header
                         RowLayout {
                             Layout.fillWidth: true
-                            Text { text: "Network"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 17; font.bold: true; Layout.fillWidth: true }
+                            Text { text: "Network"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: true; Layout.fillWidth: true }
                             
                             // Segmented Control (Ethernet / WiFi)
                             Rectangle {
-                                width: 190; height: 32; radius: 16
+                                width: 170; height: 28; radius: 14
                                 color: "#1a${c.base05}"
                                 RowLayout {
                                     anchors.fill: parent
                                     spacing: 0
                                     Rectangle {
-                                        Layout.fillWidth: true; Layout.fillHeight: true; radius: 16
+                                        Layout.fillWidth: true; Layout.fillHeight: true; radius: 14
                                         color: popupContentCC.networkTab === "ethernet" ? "#${c.base0D}" : "transparent"
-                                        Text { anchors.centerIn: parent; text: "Ethernet"; color: popupContentCC.networkTab === "ethernet" ? "#${c.base00}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; font.bold: popupContentCC.networkTab === "ethernet" }
+                                        Text { anchors.centerIn: parent; text: "Ethernet"; color: popupContentCC.networkTab === "ethernet" ? "#${c.base00}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12; font.bold: popupContentCC.networkTab === "ethernet" }
                                         MouseArea { anchors.fill: parent; onClicked: popupContentCC.networkTab = "ethernet" }
                                     }
                                     Rectangle {
-                                        Layout.fillWidth: true; Layout.fillHeight: true; radius: 16
+                                        Layout.fillWidth: true; Layout.fillHeight: true; radius: 14
                                         color: popupContentCC.networkTab === "wifi" ? "#${c.base0D}" : "transparent"
-                                        Text { anchors.centerIn: parent; text: "WiFi"; color: popupContentCC.networkTab === "wifi" ? "#${c.base00}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; font.bold: popupContentCC.networkTab === "wifi" }
+                                        Text { anchors.centerIn: parent; text: "WiFi"; color: popupContentCC.networkTab === "wifi" ? "#${c.base00}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12; font.bold: popupContentCC.networkTab === "wifi" }
                                         MouseArea { anchors.fill: parent; onClicked: popupContentCC.networkTab = "wifi" }
                                     }
                                 }
@@ -2154,23 +2154,23 @@
                         // Network List
                         ColumnLayout {
                             Layout.fillWidth: true
-                            spacing: 8
+                            spacing: 6
                             
                             Repeater {
                                 model: popupContentCC.networkTab === "ethernet" ? popupContentCC.ethernetList : popupContentCC.wifiList
                                 delegate: Rectangle {
                                     Layout.fillWidth: true
-                                    Layout.preferredHeight: 48
+                                    Layout.preferredHeight: 40
                                     radius: 8
                                     color: netMouseArea.containsMouse ? "#33${c.base05}" : (modelData.active ? "#33${c.base0D}" : "transparent")
                                     
                                     RowLayout {
                                         anchors.fill: parent
-                                        anchors.leftMargin: 12
-                                        anchors.rightMargin: 12
-                                        spacing: 12
-                                        Text { text: popupContentCC.networkTab === "ethernet" ? "󰈀" : "󰤨"; color: modelData.active ? "#${c.base0D}" : "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 19 }
-                                        Text { text: modelData.name; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 17; Layout.fillWidth: true; elide: Text.ElideRight }
+                                        anchors.leftMargin: 10
+                                        anchors.rightMargin: 10
+                                        spacing: 10
+                                        Text { text: popupContentCC.networkTab === "ethernet" ? "󰈀" : "󰤨"; color: modelData.active ? "#${c.base0D}" : "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 16 }
+                                        Text { text: modelData.name; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; Layout.fillWidth: true; elide: Text.ElideRight }
                                     }
                                     
                                     MouseArea {
@@ -2195,27 +2195,27 @@
                 // Expanded Bluetooth Block
                 Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: bluetoothCol.implicitHeight + 24
-                    radius: 16
+                    Layout.preferredHeight: bluetoothCol.implicitHeight + 20
+                    radius: 14
                     color: "#1a${c.base05}"
                     visible: popupContentCC.bluetoothExpanded
                     
                     ColumnLayout {
                         id: bluetoothCol
                         anchors.fill: parent
-                        anchors.margins: 12
-                        spacing: 16
+                        anchors.margins: 10
+                        spacing: 14
 
                         // Header
                         RowLayout {
                             Layout.fillWidth: true
-                            Text { text: "Bluetooth Devices"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 17; font.bold: true; Layout.fillWidth: true }
+                            Text { text: "Bluetooth Devices"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: true; Layout.fillWidth: true }
                             
                             // Scan/Settings Button
                             Rectangle {
-                                width: 28; height: 28; radius: 14
+                                width: 26; height: 26; radius: 13
                                 color: "#33${c.base05}"
-                                Text { anchors.centerIn: parent; text: ""; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15 }
+                                Text { anchors.centerIn: parent; text: ""; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13 }
                                 MouseArea {
                                     anchors.fill: parent
                                     cursorShape: Qt.PointingHandCursor
@@ -2236,25 +2236,25 @@
                                 model: popupContentCC.bluetoothList
                                 delegate: Rectangle {
                                     Layout.fillWidth: true
-                                    Layout.preferredHeight: 48
+                                    Layout.preferredHeight: 40
                                     radius: 8
                                     color: btMouseArea.containsMouse ? "#33${c.base05}" : (modelData.active ? "#33${c.base0D}" : "transparent")
                                     
                                     RowLayout {
                                         anchors.fill: parent
-                                        anchors.leftMargin: 12
-                                        anchors.rightMargin: 12
-                                        spacing: 12
+                                        anchors.leftMargin: 10
+                                        anchors.rightMargin: 10
+                                        spacing: 10
                                         
-                                        Text { text: ""; color: modelData.active ? "#${c.base0D}" : "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 19 }
-                                        Text { text: modelData.name; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 17; Layout.fillWidth: true }
+                                        Text { text: ""; color: modelData.active ? "#${c.base0D}" : "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 16 }
+                                        Text { text: modelData.name; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; Layout.fillWidth: true }
                                         
                                         // Battery if available
                                         Text { 
                                             text: modelData.battery !== "" ? modelData.battery : ""
                                             color: "#${c.base04}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 15
+                                            font.pixelSize: 13
                                             visible: modelData.battery !== ""
                                         }
                                     }
@@ -2277,9 +2277,9 @@
                                 text: "No devices found."
                                 color: "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 16
+                                font.pixelSize: 14
                                 Layout.alignment: Qt.AlignHCenter
-                                Layout.topMargin: 8
+                                Layout.topMargin: 6
                             }
                         }
                     }
@@ -2288,18 +2288,18 @@
                 // Bottom actions (Caffeine & Night Mode)
                 RowLayout {
                     Layout.fillWidth: true
-                    spacing: 16
+                    spacing: 14
                     
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 56
-                        radius: 12
+                        Layout.preferredHeight: 48
+                        radius: 10
                         color: ccData.caffeineActive ? "#33${c.base0D}" : (cafBottomBtnArea.containsMouse ? "#${c.base03}" : "#${c.base02}")
                         RowLayout {
                             anchors.centerIn: parent
-                            spacing: 10
-                            Text { text: ""; color: ccData.caffeineActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 19 }
-                            Text { text: "Caffeine"; color: ccData.caffeineActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.bold: true; font.pixelSize: 17 }
+                            spacing: 8
+                            Text { text: ""; color: ccData.caffeineActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 17 }
+                            Text { text: "Caffeine"; color: ccData.caffeineActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.bold: true; font.pixelSize: 15 }
                         }
                         MouseArea {
                             id: cafBottomBtnArea
@@ -2314,14 +2314,14 @@
 
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 56
-                        radius: 12
+                        Layout.preferredHeight: 48
+                        radius: 10
                         color: ccData.nightlightActive ? "#33${c.base0D}" : (nightModeArea.containsMouse ? "#${c.base03}" : "#${c.base02}")
                         RowLayout {
                             anchors.centerIn: parent
-                            spacing: 10
-                            Text { text: ""; color: ccData.nightlightActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 19 }
-                            Text { text: "Night Mode"; color: ccData.nightlightActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.bold: true; font.pixelSize: 17 }
+                            spacing: 8
+                            Text { text: ""; color: ccData.nightlightActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 17 }
+                            Text { text: "Night Mode"; color: ccData.nightlightActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.bold: true; font.pixelSize: 15 }
                         }
                         MouseArea {
                             id: nightModeArea
@@ -2364,8 +2364,8 @@
   widget = ''
     Rectangle {
         id: ccButton
-        width: 36; height: 36
-        radius: 18
+        width: 32; height: 32
+        radius: 16
         border.width: 1
         border.color: "white"
         color: hoverCC.hovered ? "#${c.base03}" : (root.controlcenterVisible ? "#E6${c.base02}" : "#CC${c.base01}")
@@ -2373,7 +2373,7 @@
         Rectangle {
             id: ccBtnAvatarMask
             anchors.centerIn: parent
-            width: 32; height: 32; radius: 16
+            width: 28; height: 28; radius: 14
             color: "black"
             visible: false
         }
@@ -2381,7 +2381,7 @@
         Image {
             id: ccBtnAvatarImage
             anchors.centerIn: parent
-            width: 32; height: 32
+            width: 28; height: 28
             source: "file:///home/egarcia/.config/hypr/user.jpg"
             fillMode: Image.PreserveAspectCrop
             visible: false
@@ -2400,7 +2400,7 @@
             text: "" // Fallback icon
             color: root.controlcenterVisible ? "#${c.base0D}" : "#${c.base05}"
             font.family: "${fontName}"
-            font.pixelSize: 17
+            font.pixelSize: 15
             visible: ccBtnAvatarImage.status !== Image.Ready
         }
         

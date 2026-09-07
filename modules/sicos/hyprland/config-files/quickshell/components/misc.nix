@@ -15,8 +15,8 @@
         anchor.rect.height: 1
         anchor.edges: Edges.Bottom | Edges.Right
         visible: root.miscVisible || popupContentMisc.opacity > 0
-        implicitWidth: 380
-        implicitHeight: 512
+        implicitWidth: 340
+        implicitHeight: 460
         color: "transparent"
 
         property var manualPlayer: null
@@ -141,25 +141,25 @@
 
             ColumnLayout {
                 anchors.fill: parent
-                anchors.topMargin: 20 + 12
-                anchors.leftMargin: 20
-                anchors.rightMargin: 20
-                anchors.bottomMargin: 20
-                spacing: 16
+                anchors.topMargin: 16 + 12
+                anchors.leftMargin: 16
+                anchors.rightMargin: 16
+                anchors.bottomMargin: 16
+                spacing: 14
 
                 // Top Source Switcher and Close button
                 Item {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 36
+                    Layout.preferredHeight: 32
                     
                     Row {
                         anchors.centerIn: parent
-                        spacing: 16
+                        spacing: 14
                         Repeater {
                             model: Mpris.players.values
                             delegate: Rectangle {
-                                width: 36; height: 36
-                                radius: 18
+                                width: 32; height: 32
+                                radius: 16
                                 color: sourceMouseArea.containsMouse ? "#${c.base03}" : (miscPopup.activePlayer === modelData ? "#${c.base02}" : "transparent")
                                 border.color: miscPopup.activePlayer === modelData ? "#33${c.base0D}" : "transparent"
                                 border.width: 1
@@ -174,7 +174,7 @@
                                     }
                                     color: miscPopup.activePlayer === modelData ? "#${c.base0D}" : "#${c.base05}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 21
+                                    font.pixelSize: 18
                                 }
                                 MouseArea {
                                     id: sourceMouseArea
@@ -191,8 +191,8 @@
                 // Album Art Vinyl and Glow
                 Item {
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: 200
-                    Layout.preferredHeight: 200
+                    Layout.preferredWidth: 180
+                    Layout.preferredHeight: 180
                     
                     // Breathing Glow behind the Album
                     Glow {
@@ -215,17 +215,17 @@
 
                     Rectangle {
                         id: maskRect
-                        width: 160
-                        height: 160
-                        radius: 80
+                        width: 140
+                        height: 140
+                        radius: 70
                         anchors.centerIn: parent
                         visible: false
                     }
 
                     Image {
                         id: albumImage
-                        width: 160
-                        height: 160
+                        width: 140
+                        height: 140
                         anchors.centerIn: parent
                         source: {
                             if (!miscPopup.activePlayer) return "";
@@ -257,13 +257,13 @@
                             anchors.fill: parent
                             color: "#${c.base02}"
                             visible: albumImage.status !== Image.Ready
-                            radius: 80
+                            radius: 70
                             Text {
                                 anchors.centerIn: parent
                                 text: ""
                                 color: "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 51
+                                font.pixelSize: 44
                             }
                         }
                     }
@@ -279,7 +279,7 @@
                         text: miscPopup.activePlayer && miscPopup.activePlayer.metadata && miscPopup.activePlayer.metadata["xesam:artist"] ? miscPopup.activePlayer.metadata["xesam:artist"].toString() : "Unknown Artist"
                         color: "#${c.base04}"
                         font.family: "${fontName}"
-                        font.pixelSize: 17
+                        font.pixelSize: 15
                         elide: Text.ElideRight
                     }
                     
@@ -292,7 +292,7 @@
                     
                     Row {
                         Layout.alignment: Qt.AlignHCenter
-                        Layout.preferredHeight: 16
+                        Layout.preferredHeight: 14
                         spacing: 3
                         Repeater {
                             model: 8
@@ -327,7 +327,7 @@
                         text: miscPopup.activePlayer && miscPopup.activePlayer.metadata && miscPopup.activePlayer.metadata["xesam:title"] ? miscPopup.activePlayer.metadata["xesam:title"].toString() : "Unknown Track"
                         color: "#${c.base05}"
                         font.family: "${fontName}"
-                        font.pixelSize: 19
+                        font.pixelSize: 16
                         font.bold: true
                         elide: Text.ElideRight
                         wrapMode: Text.Wrap
@@ -381,16 +381,16 @@
                 // Controls
                 RowLayout {
                     Layout.alignment: Qt.AlignHCenter
-                    spacing: 24
+                    spacing: 20
 
                     Rectangle {
-                        width: 40; height: 40; radius: 20
+                        width: 32; height: 32; radius: 16
                         color: prevBtnArea.containsMouse ? "#${c.base03}" : "transparent"
                         Text {
                             anchors.centerIn: parent
                             text: "󰙣"
                             color: "#${c.base05}"
-                            font.pixelSize: 23
+                            font.pixelSize: 18
                             font.family: "${fontName}"
                         }
                         MouseArea {
@@ -402,13 +402,13 @@
                     }
 
                     Rectangle {
-                        width: 50; height: 50; radius: 25
+                        width: 44; height: 44; radius: 22
                         color: "#${c.base0D}"
                         Text {
                             anchors.centerIn: parent
                             text: miscPopup.activePlayer && miscPopup.activePlayer.playbackState === 1 ? "󰏥" : ""
                             color: "#${c.base00}"
-                            font.pixelSize: 27
+                            font.pixelSize: 24
                             font.family: "${fontName}"
                         }
                         MouseArea {
@@ -418,13 +418,13 @@
                     }
 
                     Rectangle {
-                        width: 40; height: 40; radius: 20
+                        width: 32; height: 32; radius: 16
                         color: nextBtnArea.containsMouse ? "#${c.base03}" : "transparent"
                         Text {
                             anchors.centerIn: parent
                             text: "󰙡"
                             color: "#${c.base05}"
-                            font.pixelSize: 23
+                            font.pixelSize: 18
                             font.family: "${fontName}"
                         }
                         MouseArea {
@@ -475,9 +475,9 @@
     Rectangle {
         id: miscIslandMain
         color: hoverWidget.hovered ? "#${c.base03}" : (root.miscVisible ? "#E6${c.base02}" : "#CC${c.base01}")
-        radius: 14
-        Layout.preferredHeight: 36
-        Layout.preferredWidth: miscLayout.implicitWidth + 24
+        radius: 12
+        Layout.preferredHeight: 32
+        Layout.preferredWidth: miscLayout.implicitWidth + 20
         
         property bool capsLockOn: false
         property bool numLockOn: false
@@ -546,8 +546,8 @@
 
             // Caps Lock Indicator
             Rectangle {
-                width: 28; height: 28
-                radius: 14
+                width: 24; height: 24
+                radius: 12
                 color: "#${c.base08}"
                 visible: miscIslandMain.capsLockOn
                 
@@ -556,14 +556,14 @@
                     text: "󰘲"
                     color: "#${c.base00}"
                     font.family: "${fontName}"
-                    font.pixelSize: 18
+                    font.pixelSize: 16
                 }
             }
 
             // Num Lock Indicator
             Rectangle {
-                width: 28; height: 28
-                radius: 14
+                width: 24; height: 24
+                radius: 12
                 color: "#${c.base0A}"
                 visible: miscIslandMain.numLockOn
                 
@@ -572,15 +572,15 @@
                     text: "󰎦"
                     color: "#${c.base00}"
                     font.family: "${fontName}"
-                    font.pixelSize: 18
+                    font.pixelSize: 16
                 }
             }
 
             // MPRIS Media Icon
             Rectangle {
                 id: musicIconRect
-                width: 28; height: 28
-                radius: 14
+                width: 24; height: 24
+                radius: 12
                 color: "transparent"
                 visible: parent.parent.activePlayer !== null
                 
@@ -589,22 +589,22 @@
                     text: "" // Music icon
                     color: parent.parent.parent.activePlayer && parent.parent.parent.activePlayer.playbackState === 1 ? "#${c.base0D}" : "#${c.base05}"
                     font.family: "${fontName}"
-                    font.pixelSize: 20
+                    font.pixelSize: 18
                 }
             }
 
             // Power Profile Indicator
             Rectangle {
                 color: "transparent"
-                Layout.preferredHeight: 28
-                Layout.preferredWidth: 28
+                Layout.preferredHeight: 24
+                Layout.preferredWidth: 24
                 
                 Text {
                     anchors.centerIn: parent
                     text: PowerProfiles.profile === 0 ? "" : (PowerProfiles.profile === 1 ? "" : "")
                     color: PowerProfiles.profile === 0 ? "#${c.base0B}" : (PowerProfiles.profile === 1 ? "#${c.base0D}" : "#${c.base08}")
                     font.family: "${fontName}"
-                    font.pixelSize: PowerProfiles.profile === 2 ? 18 : 23
+                    font.pixelSize: PowerProfiles.profile === 2 ? 16 : 20
                 }
                 
                 // Allow direct clicking for power profiles even if misc area is large

@@ -85,12 +85,12 @@
 
                 // Dynamic width based on active state and number of apps
                 width: {
-                    var baseWidth = isActive ? 44 : 36;
-                    var appsWidth = wsWindows.length > 0 ? (wsWindows.length * 24 + 6) : 0;
+                    var baseWidth = isActive ? 40 : 32;
+                    var appsWidth = wsWindows.length > 0 ? (wsWindows.length * 22 + 4) : 0;
                     return baseWidth + appsWidth;
                 }
-                height: 36
-                radius: 18
+                height: 32
+                radius: 16
                 color: isActive ? "#E6${c.base0D}" : "#CC${c.base01}"
                 anchors.verticalCenter: parent.verticalCenter
                 
@@ -106,23 +106,23 @@
                         text: modelData.name
                         color: isActive ? "#${c.base00}" : "#${c.base05}"
                         font.family: "${fontName}"
-                        font.pixelSize: 16
+                        font.pixelSize: 14
                         font.bold: true
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
                     // Application Icons
                     Row {
-                        spacing: 4
+                        spacing: 3
                         anchors.verticalCenter: parent.verticalCenter
                         Repeater {
                             model: workspacePill.wsWindows
                             Image {
                                 source: workspacePill.resolveIconSource(modelData.class, modelData.title)
-                                width: 20
-                                height: 20
-                                sourceSize.width: 20
-                                sourceSize.height: 20
+                                width: 18
+                                height: 18
+                                sourceSize.width: 18
+                                sourceSize.height: 18
                                 fillMode: Image.PreserveAspectFit
                                 anchors.verticalCenter: parent.verticalCenter
                             }

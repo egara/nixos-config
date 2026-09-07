@@ -10,8 +10,8 @@
         anchor.rect.height: 1
         anchor.edges: Edges.Bottom | Edges.Left
         visible: root.sysinfoVisible || popupSysContent.opacity > 0
-        implicitWidth: 600
-        implicitHeight: 520
+        implicitWidth: 540
+        implicitHeight: 460
         color: "transparent"
 
         HyprlandFocusGrab {
@@ -73,21 +73,21 @@
 
             ColumnLayout {
                 anchors.fill: parent
-                anchors.margins: 20
-                anchors.topMargin: 32
-                spacing: 14
+                anchors.margins: 16
+                anchors.topMargin: 28
+                spacing: 12
                 
                 // Header
                 RowLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: false
-                    Layout.preferredHeight: 28
-                    Layout.maximumHeight: 28
+                    Layout.preferredHeight: 24
+                    Layout.maximumHeight: 24
                     Text {
                         text: "System Monitor"
                         color: "#${c.base05}"
                         font.family: "${fontName}"
-                        font.pixelSize: 20
+                        font.pixelSize: 18
                         Layout.fillWidth: true
                     }
                 }
@@ -111,8 +111,8 @@
                             spacing: 8
                             Canvas {
                                 Layout.alignment: Qt.AlignHCenter
-                                width: 80
-                                height: 80
+                                width: 70
+                                height: 70
                                 property real percentage: parseFloat(sysData.cpu) || 0
                                 
                                 onPercentageChanged: requestPaint()
@@ -123,12 +123,12 @@
                                     
                                     var centerX = width / 2;
                                     var centerY = height / 2;
-                                    var radius = width / 2 - 6;
+                                    var radius = width / 2 - 5;
                                     
                                     // Background circle
                                     ctx.beginPath();
                                     ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-                                    ctx.lineWidth = 6;
+                                    ctx.lineWidth = 5;
                                     ctx.strokeStyle = "#${c.base03}";
                                     ctx.stroke();
                                     
@@ -137,7 +137,7 @@
                                     var startAngle = -Math.PI / 2;
                                     var endAngle = startAngle + (percentage / 100) * 2 * Math.PI;
                                     ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-                                    ctx.lineWidth = 6;
+                                    ctx.lineWidth = 5;
                                     ctx.strokeStyle = "#${c.base0D}";
                                     ctx.lineCap = "round";
                                     ctx.stroke();
@@ -148,7 +148,7 @@
                                     text: Math.round(parent.percentage) + "%"
                                     color: "#${c.base05}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 18
+                                    font.pixelSize: 16
                                     font.bold: true
                                 }
                             }
@@ -156,7 +156,7 @@
                                 text: "Top CPU"
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 16
+                                font.pixelSize: 14
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             ListView {
@@ -167,7 +167,7 @@
                                 model: ListModel { id: cpuModel }
                                 delegate: Rectangle {
                                     width: cpuList.width
-                                    height: 28
+                                    height: 24
                                     radius: 6
                                     color: rowAreaCpu.containsMouse ? "#${c.base03}" : "transparent"
                                     
@@ -185,11 +185,11 @@
                                         anchors.fill: parent
                                         anchors.leftMargin: 8
                                         anchors.rightMargin: 8
-                                        Text {
+                                         Text {
                                             text: model.name
                                             color: "#${c.base05}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 15
+                                            font.pixelSize: 13
                                             Layout.fillWidth: true
                                             elide: Text.ElideRight
                                         }
@@ -197,13 +197,13 @@
                                             text: model.usage + "%"
                                             color: "#${c.base04}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 15
+                                            font.pixelSize: 13
                                         }
                                         Text {
                                             text: ""
                                             color: "#${c.base08}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 15
+                                            font.pixelSize: 13
                                             visible: rowAreaCpu.containsMouse
                                         }
                                     }
@@ -225,8 +225,8 @@
                             spacing: 8
                             Canvas {
                                 Layout.alignment: Qt.AlignHCenter
-                                width: 80
-                                height: 80
+                                width: 70
+                                height: 70
                                 property real percentage: parseFloat(sysData.ram) || 0
                                 
                                 onPercentageChanged: requestPaint()
@@ -237,12 +237,12 @@
                                     
                                     var centerX = width / 2;
                                     var centerY = height / 2;
-                                    var radius = width / 2 - 6;
+                                    var radius = width / 2 - 5;
                                     
                                     // Background circle
                                     ctx.beginPath();
                                     ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-                                    ctx.lineWidth = 6;
+                                    ctx.lineWidth = 5;
                                     ctx.strokeStyle = "#${c.base03}";
                                     ctx.stroke();
                                     
@@ -251,7 +251,7 @@
                                     var startAngle = -Math.PI / 2;
                                     var endAngle = startAngle + (percentage / 100) * 2 * Math.PI;
                                     ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-                                    ctx.lineWidth = 6;
+                                    ctx.lineWidth = 5;
                                     ctx.strokeStyle = "#${c.base0D}";
                                     ctx.lineCap = "round";
                                     ctx.stroke();
@@ -262,7 +262,7 @@
                                     text: Math.round(parent.percentage) + "%"
                                     color: "#${c.base05}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 18
+                                    font.pixelSize: 16
                                     font.bold: true
                                 }
                             }
@@ -270,7 +270,7 @@
                                 text: "Top RAM"
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 16
+                                font.pixelSize: 14
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             ListView {
@@ -281,7 +281,7 @@
                                 model: ListModel { id: ramModel }
                                 delegate: Rectangle {
                                     width: ramList.width
-                                    height: 28
+                                    height: 24
                                     radius: 6
                                     color: rowAreaRam.containsMouse ? "#${c.base03}" : "transparent"
                                     
@@ -299,11 +299,11 @@
                                         anchors.fill: parent
                                         anchors.leftMargin: 8
                                         anchors.rightMargin: 8
-                                        Text {
+                                         Text {
                                             text: model.name
                                             color: "#${c.base05}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 15
+                                            font.pixelSize: 13
                                             Layout.fillWidth: true
                                             elide: Text.ElideRight
                                         }
@@ -311,13 +311,13 @@
                                             text: model.usage + "%"
                                             color: "#${c.base04}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 15
+                                            font.pixelSize: 13
                                         }
                                         Text {
                                             text: ""
                                             color: "#${c.base08}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 15
+                                            font.pixelSize: 13
                                             visible: rowAreaRam.containsMouse
                                         }
                                     }
@@ -331,19 +331,19 @@
                 RowLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: false
-                    Layout.preferredHeight: 36
-                    Layout.minimumHeight: 36
-                    Layout.maximumHeight: 36
-                    spacing: 12
+                    Layout.preferredHeight: 32
+                    Layout.minimumHeight: 32
+                    Layout.maximumHeight: 32
+                    spacing: 10
 
                     // Btop Button
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.fillHeight: false
-                        Layout.preferredHeight: 36
-                        Layout.maximumHeight: 36
-                        height: 36
-                        radius: 18
+                        Layout.preferredHeight: 32
+                        Layout.maximumHeight: 32
+                        height: 32
+                        radius: 16
                         color: btopArea.containsMouse ? "#${c.base03}" : "#${c.base02}"
 
                         Row {
@@ -355,7 +355,7 @@
                                 text: ""
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 14
+                                font.pixelSize: 12
                             }
 
                             Text {
@@ -363,7 +363,7 @@
                                 text: "Launch Btop"
                                 color: "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 14
+                                font.pixelSize: 12
                             }
                         }
 
@@ -384,10 +384,10 @@
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.fillHeight: false
-                        Layout.preferredHeight: 36
-                        Layout.maximumHeight: 36
-                        height: 36
-                        radius: 18
+                        Layout.preferredHeight: 32
+                        Layout.maximumHeight: 32
+                        height: 32
+                        radius: 16
                         color: killBtnArea.containsMouse ? "#33${c.base08}" : "#${c.base02}"
                         border.color: killBtnArea.containsMouse ? "#${c.base08}" : "transparent"
                         border.width: 1
@@ -404,7 +404,7 @@
                                 text: "󰚌"
                                 color: "#${c.base08}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 14
+                                font.pixelSize: 12
                             }
 
                             Text {
@@ -412,7 +412,7 @@
                                 text: "Kill Window"
                                 color: killBtnArea.containsMouse ? "#${c.base08}" : "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 14
+                                font.pixelSize: 12
                                 font.bold: killBtnArea.containsMouse
                             }
                         }
@@ -503,9 +503,9 @@
     Rectangle {
         id: sysinfoWidgetContainer
         color: hoverSysinfo.hovered ? "#${c.base03}" : "#CC${c.base01}"
-        radius: 14 // Pill style
-        Layout.preferredHeight: 36
-        Layout.preferredWidth: 120
+        radius: 12 // Pill style
+        Layout.preferredHeight: 32
+        Layout.preferredWidth: 110
         
         RowLayout {
             anchors.centerIn: parent
@@ -518,13 +518,13 @@
                     text: ""
                     color: "#${c.base05}" // Same as power icon
                     font.family: "${fontName}"
-                    font.pixelSize: 23
+                    font.pixelSize: 20
                 }
                 Text {
                     text: sysData.cpu + "%"
                     color: "#${c.base05}"
                     font.family: "${fontName}"
-                    font.pixelSize: 16
+                    font.pixelSize: 14
                     font.bold: true
                 }
             }
@@ -536,13 +536,13 @@
                     text: ""
                     color: "#${c.base05}" // Same as power icon
                     font.family: "${fontName}"
-                    font.pixelSize: 20
+                    font.pixelSize: 18
                 }
                 Text {
                     text: sysData.ram + "%"
                     color: "#${c.base05}"
                     font.family: "${fontName}"
-                    font.pixelSize: 16
+                    font.pixelSize: 14
                     font.bold: true
                 }
             }

@@ -10,8 +10,8 @@
         anchor.rect.height: 1
         anchor.edges: Edges.Bottom | Edges.Right
         visible: root.batteryVisible || popupContent.opacity > 0
-        implicitWidth: 480
-        implicitHeight: 280
+        implicitWidth: 440
+        implicitHeight: 250
         color: "transparent"
 
         // Helper functions
@@ -123,9 +123,9 @@
 
             ColumnLayout {
                 anchors.fill: parent
-                anchors.margins: 20
-                anchors.topMargin: 32
-                spacing: 16
+                anchors.margins: 16
+                anchors.topMargin: 28
+                spacing: 12
 
                 // Top Row: Icon, Status, Close
                 RowLayout {
@@ -135,16 +135,16 @@
                         text: ""
                         color: "#${c.base0D}" // Cyan
                         font.family: "${fontName}"
-                        font.pixelSize: 25
+                        font.pixelSize: 22
                     }
                     
                     Text {
                         text: "<font color='#${c.base05}'><b>" + (UPower.displayDevice != null ? Math.round(UPower.displayDevice.percentage * 100) : 0) + "%</b></font> <font color='#${c.base04}'>" + batteryPopup.getBatteryStateString() + "</font>"
                         font.family: "${fontName}"
-                        font.pixelSize: 21
+                        font.pixelSize: 18
                         textFormat: Text.RichText
                         Layout.fillWidth: true
-                        Layout.leftMargin: 8
+                        Layout.leftMargin: 6
                     }
                     
                 }
@@ -152,22 +152,22 @@
                 // Middle Row: Cards
                 RowLayout {
                     Layout.fillWidth: true
-                    spacing: 16
+                    spacing: 12
                     
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 70
-                        radius: 12
+                        Layout.preferredHeight: 60
+                        radius: 10
                         color: "#${c.base02}"
                         
                         ColumnLayout {
                             anchors.centerIn: parent
-                            spacing: 6
+                            spacing: 4
                             Text {
                                 text: "Health"
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 16
+                                font.pixelSize: 14
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             Text {
@@ -175,7 +175,7 @@
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
                                 font.bold: true
-                                font.pixelSize: 23
+                                font.pixelSize: 20
                                 Layout.alignment: Qt.AlignHCenter
                             }
                         }
@@ -183,18 +183,18 @@
 
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 70
-                        radius: 12
+                        Layout.preferredHeight: 60
+                        radius: 10
                         color: "#${c.base02}"
                         
                         ColumnLayout {
                             anchors.centerIn: parent
-                            spacing: 6
+                            spacing: 4
                             Text {
                                 text: "Capacity"
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 16
+                                font.pixelSize: 14
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             Text {
@@ -202,7 +202,7 @@
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
                                 font.bold: true
-                                font.pixelSize: 23
+                                font.pixelSize: 20
                                 Layout.alignment: Qt.AlignHCenter
                             }
                         }
@@ -211,18 +211,18 @@
                     // Time Remaining Card
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 70
-                        radius: 12
+                        Layout.preferredHeight: 60
+                        radius: 10
                         color: "#${c.base02}"
                         
                         ColumnLayout {
                             anchors.centerIn: parent
-                            spacing: 6
+                            spacing: 4
                             Text {
                                 text: "Time"
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 16
+                                font.pixelSize: 14
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             Text {
@@ -230,7 +230,7 @@
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
                                 font.bold: true
-                                font.pixelSize: 23
+                                font.pixelSize: 20
                                 Layout.alignment: Qt.AlignHCenter
                             }
                         }
@@ -240,19 +240,19 @@
                 // Charge Limit Card
                 Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 46
-                    radius: 12
+                    Layout.preferredHeight: 40
+                    radius: 10
                     color: "#${c.base02}"
                     
                     RowLayout {
                         anchors.fill: parent
-                        anchors.leftMargin: 16
-                        anchors.rightMargin: 16
+                        anchors.leftMargin: 12
+                        anchors.rightMargin: 12
                         Text {
                             text: "Hardware Charge Limit"
                             color: "#${c.base0D}"
                             font.family: "${fontName}"
-                            font.pixelSize: 16
+                            font.pixelSize: 14
                             Layout.fillWidth: true
                         }
                         Text {
@@ -260,7 +260,7 @@
                             color: "#${c.base05}"
                             font.family: "${fontName}"
                             font.bold: true
-                            font.pixelSize: 19
+                            font.pixelSize: 16
                         }
                     }
                 }
@@ -268,8 +268,8 @@
                 // Bottom Row: Power Profiles
                 RowLayout {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 40
-                    spacing: 8
+                    Layout.preferredHeight: 32
+                    spacing: 6
                     
                     Repeater {
                         model: [
@@ -289,7 +289,7 @@
                                 text: modelData.name
                                 color: PowerProfiles.profile === modelData.enumVal ? "#${c.base00}" : "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 17
+                                font.pixelSize: 14
                                 font.bold: PowerProfiles.profile === modelData.enumVal
                             }
                             
@@ -339,9 +339,9 @@
         id: batteryWidgetContainer
         property bool showPercent: UPower.displayDevice != null && UPower.displayDevice.state !== 4 && UPower.displayDevice.state !== 5
         color: hoverBattery.hovered ? "#${c.base03}" : (root.batteryVisible ? "#E6${c.base02}" : "#CC${c.base01}")
-        radius: 14 // Fully rounded pill
-        Layout.preferredHeight: 36
-        Layout.preferredWidth: showPercent ? 70 : 42
+        radius: 12 // Fully rounded pill
+        Layout.preferredHeight: 32
+        Layout.preferredWidth: showPercent ? 62 : 36
         visible: UPower.displayDevice != null && UPower.displayDevice.isPresent
         
         // Smooth transition for width changes
@@ -349,7 +349,7 @@
         
         RowLayout {
             anchors.centerIn: parent
-            spacing: 6
+            spacing: 4
             Text {
                 text: (UPower.displayDevice != null && UPower.displayDevice.state === 1) ? "⚡" : 
                       (UPower.displayDevice != null && (UPower.displayDevice.state === 4 || UPower.displayDevice.state === 5)) ? "󰚥" : "🔋"
@@ -362,11 +362,11 @@
                     return "#${c.base0B}"; // Green when discharging
                 }
                 font.pixelSize: {
-                    if (!UPower.displayDevice) return 16;
+                    if (!UPower.displayDevice) return 14;
                     let s = UPower.displayDevice.state;
-                    if (s === 4 || s === 5) return 17;
-                    if (s === 1) return 16;
-                    return 16;
+                    if (s === 4 || s === 5) return 15;
+                    if (s === 1) return 14;
+                    return 14;
                 }
                 font.family: "${fontName}"
             }
@@ -375,7 +375,7 @@
                 visible: batteryWidgetContainer.showPercent
                 color: "#${c.base05}"
                 font.family: "${fontName}"
-                font.pixelSize: 16
+                font.pixelSize: 14
                 font.bold: true
             }
         }

@@ -19,8 +19,8 @@
         WlrLayershell.layer: WlrLayer.Overlay
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
         
-        implicitWidth: 420
-        implicitHeight: 64
+        implicitWidth: 380
+        implicitHeight: 56
         
         Item {
             id: progressOsdContent
@@ -35,28 +35,28 @@
             Rectangle {
                 anchors.fill: parent
                 color: "#E6${c.base01}"
-                radius: 32
+                radius: 28
                 border.color: "#33${c.base05}"
                 border.width: 1
                 
                 RowLayout {
                     anchors.fill: parent
-                    anchors.margins: 16
-                    spacing: 16
+                    anchors.margins: 14
+                    spacing: 14
                     
                     Text {
                         text: mainScope.progressOsdType === "Volume" ? (mainScope.progressOsdValue === 0 ? "󰝟" : (mainScope.progressOsdValue < 50 ? "󰖀" : "󰕾")) : "󰃠"
                         color: "#${c.base0D}"
                         font.family: "${fontName}"
-                        font.pixelSize: 27
+                        font.pixelSize: 24
                         Layout.alignment: Qt.AlignVCenter
                     }
                     
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 12
+                        Layout.preferredHeight: 10
                         Layout.alignment: Qt.AlignVCenter
-                        radius: 6
+                        radius: 5
                         color: "#33${c.base05}"
                         clip: true
                         
@@ -76,10 +76,10 @@
                         text: mainScope.progressOsdValue + "%"
                         color: "#${c.base05}"
                         font.family: "${fontName}"
-                        font.pixelSize: 17
+                        font.pixelSize: 15
                         font.bold: true
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 36
+                        Layout.preferredWidth: 32
                         horizontalAlignment: Text.AlignRight
                     }
                 }
@@ -105,8 +105,8 @@
         WlrLayershell.layer: WlrLayer.Overlay
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
         
-        implicitWidth: 120
-        implicitHeight: 64
+        implicitWidth: 100
+        implicitHeight: 56
         
         Item {
             id: lockOsdContent
@@ -120,25 +120,25 @@
             Rectangle {
                 anchors.fill: parent
                 color: "#E6${c.base01}"
-                radius: 32
+                radius: 28
                 border.color: "#33${c.base05}"
                 border.width: 1
                 
                 RowLayout {
                     anchors.centerIn: parent
-                    spacing: 12
+                    spacing: 10
                     
                     Text {
                         text: mainScope.progressOsdType === "Caps Lock" ? "󰘲" : "󰎦"
                         color: "#${c.base0D}"
                         font.family: "${fontName}"
-                        font.pixelSize: 25
+                        font.pixelSize: 22
                         Layout.alignment: Qt.AlignVCenter
                     }
                     
                     Rectangle {
                         Layout.preferredWidth: 2
-                        Layout.preferredHeight: 20
+                        Layout.preferredHeight: 18
                         radius: 1
                         color: "#33${c.base05}"
                         Layout.alignment: Qt.AlignVCenter
@@ -148,7 +148,7 @@
                         text: mainScope.progressOsdValue === 1 ? "ON" : "OFF"
                         color: "#${c.base05}"
                         font.family: "${fontName}"
-                        font.pixelSize: 17
+                        font.pixelSize: 15
                         font.bold: true
                         Layout.alignment: Qt.AlignVCenter
                     }
