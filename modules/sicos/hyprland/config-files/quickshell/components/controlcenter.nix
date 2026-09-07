@@ -44,14 +44,14 @@
             property string netTxTotal: "-"
             property string netIp: "-"
             property string netGateway: "-"
-            
+
             // Bluetooth properties
             property bool bluetoothExpanded: false
             property var bluetoothList: []
             property string activeBluetoothName: "Bluetooth"
             property string activeBluetoothBattery: "Disconnected"
             property string bluetoothStatus: "Off"
-            
+
             property bool isDraggingBrightness: false
             property var brightnessDevices: []
             property int mainBrightness: 0
@@ -66,14 +66,14 @@
             property bool fontExpanded: false
             property int currentFontSize: 10
             property int pendingFontSize: 10
-            
+
             // Pipewire dynamic properties
             property int _pwUpdateTrigger: 0
             Connections {
                 target: Pipewire.nodes
                 function onValuesChanged() { popupContentCC._pwUpdateTrigger += 1; }
             }
-            
+
             property var currentAudioStreams: {
                 var trigger = popupContentCC._pwUpdateTrigger;
                 var arr = [];
@@ -88,7 +88,7 @@
                 }
                 return arr;
             }
-            
+
             property bool micsExpanded: false
             property var currentMics: {
                 var trigger = popupContentCC._pwUpdateTrigger;
@@ -104,19 +104,19 @@
                 }
                 return arr;
             }
-            
+
             function setDeviceBrightness(name, p) {
                 brightnessSetProc.command = ["brightnessctl", "-d", name, "set", Math.round(p) + "%", "-q"];
                 brightnessSetProc.running = true;
             }
-            
+
             // Intercept all clicks
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true
                 onWheel: {}
             }
-            
+
             // Ambient Background Mask (Body + Beak)
             Item {
                 id: popupBgMaskCC
@@ -196,14 +196,14 @@
                     }
                 }
             }
-            
+
             Timer {
                 interval: 60000
                 running: root.controlcenterVisible
                 repeat: true
                 onTriggered: ccInfoProc.running = true
             }
-            
+
             Connections {
                 target: root
                 function onControlcenterVisibleChanged() {
@@ -240,7 +240,7 @@
                     }
                 }
             }
-            
+
             Timer {
                 interval: 5000
                 running: root.controlcenterVisible
@@ -275,7 +275,7 @@
                     }
                 }
             }
-            
+
             Timer {
                 interval: 2000
                 running: root.controlcenterVisible && ccData.profileExpanded
@@ -290,7 +290,7 @@
                     }
                 }
             }
-            
+
             Process {
                 id: bluetoothPollProc
                 command: ["sh", "-c", "if [ -f $HOME/.config/sicos/scripts/bluetooth-status.sh ]; then $HOME/.config/sicos/scripts/bluetooth-status.sh; else echo '{\"devices\":[],\"status\":\"Off\",\"active_name\":\"Bluetooth\",\"active_battery\":\"Disconnected\"}'; fi"]
@@ -375,7 +375,7 @@
                 monitorPollProc.running = true;
                 fontPollProc.running = true;
             }
-            
+
             opacity: root.controlcenterVisible ? 1 : 0
             y: root.controlcenterVisible ? 0 : -20
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
@@ -389,7 +389,7 @@
                 anchors.bottomMargin: 16
                 contentWidth: availableWidth
                 clip: true
-                
+
                 ColumnLayout {
                     width: parent.width
                     spacing: 14
@@ -402,31 +402,31 @@
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 12
-                        
+
                         // Avatar and Info area (Clickable)
                         Rectangle {
                             Layout.preferredHeight: 40
                             Layout.preferredWidth: profileContent.implicitWidth + 14
                             color: profileMouseArea.containsMouse ? "#1A${c.base05}" : "transparent"
                             radius: 10
-                            
+
                             RowLayout {
                                 id: profileContent
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.left: parent.left
                                 anchors.leftMargin: 4
                                 spacing: 10
-                                
+
                                 Item {
                                     width: 40; height: 40
-                                    
+
                                     Rectangle {
                                         id: avatarMask
                                         width: 40; height: 40; radius: 20
                                         color: "black"
                                         visible: false
                                     }
-                                    
+
                                     Image {
                                         id: avatarImage
                                         width: 40; height: 40
@@ -434,14 +434,14 @@
                                         fillMode: Image.PreserveAspectCrop
                                         visible: false
                                     }
-                                    
+
                                     OpacityMask {
                                         width: 40; height: 40
                                         source: avatarImage
                                         maskSource: avatarMask
                                         visible: avatarImage.status === Image.Ready
                                     }
-                                    
+
                                     Rectangle {
                                         width: 40; height: 40; radius: 20
                                         color: "#${c.base02}"
@@ -479,7 +479,7 @@
                                     font.pixelSize: 15
                                 }
                             }
-                            
+
                             MouseArea {
                                 id: profileMouseArea
                                 anchors.fill: parent
@@ -594,10 +594,10 @@
                         clip: true
                         color: "#1A${c.base03}"
                         radius: 8
-                        
+
                         Behavior on Layout.preferredHeight { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
                         Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
-                        
+
                         ColumnLayout {
                             id: expandedContentCol
                             anchors.left: parent.left
@@ -605,7 +605,7 @@
                             anchors.top: parent.top
                             anchors.margins: 6
                             spacing: 10
-                            
+
                             // System info
                             RowLayout {
                                 Layout.fillWidth: true
@@ -619,31 +619,31 @@
                                     Text { text: ccData.os !== "" ? ccData.os : "Linux"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 14; elide: Text.ElideRight; Layout.fillWidth: true }
                                 }
                             }
-                            
+
                             Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: "#33${c.base03}" }
-                            
+
                             // Omarchy-style Network Stats
                             GridLayout {
                                 Layout.fillWidth: true
                                 columns: 4
                                 rowSpacing: 6
                                 columnSpacing: 10
-                                
+
                                 Text { text: "Ping"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
                                 Text { text: popupContentCC.netPing; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
                                 Text { text: "Packet Loss"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
                                 Text { text: popupContentCC.netLoss; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                                
+
                                 Text { text: "Receiving"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
                                 Text { text: popupContentCC.netRxSpeed; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
                                 Text { text: "Sending"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
                                 Text { text: popupContentCC.netTxSpeed; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                                
+
                                 Text { text: "Downloaded"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
                                 Text { text: popupContentCC.netRxTotal; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
                                 Text { text: "Uploaded"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
                                 Text { text: popupContentCC.netTxTotal; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                                
+
                                 Text { text: "IP Address"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
                                 Text { text: popupContentCC.netIp; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13; font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
                                 Text { text: "Gateway"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 13 }
@@ -652,11 +652,11 @@
                         }
                     }
                 }
-                
+
                 // Sliders (Volume, Brightness)
                 ColumnLayout {
                     id: slidersColumn
-                    
+
                     Process {
                         id: brightnessPollProc
                         command: ["brightnessctl", "-l", "-m"]
@@ -703,51 +703,51 @@
                             }
                         }
                     }
-                    
+
                     Timer {
                         interval: 2000
                         running: root.controlcenterVisible && !popupContentCC.isDraggingBrightness
                         repeat: true
                         onTriggered: brightnessPollProc.running = true
                     }
-                    
+
                     Process {
                         id: brightnessSetProc
                     }
-                    
+
                     Layout.fillWidth: true
                     spacing: 16
-                    
+
                     // Audio Pill
                     Item {
                         Layout.fillWidth: true
                         implicitHeight: audioPillLayout.implicitHeight + 24
-                        
+
                         Rectangle {
                             anchors.fill: parent
                             color: "#1A${c.base03}"
                             radius: 12
                         }
-                        
+
                         ColumnLayout {
                             id: audioPillLayout
                             anchors.fill: parent
                             anchors.margins: 12
                             spacing: 16
-                            
+
                             // Volume Section
                             ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 8
-                        
+
                         PwObjectTracker {
                             objects: Pipewire.defaultAudioSink ? [Pipewire.defaultAudioSink] : []
                         }
-                        
+
                         RowLayout {
                             Layout.fillWidth: true
                             spacing: 12
-                            
+
                             Item {
                                         Layout.preferredWidth: 28
                                         Layout.preferredHeight: 22
@@ -762,26 +762,26 @@
                                 }
                             }
                                     }
-                            
+
                             Item {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 24
                                 property real percent: Pipewire.defaultAudioSink ? Math.max(0, Math.min(1.0, Pipewire.defaultAudioSink.audio.volume / 2.0)) : 0
-                                
+
                                 Rectangle {
                                     anchors.verticalCenter: parent.verticalCenter
                                     width: parent.width
                                     height: 12
                                     radius: 6
                                     color: "#33${c.base05}"
-                                    
+
                                     Rectangle {
                                         width: parent.width * parent.parent.percent
                                         height: parent.height
                                         radius: 4
                                         color: (Pipewire.defaultAudioSink && Pipewire.defaultAudioSink.audio.volume > 1.005) ? "#${c.base08}" : "#${c.base0D}"
                                     }
-                                    
+
                                     Rectangle {
                                         x: parent.width * 0.5
                                         width: 2
@@ -790,7 +790,7 @@
                                         color: "#${c.base00}"
                                     }
                                 }
-                                
+
                                 // Thumb (Pelotita)
                                 Rectangle {
                                     width: 20
@@ -800,7 +800,7 @@
                                     anchors.verticalCenter: parent.verticalCenter
                                     x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
                                 }
-                                
+
                                 MouseArea {
                                     anchors.fill: parent
                                     cursorShape: Qt.PointingHandCursor
@@ -817,7 +817,7 @@
                                     }
                                 }
                             }
-                            
+
                             Text {
                                 text: (Pipewire.defaultAudioSink ? Math.round(Pipewire.defaultAudioSink.audio.volume * 100) : 0) + "%"
                                 color: "#${c.base05}"
@@ -826,7 +826,7 @@
                                 Layout.preferredWidth: 36
                                 horizontalAlignment: Text.AlignRight
                             }
-                            
+
                             Rectangle {
                                 width: 22
                                 height: 22
@@ -848,19 +848,19 @@
                                 }
                             }
                         }
-                        
+
                         ColumnLayout {
                             Layout.fillWidth: true
                             visible: popupContentCC.appsExpanded
                             spacing: 8
-                            
+
                             Repeater {
                                 model: popupContentCC.currentAudioStreams
                                 delegate: RowLayout {
                                     Layout.fillWidth: true
                                     Item { width: 12 }
                                     spacing: 12
-                                    
+
                                     Item {
                                                 Layout.preferredWidth: 126
                                                 Layout.preferredHeight: 24
@@ -883,7 +883,7 @@
                                             let name = (p["application.name"] || "").toLowerCase();
                                             let bin = (p["application.process.binary"] || "").toLowerCase();
                                             let iconName = (p["application.icon-name"] || p["application.icon_name"] || "").toLowerCase();
-                                            
+
                                             let matchStr = name + " " + bin + " " + iconName;
                                             if (matchStr.indexOf("spotify") !== -1) return "image://icon/spotify";
                                             if (matchStr.indexOf("firefox") !== -1) return "image://icon/firefox";
@@ -893,10 +893,10 @@
                                             if (matchStr.indexOf("telegram") !== -1) return "image://icon/telegram";
                                             if (matchStr.indexOf("mpv") !== -1) return "image://icon/mpv";
                                             if (matchStr.indexOf("vlc") !== -1) return "image://icon/vlc";
-                                            
+
                                             if (iconName && iconName !== "") return "image://icon/" + iconName;
                                             if (bin && bin !== "") return "image://icon/" + bin;
-                                            
+
                                             return "image://icon/audio-x-generic";
                                         }
                                         opacity: modelData.audio.muted ? 0.5 : 1.0
@@ -907,7 +907,7 @@
                                             }
                                         }
                                     }
-                                    
+
                                     Text {
                                         text: {
                                             let p = modelData.properties;
@@ -917,32 +917,32 @@
                                         font.family: "${fontName}"
                                         font.pixelSize: 14
                                         Layout.fillWidth: true
-                                        
-                                        
+
+
                                         elide: Text.ElideRight
                                     }
                                                 }
                                             }
-                                    
+
                                     Item {
                                         Layout.fillWidth: true
                                         Layout.preferredHeight: 18
                                         property real percent: modelData.audio ? Math.max(0, Math.min(1.0, modelData.audio.volume / 2.0)) : 0
-                                        
+
                                         Rectangle {
                                             anchors.verticalCenter: parent.verticalCenter
                                             width: parent.width
                                             height: 6
                                             radius: 3
                                             color: "#33${c.base05}"
-                                            
+
                                             Rectangle {
                                                 width: parent.width * parent.parent.percent
                                                 height: parent.height
                                                 radius: 3
                                                 color: (modelData.audio && modelData.audio.volume > 1.005) ? "#${c.base08}" : "#${c.base0D}"
                                             }
-                                            
+
                                             Rectangle {
                                                 x: parent.width * 0.5
                                                 width: 2
@@ -951,7 +951,7 @@
                                                 color: "#${c.base00}"
                                             }
                                         }
-                                        
+
                                         Rectangle {
                                             width: 14
                                             height: 14
@@ -960,7 +960,7 @@
                                             anchors.verticalCenter: parent.verticalCenter
                                             x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
                                         }
-                                        
+
                                         MouseArea {
                                             anchors.fill: parent
                                             cursorShape: Qt.PointingHandCursor
@@ -977,7 +977,7 @@
                                             }
                                         }
                                     }
-                                    
+
                                     Text {
                                         text: Math.round(modelData.audio.volume * 100) + "%"
                                         color: "#${c.base05}"
@@ -986,28 +986,28 @@
                                         Layout.preferredWidth: 36
                                         horizontalAlignment: Text.AlignRight
                                     }
-                                    
+
                                     Item { width: 24; height: 24 }
-                                    
+
                                     PwObjectTracker { objects: [modelData] }
                                 }
                             }
                         }
                     }
-                    
+
                     // Mic Section
                     ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 8
-                        
+
                         PwObjectTracker {
                             objects: Pipewire.defaultAudioSource ? [Pipewire.defaultAudioSource] : []
                         }
-                        
+
                         RowLayout {
                             Layout.fillWidth: true
                             spacing: 12
-                            
+
                             Item {
                                         Layout.preferredWidth: 28
                                         Layout.preferredHeight: 22
@@ -1022,19 +1022,19 @@
                                 }
                             }
                                     }
-                            
+
                             Item {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 24
                                 property real percent: Pipewire.defaultAudioSource ? Math.max(0, Math.min(1.0, Pipewire.defaultAudioSource.audio.volume / 2.0)) : 0
-                                
+
                                 Rectangle {
                                     anchors.verticalCenter: parent.verticalCenter
                                     width: parent.width
                                     height: 12
                                     radius: 6
                                     color: "#33${c.base05}"
-                                    
+
                                     Rectangle {
                                         width: parent.width * parent.parent.percent
                                         height: parent.height
@@ -1042,7 +1042,7 @@
                                         color: (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio.volume > 1.005) ? "#${c.base08}" : "#${c.base0D}"
                                     }
                                 }
-                                
+
                                 Rectangle {
                                     width: 20
                                     height: 20
@@ -1051,7 +1051,7 @@
                                     anchors.verticalCenter: parent.verticalCenter
                                     x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
                                 }
-                                
+
                                 MouseArea {
                                     anchors.fill: parent
                                     cursorShape: Qt.PointingHandCursor
@@ -1066,7 +1066,7 @@
                                     onPositionChanged: (mouse) => { if (pressed) updateMicV(mouse); }
                                 }
                             }
-                            
+
                             Text {
                                 text: Pipewire.defaultAudioSource ? Math.round(Pipewire.defaultAudioSource.audio.volume * 100) + "%" : "0%"
                                 color: "#${c.base05}"
@@ -1075,7 +1075,7 @@
                                 Layout.preferredWidth: 36
                                 horizontalAlignment: Text.AlignRight
                             }
-                            
+
                             Rectangle {
                                 width: 22
                                 height: 22
@@ -1097,26 +1097,26 @@
                                 }
                             }
                         }
-                        
+
                         ColumnLayout {
                             Layout.fillWidth: true
                             visible: popupContentCC.micsExpanded
                             spacing: 8
-                            
+
                             Repeater {
                                 model: popupContentCC.currentMics
                                 delegate: RowLayout {
                                     Layout.fillWidth: true
-                                    
+
                                     PwNodePeakMonitor {
                                         id: itemPeakMonitor
                                         node: modelData
                                         enabled: popupContentCC.micsExpanded && !!modelData
                                     }
-                                    
+
                                     Item { width: 12 }
                                     spacing: 12
-                                    
+
                                     Item {
                                                 Layout.preferredWidth: 126
                                                 Layout.preferredHeight: 24
@@ -1141,39 +1141,39 @@
                                             onClicked: if (modelData.audio) modelData.audio.muted = !modelData.audio.muted
                                         }
                                     }
-                                    
+
                                     Text {
                                         text: modelData.properties["node.description"] || modelData.name
                                         color: "#${c.base05}"
                                         font.family: "${fontName}"
                                         font.pixelSize: 14
                                         Layout.fillWidth: true
-                                        
-                                        
+
+
                                         elide: Text.ElideRight
                                     }
                                                 }
                                             }
-                                    
+
                                     Item {
                                         Layout.fillWidth: true
                                         Layout.preferredHeight: 18
                                         property real percent: modelData.audio ? Math.max(0, Math.min(1.0, modelData.audio.volume / 2.0)) : 0
-                                        
+
                                         Rectangle {
                                             anchors.verticalCenter: parent.verticalCenter
                                             width: parent.width
                                             height: 6
                                             radius: 3
                                             color: "#33${c.base05}"
-                                            
+
                                             Rectangle {
                                                 width: parent.width * Math.max(0, Math.min(1.0, itemPeakMonitor.peak))
                                                 height: parent.height
                                                 radius: 3
                                                 color: (modelData.audio && modelData.audio.muted) ? "transparent" : "#55${c.base0D}"
                                             }
-                                            
+
                                             Rectangle {
                                                 width: parent.width * parent.parent.percent
                                                 height: parent.height
@@ -1181,7 +1181,7 @@
                                                 color: (modelData.audio && modelData.audio.volume > 1.005) ? "#${c.base08}" : "#${c.base0D}"
                                             }
                                         }
-                                        
+
                                         Rectangle {
                                             width: 12
                                             height: 12
@@ -1190,7 +1190,7 @@
                                             anchors.verticalCenter: parent.verticalCenter
                                             x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
                                         }
-                                        
+
                                         MouseArea {
                                             anchors.fill: parent
                                             cursorShape: Qt.PointingHandCursor
@@ -1205,7 +1205,7 @@
                                             onPositionChanged: (mouse) => { if (pressed) updateAppMicV(mouse); }
                                         }
                                     }
-                                    
+
                                     Text {
                                         text: modelData.audio ? Math.round(modelData.audio.volume * 100) + "%" : "0%"
                                         color: "#${c.base05}"
@@ -1214,9 +1214,9 @@
                                         Layout.preferredWidth: 36
                                         horizontalAlignment: Text.AlignRight
                                     }
-                                    
+
                                     Item { width: 24; height: 24 }
-                                    
+
                                     PwObjectTracker { objects: [modelData] }
                                 }
                             }
@@ -1224,24 +1224,24 @@
                     }
                         } // end audioPillLayout
                     } // end Audio Pill
-                    
+
                     // Brightness Pill
                     Item {
                         Layout.fillWidth: true
                         implicitHeight: brightnessPillLayout.implicitHeight + 24
-                        
+
                         Rectangle {
                             anchors.fill: parent
                             color: "#1A${c.base03}"
                             radius: 12
                         }
-                        
+
                         ColumnLayout {
                             id: brightnessPillLayout
                             anchors.fill: parent
                             anchors.margins: 12
                             spacing: 16
-                            
+
                             // Brightness Section
                             ColumnLayout {
                         Layout.fillWidth: true
@@ -1249,7 +1249,7 @@
                         RowLayout {
                             Layout.fillWidth: true
                             spacing: 12
-                            
+
                             Item {
                                 Layout.preferredWidth: 28
                                 Layout.preferredHeight: 22
@@ -1262,19 +1262,19 @@
                                     font.pixelSize: 18
                                 }
                             }
-                            
+
                             Item {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 24
                                 property real percent: popupContentCC.mainBrightness / 100.0
-                                
+
                                 Rectangle {
                                     anchors.verticalCenter: parent.verticalCenter
                                     width: parent.width
                                     height: 12
                                     radius: 6
                                     color: "#33${c.base05}"
-                                    
+
                                     Rectangle {
                                         width: parent.width * parent.parent.percent
                                         height: parent.height
@@ -1282,7 +1282,7 @@
                                         color: "#${c.base0D}"
                                     }
                                 }
-                                
+
                                 Rectangle {
                                     width: 20
                                     height: 20
@@ -1291,7 +1291,7 @@
                                     anchors.verticalCenter: parent.verticalCenter
                                     x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
                                 }
-                                
+
                                 MouseArea {
                                     anchors.fill: parent
                                     cursorShape: Qt.PointingHandCursor
@@ -1311,7 +1311,7 @@
                                     onPositionChanged: (mouse) => { if (pressed) updateB(mouse); }
                                 }
                             }
-                            
+
                             Text {
                                 text: Math.round(popupContentCC.mainBrightness) + "%"
                                 color: "#${c.base05}"
@@ -1320,7 +1320,7 @@
                                 Layout.preferredWidth: 36
                                 horizontalAlignment: Text.AlignRight
                             }
-                            
+
                             Rectangle {
                                 width: 22
                                 height: 22
@@ -1342,26 +1342,26 @@
                                 }
                             }
                         }
-                        
+
                         ColumnLayout {
                             Layout.fillWidth: true
                             visible: popupContentCC.brightnessExpanded
                             spacing: 8
-                            
+
                             Repeater {
                                 model: popupContentCC.brightnessDevices
                                 delegate: RowLayout {
                                     Layout.fillWidth: true
                                     Item { width: 12 }
                                     spacing: 12
-                                    
+
                                     Item {
                                         Layout.preferredWidth: 126
                                         Layout.preferredHeight: 24
                                         RowLayout {
                                             anchors.fill: parent
                                             spacing: 12
-                                            
+
                                             Item {
                                                 Layout.preferredWidth: 24
                                                 Layout.preferredHeight: 24
@@ -1373,7 +1373,7 @@
                                                      font.pixelSize: 16
                                                 }
                                             }
-                                            
+
                                              Text {
                                                  text: {
                                                      let n = modelData.name.toLowerCase();
@@ -1384,25 +1384,25 @@
                                                  font.family: "${fontName}"
                                                  font.pixelSize: 14
                                                  Layout.fillWidth: true
-                                                
-                                                
+
+
                                                 elide: Text.ElideRight
                                             }
                                         }
                                     }
-                                    
+
                                     Item {
                                         Layout.fillWidth: true
                                         Layout.preferredHeight: 18
                                         property real percent: modelData.percent / 100.0
-                                        
+
                                         Rectangle {
                                             anchors.verticalCenter: parent.verticalCenter
                                             width: parent.width
                                             height: 6
                                             radius: 3
                                             color: "#33${c.base05}"
-                                            
+
                                             Rectangle {
                                                 width: parent.width * parent.parent.percent
                                                 height: parent.height
@@ -1410,7 +1410,7 @@
                                                 color: "#${c.base0D}"
                                             }
                                         }
-                                        
+
                                         Rectangle {
                                             width: 14
                                             height: 14
@@ -1419,7 +1419,7 @@
                                             anchors.verticalCenter: parent.verticalCenter
                                             x: Math.max(0, Math.min(parent.width - width, (parent.width * parent.percent) - (width / 2)))
                                         }
-                                        
+
                                         MouseArea {
                                             anchors.fill: parent
                                             cursorShape: Qt.PointingHandCursor
@@ -1438,7 +1438,7 @@
                                             onPositionChanged: (mouse) => { if (pressed) updateDeviceB(mouse); }
                                         }
                                     }
-                                    
+
                                     Text {
                                         text: Math.round(modelData.percent) + "%"
                                         color: "#${c.base05}"
@@ -1447,7 +1447,7 @@
                                         Layout.preferredWidth: 36
                                         horizontalAlignment: Text.AlignRight
                                     }
-                                    
+
                                     Item { width: 24; height: 24 }
                                 }
                             }
@@ -1795,7 +1795,7 @@
                                     }
 
                                     Repeater {
-                                        model: [8, 9, 10, 11, 12, 13, 14, 15, 16, 18]
+                                        model: [8, 9, 10, 11, 12, 13, 14, 15, 16]
                                         delegate: Rectangle {
                                             Layout.preferredWidth: 28
                                             Layout.preferredHeight: 24
@@ -2018,12 +2018,12 @@
                     }
 
                 // Quick Toggles
-                
+
                 // Quick Toggles
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: 16
-                    
+
                     // Network Quick Toggle
                     Rectangle {
                         Layout.fillWidth: true
@@ -2032,12 +2032,12 @@
                         color: "#1a${c.base05}"
                         border.color: popupContentCC.networkExpanded ? "#${c.base0D}" : "transparent"
                         border.width: popupContentCC.networkExpanded ? 1 : 0
-                        
+
                         RowLayout {
                             anchors.fill: parent
                             anchors.margins: 10
                             spacing: 10
-                            
+
                             Rectangle {
                                 width: 32; height: 32; radius: 16
                                 color: "#${c.base0D}"
@@ -2069,16 +2069,16 @@
                         Layout.preferredHeight: 56
                         radius: 14
                         color: popupContentCC.bluetoothExpanded ? "#33${c.base0D}" : "#1a${c.base05}"
-                        
+
                         RowLayout {
                             anchors.fill: parent
                             anchors.margins: 10
                             spacing: 10
-                            
+
                             Rectangle {
                                 width: 32; height: 32; radius: 16
                                 color: (popupContentCC.bluetoothStatus === "Connected" || popupContentCC.bluetoothStatus === "On") ? "#${c.base0D}" : "#33${c.base05}"
-                                Text { 
+                                Text {
                                     anchors.centerIn: parent
                                     text: ""
                                     color: (popupContentCC.bluetoothStatus === "Connected" || popupContentCC.bluetoothStatus === "On") ? "#${c.base00}" : "#${c.base04}"
@@ -2100,7 +2100,7 @@
                                 font.pixelSize: 15
                             }
                         }
-                        
+
                         MouseArea {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
@@ -2108,7 +2108,7 @@
                         }
                     }
                 }
-                
+
                 // Expanded Network Block
                 Rectangle {
                     Layout.fillWidth: true
@@ -2116,7 +2116,7 @@
                     radius: 14
                     color: "#1a${c.base05}"
                     visible: popupContentCC.networkExpanded
-                    
+
                     ColumnLayout {
                         id: networkCol
                         anchors.fill: parent
@@ -2127,7 +2127,7 @@
                         RowLayout {
                             Layout.fillWidth: true
                             Text { text: "Network"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: true; Layout.fillWidth: true }
-                            
+
                             // Segmented Control (Ethernet / WiFi)
                             Rectangle {
                                 width: 170; height: 28; radius: 14
@@ -2155,7 +2155,7 @@
                         ColumnLayout {
                             Layout.fillWidth: true
                             spacing: 6
-                            
+
                             Repeater {
                                 model: popupContentCC.networkTab === "ethernet" ? popupContentCC.ethernetList : popupContentCC.wifiList
                                 delegate: Rectangle {
@@ -2163,7 +2163,7 @@
                                     Layout.preferredHeight: 40
                                     radius: 8
                                     color: netMouseArea.containsMouse ? "#33${c.base05}" : (modelData.active ? "#33${c.base0D}" : "transparent")
-                                    
+
                                     RowLayout {
                                         anchors.fill: parent
                                         anchors.leftMargin: 10
@@ -2172,7 +2172,7 @@
                                         Text { text: popupContentCC.networkTab === "ethernet" ? "󰈀" : "󰤨"; color: modelData.active ? "#${c.base0D}" : "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 16 }
                                         Text { text: modelData.name; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; Layout.fillWidth: true; elide: Text.ElideRight }
                                     }
-                                    
+
                                     MouseArea {
                                         id: netMouseArea
                                         hoverEnabled: true
@@ -2191,7 +2191,7 @@
                         }
                     }
                 }
-                
+
                 // Expanded Bluetooth Block
                 Rectangle {
                     Layout.fillWidth: true
@@ -2199,7 +2199,7 @@
                     radius: 14
                     color: "#1a${c.base05}"
                     visible: popupContentCC.bluetoothExpanded
-                    
+
                     ColumnLayout {
                         id: bluetoothCol
                         anchors.fill: parent
@@ -2210,7 +2210,7 @@
                         RowLayout {
                             Layout.fillWidth: true
                             Text { text: "Bluetooth Devices"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; font.bold: true; Layout.fillWidth: true }
-                            
+
                             // Scan/Settings Button
                             Rectangle {
                                 width: 26; height: 26; radius: 13
@@ -2226,12 +2226,12 @@
                                 }
                             }
                         }
-                        
+
                         // List
                         ColumnLayout {
                             Layout.fillWidth: true
                             spacing: 4
-                            
+
                             Repeater {
                                 model: popupContentCC.bluetoothList
                                 delegate: Rectangle {
@@ -2239,18 +2239,18 @@
                                     Layout.preferredHeight: 40
                                     radius: 8
                                     color: btMouseArea.containsMouse ? "#33${c.base05}" : (modelData.active ? "#33${c.base0D}" : "transparent")
-                                    
+
                                     RowLayout {
                                         anchors.fill: parent
                                         anchors.leftMargin: 10
                                         anchors.rightMargin: 10
                                         spacing: 10
-                                        
+
                                         Text { text: ""; color: modelData.active ? "#${c.base0D}" : "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 16 }
                                         Text { text: modelData.name; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; Layout.fillWidth: true }
-                                        
+
                                         // Battery if available
-                                        Text { 
+                                        Text {
                                             text: modelData.battery !== "" ? modelData.battery : ""
                                             color: "#${c.base04}"
                                             font.family: "${fontName}"
@@ -2258,7 +2258,7 @@
                                             visible: modelData.battery !== ""
                                         }
                                     }
-                                    
+
                                     MouseArea {
                                         id: btMouseArea
                                         anchors.fill: parent
@@ -2271,7 +2271,7 @@
                                     }
                                 }
                             }
-                            
+
                             Text {
                                 visible: popupContentCC.bluetoothList.length === 0
                                 text: "No devices found."
@@ -2284,12 +2284,12 @@
                         }
                     }
                 }
-                
+
                 // Bottom actions (Caffeine & Night Mode)
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: 14
-                    
+
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 48
@@ -2350,7 +2350,7 @@
                     }
                 }
             }
-            
+
             Timer {
                 id: ccCloseTimer
                 interval: 400
@@ -2369,7 +2369,7 @@
         border.width: 2
         border.color: "white"
         color: hoverCC.hovered ? "#${c.base03}" : (root.controlcenterVisible ? "#E6${c.base02}" : "#CC${c.base01}")
-        
+
         Rectangle {
             id: ccBtnAvatarMask
             anchors.centerIn: parent
@@ -2377,7 +2377,7 @@
             color: "black"
             visible: false
         }
-        
+
         Image {
             id: ccBtnAvatarImage
             anchors.centerIn: parent
@@ -2386,7 +2386,7 @@
             fillMode: Image.PreserveAspectCrop
             visible: false
         }
-        
+
         OpacityMask {
             anchors.centerIn: parent
             width: 28; height: 28
@@ -2394,7 +2394,7 @@
             maskSource: ccBtnAvatarMask
             visible: ccBtnAvatarImage.status === Image.Ready
         }
-        
+
         Text {
             anchors.centerIn: parent
             text: "" // Fallback icon
@@ -2403,7 +2403,7 @@
             font.pixelSize: 15
             visible: ccBtnAvatarImage.status !== Image.Ready
         }
-        
+
         // Hover tracker using HoverHandler (Qt 6)
         HoverHandler {
             id: hoverCC
@@ -2419,7 +2419,7 @@
                 }
             }
         }
-        
+
         Timer {
             id: ccOpenTimer
             interval: 200
@@ -2429,7 +2429,7 @@
                 root.controlcenterVisible = true;
             }
         }
-        
+
         Timer {
             id: ccCloseTimerWidget
             interval: 400
