@@ -363,7 +363,7 @@
                 }
                 font.pixelSize: {
                     if (!UPower.displayDevice) return 16;
-                    let s = Uower.displayDevice.state;
+                    let s = UPower.displayDevice.state;
                     if (s === 4 || s === 5) return 17;
                     if (s === 1) return 16;
                     return 16;

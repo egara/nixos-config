@@ -46,6 +46,7 @@ Scope {
     property int progressOsdValue: 0
     property string progressOsdType: ""
     property bool progressOsdVisible: false
+    property bool dndMode: false
 
     Timer {
         id: progressOsdTimer
@@ -54,82 +55,7 @@ Scope {
         onTriggered: mainScope.progressOsdVisible = false
     }
 
-Variants {
-    model: Quickshell.screens
-
-PanelWindow {
-    id: root
-    required property var modelData
-    screen: modelData
-    
-    // Floating bar setup
-    anchors {
-        top: true
-        left: true
-        right: true
-    }
-    
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-    WlrLayershell.layer: WlrLayer.Top
-    WlrLayershell.namespace: "sicos:bar"
-    
-    // Add some margins for a floating look
-    margins {
-        top: 2
-        left: 12
-        right: 12
-    }
-    
-    implicitHeight: 44
-    color: "transparent"
-    
-    // Exclusive zone so windows don't overlap
-    exclusiveZone: 44
-
-    // Popup visibility state for smooth animations
-    property bool batteryVisible: false
-    property bool batteryHovering: false
-    property bool sysinfoVisible: false
-    property bool sysinfoHovering: false
-    property bool trayMenuVisible: false
-    property bool clockVisible: false
-    property bool clockHovering: false
-    property bool miscVisible: false
-    property real miscButtonX: 0
-    property bool miscHovering: false
-    property bool controlcenterVisible: false
-    property real controlcenterButtonX: 0
-    property bool controlcenterHovering: false
-    
-    // Do not disturb mode
-    property bool dndMode: false
-
-    // Invisible background window to catch outside clicks for smooth exit animations
-    PanelWindow {
-        id: backgroundCatcher
-        screen: root.screen
-        anchors {
-            top: true; bottom: true; left: true; right: true
-        }
-        color: "#01000000"
-        WlrLayershell.layer: WlrLayer.Top
-        WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-        exclusiveZone: -1
-        visible: root.batteryVisible || root.sysinfoVisible || root.trayMenuVisible || root.miscVisible || root.controlcenterVisible || popupContent.opacity > 0 || popupContentMisc.opacity > 0 || popupContentCC.opacity > 0
-        
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                root.batteryVisible = false
-                root.sysinfoVisible = false
-                root.trayMenuVisible = false
-                root.miscVisible = false
-                root.controlcenterVisible = false
-            }
-        }
-    }
-
-    // Notifications Model and Server
+    // Notifications Model and Server (global across screens)
     property var notifObjects: ({})
     property var expandedGroups: ({})
     
@@ -194,12 +120,12 @@ PanelWindow {
             
             var safeBody = notif.body ? notif.body.toString().replace(/<[^>]*>?/gm, "") : "";
             
-            root.notifObjects[notif.id] = notif;
+            mainScope.notifObjects[notif.id] = notif;
             
             // Listen for when the sender closes the notification
             if (notif.Retainable) {
                 var dropHandler = function() {
-                    root.forceDismissNotification(notif.id, true);
+                    mainScope.forceDismissNotification(notif.id, true);
                 };
                 notif.Retainable.dropped.connect(dropHandler);
             }
@@ -241,13 +167,13 @@ PanelWindow {
                 notificationModel.insert(j + 1, existingData[j]);
             }
             
-            if (!root.dndMode) {
+            if (!mainScope.dndMode) {
                 // Play notification sound
                 soundPlayer.running = true;
                 
                 // Show OSD popup
                 var osdId = notif.id;
-                root.removeOsd(osdId); // Clear existing if this is an update
+                mainScope.removeOsd(osdId); // Clear existing if this is an update
                 
                 osdModel.insert(0, {
                     notifId: osdId,
@@ -261,8 +187,8 @@ PanelWindow {
                 });
                 
                 // Auto-dismiss OSD after 5 seconds
-                var timerCode = 'import QtQuick; Timer { interval: 5000; running: true; repeat: false; onTriggered: { root.removeOsd(' + osdId + '); this.destroy(); } }';
-                Qt.createQmlObject(timerCode, root, "osdTimer" + osdId);
+                var timerCode = 'import QtQuick; Timer { interval: 5000; running: true; repeat: false; onTriggered: { mainScope.removeOsd(' + osdId + '); this.destroy(); } }';
+                Qt.createQmlObject(timerCode, mainScope, "osdTimer" + osdId);
             }
         }
     }
@@ -273,9 +199,9 @@ PanelWindow {
         interval: 120
         repeat: true
         onTriggered: {
-            if (root.removalQueue.length > 0) {
-                var notifId = root.removalQueue.shift();
-                root.forceDismissNotification(notifId);
+            if (mainScope.removalQueue.length > 0) {
+                var notifId = mainScope.removalQueue.shift();
+                mainScope.forceDismissNotification(notifId);
             } else {
                 stop();
             }
@@ -283,14 +209,14 @@ PanelWindow {
     }
     
     function clearNotifications() {
-        var newQueue = root.removalQueue.slice();
+        var newQueue = mainScope.removalQueue.slice();
         var toQueue = [];
         var toInstant = [];
         var seenApps = {};
         
         for (var i = 0; i < notificationModel.count; i++) {
             var notif = notificationModel.get(i);
-            var isExpanded = root.expandedGroups[notif.appName] === true;
+            var isExpanded = mainScope.expandedGroups[notif.appName] === true;
             
             if (isExpanded || !seenApps[notif.appName]) {
                 toQueue.push(notif.notifId);
@@ -301,19 +227,19 @@ PanelWindow {
         }
         
         for (var j = 0; j < toInstant.length; j++) {
-            root.forceDismissNotification(toInstant[j]);
+            mainScope.forceDismissNotification(toInstant[j]);
         }
         for (var k = 0; k < toQueue.length; k++) {
             newQueue.push(toQueue[k]);
         }
         
-        root.removalQueue = newQueue;
-        if (root.removalQueue.length > 0) removalTimer.start();
+        mainScope.removalQueue = newQueue;
+        if (mainScope.removalQueue.length > 0) removalTimer.start();
     }
     
     function dismissNotificationGroup(appName) {
-        var newQueue = root.removalQueue.slice();
-        var isExpanded = root.expandedGroups[appName] === true;
+        var newQueue = mainScope.removalQueue.slice();
+        var isExpanded = mainScope.expandedGroups[appName] === true;
         var firstFound = false;
         var toQueue = [];
         var toInstant = [];
@@ -331,14 +257,14 @@ PanelWindow {
         }
         
         for (var j = 0; j < toInstant.length; j++) {
-            root.forceDismissNotification(toInstant[j]);
+            mainScope.forceDismissNotification(toInstant[j]);
         }
         for (var k = 0; k < toQueue.length; k++) {
             newQueue.push(toQueue[k]);
         }
         
-        root.removalQueue = newQueue;
-        if (root.removalQueue.length > 0) removalTimer.start();
+        mainScope.removalQueue = newQueue;
+        if (mainScope.removalQueue.length > 0) removalTimer.start();
     }
     
     function removeOsd(id) {
@@ -354,8 +280,8 @@ PanelWindow {
         removeOsd(notifId);
         for (var i = 0; i < notificationModel.count; i++) {
             if (notificationModel.get(i).notifId === notifId) {
-                var obj = root.notifObjects[notifId];
-                delete root.notifObjects[notifId];
+                var obj = mainScope.notifObjects[notifId];
+                delete mainScope.notifObjects[notifId];
                 notificationModel.remove(i);
                 if (!fromSender && obj) {
                     try { obj.dismiss(); } catch(e) {}
@@ -366,7 +292,7 @@ PanelWindow {
     }
     
     function invokeDefaultAction(notifId) {
-        var obj = root.notifObjects[notifId];
+        var obj = mainScope.notifObjects[notifId];
         if (obj) {
             var invoked = false;
             if (typeof obj.invokeDefaultAction === 'function') {
@@ -382,7 +308,7 @@ PanelWindow {
                     try { obj.actions[0].invoke(); invoked = true; } catch(e) {}
                 }
             }
-            root.forceDismissNotification(notifId, false);
+            mainScope.forceDismissNotification(notifId, false);
         }
     }
 
@@ -398,6 +324,78 @@ PanelWindow {
     // Helper component to run commands
     Process {
         id: cmdRunner
+    }
+
+Variants {
+    model: Quickshell.screens
+
+PanelWindow {
+    id: root
+    required property var modelData
+    screen: modelData
+    
+    // Floating bar setup
+    anchors {
+        top: true
+        left: true
+        right: true
+    }
+    
+    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+    WlrLayershell.layer: WlrLayer.Top
+    WlrLayershell.namespace: "sicos:bar"
+    
+    // Add some margins for a floating look
+    margins {
+        top: 2
+        left: 12
+        right: 12
+    }
+    
+    implicitHeight: 44
+    color: "transparent"
+    
+    // Exclusive zone so windows don't overlap
+    exclusiveZone: 44
+
+    // Popup visibility state for smooth animations
+    property bool batteryVisible: false
+    property bool batteryHovering: false
+    property bool sysinfoVisible: false
+    property bool sysinfoHovering: false
+    property bool trayMenuVisible: false
+    property bool clockVisible: false
+    property bool clockHovering: false
+    property bool miscVisible: false
+    property real miscButtonX: 0
+    property bool miscHovering: false
+    property bool controlcenterVisible: false
+    property real controlcenterButtonX: 0
+    property bool controlcenterHovering: false
+    
+    // Invisible background window to catch outside clicks for smooth exit animations
+    PanelWindow {
+        id: backgroundCatcher
+        screen: root.screen
+        anchors {
+            top: true; bottom: true; left: true; right: true
+        }
+        color: "#01000000"
+        WlrLayershell.layer: WlrLayer.Top
+        WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+        exclusiveZone: -1
+        visible: root.batteryVisible || root.sysinfoVisible || root.trayMenuVisible || root.miscVisible || root.controlcenterVisible || popupContent.opacity > 0 || popupContentMisc.opacity > 0 || popupContentCC.opacity > 0
+        
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                root.batteryVisible = false
+                root.sysinfoVisible = false
+                root.trayMenuVisible = false
+                root.miscVisible = false
+                root.controlcenterVisible = false
+            }
+        }
     }
 
     // --- POPUPS ---
@@ -512,7 +510,7 @@ PanelWindow {
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
-                            root.invokeDefaultAction(model.notifId);
+                            mainScope.invokeDefaultAction(model.notifId);
                         }
                     }
 
@@ -634,7 +632,7 @@ PanelWindow {
                                     cursorShape: Qt.PointingHandCursor
                                     onClicked: (mouse) => {
                                         mouse.accepted = true;
-                                        root.forceDismissNotification(model.notifId, false);
+                                        mainScope.forceDismissNotification(model.notifId, false);
                                     }
                                 }
                             }

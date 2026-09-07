@@ -109,7 +109,7 @@
                                 id: clearHover
                             }
                             TapHandler {
-                                onTapped: root.clearNotifications()
+                                onTapped: mainScope.clearNotifications()
                             }
                         }
 
@@ -118,12 +118,12 @@
                             width: 32
                             height: 32
                             radius: 16
-                            color: dndHover.hovered ? "#${c.base03}" : (root.dndMode ? "#20${c.base0D}" : "transparent")
+                            color: dndHover.hovered ? "#${c.base03}" : (mainScope.dndMode ? "#20${c.base0D}" : "transparent")
 
                             Text {
                                 anchors.centerIn: parent
                                 text: "󰂛"
-                                color: root.dndMode ? "#${c.base0D}" : "#${c.base04}"
+                                color: mainScope.dndMode ? "#${c.base0D}" : "#${c.base04}"
                                 font.family: "${fontName}"
                                 font.pixelSize: 19
                             }
@@ -131,7 +131,7 @@
                                 id: dndHover
                             }
                             TapHandler {
-                                onTapped: root.dndMode = !root.dndMode
+                                onTapped: mainScope.dndMode = !mainScope.dndMode
                             }
                         }
                     }
@@ -204,7 +204,7 @@
 
                             readonly property bool isFirstInGroup: delegateRoot.ListView.previousSection !== delegateRoot.ListView.section
                             readonly property bool hasMultiple: delegateRoot.ListView.nextSection === delegateRoot.ListView.section || !isFirstInGroup
-                            readonly property bool isExpanded: root.expandedGroups[model.appName] === true
+                            readonly property bool isExpanded: mainScope.expandedGroups[model.appName] === true
                             readonly property bool shouldShow: isFirstInGroup || isExpanded
 
                             visible: opacity > 0
@@ -316,7 +316,7 @@
 
                                     TapHandler {
                                         onTapped: {
-                                            root.toggleGroup(model.appName)
+                                            mainScope.toggleGroup(model.appName)
                                         }
                                     }
                                 }
@@ -342,7 +342,7 @@
 
                                     TapHandler {
                                         onTapped: {
-                                            root.dismissNotificationGroup(model.appName)
+                                            mainScope.dismissNotificationGroup(model.appName)
                                         }
                                     }
                                 }
@@ -369,7 +369,7 @@
                                     hoverEnabled: true
                                     cursorShape: Qt.PointingHandCursor
                                     onClicked: {
-                                        root.invokeDefaultAction(model.notifId);
+                                        mainScope.invokeDefaultAction(model.notifId);
                                     }
                                 }
 
@@ -497,7 +497,7 @@
                                                     cursorShape: Qt.PointingHandCursor
                                                     onClicked: (mouse) => {
                                                         mouse.accepted = true;
-                                                        root.forceDismissNotification(model.notifId, false);
+                                                        mainScope.forceDismissNotification(model.notifId, false);
                                                     }
                                                 }
                                             }
@@ -825,8 +825,8 @@
 
                 Text {
                     anchors.centerIn: parent
-                    text: root.dndMode ? "󰂛" : (notificationModel.count > 0 ? "󰂚" : "󰂜")
-                    color: root.dndMode ? "#80${c.base05}" : (notificationModel.count > 0 ? "#${c.base0D}" : "#${c.base05}")
+                    text: mainScope.dndMode ? "󰂛" : (notificationModel.count > 0 ? "󰂚" : "󰂜")
+                    color: mainScope.dndMode ? "#80${c.base05}" : (notificationModel.count > 0 ? "#${c.base0D}" : "#${c.base05}")
                     font.family: "${fontName}"
                     font.pixelSize: 18
                 }
@@ -836,7 +836,7 @@
                     anchors.fill: parent
                     hoverEnabled: true
                     onClicked: {
-                        root.dndMode = !root.dndMode
+                        mainScope.dndMode = !mainScope.dndMode
                     }
                 }
             }
