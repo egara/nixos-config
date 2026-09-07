@@ -9,7 +9,7 @@ This module handles the installation and configuration of all necessary componen
 
 ## Features
 
-- **Desktop Shell Choices (SicOS-Bar, Waybar, DankMaterialShell)**: Choose your desktop status bar via `programs.sicos.hyprland.shell`. By default, SicOS activates **SicOS-Bar**—a native, QML-based desktop shell built on QuickShell. It features floating pill-style islands, interactive MPRIS music player, workspace app icon heuristics, an Alt+Tab Window Switcher overlay with live window thumbnails, a **Display & Monitor Manager overlay (`Super + K`)** for dynamic and persistent monitor enable/disable control with Kanshi profile comparison, and a macOS-style Control Center featuring Volume/Brightness sliders, real-time Network Telemetry, Caffeine/Night Mode toggles, and a **Monitor Scaling Pill** for live and persistent resolution adjustments via Kanshi.
+- **Desktop Shell Choices (SicOS-Bar, Waybar, DankMaterialShell)**: Choose your desktop status bar via `programs.sicos.hyprland.shell`. By default, SicOS activates **SicOS-Bar**—a native, QML-based desktop shell built on QuickShell. It features floating pill-style islands, interactive MPRIS music player, workspace app icon heuristics, an Alt+Tab Window Switcher overlay with live window thumbnails, a **Display & Monitor Manager overlay (`Super + K`)** featuring an interactive 2D Drag & Drop visual canvas for multi-directional display positioning (horizontal/vertical/stacked layouts), live resolution dropdown selector, dynamic enable/disable controls, automatic default profile generation, and persistent Kanshi config synchronization, and a macOS-style Control Center featuring Volume/Brightness sliders, real-time Network Telemetry, Caffeine/Night Mode toggles, and a **Monitor Scaling Pill** for live and persistent resolution scaling via Kanshi.
 
 - **Power Management**: If activated, this option is ideal for laptops. It provides three power profiles (`performance`, `balanced`, and `power-saver`). The system automatically switches to `power-saver` mode when the AC adapter is disconnected and returns to `balanced` mode when reconnected.
 
@@ -17,6 +17,7 @@ This module handles the installation and configuration of all necessary componen
   - `Mod + Q`: Close the active window.
   - `Mod + E`: Launch the file manager.
   - `Mod + F`: Toggle floating mode for a window.
+  - `Mod + K`: Open the Display & Monitor Manager overlay.
   - `Ctrl + Alt + T`: Launch a terminal.
   - `Mod + Arrow Keys`: Move focus between windows.
 

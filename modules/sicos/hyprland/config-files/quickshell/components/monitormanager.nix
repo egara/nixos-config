@@ -166,20 +166,12 @@
                             spacing: 6
 
                             Text {
-                                anchors.verticalCenter: parent.verticalCenter
-                                text: monitorWindow.kanshiEnabled ? (monitorWindow.activeProfile !== "" ? "󰒓" : "󱃪") : "󰅚"
-                                color: monitorWindow.kanshiEnabled ? "#${c.base0D}" : "#${c.base08}"
-                                font.family: "${fontName}"
-                                font.pixelSize: 15
-                            }
-
-                            Text {
                                 id: profileText
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: {
-                                    if (!monitorWindow.kanshiEnabled) return "Kanshi Disabled";
-                                    if (monitorWindow.activeProfile !== "") return "Profile: " + monitorWindow.activeProfile;
-                                    return "No Profile Matched";
+                                    if (!monitorWindow.kanshiEnabled) return "Kanshi profile: Disabled";
+                                    if (monitorWindow.activeProfile !== "") return "Kanshi profile: " + monitorWindow.activeProfile;
+                                    return "Kanshi profile: No Profile Matched";
                                 }
                                 color: monitorWindow.kanshiEnabled ? "#${c.base0D}" : "#${c.base08}"
                                 font.family: "${fontName}"
@@ -283,12 +275,12 @@
                             anchors.horizontalCenter: parent.horizontalCenter
                             spacing: 16
 
-                            // Drag & Drop Arrangement Canvas
+                            // 2D Drag & Drop Arrangement Canvas
                             Rectangle {
                                 id: arrangementArea
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                width: Math.max(560, monitorCardsRow.implicitWidth)
-                                height: 120
+                                width: Math.max(580, monitorCardsRow.implicitWidth)
+                                height: 210
                                 radius: 16
                                 color: "#22${c.base01}"
                                 border.color: "#33${c.base03}"
@@ -302,27 +294,63 @@
                                             list.push(m);
                                         }
                                     }
-                                    list.sort(function(a, b) {
-                                        return (a.x || 0) - (b.x || 0);
-                                    });
                                     return list;
                                 }
 
-                                property real totalEffectiveWidth: {
-                                    var w = 0;
+                                property real minX: {
+                                    if (activeMonitors.length === 0) return 0;
+                                    var val = activeMonitors[0].x || 0;
+                                    for (var i = 1; i < activeMonitors.length; i++) {
+                                        val = Math.min(val, activeMonitors[i].x || 0);
+                                    }
+                                    return val;
+                                }
+
+                                property real minY: {
+                                    if (activeMonitors.length === 0) return 0;
+                                    var val = activeMonitors[0].y || 0;
+                                    for (var i = 1; i < activeMonitors.length; i++) {
+                                        val = Math.min(val, activeMonitors[i].y || 0);
+                                    }
+                                    return val;
+                                }
+
+                                property real spanW: {
+                                    if (activeMonitors.length === 0) return 1920;
+                                    var maxR = 0;
                                     for (var i = 0; i < activeMonitors.length; i++) {
                                         var m = activeMonitors[i];
                                         var sc = m.scale > 0 ? m.scale : 1.0;
-                                        w += (m.width || 1920) / sc;
+                                        var r = (m.x || 0) + ((m.width || 1920) / sc);
+                                        if (r > maxR) maxR = r;
                                     }
-                                    return w > 0 ? w : 1920;
+                                    return Math.max(1920, maxR - minX);
+                                }
+
+                                property real spanH: {
+                                    if (activeMonitors.length === 0) return 1080;
+                                    var maxB = 0;
+                                    for (var i = 0; i < activeMonitors.length; i++) {
+                                        var m = activeMonitors[i];
+                                        var sc = m.scale > 0 ? m.scale : 1.0;
+                                        var b = (m.y || 0) + ((m.height || 1080) / sc);
+                                        if (b > maxB) maxB = b;
+                                    }
+                                    return Math.max(1080, maxB - minY);
                                 }
 
                                 property real canvasScale: {
-                                    var availableW = arrangementArea.width - 60;
-                                    var s = availableW / totalEffectiveWidth;
-                                    return Math.min(s, 0.055);
+                                    var maxCanvasW = arrangementArea.width - 60;
+                                    var maxCanvasH = 150;
+                                    var sw = spanW > 0 ? spanW : 1920;
+                                    var sh = spanH > 0 ? spanH : 1080;
+                                    var scX = maxCanvasW / sw;
+                                    var scY = maxCanvasH / sh;
+                                    return Math.min(scX, scY, 0.052);
                                 }
+
+                                property real originX: (arrangementArea.width - (spanW * canvasScale)) / 2.0
+                                property real originY: 34 + (165 - (spanH * canvasScale)) / 2.0
 
                                 // Arrangement Header with Instructions
                                 Row {
@@ -344,7 +372,7 @@
 
                                     Text {
                                         anchors.verticalCenter: parent.verticalCenter
-                                        text: arrangementArea.activeMonitors.length > 1 ? "Arrange Displays (drag display cards horizontally to reposition)" : "Display Arrangement"
+                                        text: arrangementArea.activeMonitors.length > 1 ? "Arrange Displays (drag screens in any direction: side-by-side or stacked vertically)" : "Display Arrangement"
                                         color: "#${c.base04}"
                                         font.family: "${fontName}"
                                         font.pixelSize: 11
@@ -352,21 +380,10 @@
                                     }
                                 }
 
-                                // Interactive display boxes container
+                                // Interactive display boxes canvas
                                 Item {
                                     id: screensContainer
-                                    anchors.centerIn: parent
-                                    anchors.verticalCenterOffset: 10
-                                    width: {
-                                        var w = 0;
-                                        for (var i = 0; i < arrangementArea.activeMonitors.length; i++) {
-                                            var m = arrangementArea.activeMonitors[i];
-                                            var sc = m.scale > 0 ? m.scale : 1.0;
-                                            w += Math.max(90, Math.round(((m.width || 1920) / sc) * arrangementArea.canvasScale)) + 12;
-                                        }
-                                        return Math.max(0, w - 12);
-                                    }
-                                    height: 70
+                                    anchors.fill: parent
 
                                     Repeater {
                                         id: screensRepeater
@@ -380,23 +397,14 @@
                                             property real effWidth: (modelData.width || 1920) / (modelData.scale > 0 ? modelData.scale : 1.0)
                                             property real effHeight: (modelData.height || 1080) / (modelData.scale > 0 ? modelData.scale : 1.0)
 
-                                            width: Math.max(90, Math.round(effWidth * arrangementArea.canvasScale))
-                                            height: Math.max(46, Math.min(64, Math.round(effHeight * arrangementArea.canvasScale)))
-                                            anchors.verticalCenter: parent.verticalCenter
+                                            width: Math.max(88, Math.round(effWidth * arrangementArea.canvasScale))
+                                            height: Math.max(46, Math.round(effHeight * arrangementArea.canvasScale))
 
-                                            // Default target X position based on natural order
-                                            property real naturalX: {
-                                                var curX = 0;
-                                                for (var k = 0; k < index; k++) {
-                                                    var prevM = arrangementArea.activeMonitors[k];
-                                                    var prevSc = prevM.scale > 0 ? prevM.scale : 1.0;
-                                                    var prevW = Math.max(90, Math.round(((prevM.width || 1920) / prevSc) * arrangementArea.canvasScale));
-                                                    curX += prevW + 12;
-                                                }
-                                                return curX;
-                                            }
+                                            property real naturalX: arrangementArea.originX + (((modelData.x || 0) - arrangementArea.minX) * arrangementArea.canvasScale)
+                                            property real naturalY: arrangementArea.originY + (((modelData.y || 0) - arrangementArea.minY) * arrangementArea.canvasScale)
 
                                             x: naturalX
+                                            y: naturalY
 
                                             radius: 8
                                             color: miniDragMouse.drag.active ? "#EE${c.base02}" : (miniDragMouse.containsMouse ? "#DD${c.base01}" : "#AA${c.base01}")
@@ -405,6 +413,10 @@
                                             z: miniDragMouse.drag.active ? 100 : 1
 
                                             Behavior on x {
+                                                enabled: !miniDragMouse.drag.active
+                                                NumberAnimation { duration: 180; easing.type: Easing.OutCubic }
+                                            }
+                                            Behavior on y {
                                                 enabled: !miniDragMouse.drag.active
                                                 NumberAnimation { duration: 180; easing.type: Easing.OutCubic }
                                             }
@@ -455,64 +467,137 @@
                                                 id: miniDragMouse
                                                 anchors.fill: parent
                                                 hoverEnabled: true
-                                                cursorShape: arrangementArea.activeMonitors.length > 1 ? Qt.SizeHorCursor : Qt.ArrowCursor
+                                                cursorShape: arrangementArea.activeMonitors.length > 1 ? Qt.SizeAllCursor : Qt.ArrowCursor
                                                 drag.target: arrangementArea.activeMonitors.length > 1 ? parent : null
-                                                drag.axis: Drag.XAxis
-                                                drag.minimumX: -40
-                                                drag.maximumX: screensContainer.width + 40
+                                                drag.axis: Drag.XAndYAxis
+                                                drag.minimumX: 10
+                                                drag.maximumX: arrangementArea.width - parent.width - 10
+                                                drag.minimumY: 34
+                                                drag.maximumY: arrangementArea.height - parent.height - 8
 
                                                 onReleased: {
                                                     if (arrangementArea.activeMonitors.length <= 1) {
                                                         parent.x = parent.naturalX;
+                                                        parent.y = parent.naturalY;
                                                         return;
                                                     }
 
-                                                    // Calculate final order by horizontal center coordinate
                                                     var items = [];
                                                     for (var idx = 0; idx < screensRepeater.count; idx++) {
                                                         var it = screensRepeater.itemAt(idx);
                                                         if (it) {
                                                             items.push({
+                                                                name: it.modelData.name,
                                                                 mon: it.modelData,
-                                                                centerX: it.x + (it.width / 2.0),
-                                                                originalIndex: idx
+                                                                cx: it.x + (it.width / 2.0),
+                                                                cy: it.y + (it.height / 2.0),
+                                                                w: it.width,
+                                                                h: it.height,
+                                                                effW: it.effWidth,
+                                                                effH: it.effHeight
                                                             });
                                                         }
                                                     }
 
-                                                    items.sort(function(a, b) {
-                                                        return a.centerX - b.centerX;
-                                                    });
-
-                                                    // Check if ordering actually changed
-                                                    var orderChanged = false;
-                                                    for (var k = 0; k < items.length; k++) {
-                                                        if (items[k].originalIndex !== k) {
-                                                            orderChanged = true;
-                                                            break;
+                                                    // Determine 2D multi-directional placement graph
+                                                    var anchor = items[0];
+                                                    for (var a = 1; a < items.length; a++) {
+                                                        if ((items[a].cx + items[a].cy) < (anchor.cx + anchor.cy)) {
+                                                            anchor = items[a];
                                                         }
                                                     }
 
-                                                    if (orderChanged) {
-                                                        var curXOffset = 0;
-                                                        var layoutParts = [];
-                                                        for (var j = 0; j < items.length; j++) {
-                                                            var monItem = items[j].mon;
-                                                            var s = monItem.scale > 0 ? monItem.scale : 1.0;
-                                                            var effW = Math.round((monItem.width || 1920) / s);
-                                                            layoutParts.push(monItem.name + ":" + curXOffset + ",0");
-                                                            curXOffset += effW;
+                                                    var placed = {};
+                                                    placed[anchor.name] = [0, 0];
+
+                                                    var remaining = [];
+                                                    for (var b = 0; b < items.length; b++) {
+                                                        if (items[b].name !== anchor.name) remaining.push(items[b]);
+                                                    }
+
+                                                    while (remaining.length > 0) {
+                                                        var bestCand = null;
+                                                        var bestTarget = null;
+                                                        var bestRel = "RIGHT";
+                                                        var bestDist = 999999;
+
+                                                        for (var rIdx = 0; rIdx < remaining.length; rIdx++) {
+                                                            var cand = remaining[rIdx];
+                                                            for (var pName in placed) {
+                                                                var pItem = null;
+                                                                for (var k = 0; k < items.length; k++) {
+                                                                    if (items[k].name === pName) { pItem = items[k]; break; }
+                                                                }
+                                                                if (!pItem) continue;
+
+                                                                var dx = cand.cx - pItem.cx;
+                                                                var dy = cand.cy - pItem.cy;
+                                                                var dist = Math.sqrt(dx * dx + dy * dy);
+                                                                var rel = (Math.abs(dx) >= Math.abs(dy)) ? (dx > 0 ? "RIGHT" : "LEFT") : (dy > 0 ? "BOTTOM" : "TOP");
+
+                                                                if (dist < bestDist) {
+                                                                    bestDist = dist;
+                                                                    bestCand = cand;
+                                                                    bestTarget = pItem;
+                                                                    bestRel = rel;
+                                                                }
+                                                            }
                                                         }
 
-                                                        var layoutCmd = layoutParts.join(" ");
-                                                        monitorWindow.setMonitorLayout(layoutCmd);
-                                                    } else {
-                                                        // Reset naturally to previous slot
-                                                        for (var r = 0; r < screensRepeater.count; r++) {
-                                                            var itm = screensRepeater.itemAt(r);
-                                                            if (itm) itm.x = itm.naturalX;
+                                                        if (!bestCand || !bestTarget) break;
+
+                                                        var tCoords = placed[bestTarget.name];
+                                                        var tx = tCoords[0];
+                                                        var ty = tCoords[1];
+                                                        var scaleX = bestTarget.effW / bestTarget.w;
+                                                        var scaleY = bestTarget.effH / bestTarget.h;
+
+                                                        var nx = tx;
+                                                        var ny = ty;
+
+                                                        if (bestRel === "RIGHT") {
+                                                            nx = tx + Math.round(bestTarget.effW);
+                                                            var deltaY = bestCand.cy - bestTarget.cy;
+                                                            ny = Math.abs(deltaY) < 25 ? ty : (ty + Math.round(deltaY * scaleY));
+                                                        } else if (bestRel === "LEFT") {
+                                                            nx = tx - Math.round(bestCand.effW);
+                                                            var deltaY = bestCand.cy - bestTarget.cy;
+                                                            ny = Math.abs(deltaY) < 25 ? ty : (ty + Math.round(deltaY * scaleY));
+                                                        } else if (bestRel === "BOTTOM") {
+                                                            ny = ty + Math.round(bestTarget.effH);
+                                                            var deltaX = bestCand.cx - bestTarget.cx;
+                                                            nx = Math.abs(deltaX) < 25 ? tx : (tx + Math.round(deltaX * scaleX));
+                                                        } else if (bestRel === "TOP") {
+                                                            ny = ty - Math.round(bestCand.effH);
+                                                            var deltaX = bestCand.cx - bestTarget.cx;
+                                                            nx = Math.abs(deltaX) < 25 ? tx : (tx + Math.round(deltaX * scaleX));
                                                         }
+
+                                                        placed[bestCand.name] = [nx, ny];
+                                                        var remNext = [];
+                                                        for (var remI = 0; remI < remaining.length; remI++) {
+                                                            if (remaining[remI].name !== bestCand.name) remNext.push(remaining[remI]);
+                                                        }
+                                                        remaining = remNext;
                                                     }
+
+                                                    // Normalize coordinates so minX = 0 and minY = 0
+                                                    var normMinX = 999999;
+                                                    var normMinY = 999999;
+                                                    for (var pKey in placed) {
+                                                        if (placed[pKey][0] < normMinX) normMinX = placed[pKey][0];
+                                                        if (placed[pKey][1] < normMinY) normMinY = placed[pKey][1];
+                                                    }
+
+                                                    var layoutParts = [];
+                                                    for (var mName in placed) {
+                                                        var finalX = placed[mName][0] - normMinX;
+                                                        var finalY = placed[mName][1] - normMinY;
+                                                        layoutParts.push(mName + ":" + finalX + "," + finalY);
+                                                    }
+
+                                                    var layoutCmd = layoutParts.join(" ");
+                                                    monitorWindow.setMonitorLayout(layoutCmd);
                                                 }
                                             }
                                         }
@@ -569,16 +654,16 @@
                                         anchors.top: parent.top
                                         anchors.right: parent.right
                                         anchors.margins: 14
-                                        width: statusText.implicitWidth + 16
-                                        height: 24
-                                        radius: 12
+                                        width: statusText.implicitWidth + 24
+                                        height: 26
+                                        radius: 13
                                         color: isEnabled ? "#33${c.base0B}" : "#33${c.base08}"
                                         border.color: isEnabled ? "#${c.base0B}" : "#${c.base08}"
                                         border.width: 1
 
                                         Row {
                                             anchors.centerIn: parent
-                                            spacing: 5
+                                            spacing: 6
                                             Rectangle {
                                                 anchors.verticalCenter: parent.verticalCenter
                                                 width: 6; height: 6; radius: 3
@@ -590,7 +675,7 @@
                                                 text: isEnabled ? "ACTIVE" : "OFF"
                                                 color: isEnabled ? "#${c.base0B}" : "#${c.base08}"
                                                 font.family: "${fontName}"
-                                                font.pixelSize: 10
+                                                font.pixelSize: 11
                                                 font.bold: true
                                             }
                                         }
@@ -830,7 +915,7 @@
                                             }
                                         }
 
-                                        // Toggle Button Pill (Exclusively toggles monitor when clicked)
+                                        // Toggle Button Pill (Uses consistent Stylix accent color)
                                         Rectangle {
                                             id: toggleButton
                                             anchors.horizontalCenter: parent.horizontalCenter
@@ -839,36 +924,36 @@
                                             radius: 9
                                             color: {
                                                 if (toggleBtnMouse.containsMouse) {
-                                                    return isEnabled ? "#${c.base08}" : "#${c.base0B}";
+                                                    return "#${c.base0D}";
                                                 }
                                                 if (monCard.isSelected) {
-                                                    return isEnabled ? "#66${c.base08}" : "#66${c.base0B}";
+                                                    return "#55${c.base0D}";
                                                 }
-                                                return isEnabled ? "#33${c.base08}" : "#33${c.base0B}";
+                                                return "#2A${c.base0D}";
                                             }
-                                            border.color: isEnabled ? "#${c.base08}" : "#${c.base0B}"
+                                            border.color: "#${c.base0D}"
                                             border.width: 1
 
                                             Behavior on color { ColorAnimation { duration: 150 } }
 
                                             Row {
-                                                anchors.centerIn: parent
-                                                spacing: 6
-                                                Text {
-                                                    anchors.verticalCenter: parent.verticalCenter
-                                                    text: isEnabled ? "󰈆" : "󰐥"
-                                                    color: toggleBtnMouse.containsMouse ? "#${c.base00}" : (isEnabled ? "#${c.base08}" : "#${c.base0B}")
-                                                    font.family: "${fontName}"
-                                                    font.pixelSize: 13
-                                                }
-                                                Text {
-                                                    anchors.verticalCenter: parent.verticalCenter
-                                                    text: isEnabled ? "Disable Display" : "Enable Display"
-                                                    color: toggleBtnMouse.containsMouse ? "#${c.base00}" : (isEnabled ? "#${c.base08}" : "#${c.base0B}")
-                                                    font.family: "${fontName}"
-                                                    font.pixelSize: 12
-                                                    font.bold: true
-                                                }
+                                                 anchors.centerIn: parent
+                                                 spacing: 6
+                                                 Text {
+                                                     anchors.verticalCenter: parent.verticalCenter
+                                                     text: isEnabled ? "󰈆" : "󰐥"
+                                                     color: toggleBtnMouse.containsMouse ? "#${c.base00}" : "#${c.base05}"
+                                                     font.family: "${fontName}"
+                                                     font.pixelSize: 13
+                                                 }
+                                                 Text {
+                                                     anchors.verticalCenter: parent.verticalCenter
+                                                     text: isEnabled ? "Disable Display" : "Enable Display"
+                                                     color: toggleBtnMouse.containsMouse ? "#${c.base00}" : "#${c.base05}"
+                                                     font.family: "${fontName}"
+                                                     font.pixelSize: 12
+                                                     font.bold: true
+                                                 }
                                             }
 
                                             MouseArea {

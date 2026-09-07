@@ -178,6 +178,77 @@ def match_criteria(criteria, mon):
     return False
 
 
+def get_monitor_criteria(m):
+    """Determine best Kanshi output criteria string for a monitor."""
+    desc = m.get("description", "").strip()
+    if desc:
+        if desc.startswith("BOE ") and not desc.endswith("Unknown"):
+            return desc + " Unknown"
+        return desc
+    return m.get("name") or "unknown"
+
+
+def ensure_default_kanshi_profile(monitors):
+    """Create and append a default Kanshi profile for the current host if no profiles exist or match."""
+    sync_local_kanshi_config()
+    hostname = socket.gethostname().lower()
+    profile_name = f"default-{hostname}"
+
+    # Generate profile block
+    lines = [f"\n# Auto-generated default profile for {hostname}\n", f"profile {profile_name} {{\n"]
+    for m in monitors:
+        crit = get_monitor_criteria(m)
+        is_disabled = m.get("disabled", False)
+        if is_disabled:
+            lines.append(f'  output "{crit}" disable\n')
+        else:
+            w = m.get("width") or 1920
+            h = m.get("height") or 1080
+            x = m.get("x") or 0
+            y = m.get("y") or 0
+            scale = m.get("scale") or 1.0
+            scale_str = f"{scale:.6f}".rstrip("0").rstrip(".")
+            lines.append(f'  output "{crit}" enable mode {w}x{h} position {x},{y} scale {scale_str}\n')
+    lines.append("}\n")
+    block_str = "".join(lines)
+
+    # Append to all accessible Kanshi config files
+    created = False
+    for p in [KANSHI_REPO_CONFIG, KANSHI_LOCAL_CONFIG, KANSHI_MODULE_CONFIG]:
+        if p.exists() and os.access(p, os.W_OK):
+            try:
+                with open(p, "a", encoding="utf-8") as f:
+                    f.write(block_str)
+                created = True
+            except Exception:
+                pass
+        elif not p.exists():
+            try:
+                p.parent.mkdir(parents=True, exist_ok=True)
+                with open(p, "w", encoding="utf-8") as f:
+                    f.write(block_str)
+                created = True
+            except Exception:
+                pass
+
+    if created:
+        reload_kanshi()
+
+    return profile_name
+
+
+def get_or_create_active_profile(profiles, monitors):
+    """Get matching Kanshi profile or auto-generate a default profile if none exists."""
+    active = detect_active_profile(profiles, monitors)
+    if active:
+        return active, profiles
+
+    # No matching profile found, auto-create a default profile for this host
+    new_profile_name = ensure_default_kanshi_profile(monitors)
+    updated_profiles = parse_kanshi_profiles()
+    return new_profile_name, updated_profiles
+
+
 def detect_active_profile(profiles, monitors):
     """Determine which Kanshi profile matches the current system state."""
     hostname = socket.gethostname().lower()
@@ -236,7 +307,10 @@ def get_status():
     kanshi_info = is_kanshi_available()
     monitors_raw = get_hyprland_monitors()
     profiles = parse_kanshi_profiles() if kanshi_info["enabled"] else {}
-    active_profile = detect_active_profile(profiles, monitors_raw) if profiles else ""
+    if kanshi_info["enabled"] and not profiles:
+        active_profile, profiles = get_or_create_active_profile(profiles, monitors_raw)
+    else:
+        active_profile = detect_active_profile(profiles, monitors_raw) if profiles else ""
 
     host_profiles_list = [p["name"] for p in profiles.values() if p["matches_host"]]
     if not host_profiles_list and profiles:
@@ -446,7 +520,7 @@ def set_monitor_status(monitor_name, target_status):
         sys.exit(1)
 
     profiles = parse_kanshi_profiles()
-    active_profile = detect_active_profile(profiles, monitors)
+    active_profile, profiles = get_or_create_active_profile(profiles, monitors)
 
     if target_status == "disable":
         if active_profile:
@@ -647,7 +721,7 @@ def set_monitor_position(monitor_name, pos_x, pos_y):
         sys.exit(1)
 
     profiles = parse_kanshi_profiles()
-    active_profile = detect_active_profile(profiles, monitors)
+    active_profile, profiles = get_or_create_active_profile(profiles, monitors)
 
     if active_profile:
         for p in [KANSHI_REPO_CONFIG, KANSHI_LOCAL_CONFIG, KANSHI_MODULE_CONFIG]:
@@ -671,7 +745,7 @@ def set_monitor_layout(layout_str):
     sync_local_kanshi_config()
     monitors = get_hyprland_monitors()
     profiles = parse_kanshi_profiles()
-    active_profile = detect_active_profile(profiles, monitors)
+    active_profile, profiles = get_or_create_active_profile(profiles, monitors)
 
     pairs = layout_str.strip().split()
     for pair in pairs:
@@ -730,7 +804,7 @@ def set_monitor_mode(monitor_name, target_mode):
             clean_mode = res_part
 
     profiles = parse_kanshi_profiles()
-    active_profile = detect_active_profile(profiles, monitors)
+    active_profile, profiles = get_or_create_active_profile(profiles, monitors)
 
     # 1. Update Kanshi files on disk
     if active_profile:

@@ -23,9 +23,10 @@ La integración se realiza directamente en los módulos de NixOS y Home Manager 
 - [x] **Módulo Workspaces:** Integración nativa con `Quickshell.Hyprland`. Detecta escritorios activos, permite clics para navegar entre ellos (`Hyprland.dispatch`) e incluye animaciones dinámicas.
 - [x] **Módulo Batería:** Integración nativa con `Quickshell.Services.UPower`. Lee el estado y porcentaje real de la batería (multiplicando `percentage * 100` por ser un float 0.0-1.0). Se oculta en dispositivos de sobremesa.
 - [x] **Módulo Escalado de Monitor (Control Center):** Integración en el centro de control (`controlcenter.nix`) de un pill desplegable con icono Nerdfont (`󰍹`), nombre/escala de monitores detectados, botones `-`/`+` y slider continuo. Ejecuta `sicos-monitor-scale.sh` para aplicar cambios en vivo en Hyprland/Kanshi y persistirlos dinámicamente en el repositorio sin requerir `nixos-rebuild switch`.
-
-## 🚧 Siguientes Pasos
-1. **Módulo de Sistema (CPU/RAM):** Diseñar un sistema para leer `/proc/stat` y `/proc/meminfo` (o ejecutar comandos `free` / `top` periódicamente vía `Process`) para mostrar el uso real.
-2. **System Tray (Bandeja del sistema):** Integrar `Quickshell.Services.SystemTray` para mostrar íconos minimizados de aplicaciones como Insync, NetworkManager, etc.
-3. **Control Multimedia (Opcional):** Mostrar la música actual usando la API nativa de MPRIS de QuickShell.
-4. **Notificaciones / Panel de control:** Integrar `swaync` o crear un panel lateral propio en QML.
+- [x] **Módulo de Sistema (CPU/RAM):** Lectura en tiempo real del uso de CPU y RAM con gráficos de anillos circulares (`Canvas`) y visualización de los 5 procesos que más recursos consumen con terminación interactiva.
+- [x] **System Tray (Bandeja del sistema):** Integración nativa con `Quickshell.Services.SystemTray` soportando todas las aplicaciones (NetworkManager, Bluetooth, Insync, etc.).
+- [x] **Control Multimedia (MPRIS):** Reproductor multimedia con carátula en blur (`FastBlur`), barra de progreso interactiva y controles completos.
+- [x] **Control Center:** Hub centralizado con estadísticas de red en tiempo real (ping, packet loss, Rx/Tx speeds), sliders de audio y brillo, toggles de Caffeine y Night Mode, y botones de acción rápida.
+- [x] **Window Switcher (Alt + Tab):** Selector visual de ventanas abiertas en todos los espacios de trabajo con thumbnails en vivo (`ScreencopyView`) y navegación por teclado/ratón.
+- [x] **Window Killer (Forzar Cierre):** Modal interactivo para matar procesos rebeldes (`kill -9`) con previsualización en vivo.
+- [x] **Monitor Manager (Super + K):** Modal interactivo para gestión y posicionamiento de monitores con drag & drop 2D (horizontal, vertical, matrices), selector de resolución/tasa de refresco dinámica, encendido/apagado, auto-generación de perfiles por defecto y sincronización bidireccional persistente con Kanshi.

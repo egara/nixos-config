@@ -196,11 +196,11 @@
                                             property real scaleFactorY: (175 - 24) / screenH
                                             
                                             // IPC monitor x/y are logical.
-                                            property real monitorX: monIpc ? monIpc.x : (mon ? mon.x : 0)
-                                            property real monitorY: monIpc ? monIpc.y : (mon ? mon.y : 0)
+                                            property real monitorX: (monIpc && monIpc.x !== undefined) ? monIpc.x : ((mon && mon.x !== undefined) ? mon.x : 0)
+                                            property real monitorY: (monIpc && monIpc.y !== undefined) ? monIpc.y : ((mon && mon.y !== undefined) ? mon.y : 0)
                                         
-                                        property real originalX: (pos[0] - monitorX) * scaleFactorX
-                                        property real originalY: (pos[1] - monitorY) * scaleFactorY
+                                        property real originalX: (((pos && pos[0] !== undefined) ? pos[0] : 0) - monitorX) * scaleFactorX
+                                        property real originalY: (((pos && pos[1] !== undefined) ? pos[1] : 0) - monitorY) * scaleFactorY
                                         
                                         x: originalX
                                         y: originalY
