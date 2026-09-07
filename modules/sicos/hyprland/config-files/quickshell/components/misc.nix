@@ -506,17 +506,17 @@
                     
                     if (!miscIslandMain.firstLockCheck) {
                         if (newCaps !== miscIslandMain.capsLockOn) {
-                            root.progressOsdType = "Caps Lock";
-                            root.progressOsdValue = newCaps ? 1 : 0;
-                            root.progressOsdVisible = true;
-                            var timerCode = 'import QtQuick; Timer { interval: 2000; running: true; repeat: false; onTriggered: { root.progressOsdVisible = false; this.destroy(); } }';
+                            mainScope.progressOsdType = "Caps Lock";
+                            mainScope.progressOsdValue = newCaps ? 1 : 0;
+                            mainScope.progressOsdVisible = true;
+                            var timerCode = 'import QtQuick; Timer { interval: 2000; running: true; repeat: false; onTriggered: { mainScope.progressOsdVisible = false; this.destroy(); } }';
                             Qt.createQmlObject(timerCode, root, "capsTimer" + Math.random().toString().replace(".", ""));
                         }
                         if (newNum !== miscIslandMain.numLockOn) {
-                            root.progressOsdType = "Num Lock";
-                            root.progressOsdValue = newNum ? 1 : 0;
-                            root.progressOsdVisible = true;
-                            var timerCodeNum = 'import QtQuick; Timer { interval: 2000; running: true; repeat: false; onTriggered: { root.progressOsdVisible = false; this.destroy(); } }';
+                            mainScope.progressOsdType = "Num Lock";
+                            mainScope.progressOsdValue = newNum ? 1 : 0;
+                            mainScope.progressOsdVisible = true;
+                            var timerCodeNum = 'import QtQuick; Timer { interval: 2000; running: true; repeat: false; onTriggered: { mainScope.progressOsdVisible = false; this.destroy(); } }';
                             Qt.createQmlObject(timerCodeNum, root, "numTimer" + Math.random().toString().replace(".", ""));
                         }
                     }

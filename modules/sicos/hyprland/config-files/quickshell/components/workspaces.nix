@@ -2,9 +2,30 @@
 ''
     // Workspace Switcher
     Row {
+        id: workspaceRow
         spacing: 6
+
+        // Filter workspaces to only show those belonging to the current monitor
+        property var screenWorkspaces: {
+            var result = [];
+            if (typeof Hyprland === "undefined" || !Hyprland.workspaces) return result;
+            // Convert to array first, as Hyprland.workspaces is a Qt model, not a JS array
+            var allWs = Array.from(Hyprland.workspaces.values);
+            var screenName = root.screen ? root.screen.name : "";
+            for (var i = 0; i < allWs.length; i++) {
+                var ws = allWs[i];
+                if (ws && !ws.name.startsWith("special:")) {
+                    var monName = (ws.monitor && ws.monitor.name) ? ws.monitor.name : "";
+                    if (monName === screenName) {
+                        result.push(ws);
+                    }
+                }
+            }
+            return result;
+        }
+
         Repeater {
-            model: Hyprland.workspaces
+            model: workspaceRow.screenWorkspaces
             
             Rectangle {
                 id: workspacePill

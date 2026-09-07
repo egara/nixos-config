@@ -79,7 +79,7 @@ Theming is a core feature of SicOS, managed by **Stylix** and the `theme-switche
 ### 3.4. SicOS-Bar (QuickShell Desktop Shell)
 **SicOS-Bar** is a native, custom QML-based desktop shell built on **QuickShell**, designed as a first-class alternative to `waybar` and `dank-material-shell`.
 
-- **Pill-Style Floating Architecture:** Modular QML islands including Workspaces (with class/title app icon heuristics), Clock & Memento Mori calendar, System Tray (`SystemTray`), MPRIS Media Player with blurred album covers, System Monitor (CPU/RAM Canvas rings), Battery (`UPower`), and App Launcher/Power buttons.
+- **Pill-Style Floating Multi-Monitor Architecture:** Multi-display desktop bar instantiated across all active screens via `Variants { model: Quickshell.screens }`. Modular QML islands including Workspaces (with class/title app icon heuristics), Clock & Memento Mori calendar, System Tray (`SystemTray`), MPRIS Media Player with blurred album covers, System Monitor (CPU/RAM Canvas rings), Battery (`UPower`), and App Launcher/Power buttons.
 - **Interactive Control Center (`controlcenter.nix`):** Centralized macOS/iOS-style control modal containing:
   - **User Profile Header:** Username, host, avatar, uptime, and real-time network speed telemetry (Rx/Tx speeds, Ping, Packet Loss).
   - **Sliders:** System volume and screen brightness sliders with mute/brightness toggles.

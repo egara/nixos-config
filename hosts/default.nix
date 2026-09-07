@@ -1,5 +1,18 @@
 #Variables
-{ inputs, nixpkgs, nixpkgs-stable, disko, home-manager, stylix, nixos-hardware, nix-flatpak, nix-amd-ai, dankmaterialshell, self, ... }:
+{
+  inputs,
+  nixpkgs,
+  nixpkgs-stable,
+  disko,
+  home-manager,
+  stylix,
+  nixos-hardware,
+  nix-flatpak,
+  nix-amd-ai,
+  dankmaterialshell,
+  self,
+  ...
+}:
 let
   # Main user
   username = "egarcia";
@@ -22,7 +35,13 @@ let
   lib = nixpkgs.lib;
 
   # Function to generate a host configuration
-  mkHost = { hostName, desktop, extraModules ? [], homeManagerExtraImports ? [] }:
+  mkHost =
+    {
+      hostName,
+      desktop,
+      extraModules ? [ ],
+      homeManagerExtraImports ? [ ],
+    }:
 
     let
       hostArg = { inherit hostName desktop; };
@@ -50,10 +69,11 @@ let
         # It is a module itself!
         ({ lib, host, ... }: {
           imports =
-            lib.optionals (host.desktop == "plasma") [ ../modules/desktop/plasma.nix ] ++
-            lib.optionals (host.desktop == "cosmic") [ ../modules/desktop/cosmic.nix ] ++
-            # Import the new sicos hyprland module
-            lib.optionals (host.desktop == "hyprland") [ self.nixosModules.sicos-hyprland ];
+            lib.optionals (host.desktop == "plasma") [ ../modules/desktop/plasma.nix ]
+            ++ lib.optionals (host.desktop == "cosmic") [ ../modules/desktop/cosmic.nix ]
+            ++
+              # Import the new sicos hyprland module
+              lib.optionals (host.desktop == "hyprland") [ self.nixosModules.sicos-hyprland ];
 
           # Enable the sicos module if desktop is hyprland
           config = lib.mkIf (host.desktop == "hyprland") (
@@ -81,22 +101,32 @@ let
 
               # Custom config files
               # Hyprland
-              programs.sicos.hyprland.hyprland.configFile = builtins.path { path = ../home-manager/desktop/hyprland/config/hyprland.lua; };
+              programs.sicos.hyprland.hyprland.configFile = builtins.path {
+                path = ../home-manager/desktop/hyprland/config/hyprland.lua;
+              };
               # programs.sicos.hyprland.hyprland.configFile = builtins.path { path = ../home-manager/desktop/hyprland/config/hyprland.conf; };
 
               # Hyprlock
-              programs.sicos.hyprland.hyprlock.profilePicture = builtins.path { path = ../home-manager/desktop/hyprland/config/user.jpg; };
+              programs.sicos.hyprland.hyprlock.profilePicture = builtins.path {
+                path = ../home-manager/desktop/hyprland/config/user.jpg;
+              };
 
               # Kanshi
-              programs.sicos.hyprland.kanshi.configFile = builtins.path { path = ../home-manager/desktop/hyprland/programs/kanshi/config; };
+              programs.sicos.hyprland.kanshi.configFile = builtins.path {
+                path = ../home-manager/desktop/hyprland/programs/kanshi/config;
+              };
 
               # Scripts
-              programs.sicos.hyprland.scripts.path = builtins.path { path = ../home-manager/desktop/hyprland/scripts; };
-            });
+              programs.sicos.hyprland.scripts.path = builtins.path {
+                path = ../home-manager/desktop/hyprland/scripts;
+              };
+            }
+          );
         })
 
         # Home Manager module and configurations
-        home-manager.nixosModules.home-manager {
+        home-manager.nixosModules.home-manager
+        {
           # Module configuration
           home-manager.backupFileExtension = "backup";
           home-manager.useGlobalPkgs = false;
@@ -110,16 +140,16 @@ let
               stylix.homeModules.stylix
               (import ./home.nix)
             ]
-              ++ lib.optionals (desktop == "hyprland") [
-                dankmaterialshell.homeModules.dank-material-shell
-                (import ../modules/sicos/hyprland/hm-module.nix)
-              ]
-              ++ homeManagerExtraImports;
+            ++ lib.optionals (desktop == "hyprland") [
+              dankmaterialshell.homeModules.dank-material-shell
+              (import ../modules/sicos/hyprland/hm-module.nix)
+            ]
+            ++ homeManagerExtraImports;
 
             # Activation script to clean up leftover backup files
             # This prevents errors on rebuild if a previous one failed
             home.activation = {
-              cleanup-hm-backups = home-manager.lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+              cleanup-hm-backups = home-manager.lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
                 $DRY_RUN_CMD find "$HOME" -name "*.backup" -delete 2>/dev/null || true
               '';
             };
@@ -130,9 +160,10 @@ let
 
   # Modules for VM
   vmModules = [
-    disko.nixosModules.disko {
+    disko.nixosModules.disko
+    {
       _module.args.disks = [ "/dev/vda" ];
-      imports = [(import ./vm/disko-config.nix)];
+      imports = [ (import ./vm/disko-config.nix) ];
     }
     ./vm/hardware-configuration.nix
     ./efi-configuration.nix
@@ -142,9 +173,10 @@ let
 
   # Modules for Rocket
   rocketModules = [
-    disko.nixosModules.disko {
+    disko.nixosModules.disko
+    {
       _module.args.disks = [ "/dev/sda" ];
-      imports = [(import ./rocket/disko-config.nix)];
+      imports = [ (import ./rocket/disko-config.nix) ];
     }
     ./rocket/hardware-configuration.nix
     ./bios-configuration.nix
@@ -153,9 +185,10 @@ let
 
   # Modules for Ironman
   ironmanModules = [
-    disko.nixosModules.disko {
+    disko.nixosModules.disko
+    {
       _module.args.disks = [ "/dev/sda" ];
-      imports = [(import ./ironman/disko-config.nix)];
+      imports = [ (import ./ironman/disko-config.nix) ];
     }
     ./ironman/hardware-configuration.nix
     ./efi-configuration.nix
@@ -165,9 +198,10 @@ let
 
   # Modules for Taskmaster
   taskmasterModules = [
-    disko.nixosModules.disko {
+    disko.nixosModules.disko
+    {
       _module.args.disks = [ "/dev/nvme0n1" ];
-      imports = [(import ./taskmaster/disko-config.nix)];
+      imports = [ (import ./taskmaster/disko-config.nix) ];
     }
 
     ./taskmaster/hardware-configuration.nix
@@ -178,9 +212,10 @@ let
 
   # Modules for Strange
   strangeModules = [
-    disko.nixosModules.disko {
+    disko.nixosModules.disko
+    {
       _module.args.disks = [ "/dev/nvme0n1" ];
-      imports = [(import ./strange/disko-config.nix)];
+      imports = [ (import ./strange/disko-config.nix) ];
     }
     nixos-hardware.nixosModules.framework-amd-ai-300-series
     nix-amd-ai.nixosModules.default
