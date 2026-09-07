@@ -2389,7 +2389,7 @@
         
         OpacityMask {
             anchors.centerIn: parent
-            width: 32; height: 32
+            width: 28; height: 28
             source: ccBtnAvatarImage
             maskSource: ccBtnAvatarMask
             visible: ccBtnAvatarImage.status === Image.Ready
