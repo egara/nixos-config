@@ -41,8 +41,13 @@ Scope {
     property bool windowSwitcherActive: false
     property bool windowKillerActive: false
 
+Variants {
+    model: Quickshell.screens
+
 PanelWindow {
     id: root
+    required property var modelData
+    screen: modelData
     
     // Floating bar setup
     anchors {
@@ -51,7 +56,9 @@ PanelWindow {
         right: true
     }
     
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
+    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+    WlrLayershell.layer: WlrLayer.Top
+    WlrLayershell.namespace: "sicos:bar"
     
     // Add some margins for a floating look
     margins {
@@ -99,10 +106,14 @@ PanelWindow {
     // Invisible background window to catch outside clicks for smooth exit animations
     PanelWindow {
         id: backgroundCatcher
+        screen: root.screen
         anchors {
             top: true; bottom: true; left: true; right: true
         }
         color: "#01000000"
+        WlrLayershell.layer: WlrLayer.Top
+        WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+        exclusiveZone: -1
         visible: root.batteryVisible || root.sysinfoVisible || root.trayMenuVisible || root.miscVisible || root.controlcenterVisible || popupContent.opacity > 0 || popupContentMisc.opacity > 0 || popupContentCC.opacity > 0
         
         MouseArea {
@@ -441,6 +452,7 @@ PanelWindow {
             ${controlcenter.widget}
         }
     }
+}
 }
 
     // --- OSD WINDOW ---

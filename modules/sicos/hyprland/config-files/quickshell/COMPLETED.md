@@ -5,6 +5,7 @@ This document contains a historical record of all features, modules, and integra
 ## System Core & Architecture
 - **Setup and Modular Architecture:** Refactoring completed via Nix interpolation (`quickshell-bar.nix` injecting files in `components/`), ensuring scalability and incredibly clean QML code.
 - **Base Layout (QML):** Floating pill-style design, transparent, correctly anchored to the graphical environment.
+- **Multi-Monitor Architecture:** Full multi-display support using `Variants { model: Quickshell.screens }` mapping separate bars with independent popups and exclusive zones to all active monitors managed by Kanshi.
 - **Dynamic Theming:** Full integration with **Stylix** (instant light/dark switching via reload triggered by `uwsm app`).
 
 ## Developed Modules

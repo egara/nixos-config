@@ -15,7 +15,7 @@ To avoid maintaining a monolithic `.qml` file with thousands of lines (which wou
 - **`home-manager/desktop/hyprland/scripts/theme-switcher.sh`**: Manages the light/dark theme change by restarting QuickShell (`uwsm app`) to apply the new Stylix colors instantly.
 
 ### Modular Components (Nix + QML)
-- **`quickshell-bar.nix`:** The main skeleton (`PanelWindow`). It defines the overall alignment (`RowLayout` with `AlignLeft`, `AlignCenter`, `AlignRight`). It injects the other modules by calling them like `${component}`.
+- **`quickshell-bar.nix`:** The main skeleton (`Variants` over `Quickshell.screens` rendering a `PanelWindow` on each connected display). It defines the overall alignment (`RowLayout` with `AlignLeft`, `AlignCenter`, `AlignRight`). It injects the other modules by calling them like `${component}`.
 - **`components/` (Base Directory):**
   - **`battery.nix`**: Advanced battery logic (`UPower`), remaining time calculation, 80% BIOS limit detection, and Popout Window animations.
   - **`clock.nix`**: Real-time central clock (`Qt.formatDateTime`) and Calendar/Memento Mori modal.
