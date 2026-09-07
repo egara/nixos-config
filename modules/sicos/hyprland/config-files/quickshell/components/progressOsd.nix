@@ -3,7 +3,7 @@
   widget = ''
     PanelWindow {
         id: progressOsdWindow
-        visible: root.progressOsdVisible && (root.progressOsdType === "Volume" || root.progressOsdType === "Brightness")
+        visible: mainScope.progressOsdVisible && (mainScope.progressOsdType === "Volume" || mainScope.progressOsdType === "Brightness")
         
         anchors {
             top: true
@@ -23,13 +23,14 @@
         implicitHeight: 64
         
         Item {
+            id: progressOsdContent
             anchors.fill: parent
             
             // Animations
             Behavior on opacity {
                 NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
             }
-            opacity: progressOsdWindow.visible ? 1 : 0
+            opacity: (mainScope.progressOsdVisible && (mainScope.progressOsdType === "Volume" || mainScope.progressOsdType === "Brightness")) ? 1 : 0
             
             Rectangle {
                 anchors.fill: parent
@@ -44,7 +45,7 @@
                     spacing: 16
                     
                     Text {
-                        text: root.progressOsdType === "Volume" ? (root.progressOsdValue === 0 ? "󰝟" : (root.progressOsdValue < 50 ? "󰖀" : "󰕾")) : "󰃠"
+                        text: mainScope.progressOsdType === "Volume" ? (mainScope.progressOsdValue === 0 ? "󰝟" : (mainScope.progressOsdValue < 50 ? "󰖀" : "󰕾")) : "󰃠"
                         color: "#${c.base0D}"
                         font.family: "${fontName}"
                         font.pixelSize: 27
@@ -61,7 +62,7 @@
                         
                         Rectangle {
                             height: parent.height
-                            width: parent.width * (root.progressOsdValue / 100.0)
+                            width: parent.width * (mainScope.progressOsdValue / 100.0)
                             radius: 6
                             color: "#${c.base0D}"
                             
@@ -72,7 +73,7 @@
                     }
                     
                     Text {
-                        text: root.progressOsdValue + "%"
+                        text: mainScope.progressOsdValue + "%"
                         color: "#${c.base05}"
                         font.family: "${fontName}"
                         font.pixelSize: 17
@@ -88,7 +89,7 @@
     
     PanelWindow {
         id: lockOsdWindow
-        visible: root.progressOsdVisible && (root.progressOsdType === "Caps Lock" || root.progressOsdType === "Num Lock")
+        visible: mainScope.progressOsdVisible && (mainScope.progressOsdType === "Caps Lock" || mainScope.progressOsdType === "Num Lock")
         
         anchors {
             top: true
@@ -108,12 +109,13 @@
         implicitHeight: 64
         
         Item {
+            id: lockOsdContent
             anchors.fill: parent
             
             Behavior on opacity {
                 NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
             }
-            opacity: lockOsdWindow.visible ? 1 : 0
+            opacity: (mainScope.progressOsdVisible && (mainScope.progressOsdType === "Caps Lock" || mainScope.progressOsdType === "Num Lock")) ? 1 : 0
             
             Rectangle {
                 anchors.fill: parent
@@ -127,7 +129,7 @@
                     spacing: 12
                     
                     Text {
-                        text: root.progressOsdType === "Caps Lock" ? "󰘲" : "󰎦"
+                        text: mainScope.progressOsdType === "Caps Lock" ? "󰘲" : "󰎦"
                         color: "#${c.base0D}"
                         font.family: "${fontName}"
                         font.pixelSize: 25
@@ -143,7 +145,7 @@
                     }
                     
                     Text {
-                        text: root.progressOsdValue === 1 ? "ON" : "OFF"
+                        text: mainScope.progressOsdValue === 1 ? "ON" : "OFF"
                         color: "#${c.base05}"
                         font.family: "${fontName}"
                         font.pixelSize: 17

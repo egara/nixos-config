@@ -37,9 +37,22 @@ import Qt5Compat.GraphicalEffects
 import "Model.js" as Model
 
 Scope {
+    id: mainScope
     property bool overviewActive: false
     property bool windowSwitcherActive: false
     property bool windowKillerActive: false
+
+    // Progress OSD State (global across screens)
+    property int progressOsdValue: 0
+    property string progressOsdType: ""
+    property bool progressOsdVisible: false
+
+    Timer {
+        id: progressOsdTimer
+        interval: 2000
+        repeat: false
+        onTriggered: mainScope.progressOsdVisible = false
+    }
 
 Variants {
     model: Quickshell.screens
@@ -90,18 +103,6 @@ PanelWindow {
     
     // Do not disturb mode
     property bool dndMode: false
-    
-    // Progress OSD State
-    property int progressOsdValue: 0
-    property string progressOsdType: ""
-    property bool progressOsdVisible: false
-    
-    Timer {
-        id: progressOsdTimer
-        interval: 2000
-        repeat: false
-        onTriggered: root.progressOsdVisible = false
-    }
 
     // Invisible background window to catch outside clicks for smooth exit animations
     PanelWindow {
@@ -169,9 +170,9 @@ PanelWindow {
                 var isMuted = notif.body && notif.body.toString().toLowerCase().indexOf("muted") !== -1;
                 if (isMuted) val = 0;
                 
-                root.progressOsdType = notif.summary;
-                root.progressOsdValue = val;
-                root.progressOsdVisible = true;
+                mainScope.progressOsdType = notif.summary;
+                mainScope.progressOsdValue = val;
+                mainScope.progressOsdVisible = true;
                 progressOsdTimer.restart();
                 
                 try { notif.dismiss(); } catch(e) {}
