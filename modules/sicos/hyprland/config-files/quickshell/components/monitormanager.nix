@@ -100,6 +100,13 @@
                 monitorActionProc.running = true;
             }
 
+            function setMonitorLayout(layoutStr) {
+                if (!layoutStr) return;
+                var scriptCmd = "if [ -f $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/sicos-monitors.py ]; then python3 $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/sicos-monitors.py --layout '" + layoutStr + "'; elif [ -f $HOME/.config/sicos/scripts/sicos-monitors.py ]; then python3 $HOME/.config/sicos/scripts/sicos-monitors.py --layout '" + layoutStr + "'; else python3 $HOME/Zero/nixos-config/modules/sicos/hyprland/scripts/sicos-monitors.py --layout '" + layoutStr + "'; fi";
+                monitorActionProc.command = ["sh", "-c", scriptCmd];
+                monitorActionProc.running = true;
+            }
+
             function moveSelection(delta) {
                 var count = monitorList.length;
                 if (count === 0) return;
@@ -113,8 +120,8 @@
                 Behavior on y { NumberAnimation { duration: 250; easing.type: Easing.OutBack } }
                 opacity: monitorManagerActive ? 1 : 0
                 Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
-                width: Math.min(monitorWindow.width - 80, Math.max(headerRow.implicitWidth + 80, contentArea.implicitWidth + 80))
-                height: headerRow.implicitHeight + contentArea.implicitHeight + 96
+                width: Math.min(monitorWindow.width - 80, Math.max(headerCol.implicitWidth + 80, contentArea.implicitWidth + 80))
+                height: headerCol.implicitHeight + contentArea.implicitHeight + 96
                 radius: 28
                 color: "#F0${c.base00}"
                 border.color: "#66${c.base0D}"
@@ -124,32 +131,38 @@
                     anchors.centerIn: parent
                     spacing: 20
 
-                    // Modal Header
-                    Row {
-                        id: headerRow
+                    // Modal Header (Centered Title + Centered Profile Subtitle)
+                    Column {
+                        id: headerCol
                         anchors.horizontalCenter: parent.horizontalCenter
-                        spacing: 14
+                        spacing: 6
 
-                        Text {
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "󰍹"
-                            color: "#${c.base0D}"
-                            font.family: "${fontName}"
-                            font.pixelSize: 22
-                        }
-
-                        Text {
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "Display & Monitor Manager"
-                            color: "#${c.base05}"
-                            font.family: "${fontName}"
-                            font.pixelSize: 18
-                            font.bold: true
-                        }
-
-                        // Profile Label / Indicator (Clean Stylix Accent)
+                        // Main Title Row
                         Row {
-                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            spacing: 12
+
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: "󰍹"
+                                color: "#${c.base0D}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 22
+                            }
+
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: "Display & Monitor Manager"
+                                color: "#${c.base05}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 18
+                                font.bold: true
+                            }
+                        }
+
+                        // Kanshi Profile Row (Centered below Title with Stylix accent color)
+                        Row {
+                            anchors.horizontalCenter: parent.horizontalCenter
                             spacing: 6
 
                             Text {
@@ -170,37 +183,18 @@
                                 }
                                 color: monitorWindow.kanshiEnabled ? "#${c.base0D}" : "#${c.base08}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 14
+                                font.pixelSize: 15
                                 font.bold: true
-                            }
-                        }
-
-                        // Hint pill
-                        Rectangle {
-                            visible: monitorWindow.kanshiEnabled && monitorWindow.monitorList.length > 0
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: hintText.implicitWidth + 14
-                            height: 24
-                            radius: 12
-                            color: "#22${c.base05}"
-
-                            Text {
-                                id: hintText
-                                anchors.centerIn: parent
-                                text: "Select & click button or Space/Enter"
-                                color: "#${c.base04}"
-                                font.family: "${fontName}"
-                                font.pixelSize: 11
                             }
                         }
                     }
 
-                    // Content Area (Warning if Kanshi disabled, or Monitor Cards)
+                    // Content Area (Warning if Kanshi disabled, or Monitor Cards with Canvas)
                     Item {
                         id: contentArea
                         anchors.horizontalCenter: parent.horizontalCenter
-                        implicitWidth: monitorWindow.kanshiEnabled ? (monitorWindow.monitorList.length === 0 ? emptyNotice.implicitWidth : monitorCardsRow.implicitWidth) : kanshiDisabledBox.implicitWidth
-                        implicitHeight: monitorWindow.kanshiEnabled ? (monitorWindow.monitorList.length === 0 ? emptyNotice.implicitHeight : monitorCardsRow.implicitHeight) : kanshiDisabledBox.implicitHeight
+                        implicitWidth: monitorWindow.kanshiEnabled ? (monitorWindow.monitorList.length === 0 ? emptyNotice.implicitWidth : cardsColumn.implicitWidth) : kanshiDisabledBox.implicitWidth
+                        implicitHeight: monitorWindow.kanshiEnabled ? (monitorWindow.monitorList.length === 0 ? emptyNotice.implicitHeight : cardsColumn.implicitHeight) : kanshiDisabledBox.implicitHeight
 
                         // Warning when Kanshi is disabled
                         Rectangle {
@@ -282,12 +276,255 @@
                             font.pixelSize: 14
                         }
 
-                        // Monitors Cards Row
-                        Row {
-                            id: monitorCardsRow
+                        // Column containing Arrangement Canvas and Monitor Cards Row
+                        Column {
+                            id: cardsColumn
                             visible: monitorWindow.kanshiEnabled && monitorWindow.monitorList.length > 0
                             anchors.horizontalCenter: parent.horizontalCenter
-                            spacing: 18
+                            spacing: 16
+
+                            // Drag & Drop Arrangement Canvas
+                            Rectangle {
+                                id: arrangementArea
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                width: Math.max(560, monitorCardsRow.implicitWidth)
+                                height: 120
+                                radius: 16
+                                color: "#22${c.base01}"
+                                border.color: "#33${c.base03}"
+                                border.width: 1
+
+                                property var activeMonitors: {
+                                    var list = [];
+                                    for (var i = 0; i < monitorWindow.monitorList.length; i++) {
+                                        var m = monitorWindow.monitorList[i];
+                                        if (m && m.enabled) {
+                                            list.push(m);
+                                        }
+                                    }
+                                    list.sort(function(a, b) {
+                                        return (a.x || 0) - (b.x || 0);
+                                    });
+                                    return list;
+                                }
+
+                                property real totalEffectiveWidth: {
+                                    var w = 0;
+                                    for (var i = 0; i < activeMonitors.length; i++) {
+                                        var m = activeMonitors[i];
+                                        var sc = m.scale > 0 ? m.scale : 1.0;
+                                        w += (m.width || 1920) / sc;
+                                    }
+                                    return w > 0 ? w : 1920;
+                                }
+
+                                property real canvasScale: {
+                                    var availableW = arrangementArea.width - 60;
+                                    var s = availableW / totalEffectiveWidth;
+                                    return Math.min(s, 0.055);
+                                }
+
+                                // Arrangement Header with Instructions
+                                Row {
+                                    anchors {
+                                        top: parent.top
+                                        topMargin: 10
+                                        left: parent.left
+                                        leftMargin: 16
+                                    }
+                                    spacing: 8
+
+                                    Text {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        text: "󱤱"
+                                        color: "#${c.base0D}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 13
+                                    }
+
+                                    Text {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        text: arrangementArea.activeMonitors.length > 1 ? "Arrange Displays (drag display cards horizontally to reposition)" : "Display Arrangement"
+                                        color: "#${c.base04}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 11
+                                        font.bold: true
+                                    }
+                                }
+
+                                // Interactive display boxes container
+                                Item {
+                                    id: screensContainer
+                                    anchors.centerIn: parent
+                                    anchors.verticalCenterOffset: 10
+                                    width: {
+                                        var w = 0;
+                                        for (var i = 0; i < arrangementArea.activeMonitors.length; i++) {
+                                            var m = arrangementArea.activeMonitors[i];
+                                            var sc = m.scale > 0 ? m.scale : 1.0;
+                                            w += Math.max(90, Math.round(((m.width || 1920) / sc) * arrangementArea.canvasScale)) + 12;
+                                        }
+                                        return Math.max(0, w - 12);
+                                    }
+                                    height: 70
+
+                                    Repeater {
+                                        id: screensRepeater
+                                        model: arrangementArea.activeMonitors
+
+                                        Rectangle {
+                                            id: miniScreen
+                                            required property var modelData
+                                            required property int index
+
+                                            property real effWidth: (modelData.width || 1920) / (modelData.scale > 0 ? modelData.scale : 1.0)
+                                            property real effHeight: (modelData.height || 1080) / (modelData.scale > 0 ? modelData.scale : 1.0)
+
+                                            width: Math.max(90, Math.round(effWidth * arrangementArea.canvasScale))
+                                            height: Math.max(46, Math.min(64, Math.round(effHeight * arrangementArea.canvasScale)))
+                                            anchors.verticalCenter: parent.verticalCenter
+
+                                            // Default target X position based on natural order
+                                            property real naturalX: {
+                                                var curX = 0;
+                                                for (var k = 0; k < index; k++) {
+                                                    var prevM = arrangementArea.activeMonitors[k];
+                                                    var prevSc = prevM.scale > 0 ? prevM.scale : 1.0;
+                                                    var prevW = Math.max(90, Math.round(((prevM.width || 1920) / prevSc) * arrangementArea.canvasScale));
+                                                    curX += prevW + 12;
+                                                }
+                                                return curX;
+                                            }
+
+                                            x: naturalX
+
+                                            radius: 8
+                                            color: miniDragMouse.drag.active ? "#EE${c.base02}" : (miniDragMouse.containsMouse ? "#DD${c.base01}" : "#AA${c.base01}")
+                                            border.color: miniDragMouse.drag.active ? "#${c.base0D}" : (miniDragMouse.containsMouse ? "#${c.base04}" : "#${c.base0B}")
+                                            border.width: miniDragMouse.drag.active ? 2 : 1
+                                            z: miniDragMouse.drag.active ? 100 : 1
+
+                                            Behavior on x {
+                                                enabled: !miniDragMouse.drag.active
+                                                NumberAnimation { duration: 180; easing.type: Easing.OutCubic }
+                                            }
+
+                                            Column {
+                                                anchors.centerIn: parent
+                                                spacing: 2
+
+                                                Row {
+                                                    anchors.horizontalCenter: parent.horizontalCenter
+                                                    spacing: 5
+                                                    Text {
+                                                        anchors.verticalCenter: parent.verticalCenter
+                                                        text: miniScreen.modelData.name || ""
+                                                        color: "#${c.base05}"
+                                                        font.family: "${fontName}"
+                                                        font.pixelSize: 11
+                                                        font.bold: true
+                                                    }
+                                                    Rectangle {
+                                                        anchors.verticalCenter: parent.verticalCenter
+                                                        visible: miniScreen.modelData.focused
+                                                        width: 6
+                                                        height: 6
+                                                        radius: 3
+                                                        color: "#${c.base0B}"
+                                                    }
+                                                }
+
+                                                Text {
+                                                    anchors.horizontalCenter: parent.horizontalCenter
+                                                    text: (miniScreen.modelData.width || 0) + "x" + (miniScreen.modelData.height || 0)
+                                                    color: "#${c.base04}"
+                                                    font.family: "${fontName}"
+                                                    font.pixelSize: 9
+                                                }
+
+                                                Text {
+                                                    anchors.horizontalCenter: parent.horizontalCenter
+                                                    text: "pos: " + (miniScreen.modelData.x || 0) + "," + (miniScreen.modelData.y || 0)
+                                                    color: "#${c.base0D}"
+                                                    font.family: "${fontName}"
+                                                    font.pixelSize: 9
+                                                }
+                                            }
+
+                                            MouseArea {
+                                                id: miniDragMouse
+                                                anchors.fill: parent
+                                                hoverEnabled: true
+                                                cursorShape: arrangementArea.activeMonitors.length > 1 ? Qt.SizeHorCursor : Qt.ArrowCursor
+                                                drag.target: arrangementArea.activeMonitors.length > 1 ? parent : null
+                                                drag.axis: Drag.XAxis
+                                                drag.minimumX: -40
+                                                drag.maximumX: screensContainer.width + 40
+
+                                                onReleased: {
+                                                    if (arrangementArea.activeMonitors.length <= 1) {
+                                                        parent.x = parent.naturalX;
+                                                        return;
+                                                    }
+
+                                                    // Calculate final order by horizontal center coordinate
+                                                    var items = [];
+                                                    for (var idx = 0; idx < screensRepeater.count; idx++) {
+                                                        var it = screensRepeater.itemAt(idx);
+                                                        if (it) {
+                                                            items.push({
+                                                                mon: it.modelData,
+                                                                centerX: it.x + (it.width / 2.0),
+                                                                originalIndex: idx
+                                                            });
+                                                        }
+                                                    }
+
+                                                    items.sort(function(a, b) {
+                                                        return a.centerX - b.centerX;
+                                                    });
+
+                                                    // Check if ordering actually changed
+                                                    var orderChanged = false;
+                                                    for (var k = 0; k < items.length; k++) {
+                                                        if (items[k].originalIndex !== k) {
+                                                            orderChanged = true;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    if (orderChanged) {
+                                                        var curXOffset = 0;
+                                                        var layoutParts = [];
+                                                        for (var j = 0; j < items.length; j++) {
+                                                            var monItem = items[j].mon;
+                                                            var s = monItem.scale > 0 ? monItem.scale : 1.0;
+                                                            var effW = Math.round((monItem.width || 1920) / s);
+                                                            layoutParts.push(monItem.name + ":" + curXOffset + ",0");
+                                                            curXOffset += effW;
+                                                        }
+
+                                                        var layoutCmd = layoutParts.join(" ");
+                                                        monitorWindow.setMonitorLayout(layoutCmd);
+                                                    } else {
+                                                        // Reset naturally to previous slot
+                                                        for (var r = 0; r < screensRepeater.count; r++) {
+                                                            var itm = screensRepeater.itemAt(r);
+                                                            if (itm) itm.x = itm.naturalX;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Monitors Cards Row
+                            Row {
+                                id: monitorCardsRow
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                spacing: 18
 
                             Repeater {
                                 model: monitorWindow.monitorList
@@ -515,11 +752,31 @@
                                             clip: true
 
                                             ListView {
+                                                id: modesListView
                                                 anchors.fill: parent
                                                 anchors.margins: 4
                                                 model: modelData.availableModes || []
                                                 clip: true
                                                 spacing: 2
+                                                currentIndex: {
+                                                    var modes = modelData.availableModes || [];
+                                                    var curMode = (monCard.modelData.width + "x" + monCard.modelData.height).toLowerCase();
+                                                    for (var i = 0; i < modes.length; i++) {
+                                                        if (modes[i].toLowerCase().indexOf(curMode) !== -1) {
+                                                            return i;
+                                                        }
+                                                    }
+                                                    return -1;
+                                                }
+
+                                                Connections {
+                                                    target: monCard
+                                                    function onDropdownOpenChanged() {
+                                                        if (monCard.dropdownOpen && modesListView.currentIndex >= 0) {
+                                                            modesListView.positionViewAtIndex(modesListView.currentIndex, ListView.Center);
+                                                        }
+                                                    }
+                                                }
 
                                                 delegate: Rectangle {
                                                     required property var modelData
@@ -631,6 +888,7 @@
                         }
                     }
                 }
+            }
             }
 
             onVisibleChanged: {

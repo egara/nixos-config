@@ -284,8 +284,89 @@ def get_status():
     return result
 
 
-def update_kanshi_output_status(config_path, active_profile, monitor_name, new_status):
-    """Update enable/disable status for monitor in target Kanshi config file."""
+def get_max_available_mode(modes):
+    """Find the highest resolution and refresh rate mode from a list of available modes."""
+    if not modes:
+        return ""
+    def parse_mode_tuple(m_str):
+        clean = re.sub(r'Hz$', '', m_str.strip(), flags=re.IGNORECASE)
+        match = re.match(r'^(\d+)x(\d+)(?:@([\d.]+))?$', clean)
+        if match:
+            w, h = int(match.group(1)), int(match.group(2))
+            r = float(match.group(3)) if match.group(3) else 60.0
+            return (w * h, w, h, r, clean)
+        return (0, 0, 0, 0.0, clean)
+    best_mode = max(modes, key=parse_mode_tuple)
+    return parse_mode_tuple(best_mode)[4]
+
+
+def resolve_monitor_defaults(profiles, target_mon):
+    """Search all profiles for this machine to find configured mode, scale, and position, falling back to max resolution and scale 1.0."""
+    hostname = socket.gethostname().lower()
+    default_mode = ""
+    default_scale = None
+    default_pos = None
+
+    # First search matching host profiles
+    host_profs = [p for p in profiles.values() if p.get("matches_host")]
+    if not host_profs:
+        host_profs = list(profiles.values())
+
+    for prof in host_profs:
+        for out in prof["outputs"]:
+            if match_criteria(out["criteria"], target_mon):
+                if out.get("mode") and not default_mode:
+                    default_mode = out["mode"]
+                if out.get("scale") and default_scale is None:
+                    default_scale = out["scale"]
+                if out.get("position") and out["position"] != "0,0" and default_pos is None:
+                    default_pos = out["position"]
+
+    # Fallback to maximum supported mode if no mode configured
+    if not default_mode:
+        avail = target_mon.get("availableModes", [])
+        if avail:
+            default_mode = get_max_available_mode(avail)
+
+    # Fallback scale to 1.0 if not specified
+    if default_scale is None:
+        default_scale = 1.0
+
+    return {
+        "mode": default_mode,
+        "scale": default_scale,
+        "position": default_pos
+    }
+
+
+def calculate_non_overlapping_position(active_monitors, target_mon, fallback_pos=None):
+    """Calculate an adjacent, non-overlapping (X, Y) coordinate next to existing active monitors."""
+    if fallback_pos and fallback_pos != "0,0":
+        try:
+            fx, fy = map(int, fallback_pos.replace("x", ",").split(","))
+            return fx, fy
+        except Exception:
+            pass
+
+    if not active_monitors:
+        return 0, 0
+
+    # Place to the right of the rightmost monitor: X = max(X_i + Width_i / Scale_i)
+    max_right = 0
+    for m in active_monitors:
+        mx = m.get("x", 0)
+        mw = m.get("width") or 1920
+        mscale = m.get("scale") or 1.0
+        effective_w = int(round(mw / mscale))
+        right_edge = mx + effective_w
+        if right_edge > max_right:
+            max_right = right_edge
+
+    return max_right, 0
+
+
+def update_kanshi_output_status(config_path, active_profile, monitor_name, new_status, new_pos_str=None, new_mode_str=None, new_scale_val=None):
+    """Update enable/disable status for monitor in target Kanshi config file with correct position and mode."""
     if not config_path.exists() or not os.access(config_path, os.W_OK):
         return False
 
@@ -324,23 +405,21 @@ def update_kanshi_output_status(config_path, active_profile, monitor_name, new_s
                 criteria = rest.split()[0]
 
             if match_criteria(criteria, target_mon):
-                # Replace enable with disable or vice-versa
                 if new_status == "disable":
-                    # Replace everything after criteria with 'disable'
                     crit_prefix = f'output "{criteria}"' if '"' in line else f"output {criteria}"
                     indent = line[:len(line) - len(line.lstrip())]
                     line = f"{indent}{crit_prefix} disable\n"
                     updated = True
                 elif new_status == "enable":
-                    # If it was disable, restore mode/position/scale
                     width = target_mon.get("width") or 1920
                     height = target_mon.get("height") or 1080
-                    scale = target_mon.get("scale") or 1.0
-                    pos_x = target_mon.get("x", 0)
-                    pos_y = target_mon.get("y", 0)
+                    mode = new_mode_str or f"{width}x{height}"
+                    scale = new_scale_val if new_scale_val is not None else (target_mon.get("scale") or 1.0)
+                    pos = new_pos_str or "0,0"
+
                     crit_prefix = f'output "{criteria}"' if '"' in line else f"output {criteria}"
                     indent = line[:len(line) - len(line.lstrip())]
-                    line = f"{indent}{crit_prefix} enable mode {width}x{height} position {pos_x},{pos_y} scale {scale:.6f}".rstrip('0').rstrip('.') + "\n"
+                    line = f"{indent}{crit_prefix} enable mode {mode} position {pos} scale {scale:.6f}".rstrip('0').rstrip('.') + "\n"
                     updated = True
 
         new_lines.append(line)
@@ -357,7 +436,7 @@ def update_kanshi_output_status(config_path, active_profile, monitor_name, new_s
 
 
 def set_monitor_status(monitor_name, target_status):
-    """Enable or disable monitor live in Hyprland and persist in Kanshi config."""
+    """Enable or disable monitor live in Hyprland and persist in Kanshi config with auto-positioning."""
     sync_local_kanshi_config()
     monitors = get_hyprland_monitors()
     target_mon = next((m for m in monitors if m.get("name") == monitor_name), None)
@@ -369,33 +448,41 @@ def set_monitor_status(monitor_name, target_status):
     profiles = parse_kanshi_profiles()
     active_profile = detect_active_profile(profiles, monitors)
 
-    # 1. Update Kanshi files on disk
-    if active_profile:
-        for p in [KANSHI_REPO_CONFIG, KANSHI_LOCAL_CONFIG, KANSHI_MODULE_CONFIG]:
-            update_kanshi_output_status(p, active_profile, monitor_name, target_status)
-
-    # 2. Apply live state in Hyprland
     if target_status == "disable":
+        if active_profile:
+            for p in [KANSHI_REPO_CONFIG, KANSHI_LOCAL_CONFIG, KANSHI_MODULE_CONFIG]:
+                update_kanshi_output_status(p, active_profile, monitor_name, "disable")
+
         cmd = f'hl.monitor({{ output = "{monitor_name}", mode = "disable" }})'
         subprocess.run(["hyprctl", "eval", cmd], capture_output=True, text=True)
     else:
+        # Resolving non-overlapping position & defaults
+        defaults = resolve_monitor_defaults(profiles, target_mon)
+        active_monitors = [m for m in monitors if not m.get("disabled", False) and m.get("name") != monitor_name]
+
+        pos_x, pos_y = calculate_non_overlapping_position(active_monitors, target_mon, defaults.get("position"))
+        pos_str = f"{pos_x},{pos_y}"
+
         width = target_mon.get("width") or 1920
         height = target_mon.get("height") or 1080
         rate = target_mon.get("refreshRate") or 60
-        scale = target_mon.get("scale") or 1.0
-        pos_x = target_mon.get("x", 0)
-        pos_y = target_mon.get("y", 0)
+        mode_str = defaults.get("mode") or f"{width}x{height}@{rate}"
+        scale_val = defaults.get("scale") if defaults.get("scale") is not None else (target_mon.get("scale") or 1.0)
 
-        cmd = f'hl.monitor({{ output = "{monitor_name}", mode = "{width}x{height}@{rate}", position = "{pos_x}x{pos_y}", scale = {scale} }})'
+        # 1. Update Kanshi files
+        if active_profile:
+            for p in [KANSHI_REPO_CONFIG, KANSHI_LOCAL_CONFIG, KANSHI_MODULE_CONFIG]:
+                update_kanshi_output_status(p, active_profile, monitor_name, "enable", pos_str, mode_str, scale_val)
+
+        # 2. Apply live state in Hyprland
+        cmd = f'hl.monitor({{ output = "{monitor_name}", mode = "{mode_str}", position = "{pos_x}x{pos_y}", scale = {scale_val} }})'
         res = subprocess.run(["hyprctl", "eval", cmd], capture_output=True, text=True)
         if res.returncode != 0:
-            cmd2 = f'hl.monitor({{ output = "{monitor_name}", mode = "preferred", position = "auto", scale = {scale} }})'
+            cmd2 = f'hl.monitor({{ output = "{monitor_name}", mode = "preferred", position = "{pos_x}x{pos_y}", scale = {scale_val} }})'
             subprocess.run(["hyprctl", "eval", cmd2], capture_output=True, text=True)
 
-    # 3. Reload Kanshi if running
     reload_kanshi()
     time.sleep(0.1)
-
     print(f"Monitor '{monitor_name}' set to {target_status} successfully.")
 
 
@@ -453,7 +540,6 @@ def update_kanshi_output_mode(config_path, active_profile, monitor_name, new_mod
                 criteria = rest.split()[0]
 
             if match_criteria(criteria, target_mon):
-                # Clean mode string: strip 'Hz', normalize refresh rate
                 clean_mode = re.sub(r'Hz$', '', new_mode.strip(), flags=re.IGNORECASE)
                 m_match = re.match(r'^(\d+x\d+)(?:@([\d.]+))?$', clean_mode)
                 if m_match:
@@ -465,12 +551,10 @@ def update_kanshi_output_mode(config_path, active_profile, monitor_name, new_mod
                     else:
                         clean_mode = res_part
 
-                # Update mode in Kanshi output line
                 if "mode " in line:
                     line = re.sub(r'(mode\s+)[0-9a-zA-Z@.]+', r'\g<1>' + clean_mode, line)
                     updated = True
                 elif "enable" in line:
-                    # Insert mode after enable
                     line = line.replace("enable", f"enable mode {clean_mode}", 1)
                     updated = True
 
@@ -485,6 +569,142 @@ def update_kanshi_output_mode(config_path, active_profile, monitor_name, new_mod
             return False
 
     return False
+
+
+def update_kanshi_output_position(config_path, active_profile, monitor_name, new_x, new_y):
+    """Update position for monitor in target Kanshi config file."""
+    if not config_path.exists() or not os.access(config_path, os.W_OK):
+        return False
+
+    monitors = get_hyprland_monitors()
+    target_mon = next((m for m in monitors if m.get("name") == monitor_name), {})
+
+    try:
+        with open(config_path, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+    except Exception:
+        return False
+
+    updated = False
+    new_lines = []
+    in_profile = False
+    pos_str = f"{new_x},{new_y}"
+
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("profile "):
+            pname = stripped.split()[1]
+            in_profile = (pname == active_profile)
+        elif stripped == "}":
+            in_profile = False
+        elif in_profile and stripped.startswith("output "):
+            criteria = None
+            rest = stripped[7:].strip()
+            if rest.startswith('"'):
+                end_idx = rest.find('"', 1)
+                if end_idx != -1:
+                    criteria = rest[1:end_idx]
+            elif rest.startswith("'"):
+                end_idx = rest.find("'", 1)
+                if end_idx != -1:
+                    criteria = rest[1:end_idx]
+            else:
+                criteria = rest.split()[0]
+
+            if match_criteria(criteria, target_mon):
+                if "position " in line:
+                    line = re.sub(r'(position\s+)[0-9,-]+', r'\g<1>' + pos_str, line)
+                    updated = True
+                else:
+                    # Append position before scale or at end
+                    if "scale " in line:
+                        line = line.replace("scale ", f"position {pos_str} scale ", 1)
+                    else:
+                        line = line.rstrip() + f" position {pos_str}\n"
+                    updated = True
+
+        new_lines.append(line)
+
+    if updated:
+        try:
+            with open(config_path, "w", encoding="utf-8") as f:
+                f.writelines(new_lines)
+            return True
+        except Exception:
+            return False
+
+    return False
+
+
+def set_monitor_position(monitor_name, pos_x, pos_y):
+    """Set monitor position live and in Kanshi."""
+    sync_local_kanshi_config()
+    monitors = get_hyprland_monitors()
+    target_mon = next((m for m in monitors if m.get("name") == monitor_name), None)
+
+    if not target_mon:
+        sys.stderr.write(f"Error: Monitor '{monitor_name}' not found.\n")
+        sys.exit(1)
+
+    profiles = parse_kanshi_profiles()
+    active_profile = detect_active_profile(profiles, monitors)
+
+    if active_profile:
+        for p in [KANSHI_REPO_CONFIG, KANSHI_LOCAL_CONFIG, KANSHI_MODULE_CONFIG]:
+            update_kanshi_output_position(p, active_profile, monitor_name, pos_x, pos_y)
+
+    width = target_mon.get("width") or 1920
+    height = target_mon.get("height") or 1080
+    rate = target_mon.get("refreshRate") or 60
+    scale = target_mon.get("scale") or 1.0
+
+    cmd = f'hl.monitor({{ output = "{monitor_name}", mode = "{width}x{height}@{rate}", position = "{pos_x}x{pos_y}", scale = {scale} }})'
+    subprocess.run(["hyprctl", "eval", cmd], capture_output=True, text=True)
+
+    reload_kanshi()
+    time.sleep(0.1)
+    print(f"Monitor '{monitor_name}' position set to '{pos_x},{pos_y}' successfully.")
+
+
+def set_monitor_layout(layout_str):
+    """Set multiple monitor positions at once. Format: 'MON1:X,Y MON2:X,Y'."""
+    sync_local_kanshi_config()
+    monitors = get_hyprland_monitors()
+    profiles = parse_kanshi_profiles()
+    active_profile = detect_active_profile(profiles, monitors)
+
+    pairs = layout_str.strip().split()
+    for pair in pairs:
+        if ":" not in pair:
+            continue
+        m_name, coords = pair.split(":", 1)
+        if "," not in coords:
+            continue
+        try:
+            x_str, y_str = coords.split(",")
+            px, py = int(x_str), int(y_str)
+        except ValueError:
+            continue
+
+        target_mon = next((m for m in monitors if m.get("name") == m_name), None)
+        if not target_mon:
+            continue
+
+        if active_profile:
+            for p in [KANSHI_REPO_CONFIG, KANSHI_LOCAL_CONFIG, KANSHI_MODULE_CONFIG]:
+                update_kanshi_output_position(p, active_profile, m_name, px, py)
+
+        width = target_mon.get("width") or 1920
+        height = target_mon.get("height") or 1080
+        rate = target_mon.get("refreshRate") or 60
+        scale = target_mon.get("scale") or 1.0
+
+        cmd = f'hl.monitor({{ output = "{m_name}", mode = "{width}x{height}@{rate}", position = "{px}x{py}", scale = {scale} }})'
+        subprocess.run(["hyprctl", "eval", cmd], capture_output=True, text=True)
+
+    reload_kanshi()
+    time.sleep(0.1)
+    print(f"Monitor layout '{layout_str}' applied successfully.")
 
 
 def set_monitor_mode(monitor_name, target_mode):
@@ -537,7 +757,7 @@ def set_monitor_mode(monitor_name, target_mode):
 
 def main():
     if len(sys.argv) < 2 or sys.argv[1] in ["-h", "--help"]:
-        print("Usage: sicos-monitors.py {--status|--toggle <MONITOR_NAME>|--set <MONITOR_NAME> <enable|disable>|--mode <MONITOR_NAME> <MODE>}")
+        print("Usage: sicos-monitors.py {--status|--toggle <MONITOR_NAME>|--set <MONITOR_NAME> <enable|disable>|--mode <MONITOR_NAME> <MODE>|--position <MONITOR_NAME> <X> <Y>|--layout <LAYOUT_STRING>}")
         sys.exit(0)
 
     cmd = sys.argv[1]
@@ -558,6 +778,16 @@ def main():
             sys.stderr.write("Usage: sicos-monitors.py --mode <MONITOR_NAME> <MODE>\n")
             sys.exit(1)
         set_monitor_mode(sys.argv[2], sys.argv[3])
+    elif cmd == "--position":
+        if len(sys.argv) < 5:
+            sys.stderr.write("Usage: sicos-monitors.py --position <MONITOR_NAME> <X> <Y>\n")
+            sys.exit(1)
+        set_monitor_position(sys.argv[2], int(sys.argv[3]), int(sys.argv[4]))
+    elif cmd == "--layout":
+        if len(sys.argv) < 3:
+            sys.stderr.write("Usage: sicos-monitors.py --layout '<MON1:X,Y MON2:X,Y>'\n")
+            sys.exit(1)
+        set_monitor_layout(sys.argv[2])
     else:
         sys.stderr.write(f"Unknown command: {cmd}\n")
         sys.exit(1)
