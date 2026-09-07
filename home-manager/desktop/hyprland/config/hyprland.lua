@@ -105,6 +105,7 @@ local mainMod = "SUPER"
 -- For finding a special KEY, install wev application
 hl.bind("CTRL + ALT + T", hl.dsp.exec_cmd("uwsm app -- " .. terminal), { description = "Terminal (Kitty)" })
 hl.bind(mainMod .. " + Y", hl.dsp.exec_cmd("uwsm app -- " .. terminal .. " yazi"), { description = "File Manager (Yazi)" })
+hl.bind(mainMod .. " + H", hl.dsp.exec_cmd("uwsm app -- " .. terminal .. " herdr"), { description = "Herdr" })
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("uwsm app -- zeditor"), { description = "Text Editor" })
 hl.bind(mainMod .. " + Q", hl.dsp.window.close(), { description = "Close Window" })
 hl.bind("CTRL + ALT + Delete", hl.dsp.exit(), { description = "Exit" })
