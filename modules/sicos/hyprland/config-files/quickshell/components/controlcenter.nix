@@ -2366,7 +2366,7 @@
         id: ccButton
         width: 32; height: 32
         radius: 16
-        border.width: 1
+        border.width: 2
         border.color: "white"
         color: hoverCC.hovered ? "#${c.base03}" : (root.controlcenterVisible ? "#E6${c.base02}" : "#CC${c.base01}")
         
