@@ -83,6 +83,15 @@ The Window Switcher (`windowswitcher.nix`) is a full-screen overlay modal that d
 - The Hyprland binding in `hyprland.lua` executes `toggle-switcher.sh`, which writes `toggle\n` to the FIFO.
 - A persistent `Process` with `SplitParser` in `quickshell-bar.nix` listens to the FIFO and toggles `windowSwitcherActive`.
 
+### The Monitor Manager Pattern (Kanshi Integration)
+The Monitor Manager (`monitormanager.nix`) provides dynamic screen enabling/disabling and Kanshi profile comparison invoked via `Super + K`:
+- Uses `Variants` over `Quickshell.screens` with centered modal card (`radius: 28`).
+- Communicates via FIFO (`/tmp/sicos-monitors-fifo`) triggered by `toggle-monitormanager.sh`.
+- Integrates with `sicos-monitors.py` (`--status`, `--toggle <output>`, `--set <output> <enable|disable>`).
+- Inspects `hyprctl monitors all -j` and Kanshi profiles defined in `~/.config/kanshi/config`.
+- Gracefully displays a clean informative notice if Kanshi is disabled in the NixOS config.
+- Persists changes dynamically to Kanshi config and reloads via `kanshictl reload`.
+
 ### Keyboard Focus: OnDemand vs Exclusive
 When building overlay modals that need to **transfer focus to other windows** (like a window switcher), the keyboard focus mode is critical:
 
