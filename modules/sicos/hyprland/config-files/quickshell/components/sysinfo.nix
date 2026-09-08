@@ -424,6 +424,9 @@
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
                                 root.sysinfoVisible = false
+                                // The window killer is rendered only on the screen
+                                // whose sysinfo button was clicked
+                                windowKillerTargetScreen = root.screen.name;
                                 windowKillerActive = true
                             }
                         }

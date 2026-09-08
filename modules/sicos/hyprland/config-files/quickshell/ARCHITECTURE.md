@@ -76,17 +76,17 @@ To avoid this, we use a hybrid popup anchoring system:
 The Window Switcher (`windowswitcher.nix`) is a full-screen overlay modal that displays live thumbnails of all open windows across all workspaces. It follows the same architectural patterns as the Workspace Overview but with a horizontal row layout instead of a grid.
 
 **Key Implementation Details:**
-- Uses `Variants` over `Quickshell.screens` to render on all monitors.
+- Uses `Variants` over `Quickshell.screens` but renders only on the focused screen (see the Focused-Screen Modal Pattern below).
 - `WlrLayershell.layer: WlrLayer.Overlay` places it above all other windows.
 - `WlrKeyboardFocus.OnDemand` is critical — see below.
 - Communicates with Hyprland via a FIFO pipe (`/tmp/sicos-switcher-fifo`) since Quickshell cannot register global hotkeys directly.
-- The Hyprland binding in `hyprland.lua` executes `toggle-switcher.sh`, which writes `toggle\n` to the FIFO.
+- The Hyprland binding in `hyprland.lua` executes `toggle-switcher.sh`, which resolves the focused monitor and writes `toggle <monitor>\n` to the FIFO.
 - A persistent `Process` with `SplitParser` in `quickshell-bar.nix` listens to the FIFO and toggles `windowSwitcherActive`.
 
 ### The Monitor Manager Pattern (Kanshi Integration)
 The Monitor Manager (`monitormanager.nix`) provides dynamic screen enabling/disabling, 2D visual drag & drop positioning, resolution switching, and Kanshi profile synchronization invoked via `Super + K`:
-- Uses `Variants` over `Quickshell.screens` with centered modal card (`radius: 28`).
-- Communicates via FIFO (`/tmp/sicos-monitors-fifo`) triggered by `toggle-monitormanager.sh`.
+- Uses `Variants` over `Quickshell.screens` with centered modal card (`radius: 28`), rendering only on the focused screen (see the Focused-Screen Modal Pattern below).
+- Communicates via FIFO (`/tmp/sicos-monitors-fifo`) triggered by `toggle-monitormanager.sh`, which resolves the focused monitor and sends `toggle <monitor>\n` through the pipe.
 - Integrates with `sicos-monitors.py` (`--status`, `--toggle <output>`, `--set <output> <enable|disable>`, `--set-mode <output> <mode>`, `--reorder <out1,out2,...>`, `--reorder-2d <out1:x:y,out2:x:y,...>`).
 - **Interactive 2D Drag & Drop Placement:** Free-form visual arrangement canvas allowing users to arrange monitors horizontally, vertically stacked, or in multi-row/column matrices. Calculates accurate pixel offsets (`scale * resolution`) and guarantees zero overlapping.
 - **Resolution Selector:** Dynamic dropdown displaying all hardware modes supported by Hyprland EDID, preselecting active mode and persisting changes to Kanshi.
@@ -94,6 +94,36 @@ The Monitor Manager (`monitormanager.nix`) provides dynamic screen enabling/disa
 - **Port ID & EDID Disambiguation:** Resolves physical connector IDs (`DP-1`, `DP-2`) with priority over descriptions, allowing identical monitor setups (e.g. dual office displays) to configure independently.
 - **Direct Kanshi Persistence:** Directly updates `home-manager/desktop/hyprland/programs/kanshi/config` bypassing read-only `/nix/store` symlinks and invokes `kanshictl reload`.
 - Gracefully displays a clean informative notice if Kanshi is disabled in the NixOS config.
+
+### The Focused-Screen Modal Pattern (Single-Screen Overlays)
+Full-screen overlay modals instantiated through `Variants { model: Quickshell.screens }` are duplicated across every connected display. Unless a modal is explicitly meant to mirror on all screens, each overlay window must gate its own visibility so that **only the screen from which the modal was invoked renders it**. This is implemented by the Workspace Overview (`overview.nix`), Window Switcher (`windowswitcher.nix`), Window Killer (`windowkiller.nix`) and Monitor Manager (`monitormanager.nix`).
+
+**Golden rule:** the target-screen check must also gate the fade-out clause. A naive `visible: modalActive && targetMatches || (modalCard.opacity > 0)` is wrong: while the modal is open, `modalCard.opacity` is `1` on every screen, so the fade-out clause re-enables visibility everywhere and the modal mirrors again. The correct form is `visible: targetMatches && (modalActive || modalCard.opacity > 0)`.
+
+**Checklist for any new overlay modal:**
+1. Declare a target property in `quickshell-bar.nix` next to its `*Active` flag:
+   ```qml
+   property bool myModalActive: false
+   property string myModalTargetScreen: ""
+   ```
+2. In the component's `PanelWindow`, declare the target check and use it for visibility:
+   ```qml
+   property bool isTargetScreen: myModalTargetScreen === "" || modelData.name === myModalTargetScreen
+   visible: isTargetScreen && (myModalActive || modalCard.opacity > 0)
+   ```
+3. Feed the target depending on the trigger type:
+   - **Hyprland keybind via FIFO script** (Monitor Manager, Window Switcher): the toggle script resolves the focused monitor and sends it through the pipe:
+     ```bash
+     FOCUSED=$(hyprctl -j monitors 2>/dev/null | jq -r '.[] | select(.focused == true) | .name')
+     (printf 'toggle %s\n' "$FOCUSED" > "$FIFO") &
+     ```
+     The FIFO listener in `quickshell-bar.nix` parses `toggle <monitor>` and only assigns the target when opening. A bare `toggle` (empty target) falls back to rendering on every screen. Remember to keep both copies of the script in sync (`modules/sicos/hyprland/scripts/` and `home-manager/desktop/hyprland/scripts/`).
+   - **Bar button** (Workspace Overview, Window Killer): the button lives inside the per-screen bar `PanelWindow` (`id: root`), so it sets the target directly before opening:
+     ```qml
+     myModalTargetScreen = root.screen.name;
+     myModalActive = true;
+     ```
+4. Closing (`*Active = false`) needs no target handling: the fade-out clause keeps the target screen mapped until `modalCard.opacity` reaches `0`, and non-target screens are never mapped at all.
 
 ### Keyboard Focus: OnDemand vs Exclusive
 When building overlay modals that need to **transfer focus to other windows** (like a window switcher), the keyboard focus mode is critical:
