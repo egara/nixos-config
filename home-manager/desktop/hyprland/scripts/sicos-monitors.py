@@ -479,22 +479,15 @@ def update_kanshi_output_status(config_path, active_profile, monitor_name, new_s
                 criteria = rest.split()[0]
 
             if match_criteria(criteria, target_mon):
+                # Preserve existing mode/position/scale; only toggle the status flag
                 if new_status == "disable":
-                    crit_prefix = f'output "{criteria}"' if '"' in line else f"output {criteria}"
-                    indent = line[:len(line) - len(line.lstrip())]
-                    line = f"{indent}{crit_prefix} disable\n"
-                    updated = True
+                    if re.search(r'\benable\b', line):
+                        line = re.sub(r'\benable\b', 'disable', line, count=1)
+                        updated = True
                 elif new_status == "enable":
-                    width = target_mon.get("width") or 1920
-                    height = target_mon.get("height") or 1080
-                    mode = new_mode_str or f"{width}x{height}"
-                    scale = new_scale_val if new_scale_val is not None else (target_mon.get("scale") or 1.0)
-                    pos = new_pos_str or "0,0"
-
-                    crit_prefix = f'output "{criteria}"' if '"' in line else f"output {criteria}"
-                    indent = line[:len(line) - len(line.lstrip())]
-                    line = f"{indent}{crit_prefix} enable mode {mode} position {pos} scale {scale:.6f}".rstrip('0').rstrip('.') + "\n"
-                    updated = True
+                    if re.search(r'\bdisable\b', line):
+                        line = re.sub(r'\bdisable\b', 'enable', line, count=1)
+                        updated = True
 
         new_lines.append(line)
 
