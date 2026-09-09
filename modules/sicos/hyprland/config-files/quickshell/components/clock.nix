@@ -644,16 +644,23 @@
                             visible: height > 0
                             clip: true
 
-                            RowLayout {
+                            MouseArea {
                                 anchors.fill: parent
                                 visible: !calendarRoot.editingLife
-                                Text { text: "LIFE"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12; font.letterSpacing: 1 }
-                                Rectangle {
-                                    Layout.fillWidth: true; Layout.leftMargin: 6; Layout.rightMargin: 6
-                                    height: 4; radius: 2; color: "#22${c.base05}"
-                                    Rectangle { width: parent.width * calendarRoot.lifeDone; height: parent.height; radius: parent.radius; color: "#${c.base08}" }
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: calendarRoot.editingLife = true
+                                onDoubleClicked: calendarRoot.editingLife = true
+
+                                RowLayout {
+                                    anchors.fill: parent
+                                    Text { text: "LIFE"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 12; font.letterSpacing: 1 }
+                                    Rectangle {
+                                        Layout.fillWidth: true; Layout.leftMargin: 6; Layout.rightMargin: 6
+                                        height: 4; radius: 2; color: "#22${c.base05}"
+                                        Rectangle { width: parent.width * calendarRoot.lifeDone; height: parent.height; radius: parent.radius; color: "#${c.base08}" }
+                                    }
+                                    Text { text: calendarRoot.lifeDonePercent + "%"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12 }
                                 }
-                                Text { text: calendarRoot.lifeDonePercent + "%"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 12 }
                             }
 
                             RowLayout {
@@ -663,9 +670,15 @@
 
                                 Rectangle {
                                     Layout.preferredWidth: 56
-                                    Layout.preferredHeight: 16
+                                    Layout.preferredHeight: 18
                                     color: "#22${c.base05}"
                                     radius: 4
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        cursorShape: Qt.IBeamCursor
+                                        onClicked: birthInput.forceActiveFocus()
+                                    }
 
                                     TextInput {
                                         id: birthInput
@@ -677,6 +690,7 @@
                                         color: "#${c.base05}"
                                         font.family: "${fontName}"
                                         font.pixelSize: 13
+                                        selectByMouse: true
                                         onAccepted: { calendarRoot.birthYear = parseInt(text); calendarRoot.editingLife = false; }
                                         onVisibleChanged: {
                                             if (visible) {

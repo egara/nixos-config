@@ -81,8 +81,9 @@
                 RowLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: false
-                    Layout.preferredHeight: 24
-                    Layout.maximumHeight: 24
+                    Layout.preferredHeight: 32
+                    spacing: 10
+
                     Text {
                         text: "System Monitor"
                         color: "#${c.base05}"
@@ -355,7 +356,7 @@
                                 text: ""
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 12
+                                font.pixelSize: 15
                             }
 
                             Text {
@@ -363,7 +364,7 @@
                                 text: "Launch Btop"
                                 color: "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 12
+                                font.pixelSize: 14
                             }
                         }
 
@@ -404,7 +405,7 @@
                                 text: "󰚌"
                                 color: "#${c.base08}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 12
+                                font.pixelSize: 15
                             }
 
                             Text {
@@ -412,7 +413,7 @@
                                 text: "Kill Window"
                                 color: killBtnArea.containsMouse ? "#${c.base08}" : "#${c.base04}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 12
+                                font.pixelSize: 14
                                 font.bold: killBtnArea.containsMouse
                             }
                         }

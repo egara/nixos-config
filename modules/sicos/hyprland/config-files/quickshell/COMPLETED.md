@@ -88,3 +88,11 @@ This document contains a historical record of all features, modules, and integra
 - **Robust Port ID & EDID Matching:** Multi-tiered output resolution supporting both physical connector IDs (`DP-1`, `DP-2`) and EDID descriptions, automatically differentiating identical multi-monitor setups at work or home.
 - **Persistent Synchronization:** Modifies Kanshi configuration files directly (`home-manager/desktop/hyprland/programs/kanshi/config`) bypassing Nix Store read-only symlinks and reloads Kanshi live via `kanshictl reload`.
 - **Hyprland Keybinding:** Seamless toggle via `Super + K` communicating through `/tmp/sicos-monitors-fifo`.
+
+### 14. Wallpaper Gallery Selector
+- **Bar Widget Pill:** Dedicated pill button situated directly to the left of the Power Management widget displaying a wallpaper icon (`󰋩`). Left click toggles the modal; middle-click instantly applies a random wallpaper.
+- **Visual Thumbnail Gallery:** Multi-column interactive grid displaying thumbnails for all images in `~/.config/sicos/wallpapers` (including nested subfolders and symlinks like `wallpaperdownloader/`).
+- **Interactive Wallpapers Directory Banner:** Prominently displays `~/.config/sicos/wallpapers` so the user knows exactly where wallpapers reside, along with a direct button (``) to open the folder in Nautilus.
+- **Categorization & Filtering:** Top chips to filter by nested folder categories ("All", "Root", "wallpaperdownloader", etc.) and real-time live text search box.
+- **Optimistic Selection & Visual Feedback:** Border highlight (`#${c.base0B}`) and checkmark badge on active wallpaper; applies wallpaper instantly via `awww img` with smooth transition (`grow`).
+- **Thumbnail Engine:** Background helper `sicos-wallpapers.py` using `magick` for high-performance thumbnail caching in `~/.cache/sicos-wallpaper-thumbs`.

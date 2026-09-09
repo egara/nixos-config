@@ -6,6 +6,7 @@ let
   
   # Import modularized components
   battery = import ./components/battery.nix { inherit config lib pkgs c fontName; };
+  wallpaper = import ./components/wallpaper.nix { inherit config lib pkgs c fontName; };
   workspaces = import ./components/workspaces.nix { inherit config lib pkgs c fontName; };
   clock = import ./components/clock.nix { inherit config lib pkgs c fontName; };
   system = import ./components/system.nix { inherit config lib pkgs c fontName; };
@@ -343,7 +344,7 @@ PanelWindow {
         right: true
     }
     
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+    WlrLayershell.keyboardFocus: root.wallpaperVisible ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
     WlrLayershell.layer: WlrLayer.Top
     WlrLayershell.namespace: "sicos:bar"
     
@@ -363,6 +364,9 @@ PanelWindow {
     // Popup visibility state for smooth animations
     property bool batteryVisible: false
     property bool batteryHovering: false
+    property bool wallpaperVisible: false
+    property real wallpaperButtonX: 0
+    property bool wallpaperHovering: false
     property bool sysinfoVisible: false
     property bool sysinfoHovering: false
     property bool trayMenuVisible: false
@@ -386,12 +390,13 @@ PanelWindow {
         WlrLayershell.layer: WlrLayer.Top
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
         exclusiveZone: -1
-        visible: root.batteryVisible || root.sysinfoVisible || root.trayMenuVisible || root.miscVisible || root.controlcenterVisible || popupContent.opacity > 0 || popupContentMisc.opacity > 0 || popupContentCC.opacity > 0
+        visible: root.batteryVisible || root.wallpaperVisible || root.sysinfoVisible || root.trayMenuVisible || root.miscVisible || root.controlcenterVisible || popupContent.opacity > 0 || popupContentWallpaper.opacity > 0 || popupContentMisc.opacity > 0 || popupContentCC.opacity > 0
         
         MouseArea {
             anchors.fill: parent
             onClicked: {
                 root.batteryVisible = false
+                root.wallpaperVisible = false
                 root.sysinfoVisible = false
                 root.trayMenuVisible = false
                 root.miscVisible = false
@@ -402,6 +407,7 @@ PanelWindow {
 
     // --- POPUPS ---
     ${battery.popup}
+    ${wallpaper.popup}
     ${sysinfo.popup}
     ${clock.popup}
     ${misc.popup}
@@ -448,6 +454,7 @@ PanelWindow {
 
             ${tray}
 
+            ${wallpaper.widget}
             ${battery.widget}
             ${misc.widget}
             ${controlcenter.widget}

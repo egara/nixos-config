@@ -18,6 +18,7 @@ To avoid maintaining a monolithic `.qml` file with thousands of lines (which wou
 - **`quickshell-bar.nix`:** The main skeleton (`Variants` over `Quickshell.screens` rendering a `PanelWindow` on each connected display). It defines the overall alignment (`RowLayout` with `AlignLeft`, `AlignCenter`, `AlignRight`). It injects the other modules by calling them like `${component}`.
 - **`components/` (Base Directory):**
   - **`battery.nix`**: Advanced battery logic (`UPower`), remaining time calculation, 80% BIOS limit detection, and Popout Window animations.
+  - **`wallpaper.nix`**: Wallpaper gallery popup and pill widget. Scans wallpapers from `~/.config/sicos/wallpapers` (including subfolders), displays thumbnail grid with active indicators, live search filtering, folder category chips, direct Nautilus folder opener, and middle-click random wallpaper trigger.
   - **`clock.nix`**: Real-time central clock (`Qt.formatDateTime`) and Calendar/Memento Mori modal.
   - **`misc.nix`**: Miscellaneous island hosting the dynamic Power Profiles selector, session buttons (`powerprofilesctl`), and the interactive MPRIS player.
   - **`controlcenter.nix`**: Centralized QuickShell Control Center hub containing user stats, network traffic telemetry, system volume/brightness sliders, and the **Monitor Scale Control Pill** (collapsible QML slider communicating with `sicos-monitor-scale.sh` for live and persistent scale management via Kanshi).
@@ -31,11 +32,15 @@ To avoid maintaining a monolithic `.qml` file with thousands of lines (which wou
 ## 3. UI/UX Guidelines & Consistency (Style Guide)
 To maintain a High-End look ("Premium UX"), all new elements must adhere to these guidelines:
 
+- **Modal Headers:** All popup modals share a standardized header pattern:
+  - Header Title: Clean typography `font.pixelSize: 18`, color `#${c.base05}`. Subtitle / stats count text: `font.pixelSize: 13`, color `#${c.base04}` (no square icon boxes in headers).
+  - Header Action/Close Buttons: `width: 32; height: 32; radius: 16`, base color `"transparent"` or `#${c.base02}`, hovering to `#${c.base03}` (or `#${c.base08}` for destructive actions), aligned to the far right with `Item { Layout.fillWidth: true }`.
 - **Modal Titles:** `font.pixelSize: 18`, **not** bold.
 - **Subtitles/Sections:** Descriptive texts will use the accent color (`#${c.base0D}` Cyan), size `13`, centered horizontally (`Qt.AlignHCenter`).
 - **Interactive Buttons:** Rounded design `radius: 20`, borderless. Base background `#${c.base02}`, changing to `#${c.base03}` on hover. Normal texts (only bold if representing an "active" state).
 - **Lists and Rows:** List elements (`ListView` or repeaters) must use a `MouseArea` over the entire row to facilitate clicking (no tiny buttons). On hover, a slight highlight in `#${c.base03}` and display secondary action icons (e.g., delete button, which has the property `visible: mouseArea.containsMouse`).
 - **Island Backgrounds (Pill background):** `#${c.base01}` inactive, `#${c.base03}` on hover, and `#${c.base02}` active/pressed.
+- **Language Consistency:** All UI strings, labels, placeholders, empty states, tooltips, and code comments must strictly be written in English.
 - **Transition Effects:** All modals must expand and hide using `Behavior on opacity` (200ms `OutCubic`) and `Behavior on y` (250ms `OutBack`) to give a spring or soft-drop sensation.
 
 ## 4. Advanced Engineering: The "Beaks" and Vector Mask
