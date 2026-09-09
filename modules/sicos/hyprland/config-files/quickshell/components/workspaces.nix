@@ -136,7 +136,14 @@
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     onClicked: mouse => {
                         if (mouse.button === Qt.RightButton) {
-                            overviewActive = !overviewActive;
+                            if (overviewActive) {
+                                overviewActive = false;
+                            } else {
+                                // The overview is rendered only on the screen
+                                // whose workspaces pill was right-clicked
+                                overviewTargetScreen = root.screen.name;
+                                overviewActive = true;
+                            }
                         } else {
                             Hyprland.dispatch("hl.dsp.focus({ workspace = " + modelData.id + " })")
                         }

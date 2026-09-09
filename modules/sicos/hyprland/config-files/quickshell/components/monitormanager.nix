@@ -8,7 +8,11 @@
             required property var modelData
             screen: modelData
 
-            visible: monitorManagerActive || (modalCard.opacity > 0)
+            // Only the focused screen renders the overlay (empty target = render on all screens).
+            // The target check must also gate the fade-out clause, otherwise
+            // modalCard.opacity > 0 would make every screen visible while open.
+            property bool isTargetScreen: monitorManagerTargetScreen === "" || modelData.name === monitorManagerTargetScreen
+            visible: isTargetScreen && (monitorManagerActive || modalCard.opacity > 0)
 
             anchors {
                 top: true

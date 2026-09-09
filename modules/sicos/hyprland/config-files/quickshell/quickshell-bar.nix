@@ -41,9 +41,13 @@ import "Model.js" as Model
 Scope {
     id: mainScope
     property bool overviewActive: false
+    property string overviewTargetScreen: ""
     property bool windowSwitcherActive: false
+    property string windowSwitcherTargetScreen: ""
     property bool windowKillerActive: false
+    property string windowKillerTargetScreen: ""
     property bool monitorManagerActive: false
+    property string monitorManagerTargetScreen: ""
 
     // Progress OSD State (global across screens)
     property int progressOsdValue: 0
@@ -685,7 +689,8 @@ PanelWindow {
         running: true
         stdout: SplitParser {
             onRead: function(line) {
-                if (line.trim() === "toggle") {
+                var msg = line.trim();
+                if (msg.startsWith("toggle")) {
                     var count = 0;
                     if (typeof Hyprland !== "undefined" && Hyprland.toplevels) {
                         var toplevels = Array.from(Hyprland.toplevels.values);
@@ -697,7 +702,15 @@ PanelWindow {
                         }
                     }
                     if (count > 0) {
-                        windowSwitcherActive = !windowSwitcherActive;
+                        if (windowSwitcherActive) {
+                            windowSwitcherActive = false;
+                        } else {
+                            // Target the focused monitor passed by toggle-switcher.sh;
+                            // an empty target falls back to rendering on every screen.
+                            var parts = msg.split(/\s+/);
+                            windowSwitcherTargetScreen = parts.length > 1 ? parts[1] : "";
+                            windowSwitcherActive = true;
+                        }
                     } else {
                         windowSwitcherActive = false;
                     }
@@ -713,8 +726,17 @@ PanelWindow {
         running: true
         stdout: SplitParser {
             onRead: function(line) {
-                if (line.trim() === "toggle") {
-                    monitorManagerActive = !monitorManagerActive;
+                var msg = line.trim();
+                if (msg.startsWith("toggle")) {
+                    if (monitorManagerActive) {
+                        monitorManagerActive = false;
+                    } else {
+                        // Target the focused monitor passed by toggle-monitormanager.sh;
+                        // an empty target falls back to rendering on every screen.
+                        var parts = msg.split(/\s+/);
+                        monitorManagerTargetScreen = parts.length > 1 ? parts[1] : "";
+                        monitorManagerActive = true;
+                    }
                 }
             }
         }
