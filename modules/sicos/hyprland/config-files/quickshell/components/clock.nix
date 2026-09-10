@@ -83,7 +83,7 @@
                     RowLayout {
                         Layout.fillWidth: true
                         Text {
-                            text: "Notificaciones"
+                            text: "Notifications"
                             color: "#${c.base05}"
                             font.family: "${fontName}"
                             font.pixelSize: 18
@@ -673,12 +673,8 @@
                                     Layout.preferredHeight: 18
                                     color: "#22${c.base05}"
                                     radius: 4
-
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        cursorShape: Qt.IBeamCursor
-                                        onClicked: birthInput.forceActiveFocus()
-                                    }
+                                    border.color: birthInput.activeFocus ? "#${c.base0D}" : "transparent"
+                                    border.width: 1
 
                                     TextInput {
                                         id: birthInput
@@ -690,8 +686,17 @@
                                         color: "#${c.base05}"
                                         font.family: "${fontName}"
                                         font.pixelSize: 13
+                                        focus: true
                                         selectByMouse: true
-                                        onAccepted: { calendarRoot.birthYear = parseInt(text); calendarRoot.editingLife = false; }
+                                        maximumLength: 4
+                                        inputMethodHints: Qt.ImhDigitsOnly
+                                        onAccepted: {
+                                            var y = parseInt(text, 10);
+                                            if (!isNaN(y) && y > 1900 && y <= calendarRoot.today.getFullYear()) {
+                                                calendarRoot.birthYear = y;
+                                            }
+                                            calendarRoot.editingLife = false;
+                                        }
                                         onVisibleChanged: {
                                             if (visible) {
                                                 forceActiveFocus();
@@ -812,7 +817,11 @@
                 id: clockCloseTimer
                 interval: 400
                 repeat: false
-                onTriggered: if (!root.clockHovering) root.clockVisible = false
+                onTriggered: {
+                    if (!root.clockHovering && !calendarRoot.editingLife && !birthInput.activeFocus) {
+                        root.clockVisible = false;
+                    }
+                }
             }
         }
     }
@@ -908,7 +917,11 @@
             id: clockCloseTimerWidget
             interval: 400
             repeat: false
-            onTriggered: if (!root.clockHovering) root.clockVisible = false
+            onTriggered: {
+                if (!root.clockHovering && !calendarRoot.editingLife) {
+                    root.clockVisible = false;
+                }
+            }
         }
     }
   '';

@@ -348,7 +348,7 @@ PanelWindow {
         right: true
     }
     
-    WlrLayershell.keyboardFocus: root.wallpaperVisible ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+    WlrLayershell.keyboardFocus: (root.wallpaperVisible || root.clockVisible) ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
     WlrLayershell.layer: WlrLayer.Top
     WlrLayershell.namespace: "sicos:bar"
     

@@ -330,6 +330,10 @@
                         border.color: searchInput.activeFocus ? "#${c.base0D}" : "#${c.base03}"
                         border.width: 1
 
+                        TapHandler {
+                            onTapped: searchInput.forceActiveFocus()
+                        }
+
                         RowLayout {
                             anchors.fill: parent
                             anchors.leftMargin: 12
@@ -351,7 +355,7 @@
                                 font.pixelSize: 14
                                 clip: true
                                 selectByMouse: true
-                                focus: true
+                                focus: false
                                 onTextChanged: {
                                     popupContentWallpaper.searchText = text;
                                     popupContentWallpaper.filterItems();
