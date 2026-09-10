@@ -100,6 +100,20 @@ The Monitor Manager (`monitormanager.nix`) provides dynamic screen enabling/disa
 - **Direct Kanshi Persistence:** Directly updates `home-manager/desktop/hyprland/programs/kanshi/config` bypassing read-only `/nix/store` symlinks and invokes `kanshictl reload`.
 - Gracefully displays a clean informative notice if Kanshi is disabled in the NixOS config.
 
+### The Wallpaper Gallery Component
+The Wallpaper Gallery (`wallpaper.nix`) is integrated into SicOS-Bar as an interactive popup modal providing fast wallpaper exploration, filtering, per-output targeting, and live switching via `awww`:
+- **Backend Service (`sicos-wallpapers.py`):**
+  - `--list`: Scans `~/.config/sicos/wallpapers` and subdirectories, queries active outputs and current wallpapers via `awww query`, and returns structured JSON with thumbnail cache locations.
+  - `--set <path> [-o <output>] [-r <mode>]`: Dispatches wallpaper change via `awww img` with optional target output (`-o <output>` or all outputs) and resize method (`--resize <fit|crop|stretch|no>`).
+  - `--random [-o <output>] [-r <mode>]`: Selects a random wallpaper from the collection and applies it to the selected display with chosen resize mode.
+  - `--gen-thumbs`: Generates local cached square/16:9 thumbnail previews in `~/.cache/sicos-wallpaper-thumbs` for snappy UI scrolling.
+- **Interactive UI Controls:**
+  - **Outputs Dropdown:** Placed directly above the category pills. Automatically populates connected monitors (e.g. `eDP-1`, `DP-1`) alongside an `All Outputs` option.
+  - **Resize Mode Dropdown:** Allows selecting between `fit`, `crop`, `stretch`, and `no` scaling methods.
+  - **Folder Filter Chips:** Horizontal scrolling pills to filter wallpapers by subdirectory or show `All`.
+  - **Active Wallpaper Badge:** Shows green checkmark badges on wallpaper cards matching the currently active wallpaper for the selected output (or across all outputs).
+  - **Non-blocking Dropdown Overlays:** High z-index floating menus with outside-click dismiss and hover-close guards (`openDropdownIndex === -1`) to prevent unwanted modal closing while browsing options.
+
 ### The Focused-Screen Modal Pattern (Single-Screen Overlays)
 Full-screen overlay modals instantiated through `Variants { model: Quickshell.screens }` are duplicated across every connected display. Unless a modal is explicitly meant to mirror on all screens, each overlay window must gate its own visibility so that **only the screen from which the modal was invoked renders it**. This is implemented by the Workspace Overview (`overview.nix`), Window Switcher (`windowswitcher.nix`), Window Killer (`windowkiller.nix`) and Monitor Manager (`monitormanager.nix`).
 

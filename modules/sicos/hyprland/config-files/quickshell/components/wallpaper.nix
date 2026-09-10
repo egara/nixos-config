@@ -41,6 +41,14 @@
             property string searchText: ""
             property bool isScanning: false
 
+            // Multi-monitor & Resize mode settings
+            property var outputList: ["All Outputs"]
+            property string selectedOutput: "All Outputs"
+            property var outputWallpapers: ({})
+            property string selectedResize: "fit"
+            property var resizeOptions: ["fit", "crop", "stretch", "no"]
+            property int openDropdownIndex: -1 // -1: closed, 1: outputs dropdown, 2: resize dropdown
+
             function filterItems() {
                 var res = [];
                 var q = searchText.trim().toLowerCase();
@@ -55,11 +63,24 @@
 
             function setWallpaper(filePath) {
                 currentWallpaperPath = filePath;
-                wallpaperSetProc.command = ["python3", "/home/egarcia/.config/sicos/scripts/sicos-wallpapers.py", "--set", filePath];
+                if (selectedOutput !== "All Outputs") {
+                    outputWallpapers[selectedOutput] = filePath;
+                } else {
+                    for (var i = 0; i < outputList.length; i++) {
+                        var outName = outputList[i];
+                        if (outName !== "All Outputs") {
+                            outputWallpapers[outName] = filePath;
+                        }
+                    }
+                }
+                var targetOut = selectedOutput === "All Outputs" ? "all" : selectedOutput;
+                wallpaperSetProc.command = ["python3", "/home/egarcia/.config/sicos/scripts/sicos-wallpapers.py", "--set", filePath, "-o", targetOut, "-r", selectedResize];
                 wallpaperSetProc.running = true;
             }
 
             function setRandom() {
+                var targetOut = selectedOutput === "All Outputs" ? "all" : selectedOutput;
+                wallpaperRandomProc.command = ["python3", "/home/egarcia/.config/sicos/scripts/sicos-wallpapers.py", "--random", "-o", targetOut, "-r", selectedResize];
                 wallpaperRandomProc.running = true;
             }
 
@@ -85,6 +106,9 @@
                     onStreamFinished: {
                         if (text.trim() !== "") {
                             popupContentWallpaper.currentWallpaperPath = text.trim();
+                            if (popupContentWallpaper.selectedOutput !== "All Outputs") {
+                                popupContentWallpaper.outputWallpapers[popupContentWallpaper.selectedOutput] = text.trim();
+                            }
                         }
                     }
                 }
@@ -131,6 +155,21 @@
                                 popupContentWallpaper.currentWallpaperPath = data.current || "";
                                 popupContentWallpaper.folderList = data.folders || ["All"];
                                 popupContentWallpaper.allItems = data.items || [];
+
+                                // Populate available outputs
+                                var rawOutputs = data.outputs || [];
+                                var outs = ["All Outputs"];
+                                for (var o = 0; o < rawOutputs.length; o++) {
+                                    outs.push(rawOutputs[o]);
+                                }
+                                popupContentWallpaper.outputList = outs;
+                                if (data.outputWallpapers) {
+                                    popupContentWallpaper.outputWallpapers = data.outputWallpapers;
+                                }
+                                if (popupContentWallpaper.outputList.indexOf(popupContentWallpaper.selectedOutput) === -1) {
+                                    popupContentWallpaper.selectedOutput = "All Outputs";
+                                }
+
                                 popupContentWallpaper.filterItems();
                                 batchThumbsTimer.restart();
                             } catch (e) {
@@ -188,6 +227,7 @@
             }
 
             ColumnLayout {
+                id: wallpaperMainColumn
                 anchors.fill: parent
                 anchors.margins: 18
                 anchors.topMargin: 26
@@ -390,6 +430,139 @@
                     }
                 }
 
+                // Settings Row: Output & Resize Mode Selectors
+                RowLayout {
+                    id: settingsRow
+                    Layout.fillWidth: true
+                    spacing: 8
+                    z: 200
+
+                    // Output Selector Dropdown
+                    Rectangle {
+                        id: outputSelectorBox
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 34
+                        radius: 8
+                        color: "#${c.base02}"
+                        border.color: popupContentWallpaper.openDropdownIndex === 1 ? "#${c.base0D}" : "#${c.base03}"
+                        border.width: 1
+                        z: popupContentWallpaper.openDropdownIndex === 1 ? 200 : 1
+
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 10
+                            anchors.rightMargin: 10
+                            spacing: 6
+
+                            Text {
+                                text: "󰍹"
+                                color: "#${c.base0D}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                            }
+
+                            Text {
+                                text: "Output:"
+                                color: "#${c.base04}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 12
+                            }
+
+                            Text {
+                                text: popupContentWallpaper.selectedOutput
+                                color: "#${c.base05}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 12
+                                font.bold: true
+                                Layout.fillWidth: true
+                                elide: Text.ElideMiddle
+                            }
+
+                            Text {
+                                text: popupContentWallpaper.openDropdownIndex === 1 ? "󰅃" : "󰅀"
+                                color: "#${c.base0D}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 12
+                            }
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if (popupContentWallpaper.openDropdownIndex === 1) {
+                                    popupContentWallpaper.openDropdownIndex = -1;
+                                } else {
+                                    popupContentWallpaper.openDropdownIndex = 1;
+                                }
+                            }
+                        }
+
+                    }
+
+                    // Resize Mode Selector Dropdown
+                    Rectangle {
+                        id: resizeSelectorBox
+                        Layout.preferredWidth: 170
+                        Layout.preferredHeight: 34
+                        radius: 8
+                        color: "#${c.base02}"
+                        border.color: popupContentWallpaper.openDropdownIndex === 2 ? "#${c.base0D}" : "#${c.base03}"
+                        border.width: 1
+                        z: popupContentWallpaper.openDropdownIndex === 2 ? 200 : 1
+
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 10
+                            anchors.rightMargin: 10
+                            spacing: 6
+
+                            Text {
+                                text: "󰹑"
+                                color: "#${c.base0D}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                            }
+
+                            Text {
+                                text: "Resize:"
+                                color: "#${c.base04}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 12
+                            }
+
+                            Text {
+                                text: popupContentWallpaper.selectedResize
+                                color: "#${c.base05}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 12
+                                font.bold: true
+                                Layout.fillWidth: true
+                            }
+
+                            Text {
+                                text: popupContentWallpaper.openDropdownIndex === 2 ? "󰅃" : "󰅀"
+                                color: "#${c.base0D}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 12
+                            }
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if (popupContentWallpaper.openDropdownIndex === 2) {
+                                    popupContentWallpaper.openDropdownIndex = -1;
+                                } else {
+                                    popupContentWallpaper.openDropdownIndex = 2;
+                                }
+                            }
+                        }
+
+                    }
+                }
+
                 // Folder category chips (horizontal scroll)
                 Flickable {
                     Layout.fillWidth: true
@@ -496,8 +669,18 @@
                                 anchors.margins: 4
                                 radius: 8
                                 color: "#${c.base02}"
-                                border.color: modelData.isCurrent || modelData.path === popupContentWallpaper.currentWallpaperPath ? "#${c.base0B}" : (cellMouse.containsMouse ? "#${c.base0D}" : "#33${c.base03}")
-                                border.width: modelData.isCurrent || modelData.path === popupContentWallpaper.currentWallpaperPath ? 2 : (cellMouse.containsMouse ? 2 : 1)
+                                border.color: {
+                                    var currentForSel = (popupContentWallpaper.selectedOutput !== "All Outputs" && popupContentWallpaper.outputWallpapers[popupContentWallpaper.selectedOutput]) ? popupContentWallpaper.outputWallpapers[popupContentWallpaper.selectedOutput] : popupContentWallpaper.currentWallpaperPath;
+                                    var isCur = modelData.path === currentForSel || (popupContentWallpaper.selectedOutput === "All Outputs" && modelData.isCurrent);
+                                    if (isCur) return "#${c.base0B}";
+                                    if (cellMouse.containsMouse) return "#${c.base0D}";
+                                    return "#33${c.base03}";
+                                }
+                                border.width: {
+                                    var currentForSel = (popupContentWallpaper.selectedOutput !== "All Outputs" && popupContentWallpaper.outputWallpapers[popupContentWallpaper.selectedOutput]) ? popupContentWallpaper.outputWallpapers[popupContentWallpaper.selectedOutput] : popupContentWallpaper.currentWallpaperPath;
+                                    var isCur = modelData.path === currentForSel || (popupContentWallpaper.selectedOutput === "All Outputs" && modelData.isCurrent);
+                                    return isCur || cellMouse.containsMouse ? 2 : 1;
+                                }
                                 clip: true
                                 scale: cardDelegate.isHoveredZoomed ? 1.14 : 1.0
 
@@ -545,7 +728,10 @@
                                     height: 20
                                     radius: 10
                                     color: "#${c.base0B}"
-                                    visible: modelData.isCurrent || modelData.path === popupContentWallpaper.currentWallpaperPath
+                                    visible: {
+                                        var currentForSel = (popupContentWallpaper.selectedOutput !== "All Outputs" && popupContentWallpaper.outputWallpapers[popupContentWallpaper.selectedOutput]) ? popupContentWallpaper.outputWallpapers[popupContentWallpaper.selectedOutput] : popupContentWallpaper.currentWallpaperPath;
+                                        return modelData.path === currentForSel || (popupContentWallpaper.selectedOutput === "All Outputs" && modelData.isCurrent);
+                                    }
 
                                     Text {
                                         anchors.centerIn: parent
@@ -589,6 +775,165 @@
                 }
             }
 
+            // Click outside dropdowns to close them
+            MouseArea {
+                anchors.fill: parent
+                z: 150
+                visible: popupContentWallpaper.openDropdownIndex !== -1
+                onClicked: popupContentWallpaper.openDropdownIndex = -1
+            }
+
+            // Floating Dropdown Overlay: Outputs List
+            Rectangle {
+                id: outputDropdownMenu
+                z: 200
+                visible: popupContentWallpaper.openDropdownIndex === 1
+                x: wallpaperMainColumn.x + settingsRow.x + outputSelectorBox.x
+                y: wallpaperMainColumn.y + settingsRow.y + outputSelectorBox.y + outputSelectorBox.height + 4
+                width: outputSelectorBox.width
+                height: Math.min(220, outputListView.contentHeight + 10)
+                radius: 10
+                color: "#F8${c.base01}"
+                border.color: "#${c.base0D}"
+                border.width: 1
+                clip: true
+
+                ListView {
+                    id: outputListView
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    clip: true
+                    model: popupContentWallpaper.outputList
+                    boundsBehavior: Flickable.StopAtBounds
+
+                    delegate: Rectangle {
+                        width: outputListView.width
+                        height: 32
+                        radius: 6
+                        color: outItemMouse.containsMouse ? "#${c.base03}" : (popupContentWallpaper.selectedOutput === modelData ? "#33${c.base0D}" : "transparent")
+
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 10
+                            anchors.rightMargin: 10
+                            spacing: 8
+
+                            Text {
+                                text: "󰍹"
+                                color: popupContentWallpaper.selectedOutput === modelData ? "#${c.base0D}" : "#${c.base04}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 13
+                            }
+
+                            Text {
+                                text: modelData
+                                color: popupContentWallpaper.selectedOutput === modelData ? "#${c.base0D}" : "#${c.base05}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 12
+                                font.bold: popupContentWallpaper.selectedOutput === modelData
+                                Layout.fillWidth: true
+                                elide: Text.ElideMiddle
+                            }
+
+                            Text {
+                                text: "✓"
+                                visible: popupContentWallpaper.selectedOutput === modelData
+                                color: "#${c.base0B}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 12
+                                font.bold: true
+                            }
+                        }
+
+                        MouseArea {
+                            id: outItemMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                popupContentWallpaper.selectedOutput = modelData;
+                                popupContentWallpaper.openDropdownIndex = -1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Floating Dropdown Overlay: Resize Mode List
+            Rectangle {
+                id: resizeDropdownMenu
+                z: 200
+                visible: popupContentWallpaper.openDropdownIndex === 2
+                x: wallpaperMainColumn.x + settingsRow.x + resizeSelectorBox.x
+                y: wallpaperMainColumn.y + settingsRow.y + resizeSelectorBox.y + resizeSelectorBox.height + 4
+                width: resizeSelectorBox.width
+                height: Math.min(180, resizeListView.contentHeight + 10)
+                radius: 10
+                color: "#F8${c.base01}"
+                border.color: "#${c.base0D}"
+                border.width: 1
+                clip: true
+
+                ListView {
+                    id: resizeListView
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    clip: true
+                    model: popupContentWallpaper.resizeOptions
+                    boundsBehavior: Flickable.StopAtBounds
+
+                    delegate: Rectangle {
+                        width: resizeListView.width
+                        height: 32
+                        radius: 6
+                        color: resizeItemMouse.containsMouse ? "#${c.base03}" : (popupContentWallpaper.selectedResize === modelData ? "#33${c.base0D}" : "transparent")
+
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 10
+                            anchors.rightMargin: 10
+                            spacing: 8
+
+                            Text {
+                                text: "󰹑"
+                                color: popupContentWallpaper.selectedResize === modelData ? "#${c.base0D}" : "#${c.base04}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 13
+                            }
+
+                            Text {
+                                text: modelData
+                                color: popupContentWallpaper.selectedResize === modelData ? "#${c.base0D}" : "#${c.base05}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 12
+                                font.bold: popupContentWallpaper.selectedResize === modelData
+                                Layout.fillWidth: true
+                            }
+
+                            Text {
+                                text: "✓"
+                                visible: popupContentWallpaper.selectedResize === modelData
+                                color: "#${c.base0B}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 12
+                                font.bold: true
+                            }
+                        }
+
+                        MouseArea {
+                            id: resizeItemMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                popupContentWallpaper.selectedResize = modelData;
+                                popupContentWallpaper.openDropdownIndex = -1;
+                            }
+                        }
+                    }
+                }
+            }
+
             // Hover tracker using HoverHandler (Qt 6)
             HoverHandler {
                 id: popupHoverWallpaper
@@ -607,7 +952,7 @@
                 id: wallpaperCloseTimer
                 interval: 400
                 repeat: false
-                onTriggered: if (!root.wallpaperHovering && !searchInput.activeFocus) root.wallpaperVisible = false
+                onTriggered: if (!root.wallpaperHovering && !searchInput.activeFocus && popupContentWallpaper.openDropdownIndex === -1) root.wallpaperVisible = false
             }
         }
     }
@@ -679,7 +1024,7 @@
             id: wallpaperCloseTimerWidget
             interval: 400
             repeat: false
-            onTriggered: if (!root.wallpaperHovering && !searchInput.activeFocus) root.wallpaperVisible = false
+            onTriggered: if (!root.wallpaperHovering && !searchInput.activeFocus && popupContentWallpaper.openDropdownIndex === -1) root.wallpaperVisible = false
         }
     }
   '';
