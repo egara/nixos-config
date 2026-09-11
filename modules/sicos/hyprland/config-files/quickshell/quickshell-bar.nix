@@ -112,6 +112,17 @@ Scope {
                 return;
             }
 
+            if (notif.summary === "Caffeine" || notif.summary === "Night Mode") {
+                var isEnabled = notif.body && notif.body.toString().toLowerCase().indexOf("enabled") !== -1;
+                mainScope.progressOsdType = notif.summary;
+                mainScope.progressOsdValue = isEnabled ? 1 : 0;
+                mainScope.progressOsdVisible = true;
+                progressOsdTimer.restart();
+
+                try { notif.dismiss(); } catch(e) {}
+                return;
+            }
+
             notif.tracked = true;
             
             var iconName = notif.image;

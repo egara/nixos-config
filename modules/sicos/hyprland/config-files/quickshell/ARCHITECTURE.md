@@ -48,6 +48,10 @@ To maintain a High-End look ("Premium UX"), all new elements must adhere to thes
     - Muted/Inactive/Standby states use neutral dark/secondary tones: `#${c.base02}` or `#${c.base03}` for container background with contrasting `#${c.base05}` / `#${c.base08}` icon glyphs.
     - Icon color inside colored badges must be `#${c.base00}` for sharp, readable contrast.
   - Consistency: No naked icons without circular badges in the Misc island. Every status item (Caps/Num locks, Mic, Cam, Screencast, MPRIS, Power profile) shares this 24x24 circular geometry.
+- **OSD Notifications & Pill Badges (progressOsd.nix):** Transient system alerts (Volume, Brightness, Keyboard Locks, Quick Toggles) display as top-centered floating pill overlays (`margins { top: 60 }`, `radius: 28`):
+  - Continuous level OSDs (Volume & Brightness): Width 380px, displaying functional icons (`󰝟`/`󰖀`/`󰕾` for volume, sun `󰃠` for brightness) with a smooth horizontal progress bar and percentage text.
+  - State Toggle OSDs (Caps Lock, Num Lock, Caffeine, Night Mode): Compact pill (100px-190px), displaying the functional icon (`󰘲`, `󰎦`, ``, ``), label, and an ON (`#${c.base0B}` Green) / OFF (`#${c.base08}` Red) status indicator with vertical separator.
+  - Interception: Handled centrally in `quickshell-bar.nix` (`onNotification`) to intercept daemon notifications and dismiss standard toast bubbles in favor of the polished pill OSD.
 - **Language Consistency:** All UI strings, labels, placeholders, empty states, tooltips, and code comments must strictly be written in English.
 - **Transition Effects:** All modals must expand and hide using `Behavior on opacity` (200ms `OutCubic`) and `Behavior on y` (250ms `OutBack`) to give a spring or soft-drop sensation.
 

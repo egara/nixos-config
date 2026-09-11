@@ -451,7 +451,7 @@
                                             text: ""
                                             color: "#${c.base05}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 22
+                                            font.pixelSize: 24
                                         }
                                     }
                                 }
@@ -476,7 +476,7 @@
                                     text: ccData.profileExpanded ? "" : ""
                                     color: "#${c.base0D}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 15
+                                    font.pixelSize: 17
                                 }
                             }
 
@@ -502,7 +502,7 @@
                                 text: ""
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 18
+                                font.pixelSize: 20
                             }
                             MouseArea {
                                 id: screenshotBtnArea
@@ -524,7 +524,7 @@
                                 text: "󰋖"
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 13
+                                font.pixelSize: 15
                             }
                             MouseArea {
                                 id: keybindsBtnArea
@@ -546,7 +546,7 @@
                                 text: "󰙎"
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 13
+                                font.pixelSize: 15
                             }
                             MouseArea {
                                 id: infoBtnArea
@@ -571,7 +571,7 @@
                                 text: ""
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 17
+                                font.pixelSize: 19
                             }
                             MouseArea {
                                 id: btnArea
@@ -611,11 +611,11 @@
                                 Layout.fillWidth: true
                                 spacing: 14
                                 RowLayout {
-                                    Text { text: ""; color: "#${c.base0D}"; font.family: "${fontName}"; font.pixelSize: 15 }
+                                    Text { text: ""; color: "#${c.base0D}"; font.family: "${fontName}"; font.pixelSize: 17 }
                                     Text { text: ccData.host !== "" ? ccData.host : "Hostname"; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 14; font.bold: true; elide: Text.ElideRight; Layout.maximumWidth: 90 }
                                 }
                                 RowLayout {
-                                    Text { text: ""; color: "#${c.base0D}"; font.family: "${fontName}"; font.pixelSize: 15 }
+                                    Text { text: ""; color: "#${c.base0D}"; font.family: "${fontName}"; font.pixelSize: 17 }
                                     Text { text: ccData.os !== "" ? ccData.os : "Linux"; color: "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 14; elide: Text.ElideRight; Layout.fillWidth: true }
                                 }
                             }
@@ -749,19 +749,20 @@
                             spacing: 12
 
                             Item {
-                                        Layout.preferredWidth: 28
-                                        Layout.preferredHeight: 22
-                                        Text {
-                                text: (Pipewire.defaultAudioSink && Pipewire.defaultAudioSink.audio.muted) ? "" : ""
-                                color: (Pipewire.defaultAudioSink && Pipewire.defaultAudioSink.audio.muted) ? "#${c.base08}" : "#${c.base0D}"
-                                font.family: "${fontName}"
-                                font.pixelSize: 18
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: if (Pipewire.defaultAudioSink) Pipewire.defaultAudioSink.audio.muted = !Pipewire.defaultAudioSink.audio.muted
+                                Layout.preferredWidth: 28
+                                Layout.preferredHeight: 22
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: (Pipewire.defaultAudioSink && Pipewire.defaultAudioSink.audio.muted) ? "" : ""
+                                    color: (Pipewire.defaultAudioSink && Pipewire.defaultAudioSink.audio.muted) ? "#${c.base08}" : "#${c.base0D}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 20
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: if (Pipewire.defaultAudioSink) Pipewire.defaultAudioSink.audio.muted = !Pipewire.defaultAudioSink.audio.muted
+                                    }
                                 }
                             }
-                                    }
 
                             Item {
                                 Layout.fillWidth: true
@@ -837,7 +838,7 @@
                                     text: popupContentCC.appsExpanded ? "" : ""
                                     color: "#${c.base0D}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 16
+                                    font.pixelSize: 18
                                 }
                                 MouseArea {
                                     id: appMouseArea
@@ -872,10 +873,10 @@
                                                         Layout.preferredHeight: 24
                                                         Image {
                                                             anchors.centerIn: parent
-                                                            width: 16
-                                                            height: 16
-                                                            sourceSize.width: 16
-                                                            sourceSize.height: 16
+                                                            width: 18
+                                                            height: 18
+                                                            sourceSize.width: 18
+                                                            sourceSize.height: 18
                                                             fillMode: Image.PreserveAspectFit
                                         source: {
                                             let p = modelData.properties;
@@ -1009,19 +1010,20 @@
                             spacing: 12
 
                             Item {
-                                        Layout.preferredWidth: 28
-                                        Layout.preferredHeight: 22
-                                        Text {
-                                text: (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio.muted) ? "" : ""
-                                color: (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio.muted) ? "#${c.base08}" : "#${c.base0D}"
-                                font.family: "${fontName}"
-                                font.pixelSize: 18
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: if (Pipewire.defaultAudioSource) Pipewire.defaultAudioSource.audio.muted = !Pipewire.defaultAudioSource.audio.muted
+                                Layout.preferredWidth: 28
+                                Layout.preferredHeight: 22
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio.muted) ? "" : ""
+                                    color: (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio.muted) ? "#${c.base08}" : "#${c.base0D}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 20
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: if (Pipewire.defaultAudioSource) Pipewire.defaultAudioSource.audio.muted = !Pipewire.defaultAudioSource.audio.muted
+                                    }
                                 }
                             }
-                                    }
 
                             Item {
                                 Layout.fillWidth: true
@@ -1086,7 +1088,7 @@
                                     text: popupContentCC.micsExpanded ? "" : ""
                                     color: "#${c.base0D}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 16
+                                    font.pixelSize: 18
                                 }
                                 MouseArea {
                                     id: micMouseArea
@@ -1133,7 +1135,7 @@
                                          text: (modelData.audio && modelData.audio.muted) ? "" : ""
                                              color: (modelData.audio && modelData.audio.muted) ? "#${c.base08}" : "#${c.base05}"
                                              font.family: "${fontName}"
-                                             font.pixelSize: 16
+                                             font.pixelSize: 18
                                         }
                                         MouseArea {
                                             anchors.fill: parent
@@ -1254,12 +1256,11 @@
                                 Layout.preferredWidth: 28
                                 Layout.preferredHeight: 22
                                 Text {
-                                    anchors.left: parent.left
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    text: ""
+                                    anchors.centerIn: parent
+                                    text: "󰃠"
                                     color: "#${c.base0D}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 18
+                                    font.pixelSize: 20
                                 }
                             }
 
@@ -1331,7 +1332,7 @@
                                     text: popupContentCC.brightnessExpanded ? "" : ""
                                     color: "#${c.base0D}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 16
+                                    font.pixelSize: 18
                                 }
                                 MouseArea {
                                     id: brightMouseArea
@@ -1370,7 +1371,7 @@
                                                      text: modelData.class === "backlight" ? "" : ""
                                                      color: "#${c.base05}"
                                                      font.family: "${fontName}"
-                                                     font.pixelSize: 16
+                                                     font.pixelSize: 18
                                                 }
                                             }
 
@@ -1487,7 +1488,7 @@
                                         text: "󰍹"
                                         color: "#${c.base0D}"
                                         font.family: "${fontName}"
-                                        font.pixelSize: 18
+                                        font.pixelSize: 20
                                     }
                                 }
 
@@ -1526,7 +1527,7 @@
                                          text: popupContentCC.monitorExpanded ? "" : ""
                                          color: "#${c.base0D}"
                                          font.family: "${fontName}"
-                                         font.pixelSize: 16
+                                         font.pixelSize: 18
                                     }
                                     MouseArea {
                                         id: monExpandMouseArea
@@ -1566,7 +1567,7 @@
                                             text: "󰓡"
                                             color: "#${c.base0D}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 16
+                                            font.pixelSize: 18
                                         }
                                         MouseArea {
                                             id: monSelectArea
@@ -1597,7 +1598,7 @@
                                             text: "-"
                                             color: "#${c.base05}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 18
+                                            font.pixelSize: 20
                                             font.bold: true
                                         }
                                         MouseArea {
@@ -1676,7 +1677,7 @@
                                             text: "+"
                                             color: "#${c.base05}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 18
+                                            font.pixelSize: 20
                                             font.bold: true
                                         }
                                         MouseArea {
@@ -1730,7 +1731,7 @@
                                         text: ""
                                         color: "#${c.base0D}"
                                         font.family: "${fontName}"
-                                        font.pixelSize: 18
+                                        font.pixelSize: 20
                                     }
                                 }
 
@@ -1764,7 +1765,7 @@
                                          text: popupContentCC.fontExpanded ? "" : ""
                                          color: "#${c.base0D}"
                                          font.family: "${fontName}"
-                                         font.pixelSize: 16
+                                         font.pixelSize: 18
                                     }
                                     MouseArea {
                                         id: fontExpandMouseArea
@@ -1891,7 +1892,7 @@
                                             text: "-"
                                             color: "#${c.base05}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 18
+                                            font.pixelSize: 20
                                             font.bold: true
                                         }
                                         MouseArea {
@@ -1958,7 +1959,7 @@
                                             text: "+"
                                             color: "#${c.base05}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 18
+                                            font.pixelSize: 20
                                             font.bold: true
                                         }
                                         MouseArea {
@@ -1991,7 +1992,7 @@
                                             text: "󰑓"
                                             color: applyFontArea.containsMouse ? "#${c.base00}" : "#${c.base0D}"
                                             font.family: "${fontName}"
-                                            font.pixelSize: 15
+                                            font.pixelSize: 17
                                         }
                                         Text {
                                             text: popupContentCC.pendingFontSize !== popupContentCC.currentFontSize ? "Apply & Rebuild (" + popupContentCC.pendingFontSize + "pt)" : "Reapply Current Font (" + popupContentCC.currentFontSize + "pt)"
@@ -2041,7 +2042,7 @@
                             Rectangle {
                                 width: 32; height: 32; radius: 16
                                 color: "#${c.base0D}"
-                                Text { anchors.centerIn: parent; text: popupContentCC.activeNetworkType === "ethernet" ? "󰈀" : (popupContentCC.activeNetworkType === "none" ? "󰤭" : ""); color: "#${c.base00}"; font.family: "${fontName}"; font.pixelSize: 16 }
+                                Text { anchors.centerIn: parent; text: popupContentCC.activeNetworkType === "ethernet" ? "󰈀" : (popupContentCC.activeNetworkType === "none" ? "󰤭" : ""); color: "#${c.base00}"; font.family: "${fontName}"; font.pixelSize: 18 }
                             }
                             ColumnLayout {
                                 Layout.fillWidth: true
@@ -2053,7 +2054,7 @@
                                 text: popupContentCC.networkExpanded ? "" : ""
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 15
+                                font.pixelSize: 17
                             }
                         }
                         MouseArea {
@@ -2083,7 +2084,7 @@
                                     text: ""
                                     color: (popupContentCC.bluetoothStatus === "Connected" || popupContentCC.bluetoothStatus === "On") ? "#${c.base00}" : "#${c.base04}"
                                     font.family: "${fontName}"
-                                    font.pixelSize: 16
+                                    font.pixelSize: 18
                                 }
                             }
                             ColumnLayout {
@@ -2097,7 +2098,7 @@
                                 text: popupContentCC.bluetoothExpanded ? "" : ""
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 15
+                                font.pixelSize: 17
                             }
                         }
 
@@ -2169,7 +2170,7 @@
                                         anchors.leftMargin: 10
                                         anchors.rightMargin: 10
                                         spacing: 10
-                                        Text { text: popupContentCC.networkTab === "ethernet" ? "󰈀" : "󰤨"; color: modelData.active ? "#${c.base0D}" : "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 16 }
+                                        Text { text: popupContentCC.networkTab === "ethernet" ? "󰈀" : "󰤨"; color: modelData.active ? "#${c.base0D}" : "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 18 }
                                         Text { text: modelData.name; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; Layout.fillWidth: true; elide: Text.ElideRight }
                                     }
 
@@ -2215,7 +2216,7 @@
                             Rectangle {
                                 width: 26; height: 26; radius: 13
                                 color: "#33${c.base05}"
-                                Text { anchors.centerIn: parent; text: ""; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 13 }
+                                Text { anchors.centerIn: parent; text: ""; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15 }
                                 MouseArea {
                                     anchors.fill: parent
                                     cursorShape: Qt.PointingHandCursor
@@ -2246,7 +2247,7 @@
                                         anchors.rightMargin: 10
                                         spacing: 10
 
-                                        Text { text: ""; color: modelData.active ? "#${c.base0D}" : "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 16 }
+                                        Text { text: ""; color: modelData.active ? "#${c.base0D}" : "#${c.base04}"; font.family: "${fontName}"; font.pixelSize: 18 }
                                         Text { text: modelData.name; color: "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 15; Layout.fillWidth: true }
 
                                         // Battery if available
@@ -2298,7 +2299,7 @@
                         RowLayout {
                             anchors.centerIn: parent
                             spacing: 8
-                            Text { text: ""; color: ccData.caffeineActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 17 }
+                            Text { text: ""; color: ccData.caffeineActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 19 }
                             Text { text: "Caffeine"; color: ccData.caffeineActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.bold: true; font.pixelSize: 15 }
                         }
                         MouseArea {
@@ -2320,7 +2321,7 @@
                         RowLayout {
                             anchors.centerIn: parent
                             spacing: 8
-                            Text { text: ""; color: ccData.nightlightActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 17 }
+                            Text { text: ""; color: ccData.nightlightActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.pixelSize: 19 }
                             Text { text: "Night Mode"; color: ccData.nightlightActive ? "#${c.base0D}" : "#${c.base05}"; font.family: "${fontName}"; font.bold: true; font.pixelSize: 15 }
                         }
                         MouseArea {

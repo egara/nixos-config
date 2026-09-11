@@ -791,7 +791,7 @@
                     text: "" // Music icon
                     color: (miscIslandMain.activePlayer && miscIslandMain.activePlayer.playbackState === 1) ? "#${c.base00}" : "#${c.base05}"
                     font.family: "${fontName}"
-                    font.pixelSize: 13
+                    font.pixelSize: 16
                 }
 
                 // Click to toggle play/pause directly

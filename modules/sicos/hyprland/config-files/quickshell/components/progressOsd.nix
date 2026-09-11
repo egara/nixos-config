@@ -45,7 +45,15 @@
                     spacing: 14
                     
                     Text {
-                        text: mainScope.progressOsdType === "Volume" ? (mainScope.progressOsdValue === 0 ? "󰝟" : (mainScope.progressOsdValue < 50 ? "󰖀" : "󰕾")) : "󰃠"
+                        text: {
+                            if (mainScope.progressOsdType === "Volume") {
+                                if (mainScope.progressOsdValue === 0) return "󰝟";
+                                if (mainScope.progressOsdValue < 50) return "󰖀";
+                                return "󰕾";
+                            }
+                            // Brightness icon (Sun)
+                            return "󰃠";
+                        }
                         color: "#${c.base0D}"
                         font.family: "${fontName}"
                         font.pixelSize: 24
@@ -89,7 +97,7 @@
     
     PanelWindow {
         id: lockOsdWindow
-        visible: mainScope.progressOsdVisible && (mainScope.progressOsdType === "Caps Lock" || mainScope.progressOsdType === "Num Lock")
+        visible: mainScope.progressOsdVisible && (mainScope.progressOsdType === "Caps Lock" || mainScope.progressOsdType === "Num Lock" || mainScope.progressOsdType === "Caffeine" || mainScope.progressOsdType === "Night Mode")
         
         anchors {
             top: true
@@ -105,7 +113,7 @@
         WlrLayershell.layer: WlrLayer.Overlay
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
         
-        implicitWidth: 100
+        implicitWidth: (mainScope.progressOsdType === "Caffeine" || mainScope.progressOsdType === "Night Mode") ? 190 : 100
         implicitHeight: 56
         
         Item {
@@ -115,7 +123,7 @@
             Behavior on opacity {
                 NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
             }
-            opacity: (mainScope.progressOsdVisible && (mainScope.progressOsdType === "Caps Lock" || mainScope.progressOsdType === "Num Lock")) ? 1 : 0
+            opacity: (mainScope.progressOsdVisible && (mainScope.progressOsdType === "Caps Lock" || mainScope.progressOsdType === "Num Lock" || mainScope.progressOsdType === "Caffeine" || mainScope.progressOsdType === "Night Mode")) ? 1 : 0
             
             Rectangle {
                 anchors.fill: parent
@@ -126,16 +134,32 @@
                 
                 RowLayout {
                     anchors.centerIn: parent
-                    spacing: 10
+                    spacing: 12
                     
                     Text {
-                        text: mainScope.progressOsdType === "Caps Lock" ? "󰘲" : "󰎦"
-                        color: "#${c.base0D}"
+                        text: {
+                            if (mainScope.progressOsdType === "Caps Lock") return "󰘲";
+                            if (mainScope.progressOsdType === "Num Lock") return "󰎦";
+                            if (mainScope.progressOsdType === "Caffeine") return "";
+                            if (mainScope.progressOsdType === "Night Mode") return "";
+                            return "󰂚";
+                        }
+                        color: (mainScope.progressOsdValue === 1) ? "#${c.base0D}" : "#${c.base04}"
                         font.family: "${fontName}"
                         font.pixelSize: 22
                         Layout.alignment: Qt.AlignVCenter
                     }
                     
+                    Text {
+                        visible: (mainScope.progressOsdType === "Caffeine" || mainScope.progressOsdType === "Night Mode")
+                        text: mainScope.progressOsdType
+                        color: "#${c.base05}"
+                        font.family: "${fontName}"
+                        font.pixelSize: 15
+                        font.bold: true
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+
                     Rectangle {
                         Layout.preferredWidth: 2
                         Layout.preferredHeight: 18
@@ -146,7 +170,7 @@
                     
                     Text {
                         text: mainScope.progressOsdValue === 1 ? "ON" : "OFF"
-                        color: "#${c.base05}"
+                        color: (mainScope.progressOsdValue === 1) ? "#${c.base0B}" : "#${c.base08}"
                         font.family: "${fontName}"
                         font.pixelSize: 15
                         font.bold: true

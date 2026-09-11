@@ -356,7 +356,7 @@
                                 text: ""
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 15
+                                font.pixelSize: 19
                             }
 
                             Text {
@@ -405,7 +405,7 @@
                                 text: "󰚌"
                                 color: "#${c.base08}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 15
+                                font.pixelSize: 19
                             }
 
                             Text {
