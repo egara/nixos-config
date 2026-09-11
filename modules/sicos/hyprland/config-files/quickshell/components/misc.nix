@@ -24,10 +24,25 @@
             var players = Mpris.players.values;
             if (!players || players.length === 0) return null;
             if (manualPlayer && players.includes(manualPlayer)) return manualPlayer;
+
+            // Priority 1: Currently playing media
             for (var i = 0; i < players.length; i++) {
                 if (players[i].playbackState === 1) return players[i];
             }
-            return players[0];
+
+            // Priority 2: Paused media with real title/artist (e.g. Spotify, YouTube, VLC)
+            for (var j = 0; j < players.length; j++) {
+                var p = players[j];
+                if (p.playbackState === 2) {
+                    var title = (p.trackTitle || (p.metadata && p.metadata["xesam:title"]) || "").toString().trim();
+                    var artist = (p.trackArtist || (p.metadata && p.metadata["xesam:artist"]) || "").toString().trim();
+                    var url = (p.metadata && p.metadata["xesam:url"] ? p.metadata["xesam:url"].toString() : "").toLowerCase();
+                    // Ignore WhatsApp Web or generic audio when paused
+                    if (url.includes("web.whatsapp.com") || title.toLowerCase() === "whatsapp") continue;
+                    if (title !== "" || artist !== "") return p;
+                }
+            }
+            return null;
         }
 
         property real currentTrackPosition: 0
@@ -528,15 +543,142 @@
             }
         }
         
+        // Track Pipewire nodes so their properties and streams update live in Quickshell
+        PwObjectTracker {
+            objects: (Pipewire.ready && Pipewire.nodes && Pipewire.nodes.values) ? Pipewire.nodes.values : []
+        }
+
+        // Pipewire Privacy Tracking Properties
+        property int _pwPrivacyTrigger: 0
+        Connections {
+            target: Pipewire.nodes
+            function onValuesChanged() { miscIslandMain._pwPrivacyTrigger += 1; }
+        }
+
+        // Microphone in use detection (filtering out Quickshell internal peak monitor and cava)
+        property bool micInUse: {
+            var trigger = miscIslandMain._pwPrivacyTrigger;
+            if (!Pipewire.ready || !Pipewire.nodes || !Pipewire.nodes.values) return false;
+            var nodes = Pipewire.nodes.values;
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+                if (!node) continue;
+                if (node.isStream && node.isSink === false) {
+                    var name = (node.name || "").toLowerCase();
+                    var mediaName = (node.properties && node.properties["media.name"] || "").toLowerCase();
+                    var appName = (node.properties && node.properties["application.name"] || "").toLowerCase();
+                    var category = (node.properties && node.properties["media.category"] || "").toLowerCase();
+                    var combined = name + " " + mediaName + " " + appName + " " + category;
+                    // Ignore Quickshell's own peak monitor, cava, system monitors
+                    if (/quickshell|peak detect|cava|monitor|system/.test(combined)) continue;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        property bool rawCameraInUse: false
+
+        Timer {
+            interval: 1000
+            running: true
+            repeat: true
+            onTriggered: cameraCheckProc.running = true
+        }
+
+        Process {
+            id: cameraCheckProc
+            command: ["python3", "-c", "import glob, os\ndef chk():\n    for f in glob.glob('/proc/[0-9]*/fd/*'):\n        try:\n            t = os.readlink(f)\n            if t.startswith('/dev/video'):\n                pid = f.split('/')[2]\n                with open(f'/proc/{pid}/cmdline', 'rb') as c:\n                    cmd = c.read()\n                    if b'wireplumber' not in cmd and b'pipewire' not in cmd:\n                        return True\n        except (OSError, UnicodeDecodeError):\n            pass\n    return False\nprint('CAM:1' if chk() else 'CAM:0')"]
+            running: true
+            stdout: StdioCollector {
+                onStreamFinished: {
+                    if (text.indexOf("CAM:1") !== -1) {
+                        miscIslandMain.rawCameraInUse = true;
+                    } else if (text.indexOf("CAM:0") !== -1) {
+                        miscIslandMain.rawCameraInUse = false;
+                    }
+                }
+            }
+        }
+
+        // Camera in use detection (combining direct V4L2 device usage and Pipewire streams)
+        property bool cameraInUse: {
+            if (rawCameraInUse) return true;
+            var trigger = miscIslandMain._pwPrivacyTrigger;
+            if (!Pipewire.ready || !Pipewire.nodes || !Pipewire.nodes.values) return false;
+            var nodes = Pipewire.nodes.values;
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+                if (!node) continue;
+                // Check 1: Active camera input stream (WebRTC, OBS, Portals)
+                if (node.isStream && node.properties && (node.properties["media.class"] === "Stream/Input/Video" || node.properties["media.type"] === "Video")) {
+                    return true;
+                }
+                // Check 2: Physical/V4L2 camera source node actively running/streaming
+                if (node.properties && (node.properties["media.class"] === "Video/Source" || node.properties["media.role"] === "Camera")) {
+                    if (node.state === "running" || node.state === "active" || node.state === 3) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        // Screencast / Screen sharing in use detection
+        property bool screenShareInUse: {
+            var trigger = miscIslandMain._pwPrivacyTrigger;
+            if (!Pipewire.ready || !Pipewire.nodes || !Pipewire.nodes.values) return false;
+            var nodes = Pipewire.nodes.values;
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+                if (!node) continue;
+                var mediaClass = (node.properties && node.properties["media.class"]) || "";
+                var mediaName = (node.properties && node.properties["media.name"] || "").toLowerCase();
+                var nodeName = (node.name || "").toLowerCase();
+                var appName = (node.properties && node.properties["application.name"] || "").toLowerCase();
+                var combined = mediaClass + " " + mediaName + " " + nodeName + " " + appName;
+
+                // Case 1: xdg-desktop-portal-hyprland screencast node (Stream/Output/Video or Video/Source with xdph)
+                if (combined.indexOf("xdph") !== -1 || combined.indexOf("screencast") !== -1 || combined.indexOf("screen-cast") !== -1) {
+                    if (node.state === "running" || node.state === "active" || node.state === 3 || (node.properties && node.properties["stream.is-live"] === "true")) {
+                        return true;
+                    }
+                }
+
+                // Case 2: General Stream/Output/Video portals/OBS
+                if (mediaClass === "Stream/Output/Video") {
+                    if (/xdg-desktop-portal|xdpw|screencast|screen|obs|hyprland/.test(combined)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         property var activePlayer: {
             var players = Mpris.players.values;
             if (!players || players.length === 0) return null;
+
+            // Priority 1: Currently playing media
             for (var i = 0; i < players.length; i++) {
                 if (players[i].playbackState === 1) { // Playing
                     return players[i];
                 }
             }
-            return players[0];
+
+            // Priority 2: Paused media with real title/artist (e.g. Spotify, YouTube, VLC)
+            for (var j = 0; j < players.length; j++) {
+                var p = players[j];
+                if (p.playbackState === 2) { // Paused
+                    var title = (p.trackTitle || (p.metadata && p.metadata["xesam:title"]) || "").toString().trim();
+                    var artist = (p.trackArtist || (p.metadata && p.metadata["xesam:artist"]) || "").toString().trim();
+                    var url = (p.metadata && p.metadata["xesam:url"] ? p.metadata["xesam:url"].toString() : "").toLowerCase();
+                    // Ignore WhatsApp Web or generic audio when paused
+                    if (url.includes("web.whatsapp.com") || title.toLowerCase() === "whatsapp") continue;
+                    if (title !== "" || artist !== "") return p;
+                }
+            }
+            return null;
         }
 
         RowLayout {
@@ -573,6 +715,66 @@
                     color: "#${c.base00}"
                     font.family: "${fontName}"
                     font.pixelSize: 16
+                }
+            }
+
+            // Microphone In Use Indicator
+            Rectangle {
+                property bool isMuted: Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio && Pipewire.defaultAudioSource.audio.muted
+                width: 24; height: 24
+                radius: 12
+                color: isMuted ? "#${c.base03}" : "#${c.base08}"
+                visible: miscIslandMain.micInUse
+
+                Text {
+                    anchors.centerIn: parent
+                    text: parent.isMuted ? "󰍭" : "󰍬"
+                    color: parent.isMuted ? "#${c.base08}" : "#${c.base00}"
+                    font.family: "${fontName}"
+                    font.pixelSize: 15
+                }
+
+                // Click to mute/unmute default audio source
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        if (Pipewire.defaultAudioSource && Pipewire.defaultAudioSource.audio) {
+                            Pipewire.defaultAudioSource.audio.muted = !Pipewire.defaultAudioSource.audio.muted;
+                        }
+                    }
+                }
+            }
+
+            // Camera In Use Indicator
+            Rectangle {
+                width: 24; height: 24
+                radius: 12
+                color: "#${c.base09}"
+                visible: miscIslandMain.cameraInUse
+
+                Text {
+                    anchors.centerIn: parent
+                    text: "󰄀"
+                    color: "#${c.base00}"
+                    font.family: "${fontName}"
+                    font.pixelSize: 15
+                }
+            }
+
+            // Screen Sharing In Use Indicator
+            Rectangle {
+                width: 24; height: 24
+                radius: 12
+                color: "#${c.base0C}"
+                visible: miscIslandMain.screenShareInUse
+
+                Text {
+                    anchors.centerIn: parent
+                    text: "󰕩"
+                    color: "#${c.base00}"
+                    font.family: "${fontName}"
+                    font.pixelSize: 15
                 }
             }
 
