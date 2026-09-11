@@ -40,6 +40,14 @@ To maintain a High-End look ("Premium UX"), all new elements must adhere to thes
 - **Interactive Buttons:** Rounded design `radius: 20`, borderless. Base background `#${c.base02}`, changing to `#${c.base03}` on hover. Normal texts (only bold if representing an "active" state).
 - **Lists and Rows:** List elements (`ListView` or repeaters) must use a `MouseArea` over the entire row to facilitate clicking (no tiny buttons). On hover, a slight highlight in `#${c.base03}` and display secondary action icons (e.g., delete button, which has the property `visible: mouseArea.containsMouse`).
 - **Island Backgrounds (Pill background):** `#${c.base01}` inactive, `#${c.base03}` on hover, and `#${c.base02}` active/pressed.
+- **Island Indicator Badges (Misc Pill & Status Indicators):** All indicator icons inside the Misc island follow a unified circular badge pattern:
+  - Container: `width: 24; height: 24; radius: 12` (`Rectangle` circular badge).
+  - Icon Text: Centered (`anchors.centerIn: parent`), font size 13-16px depending on glyph proportions, font family `${fontName}`.
+  - Colors (Strict Stylix Semantics):
+    - Background uses functional accent colors: `#${c.base08}` (Red: CapsLock, Active Unmuted Mic, Performance Profile), `#${c.base09}` (Peach/Orange: Active Camera in use), `#${c.base0A}` (Yellow: NumLock), `#${c.base0B}` (Green: Power-saver Profile), `#${c.base0C}` (Cyan/Teal: Screen Sharing in use), `#${c.base0D}` (Blue/Accent: Active/Playing MPRIS, Balanced Profile).
+    - Muted/Inactive/Standby states use neutral dark/secondary tones: `#${c.base02}` or `#${c.base03}` for container background with contrasting `#${c.base05}` / `#${c.base08}` icon glyphs.
+    - Icon color inside colored badges must be `#${c.base00}` for sharp, readable contrast.
+  - Consistency: No naked icons without circular badges in the Misc island. Every status item (Caps/Num locks, Mic, Cam, Screencast, MPRIS, Power profile) shares this 24x24 circular geometry.
 - **Language Consistency:** All UI strings, labels, placeholders, empty states, tooltips, and code comments must strictly be written in English.
 - **Transition Effects:** All modals must expand and hide using `Behavior on opacity` (200ms `OutCubic`) and `Behavior on y` (250ms `OutBack`) to give a spring or soft-drop sensation.
 

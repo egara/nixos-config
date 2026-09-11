@@ -74,7 +74,7 @@
             width: parent.width
             height: parent.height
             color: "transparent"
-            
+
             // Ambient Background Mask (Body + Beak)
             Item {
                 id: popupBgMask
@@ -148,7 +148,7 @@
                 source: tintRect
                 maskSource: popupBgMask
             }
-            
+
             opacity: root.miscVisible ? 1 : 0
             y: root.miscVisible ? 0 : -20
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
@@ -166,7 +166,7 @@
                 Item {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 32
-                    
+
                     Row {
                         anchors.centerIn: parent
                         spacing: 14
@@ -208,7 +208,7 @@
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredWidth: 180
                     Layout.preferredHeight: 180
-                    
+
                     // Breathing Glow behind the Album
                     Glow {
                         id: albumGlow
@@ -220,7 +220,7 @@
                         samples: 41
                         transparentBorder: true
                     }
-                    
+
                     SequentialAnimation {
                         running: miscPopup.activePlayer && miscPopup.activePlayer.playbackState === 1 // Only animate when playing
                         loops: Animation.Infinite
@@ -247,7 +247,7 @@
                             let art = "";
                             if (miscPopup.activePlayer.trackArtUrl) art = miscPopup.activePlayer.trackArtUrl.toString();
                             else if (miscPopup.activePlayer.metadata && miscPopup.activePlayer.metadata["mpris:artUrl"]) art = miscPopup.activePlayer.metadata["mpris:artUrl"].toString();
-                            
+
                             if (art !== "") return art;
 
                             if (miscPopup.activePlayer.metadata && miscPopup.activePlayer.metadata["xesam:url"]) {
@@ -266,7 +266,7 @@
                         layer.effect: OpacityMask {
                             maskSource: maskRect
                         }
-                        
+
                         // Fallback icon if no art
                         Rectangle {
                             anchors.fill: parent
@@ -297,14 +297,14 @@
                         font.pixelSize: 15
                         elide: Text.ElideRight
                     }
-                    
+
                     // Real-ish EQ based on Pipewire peak
                     PwNodePeakMonitor {
                         id: outputPeakMonitor
                         node: Pipewire.defaultAudioSink
                         enabled: root.miscVisible && miscPopup.activePlayer && miscPopup.activePlayer.playbackState === 1
                     }
-                    
+
                     Row {
                         Layout.alignment: Qt.AlignHCenter
                         Layout.preferredHeight: 14
@@ -316,21 +316,21 @@
                                 radius: 1
                                 color: "#${c.base0D}"
                                 anchors.verticalCenter: parent.verticalCenter
-                                
+
                                 height: {
                                     if (!miscPopup.activePlayer || miscPopup.activePlayer.playbackState !== 1) return 3;
-                                    
+
                                     let p = outputPeakMonitor.peak || 0;
                                     let factor = 1.0;
                                     let factors = [0.7, 1.2, 1.1, 0.9, 1.3, 0.8, 1.1, 0.8];
                                     if (index >= 0 && index < factors.length) factor = factors[index];
-                                    
+
                                     let targetHeight = 3 + (p * 14 * factor);
                                     return Math.min(16, targetHeight);
                                 }
-                                
-                                Behavior on height { 
-                                    NumberAnimation { duration: 75; easing.type: Easing.OutQuad } 
+
+                                Behavior on height {
+                                    NumberAnimation { duration: 75; easing.type: Easing.OutQuad }
                                 }
                             }
                         }
@@ -358,14 +358,14 @@
                         return (miscPopup.activePlayer.metadata["mpris:length"] > 0);
                     }
                     spacing: 12
-                    
+
                     Rectangle {
                         Layout.fillWidth: true
                         height: 6
                         radius: 3
                         color: "#33${c.base05}"
                         clip: true
-                        
+
                         Rectangle {
                             height: parent.height
                             radius: 3
@@ -474,7 +474,7 @@
                 acceptedButtons: Qt.NoButton
                 onWheel: {}
             }
-            
+
             Timer {
                 id: popupCloseTimer
                 interval: 400
@@ -493,7 +493,7 @@
         radius: 12
         Layout.preferredHeight: 32
         Layout.preferredWidth: miscLayout.implicitWidth + 20
-        
+
         property bool capsLockOn: false
         property bool numLockOn: false
         property bool firstLockCheck: true
@@ -506,19 +506,19 @@
                 locksProc.running = true;
             }
         }
-        
+
         Process {
             id: locksProc
             command: ["sh", "-c", "hyprctl devices -j | awk -F'[:,]' '/\"capsLock\"/{c=$2} /\"numLock\"/{n=$2} /\"main\": true/{print \"CAPS:\"c\" NUM:\"n}' | tr -d ' \\t\\r\\n'"]
             running: true
-            
+
             stdout: StdioCollector {
                 onStreamFinished: {
                     if (text === "") return;
                     var str = text;
                     var newCaps = str.indexOf("CAPS:true") !== -1;
                     var newNum = str.indexOf("NUM:true") !== -1;
-                    
+
                     if (!miscIslandMain.firstLockCheck) {
                         if (newCaps !== miscIslandMain.capsLockOn) {
                             mainScope.progressOsdType = "Caps Lock";
@@ -535,14 +535,14 @@
                             Qt.createQmlObject(timerCodeNum, root, "numTimer" + Math.random().toString().replace(".", ""));
                         }
                     }
-                    
+
                     miscIslandMain.capsLockOn = newCaps;
                     miscIslandMain.numLockOn = newNum;
                     miscIslandMain.firstLockCheck = false;
                 }
             }
         }
-        
+
         // Track Pipewire nodes so their properties and streams update live in Quickshell
         PwObjectTracker {
             objects: (Pipewire.ready && Pipewire.nodes && Pipewire.nodes.values) ? Pipewire.nodes.values : []
@@ -692,7 +692,7 @@
                 radius: 12
                 color: "#${c.base08}"
                 visible: miscIslandMain.capsLockOn
-                
+
                 Text {
                     anchors.centerIn: parent
                     text: "󰘲"
@@ -708,7 +708,7 @@
                 radius: 12
                 color: "#${c.base0A}"
                 visible: miscIslandMain.numLockOn
-                
+
                 Text {
                     anchors.centerIn: parent
                     text: "󰎦"
@@ -783,33 +783,44 @@
                 id: musicIconRect
                 width: 24; height: 24
                 radius: 12
-                color: "transparent"
-                visible: parent.parent.activePlayer !== null
-                
+                color: (miscIslandMain.activePlayer && miscIslandMain.activePlayer.playbackState === 1) ? "#${c.base0D}" : "#${c.base02}"
+                visible: miscIslandMain.activePlayer !== null
+
                 Text {
                     anchors.centerIn: parent
                     text: "" // Music icon
-                    color: parent.parent.parent.activePlayer && parent.parent.parent.activePlayer.playbackState === 1 ? "#${c.base0D}" : "#${c.base05}"
+                    color: (miscIslandMain.activePlayer && miscIslandMain.activePlayer.playbackState === 1) ? "#${c.base00}" : "#${c.base05}"
                     font.family: "${fontName}"
-                    font.pixelSize: 18
+                    font.pixelSize: 13
+                }
+
+                // Click to toggle play/pause directly
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        if (miscIslandMain.activePlayer) {
+                            miscIslandMain.activePlayer.togglePlaying();
+                        }
+                    }
                 }
             }
 
             // Power Profile Indicator
             Rectangle {
-                color: "transparent"
-                Layout.preferredHeight: 24
-                Layout.preferredWidth: 24
-                
+                width: 24; height: 24
+                radius: 12
+                color: PowerProfiles.profile === 0 ? "#${c.base0B}" : (PowerProfiles.profile === 1 ? "#${c.base0D}" : "#${c.base08}")
+
                 Text {
                     anchors.centerIn: parent
                     text: PowerProfiles.profile === 0 ? "" : (PowerProfiles.profile === 1 ? "" : "")
-                    color: PowerProfiles.profile === 0 ? "#${c.base0B}" : (PowerProfiles.profile === 1 ? "#${c.base0D}" : "#${c.base08}")
+                    color: "#${c.base00}"
                     font.family: "${fontName}"
-                    font.pixelSize: PowerProfiles.profile === 2 ? 16 : 20
+                    font.pixelSize: PowerProfiles.profile === 2 ? 13 : 18
                 }
-                
-                // Allow direct clicking for power profiles even if misc area is large
+
+                // Allow direct clicking for power profiles to cycle through modes
                 MouseArea {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
@@ -847,7 +858,7 @@
                 }
             }
         }
-        
+
         Timer {
             id: miscOpenTimer
             interval: 200
@@ -859,7 +870,7 @@
                 }
             }
         }
-        
+
         Timer {
             id: widgetCloseTimer
             interval: 400
