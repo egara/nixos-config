@@ -133,7 +133,7 @@ in
         # applications.
         open = [
           {
-            run = "xdg-open \"$@\"";
+            run = "xdg-open %s";
             orphan = true;
             for = "unix";
             desc = "Open";
@@ -143,7 +143,7 @@ in
         # The default player for music will be QMMP
         play = [
           {
-            run = "qmmp \"$@\"";
+            run = "qmmp %s";
             orphan = true;
             for = "unix";
           }
@@ -152,7 +152,7 @@ in
         # The default player for video will be VLC
         video = [
           {
-            run = "vlc \"$@\"";
+            run = "vlc %s";
             orphan = true;
             for = "unix";
           }
@@ -161,7 +161,7 @@ in
         # The default image viewer will be feh
         image = [
           {
-            run = "feh \"$@\"";
+            run = "feh %s";
             orphan = true;
             for = "unix";
           }
@@ -170,7 +170,7 @@ in
         # The default PDF reader will be Papers
         pdf = [
           {
-            run = "papers \"$@\"";
+            run = "papers %s";
             orphan = true;
             for = "unix";
           }
@@ -184,7 +184,7 @@ in
         # The default editor will be Zed
         edit = [
           {
-            run = "zeditor \"$@\"";
+            run = "zeditor %s";
             orphan = true;
             for = "unix";
           }
@@ -193,7 +193,7 @@ in
         # A generic opener for Firefox
         firefox = [
           {
-            run = "firefox \"$@\"";
+            run = "firefox %s";
             orphan = true;
             for = "unix";
           }
