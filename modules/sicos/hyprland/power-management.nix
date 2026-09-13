@@ -88,6 +88,7 @@ in
         # External dependencies
         power-profiles-daemon
         brightnessctl
+        upower # battery and power supply telemetry CLI
         bc # for floating point arithmetic in script
         libnotify # for on-screen notifications
         sudo # needed by notifyAsUser script

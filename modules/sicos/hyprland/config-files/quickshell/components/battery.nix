@@ -11,8 +11,42 @@
         anchor.edges: Edges.Bottom | Edges.Right
         visible: root.batteryVisible || popupContent.opacity > 0
         implicitWidth: 440
-        implicitHeight: 250
+        implicitHeight: hasChargeLimit ? 250 : 198
         color: "transparent"
+        property int chargeLimit: 100
+        property bool hasChargeLimit: false
+
+        // Dynamic detection of hardware charge limit via sysfs
+        Process {
+            id: chargeLimitProc
+            command: ["sh", "-c", "cat /sys/class/power_supply/BAT*/charge_control_end_threshold /sys/class/power_supply/BAT*/charge_stop_threshold 2>/dev/null | head -n 1"]
+            running: false
+            stdout: StdioCollector {
+                onStreamFinished: {
+                    let val = parseInt(text.trim());
+                    if (!isNaN(val) && val > 0 && val < 100) {
+                        batteryPopup.chargeLimit = val;
+                        batteryPopup.hasChargeLimit = true;
+                    } else {
+                        batteryPopup.hasChargeLimit = false;
+                        batteryPopup.chargeLimit = 100;
+                    }
+                }
+            }
+        }
+
+        Connections {
+            target: root
+            function onBatteryVisibleChanged() {
+                if (root.batteryVisible) {
+                    chargeLimitProc.running = true;
+                }
+            }
+        }
+
+        Component.onCompleted: {
+            chargeLimitProc.running = true;
+        }
 
         // Helper functions
         function getRealBatteryHealth() {
@@ -38,9 +72,12 @@
         function getBatteryStateString() {
             if (!UPower.displayDevice) return "Unknown";
             
-            // Detect hardware charge limit (usually around 80% and in 'Pending Charge' state)
-            if (UPower.displayDevice.state === 5 && UPower.displayDevice.percentage >= 0.79 && UPower.displayDevice.percentage <= 0.81) {
-                return "Limit Reached";
+            // Detect hardware charge limit dynamically when active
+            if (batteryPopup.hasChargeLimit) {
+                let curPercent = Math.round(UPower.displayDevice.percentage * 100);
+                if (curPercent >= (batteryPopup.chargeLimit - 1) && (UPower.displayDevice.state === 5 || UPower.displayDevice.state === 4)) {
+                    return "Limit Reached";
+                }
             }
             
             switch(UPower.displayDevice.state) {
@@ -237,10 +274,11 @@
                     }
                 }
 
-                // Charge Limit Card
+                // Charge Limit Card (only shown when a hardware threshold exists and is active)
                 Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 40
+                    Layout.preferredHeight: batteryPopup.hasChargeLimit ? 40 : 0
+                    visible: batteryPopup.hasChargeLimit
                     radius: 10
                     color: "#${c.base02}"
                     
@@ -256,7 +294,7 @@
                             Layout.fillWidth: true
                         }
                         Text {
-                            text: "80%"
+                            text: batteryPopup.chargeLimit + "%"
                             color: "#${c.base05}"
                             font.family: "${fontName}"
                             font.bold: true
