@@ -70,6 +70,15 @@ let
     ${pkgs.brightnessctl}/bin/brightnessctl set 100%
     ${pkgs.util-linux}/bin/logger -t power-management "Restored brightness to 100% due to AC plug."
   '';
+
+  performanceModeScript = pkgs.writeShellScriptBin "performance-mode" ''
+    # Send notification via the helper script
+    ${notifyAsUser}/bin/notify-as-user -t 3500 -u low -r 9993 "Energy Profile" " Performance "
+
+    # Switch to performance profile using absolute paths
+    ${pkgs.power-profiles-daemon}/bin/powerprofilesctl set performance
+    ${pkgs.util-linux}/bin/logger -t power-management "Switched to performance profile."
+  '';
 in
 {
   config = mkIf cfg.enable {
@@ -86,6 +95,7 @@ in
         # Add our custom scripts to the system PATH
         powerSaverScript
         balancedModeScript
+        performanceModeScript
         notifyAsUser
       ];
 

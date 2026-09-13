@@ -52,6 +52,7 @@ Scope {
     // Progress OSD State (global across screens)
     property int progressOsdValue: 0
     property string progressOsdType: ""
+    property string progressOsdText: ""
     property bool progressOsdVisible: false
     property bool dndMode: false
 
@@ -116,6 +117,27 @@ Scope {
                 var isEnabled = notif.body && notif.body.toString().toLowerCase().indexOf("enabled") !== -1;
                 mainScope.progressOsdType = notif.summary;
                 mainScope.progressOsdValue = isEnabled ? 1 : 0;
+                mainScope.progressOsdVisible = true;
+                progressOsdTimer.restart();
+
+                try { notif.dismiss(); } catch(e) {}
+                return;
+            }
+
+            if (notif.summary === "Power Profile" || notif.summary === "Energy Profile") {
+                var b = notif.body ? notif.body.toString().toLowerCase() : "";
+                var profVal = 1;
+                var profText = "Balanced";
+                if (b.indexOf("saver") !== -1 || b.indexOf("power-saver") !== -1) {
+                    profVal = 0;
+                    profText = "Power Saver";
+                } else if (b.indexOf("performance") !== -1) {
+                    profVal = 2;
+                    profText = "Performance";
+                }
+                mainScope.progressOsdType = "Power Profile";
+                mainScope.progressOsdValue = profVal;
+                mainScope.progressOsdText = profText;
                 mainScope.progressOsdVisible = true;
                 progressOsdTimer.restart();
 

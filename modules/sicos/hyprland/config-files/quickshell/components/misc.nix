@@ -876,14 +876,30 @@
                     cursorShape: Qt.PointingHandCursor
                     onClicked: {
                         let nextCmd = "balanced-mode";
+                        let nextVal = 1;
+                        let nextText = "Balanced";
+
                         if (PowerProfiles.profile === 0) {
                             nextCmd = "balanced-mode";
+                            nextVal = 1;
+                            nextText = "Balanced";
                         } else if (PowerProfiles.profile === 1) {
-                            nextCmd = "powerprofilesctl set performance";
+                            nextCmd = "performance-mode";
+                            nextVal = 2;
+                            nextText = "Performance";
                         } else {
                             nextCmd = "power-saver-mode";
+                            nextVal = 0;
+                            nextText = "Power Saver";
                         }
-                        indicatorProc.exec(["sh", "-c", nextCmd])
+
+                        mainScope.progressOsdType = "Power Profile";
+                        mainScope.progressOsdValue = nextVal;
+                        mainScope.progressOsdText = nextText;
+                        mainScope.progressOsdVisible = true;
+                        progressOsdTimer.restart();
+
+                        indicatorProc.exec(["sh", "-c", nextCmd]);
                     }
                 }
                 Process {

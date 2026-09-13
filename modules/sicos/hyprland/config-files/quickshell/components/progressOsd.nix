@@ -97,7 +97,7 @@
     
     PanelWindow {
         id: lockOsdWindow
-        visible: mainScope.progressOsdVisible && (mainScope.progressOsdType === "Caps Lock" || mainScope.progressOsdType === "Num Lock" || mainScope.progressOsdType === "Caffeine" || mainScope.progressOsdType === "Night Mode")
+        visible: mainScope.progressOsdVisible && (mainScope.progressOsdType === "Caps Lock" || mainScope.progressOsdType === "Num Lock" || mainScope.progressOsdType === "Caffeine" || mainScope.progressOsdType === "Night Mode" || mainScope.progressOsdType === "Power Profile")
         
         anchors {
             top: true
@@ -113,7 +113,11 @@
         WlrLayershell.layer: WlrLayer.Overlay
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
         
-        implicitWidth: (mainScope.progressOsdType === "Caffeine" || mainScope.progressOsdType === "Night Mode") ? 190 : 100
+        implicitWidth: {
+            if (mainScope.progressOsdType === "Power Profile") return 220;
+            if (mainScope.progressOsdType === "Caffeine" || mainScope.progressOsdType === "Night Mode") return 190;
+            return 100;
+        }
         implicitHeight: 56
         
         Item {
@@ -123,7 +127,7 @@
             Behavior on opacity {
                 NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
             }
-            opacity: (mainScope.progressOsdVisible && (mainScope.progressOsdType === "Caps Lock" || mainScope.progressOsdType === "Num Lock" || mainScope.progressOsdType === "Caffeine" || mainScope.progressOsdType === "Night Mode")) ? 1 : 0
+            opacity: (mainScope.progressOsdVisible && (mainScope.progressOsdType === "Caps Lock" || mainScope.progressOsdType === "Num Lock" || mainScope.progressOsdType === "Caffeine" || mainScope.progressOsdType === "Night Mode" || mainScope.progressOsdType === "Power Profile")) ? 1 : 0
             
             Rectangle {
                 anchors.fill: parent
@@ -142,17 +146,29 @@
                             if (mainScope.progressOsdType === "Num Lock") return "󰎦";
                             if (mainScope.progressOsdType === "Caffeine") return "";
                             if (mainScope.progressOsdType === "Night Mode") return "";
+                            if (mainScope.progressOsdType === "Power Profile") {
+                                if (mainScope.progressOsdValue === 0) return "";
+                                if (mainScope.progressOsdValue === 1) return "";
+                                return "";
+                            }
                             return "󰂚";
                         }
-                        color: (mainScope.progressOsdValue === 1) ? "#${c.base0D}" : "#${c.base04}"
+                        color: {
+                            if (mainScope.progressOsdType === "Power Profile") {
+                                if (mainScope.progressOsdValue === 0) return "#${c.base0B}";
+                                if (mainScope.progressOsdValue === 1) return "#${c.base0D}";
+                                return "#${c.base08}";
+                            }
+                            return (mainScope.progressOsdValue === 1) ? "#${c.base0D}" : "#${c.base04}";
+                        }
                         font.family: "${fontName}"
-                        font.pixelSize: 22
+                        font.pixelSize: (mainScope.progressOsdType === "Power Profile" && mainScope.progressOsdValue === 2) ? 18 : 22
                         Layout.alignment: Qt.AlignVCenter
                     }
                     
                     Text {
-                        visible: (mainScope.progressOsdType === "Caffeine" || mainScope.progressOsdType === "Night Mode")
-                        text: mainScope.progressOsdType
+                        visible: (mainScope.progressOsdType === "Caffeine" || mainScope.progressOsdType === "Night Mode" || mainScope.progressOsdType === "Power Profile")
+                        text: mainScope.progressOsdType === "Power Profile" ? "Power" : mainScope.progressOsdType
                         color: "#${c.base05}"
                         font.family: "${fontName}"
                         font.pixelSize: 15
@@ -169,8 +185,20 @@
                     }
                     
                     Text {
-                        text: mainScope.progressOsdValue === 1 ? "ON" : "OFF"
-                        color: (mainScope.progressOsdValue === 1) ? "#${c.base0B}" : "#${c.base08}"
+                        text: {
+                            if (mainScope.progressOsdType === "Power Profile") {
+                                return mainScope.progressOsdText !== "" ? mainScope.progressOsdText : (mainScope.progressOsdValue === 0 ? "Power Saver" : (mainScope.progressOsdValue === 1 ? "Balanced" : "Performance"));
+                            }
+                            return mainScope.progressOsdValue === 1 ? "ON" : "OFF";
+                        }
+                        color: {
+                            if (mainScope.progressOsdType === "Power Profile") {
+                                if (mainScope.progressOsdValue === 0) return "#${c.base0B}";
+                                if (mainScope.progressOsdValue === 1) return "#${c.base0D}";
+                                return "#${c.base08}";
+                            }
+                            return (mainScope.progressOsdValue === 1) ? "#${c.base0B}" : "#${c.base08}";
+                        }
                         font.family: "${fontName}"
                         font.pixelSize: 15
                         font.bold: true

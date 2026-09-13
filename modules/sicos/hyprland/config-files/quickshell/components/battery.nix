@@ -275,7 +275,7 @@
                         model: [
                             { name: "Power Saver", cmd: "power-saver-mode", enumVal: 0 },
                             { name: "Balanced", cmd: "balanced-mode", enumVal: 1 },
-                            { name: "Performance", cmd: "powerprofilesctl set performance", enumVal: 2 }
+                            { name: "Performance", cmd: "performance-mode", enumVal: 2 }
                         ]
                         Rectangle {
                             Layout.fillWidth: true
@@ -298,7 +298,12 @@
                                 anchors.fill: parent
                                 hoverEnabled: true
                                 onClicked: {
-                                    profileProc.exec(["sh", "-c", modelData.cmd])
+                                    mainScope.progressOsdType = "Power Profile";
+                                    mainScope.progressOsdValue = modelData.enumVal;
+                                    mainScope.progressOsdText = modelData.name;
+                                    mainScope.progressOsdVisible = true;
+                                    progressOsdTimer.restart();
+                                    profileProc.exec(["sh", "-c", modelData.cmd]);
                                 }
                             }
                             Process {
