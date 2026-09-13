@@ -6,6 +6,7 @@
         radius: 12
         Layout.preferredHeight: 32
         Layout.minimumWidth: trayLayout.width + 14
+        property bool isLightTheme: ${if (config.stylix.polarity or "dark") == "light" then "true" else "false"}
         
         PopupWindow {
             id: trayMenuPopup
@@ -278,6 +279,7 @@
                     color: trayMouseArea.containsMouse ? "#44${c.base03}" : "transparent"
                     
                     Image {
+                        id: trayIconImg
                         anchors.centerIn: parent
                         source: trayLayout.trayIconSourceFor(modelData)
                         width: 18
@@ -285,6 +287,11 @@
                         fillMode: Image.PreserveAspectFit
                         sourceSize: Qt.size(28, 28)
                         asynchronous: true
+                        layer.enabled: trayIsland.isLightTheme
+                        layer.effect: MultiEffect {
+                            colorization: 1.0
+                            colorizationColor: "#${c.base05}"
+                        }
                     }
                     
                     MouseArea {
