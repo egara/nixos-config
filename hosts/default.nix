@@ -78,8 +78,8 @@ let
           # Enable the sicos module if desktop is hyprland
           config = lib.mkIf (host.desktop == "hyprland") (
             let
-              themeMode = "light";
-              themeScheme = "atelier-savanna-light";
+              themeMode = "dark";
+              themeScheme = "gruvbox-dark";
               themeFontSize = 11;
             in
             {
