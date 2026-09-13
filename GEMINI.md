@@ -1,151 +1,31 @@
-# Gemini Agent Context for nixos-config
+# Gemini / Antigravity Context for nixos-config
 
-This document serves as the primary context and knowledge base for the Gemini CLI agent operating within the `nixos-config` repository. It outlines the project's architecture, key components, and operational workflows.
+This repository manages multi-machine NixOS systems using Flakes and hosts the custom Hyprland-based desktop environment **SicOS**.
 
-## 1. Project Philosophy & Goal
+## 1. Project Architecture
 
-This repository is a **NixOS Flake** configuration that manages multiple machines (hosts). The primary goal is to provide a reproducible, declarative system configuration with a focus on a custom, polished desktop environment named **SicOS**.
+- **`flake.nix`**: Entry point and outputs (`nixosConfigurations`, `nixosModules`, `homeManagerModules`).
+- **`hosts/`**: Machine-specific configurations (`strange`, `rocket`, `ironman`, `taskmaster`, `vm`).
+  - `default.nix`: Central logic using `mkHost` to generate configurations and define Stylix themes.
+- **`modules/sicos/hyprland/`**: Core SicOS desktop environment module:
+  - `default.nix`: System-level NixOS options, SDDM, packages, and system services.
+  - `hm-module.nix`: Home Manager module managing dotfiles and Stylix integration.
+  - `config-files/quickshell/`: Native QML desktop shell (SicOS-Bar, overlays, control center).
+- **`home-manager/`**: User-specific dotfiles and helper scripts.
 
-**Core Principles:**
-- **Pure Flakes:** All configurations are driven by `flake.nix`.
-- **Modularity:** Configuration is split into `hosts`, `modules` (system-level), and `home-manager` (user-level).
-- **SicOS:** A custom Hyprland-based desktop environment module that can be imported by any NixOS system.
-- **Theming:** Integrated Light/Dark mode switching using **Stylix** and a custom theme switcher.
+## 2. Specialized Skills (Required Usage)
 
-## 2. Architecture & Directory Structure
+Deep domain knowledge and procedural runbooks are organized into specialized skills under `.agents/skills/`. Agents **MUST** review the corresponding skill before modifying configurations:
 
-- **`flake.nix`**: The entry point. Defines inputs (NixOS, Home Manager, Stylix, etc.) and outputs (`nixosConfigurations`, `nixosModules`, `homeManagerModules`).
-- **`hosts/`**: Contains machine-specific configurations.
-    - `default.nix`: **Central logic** using `mkHost` to generate configurations. Defines `themeMode` and `themeScheme` for SicOS.
-    - `<hostname>/`: Directory for each machine (e.g., `ironman`, `rocket`, `strange`, `vm`, `taskmaster`).
-        - `configuration.nix`: Main system configuration for the host.
-        - `hardware-configuration.nix`: Hardware-specific settings.
-        - `disko-config.nix`: Disk partitioning layout (managed by Disko).
-- **`modules/`**: Custom NixOS modules.
-    - `sicos/hyprland/`: **The core SicOS module.** Highly modular and configurable.
-        - `default.nix`: Defines extensive module options (`programs.sicos.hyprland.*`) and system-level config (SDDM, packages, portals).
-        - `hm-module.nix`: Home Manager companion module. Manages dotfiles via dynamic Nix templates and integrates with **Stylix**.
-        - `config-files/`: Raw configuration templates (Waybar, SwayNC, Wlogout, etc.).
-        - `scripts/`: Helper scripts like `sicos-settings.sh` and `screensaver.sh`.
-        - `themes/`: Predefined color schemes and previews.
-        - `wallpapers/`: Curated wallpapers for light/dark modes.
-        - `sddm-theme/`: Custom SicOS theme for the SDDM login manager.
-- **`home-manager/`**: User-specific configurations (dotfiles) and shared resources used by the SicOS module.
-    - `desktop/hyprland/scripts/theme-switcher.sh`: The master script for toggling themes and rebuilding the system.
+- **Desktop UI, QuickShell & Theming:** Use [`.agents/skills/sicos-desktop/SKILL.md`](.agents/skills/sicos-desktop/SKILL.md)
+  - Covers SicOS-Bar (QML), Premium UX rules, Wayland anchoring, Hyprland rules/bindings, Stylix theming, and Kanshi integration.
+- **System Administration & Flakes:** Use [`.agents/skills/nixos-flake-ops/SKILL.md`](.agents/skills/nixos-flake-ops/SKILL.md)
+  - Covers Flake rebuilds, host provisioning, hardware configurations, and Disko BTRFS partitioning.
 
-## 3. Key Components
+## 3. General Rules & Code Style
 
-### 3.1. SicOS Module
-**Location:** `modules/sicos/hyprland/`
-
-SicOS provides a complete, themed desktop experience. It is split into two parts:
-1.  **NixOS Module (`default.nix`)**:
-    - Installs a wide range of packages (`hyprland`, `hyprlock`, `hypridle`, `waybar`, `swaynotificationcenter`, `wlogout`, `walker`, etc.).
-    - Enables system services (`sddm` with custom theme, `gvfs`, `udisks2`, `polkit`).
-    - Defines options to overwrite default configs for Waybar, Wlogout, SwayNC, etc.
-2.  **Home Manager Module (`hm-module.nix`)**:
-    - Manages dotfiles in `.config/hypr`, `.config/waybar`, `.config/swaync`, etc.
-    - Uses dynamic `.text` generation for Waybar, Wlogout, and SwayNC styles to integrate Stylix colors.
-    - Configures `xdg.mimeApps` for default applications (Zed, Firefox, Nautilus, etc.).
-    - Integrates with **Stylix** for global theming.
-
-**Key Options:**
-- `enable`: Activate the module.
-- `shell`: Choice of desktop shell (`"waybar"`, `"dank-material-shell"`, or `"sicos-bar"`).
-- `theming.mode`: `"light"` or `"dark"`.
-- `theming.base16Scheme`: Base16 color scheme name (e.g., `"catppuccin-mocha"`).
-- `theming.fontSize`: Font size for Stylix (default: `10`).
-- `powerManagement.enable`: System optimizations and Waybar/SicOS-Bar power modules.
-- `kanshi.enable`: Automated monitor layout management.
-- `insync.enable`: Google Drive sync integration.
-
-### 3.2. Theming & Stylix
-Theming is a core feature of SicOS, managed by **Stylix** and the `theme-switcher.sh` script.
-- **Stylix Integration**: Defined in `hm-module.nix`. It sets colors, fonts (JetBrainsMono Nerd Font), and cursors (Bibata) globally. It handles polarity (light/dark) and targets various apps (Kitty, Zed, Btop, Yazi).
-- **Theme Switcher Script**:
-    1.  Located at `home-manager/desktop/hyprland/scripts/theme-switcher.sh`.
-    2.  Updates `themeMode` and `themeScheme` in `hosts/default.nix` using `sed`.
-    3.  Runs `nixos-rebuild switch --flake .#<host>-hyprland`.
-    4.  Restarts UI services (`waybar`, `swaync`, `walker`) using `uwsm app` to apply changes instantly.
-    5.  Updates the wallpaper using `awww`.
-
-### 3.3. Hosts
-- **VM (`vm`)**: Virtual machine for testing (Plasma/Hyprland).
-- **Rocket (`rocket`)**: Desktop PC (Nvidia/AMD).
-- **Ironman (`ironman`)**: Laptop (Intel/Nvidia).
-- **Taskmaster (`taskmaster`)**: Work Laptop.
-- **Strange (`strange`)**: Framework Laptop 13 (AMD Ryzen AI 300).
-
-### 3.4. SicOS-Bar (QuickShell Desktop Shell)
-**SicOS-Bar** is a native, custom QML-based desktop shell built on **QuickShell**, designed as a first-class alternative to `waybar` and `dank-material-shell`.
-
-- **Pill-Style Floating Multi-Monitor Architecture:** Multi-display desktop bar instantiated across all active screens via `Variants { model: Quickshell.screens }`. Modular QML islands including Workspaces (with class/title app icon heuristics), Clock & Memento Mori calendar, System Tray (`SystemTray`), MPRIS Media Player with blurred album covers, System Monitor (CPU/RAM Canvas rings), Battery (`UPower`), and App Launcher/Power buttons.
-- **Interactive Control Center (`controlcenter.nix`):** Centralized macOS/iOS-style control modal containing:
-  - **User Profile Header:** Username, host, avatar, uptime, and real-time network speed telemetry (Rx/Tx speeds, Ping, Packet Loss).
-  - **Sliders:** System volume and screen brightness sliders with mute/brightness toggles.
-  - **Monitor Scaling Pill:** Collapsible monitor scale module (`󰍹`) with `-`/`+` step buttons and continuous slider, integrated with `sicos-monitor-scale.sh` for real-time and persistent scaling via Kanshi.
-  - **Quick Toggles:** Caffeine (`hypridle` inhibitor) and Night Mode (`hyprsunset` color temperature).
-  - **Action Buttons:** Fastfetch spec modal, region screenshot (`hyprshot` + `satty`), keybindings cheatsheet (`walker`), and session menu (`wlogout`).
-- **Window Switcher Overlay (`windowswitcher.nix`):** Alt+Tab overlay rendering real-time screen thumbnails (`ScreencopyView`) using `WlrKeyboardFocus.OnDemand` for seamless window focusing.
-- **Display & Monitor Manager (`monitormanager.nix`):** Full-screen interactive overlay triggered by `Super + K` for visual multi-monitor configuration:
-  - **2D Drag & Drop Layout Canvas:** Visual drag & drop arrangement supporting horizontal, vertical stacked, and multi-directional layouts with non-overlapping pixel calculation (`scale * resolution`).
-  - **Dynamic Resolution & Refresh Rate Selector:** Live dropdown populated from Hyprland monitor modes with preselected active mode.
-  - **Power & Status Controls:** Per-display enable/disable toggles with non-switching Stylix accent borders and status pills.
-  - **Auto-Profile Generation:** Automatically creates default profile (`profile default-<hostname> { ... }`) when Kanshi is active without existing profiles.
-  - **Port ID & EDID Resolution:** Prioritizes connector IDs (`DP-1`, `DP-2`) to disambiguate identical multi-monitor setups at work or home.
-- **Stylix Integration:** Theme colors (`c.base00` to `c.base0F`) and monospace fonts are injected dynamically from Stylix with zero hardcoded CSS or colors.
-
-### 3.5. Dynamic Monitor Management & Kanshi Integration
-- **Helper Scripts:**
-  - `home-manager/desktop/hyprland/scripts/sicos-monitor-scale.sh`: Live and persistent scale control via Control Center.
-  - `home-manager/desktop/hyprland/scripts/sicos-monitors.py`: Monitor discovery, 2D layout solver, mode switching, profile generation, and Kanshi synchronization.
-  - Synced to `modules/sicos/hyprland/scripts/`.
-- **UI Integration:** Integrated into QuickShell Control Center (`controlcenter.nix`) and Monitor Manager (`monitormanager.nix`).
-- **Dynamic & Persistent Scaling Mechanics:**
-  1. **Nix Store Bypass:** Function `sync_local_kanshi_config` replaces read-only `/nix/store` symlinks at `~/.config/kanshi/config` with a direct symlink to `home-manager/desktop/hyprland/programs/kanshi/config`.
-  2. **Hostname-Filtered Persistence & Auto-Profile:** Python parser updates output scale, mode, status, and position lines specifically within Kanshi profile blocks corresponding to the active `hostname`, generating a default profile if none exists.
-  3. **Live Output Reload:** Triggers `kanshictl reload` so Kanshi loads the updated profile from disk into memory and applies live configuration; fallback to Hyprland IPC if Kanshi daemon is not running.
-
-## 4. Operational Workflows for the Agent
-
-### 4.1. Modifying the Desktop Environment (SicOS)
-**Goal:** Change UI components or behavior.
-1.  **Identify Component:**
-    - System packages or global services: Edit `modules/sicos/hyprland/default.nix`.
-    - User config or dynamic styles: Edit `modules/sicos/hyprland/hm-module.nix` or the corresponding `.nix` template in `config-files/`.
-2.  **Edit Config:**
-    - Waybar: `modules/sicos/hyprland/config-files/waybar/waybar-style.nix`.
-    - Hyprland: `home-manager/desktop/hyprland/config/hyprland.conf`.
-3.  **Apply:** Run `nixos-rebuild switch --flake .#<host>-hyprland`.
-
-### 4.2. Adding a New Package
-- **System-wide:** Add to `environment.systemPackages` in `modules/sicos/hyprland/default.nix` (if SicOS-related) or `hosts/<host>/configuration.nix`.
-- **User-specific:** Add to `home.packages` in `hosts/home.nix`.
-
-### 4.3. Creating a New Host
-1.  Create `hosts/<new-host>/`.
-2.  Add `hardware-configuration.nix`, `configuration.nix`, and `disko-config.nix`.
-3.  Update `hosts/default.nix` to add a new `mkHost` entry in the `in { ... }` block.
-
-## 5. File Map
-
-| Path | Description |
-| :--- | :--- |
-| `flake.nix` | Entry point, inputs, and module exports. |
-| `hosts/default.nix` | Central host generator and SicOS settings. |
-| `modules/sicos/hyprland/default.nix` | SicOS System Module (Packages, SDDM, Options). |
-| `modules/sicos/hyprland/hm-module.nix` | SicOS Home Manager Module (Stylix, Dotfiles). |
-| `modules/sicos/hyprland/config-files/` | Configuration templates (Nix-based CSS/JSON). |
-| `home-manager/desktop/hyprland/scripts/` | User-space scripts (theme switcher, etc.). |
-
-## 6. General Rules & Style Guide
-
-### 6.1. General Rules
-- **Language:** All generated code and comments must be in English.
-- **Existing Comments:** Do not delete existing comments in the code.
-- **Comment Placement:** All comments must be placed on the line immediately preceding the code they describe.
-
-### 6.2. Style Guidelines
-- **Nix Formatting:** Use standard formatting (2 spaces indentation).
-- **Comments Content:** Explain *why* something is done, not just *what* is done.
-- **Commit Messages:** Use clear, concise messages (e.g., `feat(sicos): add screensaver script`).
+- **Language:** All generated code, comments, user-facing UI labels, and commit messages must strictly be in English.
+- **Existing Comments:** Never remove existing comments unless explicitly requested. Always place explanatory comments on the line immediately preceding the code.
+- **Nix Formatting:** Standard 2-space indentation.
+- **Dual-Script Synchronization:** Helper scripts duplicated in `home-manager/desktop/hyprland/scripts/` and `modules/sicos/hyprland/scripts/` must always be updated in both locations.
+- **Nix Store Immutability:** Never attempt to edit files inside `/nix/store/` or symlinked store paths directly.
