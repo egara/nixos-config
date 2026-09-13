@@ -79,11 +79,11 @@ CONFIG_PATH="$HOME/Zero/nixos-config"
 # Define the SicOS wallpapers path
 WALLPAPERS_PATH="$HOME/.config/sicos/wallpapers"
 
-# Find the file containing the 'themeMode' setting, excluding the README and the script itself.
+# Find the Nix configuration file containing the 'themeMode' setting.
 # -r: recursive search
 # -l: print only file names of matching files
-# --exclude: pattern for files to exclude
-FILE_TO_EDIT=$(grep -r -l --exclude="README.md" --exclude="theme-switcher.sh" 'themeMode = "' "$CONFIG_PATH" 2>/dev/null || true)
+# --include="*.nix": inspect only Nix source files, preventing matches in markdown/skills/docs
+FILE_TO_EDIT=$(grep -r -l --include="*.nix" 'themeMode = "' "$CONFIG_PATH" 2>/dev/null || true)
 
 # Error handling if no file is found
 if [ -z "$FILE_TO_EDIT" ]; then
