@@ -25,6 +25,14 @@
             if (!players || players.length === 0) return null;
             if (manualPlayer && players.includes(manualPlayer)) return manualPlayer;
 
+            // Helper to determine if player is a web browser
+            function isBrowser(p) {
+                var id = (p.identity || "").toLowerCase();
+                var bus = (p.busName || p.desktopEntry || "").toLowerCase();
+                return /firefox|chrome|chromium|brave|vivaldi|opera|edge|librewolf|waterfox|zen|floorp/.test(id) ||
+                       /firefox|chrome|chromium|brave|vivaldi|opera|edge|librewolf|waterfox|zen|floorp/.test(bus);
+            }
+
             // Priority 1: Currently playing media
             for (var i = 0; i < players.length; i++) {
                 if (players[i].playbackState === 1) return players[i];
@@ -33,12 +41,29 @@
             // Priority 2: Paused media with real title/artist (e.g. Spotify, YouTube, VLC)
             for (var j = 0; j < players.length; j++) {
                 var p = players[j];
-                if (p.playbackState === 2) {
+                if (p.playbackState === 2) { // Paused
                     var title = (p.trackTitle || (p.metadata && p.metadata["xesam:title"]) || "").toString().trim();
                     var artist = (p.trackArtist || (p.metadata && p.metadata["xesam:artist"]) || "").toString().trim();
                     var url = (p.metadata && p.metadata["xesam:url"] ? p.metadata["xesam:url"].toString() : "").toLowerCase();
-                    // Ignore WhatsApp Web or generic audio when paused
-                    if (url.includes("web.whatsapp.com") || title.toLowerCase() === "whatsapp") continue;
+                    var lowerTitle = title.toLowerCase();
+
+                    // If originating from a browser, ignore short/ephemeral audio, social notifications, or web tabs (WhatsApp, Instagram, etc.)
+                    if (isBrowser(p)) {
+                        if (/whatsapp|instagram|telegram|discord|slack|messenger|twitter|x\.com|tiktok|reddit|facebook/.test(url) ||
+                            /whatsapp|instagram|telegram|discord|slack|messenger|twitter|tiktok|reddit|facebook/.test(lowerTitle)) {
+                            continue;
+                        }
+                        // Generic/uninformative browser titles or empty artist & url
+                        if (lowerTitle === "" || lowerTitle === "audio" || lowerTitle === "video" || lowerTitle === "whatsapp" || lowerTitle === "instagram") {
+                            continue;
+                        }
+                        // Paused browser media without artist and without media length is usually a short audio element/voice note
+                        var len = (p.metadata && p.metadata["mpris:length"]) ? Number(p.metadata["mpris:length"]) : 0;
+                        if (artist === "" && (len <= 0 || len < 30000000) && !/youtube|music|soundcloud|spotify|bandcamp|deezer|bilibili|twitch/.test(url)) {
+                            continue;
+                        }
+                    }
+
                     if (title !== "" || artist !== "") return p;
                 }
             }
@@ -659,6 +684,14 @@
             var players = Mpris.players.values;
             if (!players || players.length === 0) return null;
 
+            // Helper to determine if player is a web browser
+            function isBrowser(p) {
+                var id = (p.identity || "").toLowerCase();
+                var bus = (p.busName || p.desktopEntry || "").toLowerCase();
+                return /firefox|chrome|chromium|brave|vivaldi|opera|edge|librewolf|waterfox|zen|floorp/.test(id) ||
+                       /firefox|chrome|chromium|brave|vivaldi|opera|edge|librewolf|waterfox|zen|floorp/.test(bus);
+            }
+
             // Priority 1: Currently playing media
             for (var i = 0; i < players.length; i++) {
                 if (players[i].playbackState === 1) { // Playing
@@ -673,8 +706,25 @@
                     var title = (p.trackTitle || (p.metadata && p.metadata["xesam:title"]) || "").toString().trim();
                     var artist = (p.trackArtist || (p.metadata && p.metadata["xesam:artist"]) || "").toString().trim();
                     var url = (p.metadata && p.metadata["xesam:url"] ? p.metadata["xesam:url"].toString() : "").toLowerCase();
-                    // Ignore WhatsApp Web or generic audio when paused
-                    if (url.includes("web.whatsapp.com") || title.toLowerCase() === "whatsapp") continue;
+                    var lowerTitle = title.toLowerCase();
+
+                    // If originating from a browser, ignore short/ephemeral audio, social notifications, or web tabs (WhatsApp, Instagram, etc.)
+                    if (isBrowser(p)) {
+                        if (/whatsapp|instagram|telegram|discord|slack|messenger|twitter|x\.com|tiktok|reddit|facebook/.test(url) ||
+                            /whatsapp|instagram|telegram|discord|slack|messenger|twitter|tiktok|reddit|facebook/.test(lowerTitle)) {
+                            continue;
+                        }
+                        // Generic/uninformative browser titles or empty artist & url
+                        if (lowerTitle === "" || lowerTitle === "audio" || lowerTitle === "video" || lowerTitle === "whatsapp" || lowerTitle === "instagram") {
+                            continue;
+                        }
+                        // Paused browser media without artist and without media length is usually a short audio element/voice note
+                        var len = (p.metadata && p.metadata["mpris:length"]) ? Number(p.metadata["mpris:length"]) : 0;
+                        if (artist === "" && (len <= 0 || len < 30000000) && !/youtube|music|soundcloud|spotify|bandcamp|deezer|bilibili|twitch/.test(url)) {
+                            continue;
+                        }
+                    }
+
                     if (title !== "" || artist !== "") return p;
                 }
             }
