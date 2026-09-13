@@ -416,6 +416,13 @@ hl.layer_rule({
     animation = "fade",
 })
 
+-- Native blur for SicOS-Bar and QuickShell components
+hl.layer_rule({
+    match = { namespace = "^sicos:.*" },
+    blur = true,
+    ignore_alpha = 0.5,
+})
+
 -- ######################
 -- Layer Rules - FINISH
 -- ######################
