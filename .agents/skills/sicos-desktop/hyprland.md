@@ -4,7 +4,20 @@ Read this before modifying Hyprland window rules, keybindings, animations, input
 
 ---
 
-## 1. File Structure
+## 1. Official Documentation & Verification
+
+> [!CRITICAL]
+> **HYPRLAND SYNTAX EVOLVES FREQUENTLY BETWEEN RELEASES.**
+> Do NOT rely on cached or memorized syntax for window rules, layer rules, or dispatcher commands. Syntax changes across Hyprland versions can silently break configs or prevent windows from tiling/floating properly.
+> Always verify current syntax against official resources when creating new rules:
+> - **Window Rules:** [https://wiki.hypr.land/Configuring/Window-Rules/](https://wiki.hypr.land/Configuring/Window-Rules/)
+> - **Binds & Dispatchers:** [https://wiki.hypr.land/Configuring/Binds/](https://wiki.hypr.land/Configuring/Binds/)
+> - **Monitors & Scaling:** [https://wiki.hypr.land/Configuring/Monitors/](https://wiki.hypr.land/Configuring/Monitors/)
+> - **Variables & Appearance:** [https://wiki.hypr.land/Configuring/Variables/](https://wiki.hypr.land/Configuring/Variables/)
+
+---
+
+## 2. File Structure
 
 ```
 home-manager/desktop/hyprland/
@@ -24,7 +37,7 @@ home-manager/desktop/hyprland/
 
 ---
 
-## 2. Keybindings Workflow
+## 3. Keybindings Workflow
 
 - **Check existing keybindings before adding or changing:**
   Inspect `home-manager/desktop/hyprland/config/hyprland.conf` or run:
@@ -49,12 +62,9 @@ home-manager/desktop/hyprland/
 
 ---
 
-## 3. Window Rules
+## 4. Window Rules
 
-> [!WARNING]
-> Hyprland window rules syntax evolves across releases. Never guess the syntax. Always check existing patterns in `hyprland.conf` or the [official Hyprland window rules documentation](https://wiki.hypr.land/Configuring/Window-Rules/).
-
-Common syntax patterns:
+Common validated syntax patterns:
 ```ini
 # Floating specific windows
 windowrulev2 = float, class:^(org.gnome.Nautilus)$
@@ -72,7 +82,7 @@ layerrule = ignorezero, quickshell:.*
 
 ---
 
-## 4. Multi-Monitor Setup & Kanshi Persistence
+## 5. Multi-Monitor Setup & Kanshi Persistence
 
 SicOS integrates dynamic runtime scaling and multi-monitor positioning with persistent declarative configs.
 

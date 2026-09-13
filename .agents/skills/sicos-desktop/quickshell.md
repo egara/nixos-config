@@ -24,7 +24,20 @@ modules/sicos/hyprland/config-files/quickshell/
 
 ---
 
-## 1. Nix String Interpolation & Stylix Injection
+## 1. Official Documentation & Local References
+
+> [!CRITICAL]
+> **DO NOT GUESS QUICKSHELL OR WAYLAND LAYERSHELL APIS.**
+> QuickShell types (`Variants`, `PanelWindow`, `WlrKeyboardFocus`, `Quickshell.Hyprland`, `Quickshell.Services.*`) have unique semantics that differ from standard QtQuick.
+> Whenever unsure about an API property, syntax, or method, consult the official documentation or local reference implementations before writing code:
+> - **Official QuickShell Docs:** [https://quickshell.org/docs/v0.1.0/guide/](https://quickshell.org/docs/v0.1.0/guide/)
+> - **Local Reference Implementations (Inspection Safe):**
+>   - DankMaterialShell: `/home/egarcia/Development/git/DankMaterialShell`
+>   - Omarchy: `/home/egarcia/Development/git/omarchy`
+
+---
+
+## 2. Nix String Interpolation & Stylix Injection
 
 QML files are written as strings inside Nix functions. Stylix theme colors and fonts are passed dynamically:
 
@@ -48,7 +61,7 @@ in
 
 ---
 
-## 2. UI/UX Style Guide ("Premium UX")
+## 3. UI/UX Style Guide ("Premium UX")
 
 - **Modal Headers:** Clean typography `font.pixelSize: 18`, color `#${c.base05}`. Subtitles / counters: `font.pixelSize: 13`, color `#${c.base04}` (never use square icon boxes in headers).
 - **Close/Action Buttons:** `width: 32; height: 32; radius: 16`, base color `"transparent"` or `#${c.base02}`, hovering to `#${c.base03}` (or `#${c.base08}` for destructive actions).
@@ -69,7 +82,7 @@ in
 
 ---
 
-## 3. Advanced Engineering: Beaks and Vector Masks
+## 4. Advanced Engineering: Beaks and Vector Masks
 
 Popups feature an iOS/macOS-style pointer beak (triangle).
 
@@ -81,7 +94,7 @@ Popups feature an iOS/macOS-style pointer beak (triangle).
 
 ---
 
-## 4. Wayland LayerShell Anchoring & Edge Clamping
+## 5. Wayland LayerShell Anchoring & Edge Clamping
 
 Hyprland pushes LayerShell popups if they overflow the screen edge ("Edge Clamping"), misaligning beaks if dynamically anchored to buttons near borders.
 
@@ -102,7 +115,7 @@ Hyprland pushes LayerShell popups if they overflow the screen edge ("Edge Clampi
 
 ---
 
-## 5. Overlay Modals & Keyboard Focus
+## 6. Overlay Modals & Keyboard Focus
 
 ### Focused-Screen Modal Pattern (Single-Screen Overlays)
 Overlays in `Variants { model: Quickshell.screens }` render on every monitor unless gated.
@@ -122,7 +135,7 @@ visible: myModalActive && targetMatches || (modalCard.opacity > 0)
 
 ---
 
-## 6. IPC Pipes & Script Triggers
+## 7. IPC Pipes & Script Triggers
 
 QuickShell communicates with Hyprland global shortcuts via FIFO pipes in `/tmp/`:
 - Window Switcher: `/tmp/sicos-switcher-fifo` (triggered by `toggle-switcher.sh` via `Alt+Tab`)

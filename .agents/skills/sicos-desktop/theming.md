@@ -4,7 +4,17 @@ Read this before editing themes, color schemes, font configurations, wallpapers,
 
 ---
 
-## 1. Stylix & Base16 Global Theming
+## 1. Official Documentation & Palette References
+
+- **Base16 Styling Architecture:** [https://github.com/chriskempson/base16/blob/main/styling.md](https://github.com/chriskempson/base16/blob/main/styling.md)
+  (Outlines the exact semantic meaning of each slot `base00` to `base0F`).
+- **Tinted Theming Scheme Gallery:** [https://tinted-theming.github.io/tinted-gallery/](https://tinted-theming.github.io/tinted-gallery/)
+  (Visual preview of all standard Base16 color schemes).
+- **Stylix Official Documentation:** [https://stylix.danth.me/](https://stylix.danth.me/)
+
+---
+
+## 2. Stylix & Base16 Global Theming
 
 SicOS relies on [Stylix](https://github.com/danth/stylix) integrated in `modules/sicos/hyprland/hm-module.nix` for centralized color schemes, fonts, and cursors.
 
@@ -37,7 +47,7 @@ Stylix maps colors `c.base00` to `c.base0F`:
 
 ---
 
-## 2. Master Theme Switcher (`theme-switcher.sh`)
+## 3. Master Theme Switcher (`theme-switcher.sh`)
 
 Location: `home-manager/desktop/hyprland/scripts/theme-switcher.sh`
 
@@ -52,7 +62,7 @@ Location: `home-manager/desktop/hyprland/scripts/theme-switcher.sh`
 
 ---
 
-## 3. Wallpaper Management Engine (`sicos-wallpapers.py` & `awww`)
+## 4. Wallpaper Management Engine (`sicos-wallpapers.py` & `awww`)
 
 SicOS uses `awww` as the Wayland wallpaper daemon.
 

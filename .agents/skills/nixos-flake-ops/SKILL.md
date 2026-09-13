@@ -13,7 +13,20 @@ description: >
 
 Manage, build, and provision NixOS systems within this multi-host Flake repository.
 
-## When This Skill MUST Be Used
+## 1. Official Documentation & Package / Option Search
+
+> [!CRITICAL]
+> **VERIFY NIXOS AND HOME MANAGER OPTIONS BEFORE IMPLEMENTING.**
+> Options in `nixpkgs-unstable` and `home-manager` evolve across channel updates. If configuring a new system service, bootloader parameter, or package configuration, use the official search engines:
+> - **NixOS Options Search:** [https://search.nixos.org/options](https://search.nixos.org/options)
+> - **Nix Packages Search:** [https://search.nixos.org/packages](https://search.nixos.org/packages)
+> - **Home Manager Options:** [https://home-manager-options.extranix.com/](https://home-manager-options.extranix.com/)
+> - **Disko Repository & Examples:** [https://github.com/nix-community/disko](https://github.com/nix-community/disko)
+> - **NixOS Hardware Quirks:** [https://github.com/NixOS/nixos-hardware](https://github.com/NixOS/nixos-hardware)
+
+---
+
+## 2. When This Skill MUST Be Used
 
 **ALWAYS invoke this skill for requests involving ANY of these:**
 
@@ -27,14 +40,14 @@ Manage, build, and provision NixOS systems within this multi-host Flake reposito
 
 ---
 
-## Topic Guides
+## 3. Topic Guides
 
 - [`hosts-hardware.md`](hosts-hardware.md) - Machine profiles (`ironman`, `rocket`, `strange`, `taskmaster`, `vm`), hardware-specific quirks, kernel modules
 - [`disko-partitioning.md`](disko-partitioning.md) - Disko BTRFS layout (`@`, `@home`, `@snapshots`), EFI, SWAP, automated install script
 
 ---
 
-## Rebuild & Switch Workflows
+## 4. Rebuild & Switch Workflows
 
 Always specify the target host and profile flake output:
 
@@ -57,7 +70,7 @@ nixos-rebuild build --flake .#<hostname>-<profile>
 
 ---
 
-## Adding a New Host
+## 5. Adding a New Host
 
 Follow this sequence to register a new machine:
 
