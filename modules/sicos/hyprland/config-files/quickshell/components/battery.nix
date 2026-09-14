@@ -118,8 +118,7 @@
         function getTimeRemaining() {
             if (!UPower.displayDevice) return "N/A";
             let dev = UPower.displayDevice;
-            let seconds = dev.state === 1 ? dev.timeToFull : dev.timeToEmpty;
-            // UPower may not have computed an estimate yet (freshly unplugged or
+            let seconds = dev.state === 1 ? dev.timeToFull : dev.timeToEmpty;            // UPower may not have computed an estimate yet (freshly unplugged or
             // no accumulated statistics), so derive it from the current drain
             if (seconds <= 0 && Math.abs(dev.changeRate) > 0.1) {
                 if (dev.state === 1) {
@@ -149,6 +148,15 @@
             let rateW = consumed / hours;
             if (rateW < 1) return 0;
             return last.e / rateW * 3600;
+        }
+
+        // Label clarifies what the time refers to, since the same card shows
+        // time to full charge or time left depending on the power state
+        function getTimeLabel() {
+            if (!UPower.displayDevice) return "Time";
+            if (UPower.displayDevice.state === 1) return "To Full";
+            if (UPower.displayDevice.state === 2) return "Time Left";
+            return "Time";
         }
 
         HyprlandFocusGrab {
@@ -306,7 +314,7 @@
                             anchors.centerIn: parent
                             spacing: 4
                             Text {
-                                text: "Time"
+                                text: batteryPopup.getTimeLabel()
                                 color: "#${c.base0D}"
                                 font.family: "${fontName}"
                                 font.pixelSize: 14
