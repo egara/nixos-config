@@ -15,6 +15,8 @@
         color: "transparent"
         property int chargeLimit: 100
         property bool hasChargeLimit: false
+        // Energy samples {t, e} taken while discharging, to derive a drain rate
+        property var drainSamples: []
 
         // Dynamic detection of hardware charge limit via sysfs
         Process {
@@ -46,6 +48,28 @@
 
         Component.onCompleted: {
             chargeLimitProc.running = true;
+        }
+
+        // Some batteries (this HP one included) stop reporting current while
+        // discharging, so UPower sees 0 W and cannot estimate time left. We
+        // track energy ourselves to derive the average drain rate over time.
+        Timer {
+            id: drainSampler
+            interval: 30000
+            triggeredOnStart: true
+            repeat: true
+            running: UPower.displayDevice != null && UPower.displayDevice.state === 2
+            onTriggered: {
+                let dev = UPower.displayDevice;
+                if (!dev || dev.state !== 2) {
+                    batteryPopup.drainSamples = [];
+                    return;
+                }
+                let now = Date.now();
+                let samples = batteryPopup.drainSamples.filter(s => now - s.t < 600000);
+                samples.push({ t: now, e: dev.energy });
+                batteryPopup.drainSamples = samples;
+            }
         }
 
         // Helper functions
@@ -104,11 +128,27 @@
                     seconds = dev.energy / Math.abs(dev.changeRate) * 3600;
                 }
             }
+            // Last resort: observed drain rate from our own energy samples
+            if (seconds <= 0 && dev.state === 2) seconds = batteryPopup.getDrainEstimateSeconds();
             if (seconds <= 0) return "N/A";
             let hours = Math.floor(seconds / 3600);
             let minutes = Math.floor((seconds % 3600) / 60);
             if (hours > 0) return hours + "h " + minutes + "m";
             return minutes + "m";
+        }
+
+        function getDrainEstimateSeconds() {
+            let samples = batteryPopup.drainSamples;
+            if (samples.length < 2) return 0;
+            let first = samples[0];
+            let last = samples[samples.length - 1];
+            let hours = (last.t - first.t) / 3600000;
+            let consumed = first.e - last.e;
+            // Discard implausible readings (noise, sensor glitches, recharge)
+            if (hours <= 0 || consumed <= 0) return 0;
+            let rateW = consumed / hours;
+            if (rateW < 1) return 0;
+            return last.e / rateW * 3600;
         }
 
         HyprlandFocusGrab {
