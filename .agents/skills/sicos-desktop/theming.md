@@ -19,12 +19,14 @@ Read this before editing themes, color schemes, font configurations, wallpapers,
 SicOS relies on [Stylix](https://github.com/danth/stylix) integrated in `modules/sicos/hyprland/hm-module.nix` for centralized color schemes, fonts, and cursors.
 
 ### Central Definition in `hosts/default.nix`
-Theme mode and Base16 schemes are declared per host in `hosts/default.nix`:
+Theme mode, Base16 scheme, and font size are defined as local variables inside the `mkHost` function body in `hosts/default.nix` (shared by all hyprland hosts):
 ```nix
-# Example configuration in default.nix
+# Current values inside mkHost in hosts/default.nix
 themeMode = "dark";                  # "dark" or "light"
-themeScheme = "catppuccin-mocha";    # Base16 scheme name
+themeScheme = "gruvbox-dark";        # Base16 scheme name
+themeFontSize = 11;                  # Global Stylix font size
 ```
+These variables are then applied to `programs.sicos.hyprland.theming.{mode,base16Scheme,fontSize}`.
 
 ### Base16 Color Map Reference
 Stylix maps colors `c.base00` to `c.base0F`:

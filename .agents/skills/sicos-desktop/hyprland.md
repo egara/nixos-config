@@ -22,10 +22,8 @@ Read this before modifying Hyprland window rules, keybindings, animations, input
 ```
 home-manager/desktop/hyprland/
 ├── config/
-│   ├── hyprland.conf            # Main Hyprland configuration (source of truth)
-│   ├── hypridle.conf            # Idle daemon settings (dpms off, lock)
-│   ├── hyprlock.conf            # Screen lock screen styling
-│   └── satty.conf               # Screenshot annotation configuration
+│   ├── hyprland.lua             # Main Hyprland configuration (source of truth, Lua-based)
+│   └── user.jpg                 # Profile picture used by hyprlock
 ├── programs/
 │   └── kanshi/
 │       └── config               # Kanshi multi-monitor profile definitions
@@ -35,12 +33,14 @@ home-manager/desktop/hyprland/
     └── show-hyprland-keybindings.sh
 ```
 
+> Lock/idle configs (`hyprlock.conf`, `hypridle.conf`) live in `modules/sicos/hyprland/config-files/`.
+
 ---
 
 ## 3. Keybindings Workflow
 
 - **Check existing keybindings before adding or changing:**
-  Inspect `home-manager/desktop/hyprland/config/hyprland.conf` or run:
+  Inspect `home-manager/desktop/hyprland/config/hyprland.lua` or run:
   ```bash
   ~/Zero/nixos-config/home-manager/desktop/hyprland/scripts/show-hyprland-keybindings.sh
   ```

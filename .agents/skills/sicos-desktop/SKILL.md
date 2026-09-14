@@ -69,7 +69,7 @@ Deep-dive instructions for each major desktop subsystem live next to this file. 
 
 | Component | Technology | Nix Configuration Location |
 |---|---|---|
-| **Compositor / WM** | Hyprland (Wayland) | `home-manager/desktop/hyprland/config/hyprland.conf` |
+| **Compositor / WM** | Hyprland (Wayland) | `home-manager/desktop/hyprland/config/hyprland.lua` |
 | **Desktop Shell** | QuickShell (QML / C++) | `modules/sicos/hyprland/config-files/quickshell/` |
 | **Alternative Bars** | Waybar / DankMaterialShell | `modules/sicos/hyprland/config-files/waybar/` |
 | **Global Theming** | Stylix + Base16 | `modules/sicos/hyprland/hm-module.nix` & `hosts/default.nix` |

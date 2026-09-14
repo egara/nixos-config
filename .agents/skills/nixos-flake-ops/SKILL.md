@@ -36,7 +36,7 @@ Manage, build, and provision NixOS systems within this multi-host Flake reposito
 - Modifying `hardware-configuration.nix` or kernel parameters
 - Adding system-wide packages or services in `configuration.nix`
 - Executing system rebuilds (`nixos-rebuild switch`)
-- Running system maintenance, rollbacks, or garbage collection (`nixos-clean.sh`)
+- Running system maintenance, rollbacks, or garbage collection (`home-manager/desktop/hyprland/scripts/nixos-clean.sh`)
 
 ---
 
@@ -78,13 +78,30 @@ Follow this sequence to register a new machine:
 2. **Generate / Add Hardware Config:** `hardware-configuration.nix`
 3. **Define Storage Layout:** `disko-config.nix` (standard UEFI/BTRFS or custom)
 4. **Define Host Configuration:** `configuration.nix` (networking, hostname, specific packages)
-5. **Register in `hosts/default.nix`:**
+5. **Define the host module list in `hosts/default.nix`** (before the `in` block), following the existing `<hostname>Modules` pattern:
+   ```nix
+   # Modules for <hostname>
+   <hostname>Modules = [
+     disko.nixosModules.disko
+     {
+       _module.args.disks = [ "/dev/nvme0n1" ];
+       imports = [ (import ./<hostname>/disko-config.nix) ];
+     }
+     ./<hostname>/hardware-configuration.nix
+     ./efi-configuration.nix          # or ./bios-configuration.nix
+     ./<hostname>/configuration.nix
+   ];
+   ```
+6. **Register in `hosts/default.nix`:**
    Add an entry inside `in { ... }` using the `mkHost` function:
    ```nix
    "<hostname>-hyprland" = mkHost {
-     hostname = "<hostname>";
-     desktopProfile = "hyprland";
-     themeMode = "dark";
-     themeScheme = "catppuccin-mocha";
+     hostName = "<hostname>";
+     desktop = "hyprland";            # "plasma", "hyprland" or "cosmic"
+     extraModules = <hostname>Modules;
+     # homeManagerExtraImports = [ ... ];  # optional
    };
    ```
+
+> [!NOTE]
+> **Theming is NOT a `mkHost` argument.** `themeMode`, `themeScheme`, and `themeFontSize` are local variables defined inside the `mkHost` function body in `hosts/default.nix` (applied to `programs.sicos.hyprland.theming.*`). To change the theme for all hyprland hosts, edit those local variables there.

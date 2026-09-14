@@ -14,7 +14,7 @@ SicOS uses `hyprshot` combined with `satty` for an interactive snapshot flow.
   1. `hyprshot -m region --raw`: Captures selected screen rectangle.
   2. Piped into `satty --filename - --fullscreen --output-filename ~/Pictures/Screenshots/screenshot-%Y%m%d-%H%M%S.png`.
   3. `satty` allows drawing arrows, boxes, text, blurring sensitive information, and copying directly to the clipboard or saving to disk.
-- **Configuration:** `home-manager/desktop/hyprland/config/satty.conf`.
+- **Configuration:** Passed inline via command-line flags when `satty` is invoked (no `satty.conf` file exists).
 
 ---
 
@@ -24,7 +24,7 @@ SicOS uses `hyprshot` combined with `satty` for an interactive snapshot flow.
 
 - **Trigger:** `Super` or click on the launcher button in SicOS-Bar.
 - **Keybindings Cheatsheet:**
-  The script `home-manager/desktop/hyprland/scripts/show-hyprland-keybindings.sh` parses active keybindings from `hyprland.conf` and opens an interactive, searchable Walker menu.
+  The script `home-manager/desktop/hyprland/scripts/show-hyprland-keybindings.sh` reads live keybindings via `hyprctl binds -j` (Hyprland IPC) and opens an interactive, searchable Walker menu.
 - **Configured via:** `modules/sicos/hyprland/hm-module.nix`.
 
 ---
