@@ -93,7 +93,17 @@
         
         function getTimeRemaining() {
             if (!UPower.displayDevice) return "N/A";
-            let seconds = UPower.displayDevice.state === 1 ? UPower.displayDevice.timeToFull : UPower.displayDevice.timeToEmpty;
+            let dev = UPower.displayDevice;
+            let seconds = dev.state === 1 ? dev.timeToFull : dev.timeToEmpty;
+            // UPower may not have computed an estimate yet (freshly unplugged or
+            // no accumulated statistics), so derive it from the current drain
+            if (seconds <= 0 && Math.abs(dev.changeRate) > 0.1) {
+                if (dev.state === 1) {
+                    seconds = Math.max(dev.energyCapacity - dev.energy, 0) / Math.abs(dev.changeRate) * 3600;
+                } else if (dev.state === 2) {
+                    seconds = dev.energy / Math.abs(dev.changeRate) * 3600;
+                }
+            }
             if (seconds <= 0) return "N/A";
             let hours = Math.floor(seconds / 3600);
             let minutes = Math.floor((seconds % 3600) / 60);
