@@ -1,4 +1,9 @@
 { config, lib, pkgs, c, fontName }:
+let
+  # Resolve the backend script path per-user at build time so the module
+  # works on any machine regardless of the username (never hardcode /home/<user>)
+  sicosWallpapersPy = "${config.home.homeDirectory}/.config/sicos/scripts/sicos-wallpapers.py";
+in
 {
   popup = ''
     PopupWindow {
@@ -37,7 +42,7 @@
             property var folderList: ["All"]
             property string activeFolder: "All"
             property string currentWallpaperPath: ""
-            property string wallpapersDirPath: "~/.config/sicos/wallpapers"
+            property string wallpapersDirPath: "${config.home.homeDirectory}/.config/sicos/wallpapers"
             property string searchText: ""
             property bool isScanning: false
 
@@ -74,13 +79,13 @@
                     }
                 }
                 var targetOut = selectedOutput === "All Outputs" ? "all" : selectedOutput;
-                wallpaperSetProc.command = ["python3", "/home/egarcia/.config/sicos/scripts/sicos-wallpapers.py", "--set", filePath, "-o", targetOut, "-r", selectedResize];
+                wallpaperSetProc.command = ["python3", "${sicosWallpapersPy}", "--set", filePath, "-o", targetOut, "-r", selectedResize];
                 wallpaperSetProc.running = true;
             }
 
             function setRandom() {
                 var targetOut = selectedOutput === "All Outputs" ? "all" : selectedOutput;
-                wallpaperRandomProc.command = ["python3", "/home/egarcia/.config/sicos/scripts/sicos-wallpapers.py", "--random", "-o", targetOut, "-r", selectedResize];
+                wallpaperRandomProc.command = ["python3", "${sicosWallpapersPy}", "--random", "-o", targetOut, "-r", selectedResize];
                 wallpaperRandomProc.running = true;
             }
 
@@ -100,7 +105,7 @@
 
             Process {
                 id: wallpaperRandomProc
-                command: ["python3", "/home/egarcia/.config/sicos/scripts/sicos-wallpapers.py", "--random"]
+                command: ["python3", "${sicosWallpapersPy}", "--random"]
                 running: false
                 stdout: StdioCollector {
                     onStreamFinished: {
@@ -123,7 +128,7 @@
             // Batch Thumbnail Generator Process
             Process {
                 id: batchThumbGenProc
-                command: ["python3", "/home/egarcia/.config/sicos/scripts/sicos-wallpapers.py", "--gen-thumbs"]
+                command: ["python3", "${sicosWallpapersPy}", "--gen-thumbs"]
                 running: false
                 onExited: {
                     // Refresh wallpaper list to pick up generated thumbnails
@@ -144,14 +149,14 @@
 
             Process {
                 id: wallpaperListProc
-                command: ["python3", "/home/egarcia/.config/sicos/scripts/sicos-wallpapers.py", "--list"]
+                command: ["python3", "${sicosWallpapersPy}", "--list"]
                 running: false
                 stdout: StdioCollector {
                     onStreamFinished: {
                         if (text !== "") {
                             try {
                                 var data = JSON.parse(text);
-                                popupContentWallpaper.wallpapersDirPath = data.wallpapersDir || "~/.config/sicos/wallpapers";
+                                popupContentWallpaper.wallpapersDirPath = data.wallpapersDir || "${config.home.homeDirectory}/.config/sicos/wallpapers";
                                 popupContentWallpaper.currentWallpaperPath = data.current || "";
                                 popupContentWallpaper.folderList = data.folders || ["All"];
                                 popupContentWallpaper.allItems = data.items || [];
@@ -998,7 +1003,7 @@
             onClicked: (mouse) => {
                 if (mouse.button === Qt.MiddleButton) {
                     // Set random wallpaper on middle click
-                    cmdRunner.exec(["python3", "/home/egarcia/.config/sicos/scripts/sicos-wallpapers.py", "--random"]);
+                    cmdRunner.exec(["python3", "${sicosWallpapersPy}", "--random"]);
                 } else {
                     root.wallpaperButtonX = wallpaperButton.mapToItem(null, wallpaperButton.width / 2, 0).x;
                     root.wallpaperVisible = !root.wallpaperVisible;

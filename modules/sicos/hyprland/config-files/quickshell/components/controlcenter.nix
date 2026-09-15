@@ -2383,7 +2383,7 @@
             id: ccBtnAvatarImage
             anchors.centerIn: parent
             width: 28; height: 28
-            source: "file:///home/egarcia/.config/hypr/user.jpg"
+            source: "file://${config.home.homeDirectory}/.config/hypr/user.jpg"
             fillMode: Image.PreserveAspectCrop
             visible: false
         }
