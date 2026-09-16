@@ -300,8 +300,6 @@
     pkgs-stable.wireshark
     killall
     proton-vpn
-    antigravity-cli
-    herdr
     #gradia
     posting
     k9s
@@ -316,6 +314,10 @@
     age
     sops
     keepassxc
+    # AI Tools
+    pkgs-stable.opencode
+    antigravity-cli
+    herdr
   ];
 
   # List of programs that must be enabled
@@ -331,7 +333,6 @@
       enable = true;
       binfmt = true;
     };
-
 
     # Virtual Manager
     virt-manager = {

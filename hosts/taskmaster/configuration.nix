@@ -1,4 +1,9 @@
-{ config, pkgs, pkgs-stable, ... }:
+{
+  config,
+  pkgs,
+  pkgs-stable,
+  ...
+}:
 
 {
   ##############################################
@@ -28,7 +33,10 @@
     # Gateway
     defaultGateway = "10.18.8.1";
     # DNS
-    nameservers = [ "193.146.97.145" "193.146.97.171" ];
+    nameservers = [
+      "193.146.97.145"
+      "193.146.97.171"
+    ];
   };
 
   # Global power management for laptops
@@ -81,8 +89,8 @@
   # Kernel parameters passed in GRUB in order to
   # allow the laptop starts normally due to the
   # hardware of this machine
-   boot.kernelParams = [
-   ];
+  boot.kernelParams = [
+  ];
 
   # Docker
   virtualisation.docker.package = pkgs.docker;
@@ -94,17 +102,19 @@
 
   # List of packages installed in system profile only for this host
   environment.systemPackages = with pkgs; [
-      apache-directory-studio
-      eclipses.eclipse-jee
-      pkgs-stable.jdk8
-      opencode
-      python3
+    apache-directory-studio
+    eclipses.eclipse-jee
+    pkgs-stable.jdk8
+    python3
   ];
 
   # Mounting openjdk8 via bind mount so Eclipse properly recognizes it as a static path without symlink issues
   fileSystems."/var/lib/jvm/openjdk8" = {
     device = "${pkgs-stable.jdk8}/lib/openjdk";
     fsType = "none";
-    options = [ "bind" "nofail" ];
+    options = [
+      "bind"
+      "nofail"
+    ];
   };
 }
