@@ -986,7 +986,7 @@ in
         Text {
             anchors.centerIn: parent
             text: "󰋩"
-            color: root.wallpaperVisible ? "#${c.base0D}" : "#${c.base05}"
+            color: "#${c.base05}"
             font.family: "${fontName}"
             font.pixelSize: 18
         }
