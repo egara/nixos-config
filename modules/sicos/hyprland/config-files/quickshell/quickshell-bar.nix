@@ -64,6 +64,22 @@ Scope {
         onTriggered: mainScope.progressOsdVisible = false
     }
 
+    // Wallpaper target OSD state: list of output names that should show the
+    // "target" feedback OSD so the user knows which screen will receive wallpapers
+    property var wallpaperOsdOutputs: []
+
+    Timer {
+        id: wallpaperOsdTimer
+        interval: 2000
+        repeat: false
+        onTriggered: mainScope.wallpaperOsdOutputs = []
+    }
+
+    function showWallpaperOsd(outputs) {
+        mainScope.wallpaperOsdOutputs = outputs;
+        wallpaperOsdTimer.restart();
+    }
+
     // Notifications Model and Server (global across screens)
     property var notifObjects: ({})
     property var expandedGroups: ({})
@@ -450,6 +466,9 @@ PanelWindow {
     ${clock.popup}
     ${misc.popup}
     ${controlcenter.popup}
+
+    // Per-screen OSD giving feedback about the wallpaper target output
+    ${wallpaper.osd}
 
     Rectangle {
         anchors.fill: parent
