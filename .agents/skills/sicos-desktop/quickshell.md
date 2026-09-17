@@ -15,6 +15,7 @@ modules/sicos/hyprland/config-files/quickshell/
 │   ├── monitormanager.nix           # Super+K visual 2D display manager overlay
 │   ├── overview.nix                 # Workspace overview overlay
 │   ├── progressOsd.nix              # Floating top pill alerts (Vol/Bright/Locks)
+│   ├── targetosd.nix                # Shared per-screen target feedback OSD (wallpaper output, scale)
 │   ├── system.nix                   # CPU/RAM Canvas charts & Walker launcher
 │   ├── wallpaper.nix                # Wallpaper gallery modal & Nautilus trigger
 │   ├── windowkiller.nix             # Kill -9 frozen window visual overlay
@@ -142,3 +143,23 @@ QuickShell communicates with Hyprland global shortcuts via FIFO pipes in `/tmp/`
 - Monitor Manager: `/tmp/sicos-monitors-fifo` (triggered by `toggle-monitormanager.sh` via `Super+K`)
 
 Processes in `quickshell-bar.nix` use `Process` with `SplitParser` to listen and update properties.
+
+## 8. Target OSD Pattern (Multi-Monitor Feedback)
+
+Any UI action that **targets a specific output** (wallpaper output dropdown, monitor scale pill, and future per-monitor settings) must give the user visual feedback **on the affected screen**, identifying it. Use the shared component, never a bespoke popup:
+
+- **Component:** `targetosd.nix`, interpolated as `${targetOsd.widget}` *inside* the per-screen bar `PanelWindow` of the `Variants` block (one instance per monitor). Top-center volume-style pill (`margins { top: 60 }`, `radius: 28`, accent `#${c.base0D}`, `WlrLayer.Overlay`).
+- **API (global in `quickshell-bar.nix`):**
+  ```qml
+  mainScope.showTargetOsd(outputs, label, value)
+  ```
+  - `outputs`: array of output names (e.g. `["DP-1"]`, or all outputs for "All Outputs").
+  - `label`: context of the action; defaults to `"Output"`.
+  - `value`: right-hand text; when empty each OSD falls back to the name of the screen it is rendered on (each monitor identifies itself).
+  - Auto-hides after 2s via `targetOsdTimer` (re-calling extends the timeout).
+- **Visibility gating:** each instance checks `mainScope.targetOsdOutputs.indexOf(root.screen.name) !== -1`. Output names from backends (`hyprctl monitors -j`) match QuickShell `screen.name`, so the check is a plain string comparison.
+- **Current consumers:**
+  - Wallpaper Gallery (`wallpaper.nix`): output dropdown shows `Output | DP-1` on that screen; `All Outputs` fires one OSD per monitor.
+  - Control Center (`controlcenter.nix`): monitor switch or scale apply (`-`/`+`/slider release via `setMonitorScale()`) shows `Scale | DP-1 · 1.25x` on the affected screen.
+
+**Golden rule:** every new multi-monitor setting must trigger the shared Target OSD instead of inventing a new feedback UI, keeping geometry, animation, and styling consistent with the "Premium UX" language.

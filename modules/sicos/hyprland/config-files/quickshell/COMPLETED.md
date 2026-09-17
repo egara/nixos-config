@@ -95,4 +95,13 @@ This document contains a historical record of all features, modules, and integra
 - **Interactive Wallpapers Directory Banner:** Prominently displays `~/.config/sicos/wallpapers` so the user knows exactly where wallpapers reside, along with a direct button (``) to open the folder in Nautilus.
 - **Categorization & Filtering:** Top chips to filter by nested folder categories ("All", "Root", "wallpaperdownloader", etc.) and real-time live text search box.
 - **Optimistic Selection & Visual Feedback:** Border highlight (`#${c.base0B}`) and checkmark badge on active wallpaper; applies wallpaper instantly via `awww img` with smooth transition (`grow`).
+- **Target Output OSD:** Selecting an output in the Outputs dropdown triggers the shared target OSD on the referenced screen (one per screen for `All Outputs`) so the user sees where the wallpaper will be applied.
 - **Thumbnail Engine:** Background helper `sicos-wallpapers.py` using `magick` for high-performance thumbnail caching in `~/.cache/sicos-wallpaper-thumbs`.
+
+### 15. Shared Target OSD (Multi-Monitor Feedback)
+- **Per-Screen Feedback Pill:** Shared `targetosd.nix` component instantiated once per monitor inside the bar `Variants` block; displays a top-center volume-style pill (`margins { top: 60 }`, `radius: 28`, accent `#${c.base0D}`, `WlrLayer.Overlay`) only on the targeted output.
+- **Generic API:** `mainScope.showTargetOsd(outputs, label, value)` in `quickshell-bar.nix` with 2s auto-dismiss (`targetOsdTimer`); an empty `value` falls back to the rendering screen name so each monitor identifies itself.
+- **Wallpaper Gallery Integration:** Selecting an output in the Outputs dropdown shows `Output | <name>` on that screen; `All Outputs` fires one OSD per connected monitor, each identifying itself.
+- **Control Center Integration:** Switching the configured monitor or applying a scale change (`-`/`+`/slider release, funneled through `setMonitorScale()`) shows `Scale | <name> · <scale>x` on the affected screen.
+- **Output Name Matching:** Backend output names (`hyprctl monitors -j`) match QuickShell `screen.name`, making target gating a direct string comparison.
+- **Golden Rule:** Every new multi-monitor setting must trigger the shared Target OSD instead of inventing a new feedback UI, keeping the "Premium UX" language consistent.

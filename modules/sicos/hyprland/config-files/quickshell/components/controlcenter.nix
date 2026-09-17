@@ -340,6 +340,8 @@
             function setMonitorScale(monName, scaleVal) {
                 var scriptCmd = "if [ -f $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/sicos-monitor-scale.py ]; then $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/sicos-monitor-scale.py --set " + monName + " " + scaleVal + "; elif [ -f $HOME/.config/sicos/scripts/sicos-monitor-scale.py ]; then $HOME/.config/sicos/scripts/sicos-monitor-scale.py --set " + monName + " " + scaleVal + "; else $HOME/Zero/nixos-config/modules/sicos/hyprland/scripts/sicos-monitor-scale.py --set " + monName + " " + scaleVal + "; fi";
                 cmdRunner.exec(["sh", "-c", scriptCmd]);
+                // Feedback: highlight the screen being scaled with the shared target OSD
+                mainScope.showTargetOsd([monName], "Scale", monName + " · " + Number(scaleVal).toFixed(2) + "x");
             }
 
             Process {
@@ -1579,6 +1581,8 @@
                                                 popupContentCC.selectedMonitorIndex = nextIdx;
                                                 let mon = popupContentCC.monitorList[nextIdx];
                                                 popupContentCC.currentMonitorScale = mon.scale;
+                                                // Feedback: highlight the screen now being configured
+                                                mainScope.showTargetOsd([mon.name], "Scale", mon.name + " · " + Number(mon.scale).toFixed(2) + "x");
                                             }
                                         }
                                     }

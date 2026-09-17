@@ -869,7 +869,7 @@ in
                                 } else {
                                     targets.push(modelData);
                                 }
-                                mainScope.showWallpaperOsd(targets);
+                                mainScope.showTargetOsd(targets);
                             }
                         }
                     }
@@ -970,91 +970,6 @@ in
                 interval: 400
                 repeat: false
                 onTriggered: if (!root.wallpaperHovering && !searchInput.activeFocus && popupContentWallpaper.openDropdownIndex === -1) root.wallpaperVisible = false
-            }
-        }
-    }
-  '';
-
-  osd = ''
-    // Per-screen OSD (volume-style pill) shown on the output(s) currently
-    // selected as wallpaper target, so the user gets visual feedback of
-    // which screen the next wallpaper will be applied to.
-    PanelWindow {
-        id: wallpaperTargetOsdWindow
-        screen: root.screen
-        visible: mainScope.wallpaperOsdOutputs.indexOf(root.screen.name) !== -1
-
-        anchors {
-            top: true
-            left: false
-            right: false
-            bottom: false
-        }
-
-        margins { top: 60 }
-
-        color: "transparent"
-        exclusiveZone: -1
-        WlrLayershell.layer: WlrLayer.Overlay
-        WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-
-        implicitWidth: 280
-        implicitHeight: 56
-
-        Item {
-            id: wallpaperTargetOsdContent
-            anchors.fill: parent
-
-            Behavior on opacity {
-                NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
-            }
-            opacity: mainScope.wallpaperOsdOutputs.indexOf(root.screen.name) !== -1 ? 1 : 0
-
-            Rectangle {
-                anchors.fill: parent
-                color: "#E6${c.base01}"
-                radius: 28
-                border.color: "#33${c.base05}"
-                border.width: 1
-
-                RowLayout {
-                    anchors.centerIn: parent
-                    spacing: 12
-
-                    Text {
-                        text: "󰍹"
-                        color: "#${c.base0D}"
-                        font.family: "${fontName}"
-                        font.pixelSize: 22
-                        Layout.alignment: Qt.AlignVCenter
-                    }
-
-                    Text {
-                        text: "Output"
-                        color: "#${c.base04}"
-                        font.family: "${fontName}"
-                        font.pixelSize: 15
-                        font.bold: true
-                        Layout.alignment: Qt.AlignVCenter
-                    }
-
-                    Rectangle {
-                        Layout.preferredWidth: 2
-                        Layout.preferredHeight: 18
-                        radius: 1
-                        color: "#33${c.base05}"
-                        Layout.alignment: Qt.AlignVCenter
-                    }
-
-                    Text {
-                        text: root.screen.name
-                        color: "#${c.base0D}"
-                        font.family: "${fontName}"
-                        font.pixelSize: 15
-                        font.bold: true
-                        Layout.alignment: Qt.AlignVCenter
-                    }
-                }
             }
         }
     }

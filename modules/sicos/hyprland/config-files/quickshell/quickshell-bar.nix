@@ -19,6 +19,7 @@ let
   windowSwitcher = import ./components/windowswitcher.nix { inherit config lib pkgs c fontName; };
   windowKiller = import ./components/windowkiller.nix { inherit config lib pkgs c fontName; };
   monitorManager = import ./components/monitormanager.nix { inherit config lib pkgs c fontName; };
+  targetOsd = import ./components/targetosd.nix { inherit config lib pkgs c fontName; };
 in
 ''
 //@ pragma UseQApplication
@@ -64,20 +65,25 @@ Scope {
         onTriggered: mainScope.progressOsdVisible = false
     }
 
-    // Wallpaper target OSD state: list of output names that should show the
-    // "target" feedback OSD so the user knows which screen will receive wallpapers
-    property var wallpaperOsdOutputs: []
+    // Target OSD state: list of output names that should show the shared
+    // feedback OSD so the user knows which screen a setting will affect
+    // (wallpaper output, monitor scale, ...)
+    property var targetOsdOutputs: []
+    property string targetOsdLabel: "Output"
+    property string targetOsdValue: ""
 
     Timer {
-        id: wallpaperOsdTimer
+        id: targetOsdTimer
         interval: 2000
         repeat: false
-        onTriggered: mainScope.wallpaperOsdOutputs = []
+        onTriggered: mainScope.targetOsdOutputs = []
     }
 
-    function showWallpaperOsd(outputs) {
-        mainScope.wallpaperOsdOutputs = outputs;
-        wallpaperOsdTimer.restart();
+    function showTargetOsd(outputs, label, value) {
+        mainScope.targetOsdOutputs = outputs;
+        mainScope.targetOsdLabel = (label !== undefined && label !== "") ? label : "Output";
+        mainScope.targetOsdValue = (value !== undefined) ? value : "";
+        targetOsdTimer.restart();
     }
 
     // Notifications Model and Server (global across screens)
@@ -468,7 +474,7 @@ PanelWindow {
     ${controlcenter.popup}
 
     // Per-screen OSD giving feedback about the wallpaper target output
-    ${wallpaper.osd}
+    ${targetOsd.widget}
 
     Rectangle {
         anchors.fill: parent

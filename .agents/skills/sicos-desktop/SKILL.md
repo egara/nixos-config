@@ -76,6 +76,7 @@ Deep-dive instructions for each major desktop subsystem live next to this file. 
 | **Display Manager** | SDDM (Custom SicOS Theme) | `modules/sicos/hyprland/sddm-theme/` |
 | **App Launcher** | Walker | Configured in `hm-module.nix` |
 | **Notifications** | QuickShell OSD / SwayNC | `progressOsd.nix` or `config-files/swaync/` |
+| **Target OSD (Multi-Monitor Feedback)** | QuickShell per-screen pill | `targetosd.nix` |
 | **Session Menu** | Wlogout | `modules/sicos/hyprland/config-files/wlogout/` |
 | **Wallpaper Daemon** | `awww` | Managed by `sicos-wallpapers.py` & `theme-switcher.sh` |
 | **Display Layouts** | Kanshi + Hyprland IPC | `home-manager/desktop/hyprland/programs/kanshi/config` |

@@ -21,7 +21,8 @@ To avoid maintaining a monolithic `.qml` file with thousands of lines (which wou
   - **`wallpaper.nix`**: Wallpaper gallery popup and pill widget. Scans wallpapers from `~/.config/sicos/wallpapers` (including subfolders), displays thumbnail grid with active indicators, live search filtering, folder category chips, direct Nautilus folder opener, and middle-click random wallpaper trigger.
   - **`clock.nix`**: Real-time central clock (`Qt.formatDateTime`) and Calendar/Memento Mori modal.
   - **`misc.nix`**: Miscellaneous island hosting Keyboard lock indicators (Caps/Num Lock), real-time Pipewire privacy indicators (Microphone, Camera, Screen Sharing), the dynamic Power Profiles selector (`powerprofilesctl`), and the interactive MPRIS player.
-  - **`controlcenter.nix`**: Centralized QuickShell Control Center hub containing user stats, network traffic telemetry, system volume/brightness sliders, and the **Monitor Scale Control Pill** (collapsible QML slider communicating with `sicos-monitor-scale.sh` for live and persistent scale management via Kanshi).
+  - **`controlcenter.nix`**: Centralized QuickShell Control Center hub containing user stats, network traffic telemetry, system volume/brightness sliders, and the **Monitor Scale Control Pill** (collapsible QML slider communicating with `sicos-monitor-scale.sh` for live and persistent scale management via Kanshi). Switching the configured monitor or applying a scale change triggers the shared Target OSD on the affected screen.
+  - **`targetosd.nix`**: Shared per-screen feedback OSD (top-center, volume-style pill) instantiated once per monitor inside the bar `Variants` block. Renders only on the output(s) currently targeted by a multi-monitor setting so the user knows which screen will be affected (wallpaper output selector, Control Center monitor scale).
   - **`system.nix`**: App launcher button (`walker`) and system monitor (CPU/RAM ring charts).
   - **`workspaces.nix`**: Native two-way integration with Hyprland (`Quickshell.Hyprland`). Dynamically identifies open windows, rendering their system icons using a heuristic based on *class* and *title*.
   - **`windowswitcher.nix`**: Full-screen overlay modal for live window switching (`ALT+Tab`) using `ScreencopyView` and `WlrKeyboardFocus.OnDemand`.
@@ -52,6 +53,7 @@ To maintain a High-End look ("Premium UX"), all new elements must adhere to thes
   - Continuous level OSDs (Volume & Brightness): Width 380px, displaying functional icons (`󰝟`/`󰖀`/`󰕾` for volume, sun `󰃠` for brightness) with a smooth horizontal progress bar and percentage text.
   - State Toggle OSDs (Caps Lock, Num Lock, Caffeine, Night Mode): Compact pill (100px-190px), displaying the functional icon (`󰘲`, `󰎦`, ``, ``), label, and an ON (`#${c.base0B}` Green) / OFF (`#${c.base08}` Red) status indicator with vertical separator.
   - Interception: Handled centrally in `quickshell-bar.nix` (`onNotification`) to intercept daemon notifications and dismiss standard toast bubbles in favor of the polished pill OSD.
+  - Target Feedback OSD (`targetosd.nix`): Per-screen pill displaying `󰍹 <label> | <value>`, visible only when the screen name is listed in `mainScope.targetOsdOutputs` (see the Target OSD Pattern below).
 - **Language Consistency:** All UI strings, labels, placeholders, empty states, tooltips, and code comments must strictly be written in English.
 - **Transition Effects:** All modals must expand and hide using `Behavior on opacity` (200ms `OutCubic`) and `Behavior on y` (250ms `OutBack`) to give a spring or soft-drop sensation.
 
@@ -120,7 +122,7 @@ The Wallpaper Gallery (`wallpaper.nix`) is integrated into SicOS-Bar as an inter
   - `--random [-o <output>] [-r <mode>]`: Selects a random wallpaper from the collection and applies it to the selected display with chosen resize mode.
   - `--gen-thumbs`: Generates local cached square/16:9 thumbnail previews in `~/.cache/sicos-wallpaper-thumbs` for snappy UI scrolling.
 - **Interactive UI Controls:**
-  - **Outputs Dropdown:** Placed directly above the category pills. Automatically populates connected monitors (e.g. `eDP-1`, `DP-1`) alongside an `All Outputs` option.
+  - **Outputs Dropdown:** Placed directly above the category pills. Automatically populates connected monitors (e.g. `eDP-1`, `DP-1`) alongside an `All Outputs` option. Selecting an entry triggers the shared Target OSD on the referenced screen (`Output | DP-1`), or one OSD per monitor for `All Outputs`, so the user sees where the next wallpaper will be applied.
   - **Resize Mode Dropdown:** Allows selecting between `fit`, `crop`, `stretch`, and `no` scaling methods.
   - **Folder Filter Chips:** Horizontal scrolling pills to filter wallpapers by subdirectory or show `All`.
   - **Active Wallpaper Badge:** Shows green checkmark badges on wallpaper cards matching the currently active wallpaper for the selected output (or across all outputs).
@@ -155,6 +157,24 @@ Full-screen overlay modals instantiated through `Variants { model: Quickshell.sc
      myModalActive = true;
      ```
 4. Closing (`*Active = false`) needs no target handling: the fade-out clause keeps the target screen mapped until `modalCard.opacity` reaches `0`, and non-target screens are never mapped at all.
+
+### The Target OSD Pattern (Multi-Monitor Feedback)
+Any UI action that **targets a specific output** (wallpaper output dropdown, monitor scale pill, and future per-monitor settings) must give the user visual feedback **on the affected screen**, identifying it. This is handled by a single shared component instead of per-feature popups:
+
+- **Shared component (`targetosd.nix`):** A `PanelWindow` interpolated as `${targetOsd.widget}` *inside* the per-screen bar `PanelWindow` of the `Variants` block, so every connected monitor owns an instance. It renders a top-center, volume-style pill (`margins { top: 60 }`, `radius: 28`, accent `#${c.base0D}`) on layer `Overlay`.
+- **Visibility gating:** Each instance checks `mainScope.targetOsdOutputs.indexOf(root.screen.name) !== -1`, so the pill appears only on the targeted output(s). Output names from backends (`hyprctl monitors -j`) match QuickShell `screen.name`, making the check a direct string comparison.
+- **Global API in `quickshell-bar.nix`:**
+  ```qml
+  function showTargetOsd(outputs, label, value)
+  ```
+  - `outputs`: array of output names (e.g. `["DP-1"]` or all outputs for "All Outputs").
+  - `label`: context of the action; defaults to `"Output"`.
+  - `value`: right-hand text; when empty, each OSD falls back to the name of the screen it is rendered on (used to identify every monitor).
+  - Auto-hides after 2s via `targetOsdTimer` (re-calling the function extends the timeout).
+- **Current consumers:**
+  - *Wallpaper Gallery (`wallpaper.nix`)*: picking an output in the Outputs dropdown shows `Output | DP-1` on that screen; picking `All Outputs` fires one OSD per connected monitor, each identifying itself.
+  - *Control Center (`controlcenter.nix`)*: switching the configured monitor or applying a scale change (`-`/`+`/slider release, all funneled through `setMonitorScale()`) shows `Scale | DP-1 · 1.25x` on the affected screen.
+- **Golden rule:** every new multi-monitor setting must trigger the shared Target OSD instead of inventing a new feedback UI. Reuse keeps geometry, animation, and styling consistent with the "Premium UX" language.
 
 ### Keyboard Focus: OnDemand vs Exclusive
 When building overlay modals that need to **transfer focus to other windows** (like a window switcher), the keyboard focus mode is critical:
