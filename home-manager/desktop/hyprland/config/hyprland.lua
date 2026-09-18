@@ -408,6 +408,17 @@ hl.window_rule({
 -- Window Rules - FINISH
 -- #######################
 
+-- #########################
+-- Workspace Rules - START
+-- #########################
+
+-- Dwindle layout in the magic workspace (global layout is scrolling)
+hl.workspace_rule({ workspace = "special:magic", layout = "dwindle" })
+
+-- #########################
+-- Workspace Rules - FINISH
+-- #########################
+
 -- #####################
 -- Layer Rules - START
 -- #####################
