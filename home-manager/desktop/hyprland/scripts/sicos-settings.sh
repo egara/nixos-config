@@ -7,14 +7,12 @@
 # @email: eloy.garcia.pca@gmail.com
 # ------------------------------------------
 
-items="⏻\u00A0\u00A0\u00A0\u00A0Power\n󱓟\u00A0\u00A0\u00A0\u00A0Applications\n󰚰\u00A0\u00A0\u00A0\u00A0Update\n\u00A0\u00A0\u00A0\u00A0Clean\n󱕅\u00A0\u00A0\u00A0\u00A0Screensaver\n󰔎\u00A0\u00A0\u00A0\u00A0Themes\n󰸉\u00A0\u00A0\u00A0\u00A0Wallpapers\n󰋖\u00A0\u00A0\u00A0\u00A0Hyprland Keybindings\n󰱦\u00A0\u00A0\u00A0\u00A0Extranet\n\u00A0\u00A0\u00A0\u00A0Eclipse\n\u00A0\u00A0\u00A0\u00A0Hibernate\n\u00A0\u00A0\u00A0\u00A0Screenshots\n󰙎\u00A0\u00A0\u00A0\u00A0Info"
+items="⏻\u00A0\u00A0\u00A0\u00A0Power\n󰚰\u00A0\u00A0\u00A0\u00A0Update\n\u00A0\u00A0\u00A0\u00A0Clean\n󱕅\u00A0\u00A0\u00A0\u00A0Screensaver\n󰔎\u00A0\u00A0\u00A0\u00A0Themes\n󰸉\u00A0\u00A0\u00A0\u00A0Wallpapers\n󰋖\u00A0\u00A0\u00A0\u00A0Hyprland Keybindings\n󰱦\u00A0\u00A0\u00A0\u00A0Extranet\n\u00A0\u00A0\u00A0\u00A0Eclipse\n\u00A0\u00A0\u00A0\u00A0Hibernate\n󰚩\u00A0\u00A0\u00A0\u00A0AI\n\u00A0\u00A0\u00A0\u00A0Screenshots\n󰙎\u00A0\u00A0\u00A0\u00A0Info"
 
 output=$(echo -e $items | walker --dmenu -H -n -N)
 
 if [[ "$output" == *"Power"* ]]; then
     wlogout --protocol layer-shell -b 6
-elif [[ "$output" == *"Applications"* ]]; then
-    uwsm app -- walker
 elif [[ "$output" == *"Update"* ]]; then
     # Dynamically define window rules to float, size, and center the update window
     hyprctl eval 'sicos_update_rule1 = hl.window_rule({ match = { class = "sicos-update" }, float = true }); sicos_update_rule2 = hl.window_rule({ match = { class = "sicos-update" }, size = { 1600, 900 } }); sicos_update_rule3 = hl.window_rule({ match = { class = "sicos-update" }, center = true })'
@@ -39,6 +37,10 @@ elif [[ "$output" == *"Eclipse"* ]]; then
     . ~/scripts/nixos/eclipse.sh
 elif [[ "$output" == *"Hibernate"* ]]; then
     kitty --hold sh -c "distrobox enter arch -- ~/distrobox/arch/programs/eclipse-2023-12/eclipse"
+elif [[ "$output" == *"AI"* ]]; then
+    # Dynamically define a window rule to open the AI stack windows (main manager + FLM + SCAYLE terminals) in the magic workspace
+    hyprctl eval 'sicos_ai_rule1 = hl.window_rule({ match = { class = "^(sicos-ai|flm|scayle)$" }, workspace = "special:magic" })'
+    uwsm app -- kitty --class sicos-ai --hold sh -c "$HOME/scripts/nixos/ai.sh"
 elif [[ "$output" == *"Screenshots"* ]]; then
     hyprshot -m region --raw | satty --filename - --early-exit --copy-command wl-copy --initial-tool arrow --output-filename ~/Pictures/screenshot-$(date '+%Y%m%d-%H:%M:%S').png
 elif [[ "$output" == *"Info"* ]]; then
