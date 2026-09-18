@@ -131,26 +131,35 @@ hl.bind(mainMod .. " + ALT + Down", hl.dsp.window.resize({ x = 0, y = 20, relati
 hl.bind("ALT + Tab", hl.dsp.exec_cmd("~/.config/sicos/scripts/toggle-switcher.sh"), { description = "Open Window Switcher" })
 hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("~/.config/sicos/scripts/toggle-monitormanager.sh"), { description = "Monitor Manager (Kanshi)" })
 
--- Layouts
-hl.bind(mainMod .. " + F1", function()
-    hl.config({ general = { layout = "dwindle" } })
-    hl.exec_cmd('notify-send -t 2500 -u low -r 9993 "Dwindle Layout" "Binary Tree layout enabled"')
-end, { description = "Enable Dwindle Layout" })
+-- Layouts (applied only to the active workspace, not globally)
+local function set_workspace_layout(layout)
+    return function()
+        local workspace = hl.get_active_workspace()
+        if hl.get_active_special_workspace() then
+            workspace = hl.get_active_special_workspace()
+        end
 
-hl.bind(mainMod .. " + F2", function()
-    hl.config({ general = { layout = "master" } })
-    hl.exec_cmd('notify-send -t 2500 -u low -r 9993 "Master Layout" "Master window layout enabled"')
-end, { description = "Enable Master Layout" })
+        if not workspace then
+            return
+        end
 
-hl.bind(mainMod .. " + F3", function()
-    hl.config({ general = { layout = "scrolling" } })
-    hl.exec_cmd('notify-send -t 2500 -u low -r 9993 "Scrolling Layout" "Scrolling windows layout enabled"')
-end, { description = "Enable Scrolling Layout" })
+        if workspace.special then
+            hl.workspace_rule({ workspace = tostring(workspace.name), layout = layout })
+        else
+            hl.workspace_rule({ workspace = tostring(workspace.id), layout = layout })
+        end
 
-hl.bind(mainMod .. " + F4", function()
-    hl.config({ general = { layout = "monocle" } })
-    hl.exec_cmd('notify-send -t 2500 -u low -r 9993 "Monocle Layout" "Maximized windows layout enabled"')
-end, { description = "Enable Monocle Layout" })
+        hl.exec_cmd('notify-send -t 2500 -u low -r 9993 "' .. layout .. ' Layout" "Layout applied to the active workspace"')
+    end
+end
+
+hl.bind(mainMod .. " + F1", set_workspace_layout("dwindle"), { description = "Enable Dwindle Layout (Active Workspace)" })
+
+hl.bind(mainMod .. " + F2", set_workspace_layout("master"), { description = "Enable Master Layout (Active Workspace)" })
+
+hl.bind(mainMod .. " + F3", set_workspace_layout("scrolling"), { description = "Enable Scrolling Layout (Active Workspace)" })
+
+hl.bind(mainMod .. " + F4", set_workspace_layout("monocle"), { description = "Enable Monocle Layout (Active Workspace)" })
 
 -- Volume
 -- pamixer is needed to get the volume via command line
