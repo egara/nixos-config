@@ -7,6 +7,15 @@
 # @email: eloy.garcia.pca@gmail.com
 # -------------------------------------
 
+# Same visual placement as the system info window: clean full screen presentation
+printf '\e[?25l' # Hide cursor
+clear
+
+echo "==============================================="
+echo "             NixOS System Update"
+echo "==============================================="
+echo
+
 # Getting hostname
 host="$(hostname)"
 echo "The host that will be updated is $host"
@@ -23,8 +32,9 @@ fi
 
 echo "Desktop environment detected: $desktop"
 echo "Updating system with profile $host-$desktop. Please wait..."
+echo
 
-pushd "$HOME/Zero/nixos-config"
+pushd "$HOME/Zero/nixos-config" > /dev/null
 
 # Checking installed packages
 echo "Updating packages. Please wait..."
@@ -39,8 +49,7 @@ echo "These are the packages that will be updated"
 nvd diff /run/current-system ./result
 
 # Asking for system update
-echo "Do you want to update the system? [y/n]"
-read updateSystem
+read -r -p "Do you want to update the system? [y/n] " updateSystem < /dev/tty
 
 if [[ "$updateSystem" == "y" ]]; then
     # Updating the system
@@ -52,3 +61,11 @@ else
     # Exit
     echo "Ok. Bye!"
 fi
+
+printf '\e[?25h' # Show cursor again
+
+echo
+echo "Press any key to close the window..."
+
+# Wait for any keypress to exit, ensuring we read from the TTY
+read -s -n 1 < /dev/tty

@@ -16,7 +16,9 @@ if [[ "$output" == *"Power"* ]]; then
 elif [[ "$output" == *"Applications"* ]]; then
     uwsm app -- walker
 elif [[ "$output" == *"Clean"* ]]; then
-    kitty --hold sh -c "~/.config/sicos/scripts/nixos-clean.sh"
+    # Dynamically define window rules to float, size, and center the clean window
+    hyprctl eval 'sicos_clean_rule1 = hl.window_rule({ match = { class = "sicos-clean" }, float = true }); sicos_clean_rule2 = hl.window_rule({ match = { class = "sicos-clean" }, size = { 1600, 900 } }); sicos_clean_rule3 = hl.window_rule({ match = { class = "sicos-clean" }, center = true })'
+    uwsm app -- kitty --class sicos-clean sh -c ~/.config/sicos/scripts/nixos-clean.sh
 elif [[ "$output" == *"Screensaver"* ]]; then
     . ~/.config/sicos/scripts/screensaver.sh
 elif [[ "$output" == *"Wallpapers"* ]]; then
