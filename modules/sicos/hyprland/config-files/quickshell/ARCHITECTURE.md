@@ -100,7 +100,9 @@ The Window Switcher (`windowswitcher.nix`) is a full-screen overlay modal that d
 - `WlrKeyboardFocus.OnDemand` is critical — see below.
 - Communicates with Hyprland via a FIFO pipe (`/tmp/sicos-switcher-fifo`) since Quickshell cannot register global hotkeys directly.
 - The Hyprland binding in `hyprland.lua` executes `toggle-switcher.sh`, which resolves the focused monitor and writes `toggle <monitor>\n` to the FIFO.
-- A persistent `Process` with `SplitParser` in `quickshell-bar.nix` listens to the FIFO and toggles `windowSwitcherActive`.
+- A persistent `Process` with `SplitParser` in `quickshell-bar.nix` listens to the FIFO: if the overlay is closed it opens `windowSwitcherActive`, otherwise it bumps `windowSwitcherCycleRequest` so a repeated Alt+Tab cycles the selection (classic Alt+Tab behavior).
+- Releasing the `ALT` modifier confirms the selection inside the overlay itself: the overlay owns keyboard focus while open, so it receives the ALT key release directly (`Keys.onReleased`) and focuses the highlighted window — no Enter needed.
+- Windows are ordered by usage frequency: focus changes are tracked through the `activewindowv2` IPC event (`Hyprland.rawEvent`), and each window keeps a focus count that decays over time (10 min half-life), with recency as tiebreaker.
 
 ### The Monitor Manager Pattern (Kanshi Integration)
 The Monitor Manager (`monitormanager.nix`) provides dynamic screen enabling/disabling, 2D visual drag & drop positioning, resolution switching, and Kanshi profile synchronization invoked via `Super + K`:

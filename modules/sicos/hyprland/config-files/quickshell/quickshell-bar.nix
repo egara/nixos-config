@@ -46,6 +46,10 @@ Scope {
     property string overviewTargetScreen: ""
     property bool windowSwitcherActive: false
     property string windowSwitcherTargetScreen: ""
+    // Monotonic counter used as an event signal for the per-screen switcher
+    // instances: incrementing it notifies every instance through the
+    // change handler, and only the target screen acts on it.
+    property int windowSwitcherCycleRequest: 0
     property bool windowKillerActive: false
     property string windowKillerTargetScreen: ""
     property bool monitorManagerActive: false
@@ -762,7 +766,10 @@ PanelWindow {
                     }
                     if (count > 0) {
                         if (windowSwitcherActive) {
-                            windowSwitcherActive = false;
+                            // A repeated Alt+Tab while the overlay is open
+                            // cycles the selection instead of closing it
+                            // (classic Alt+Tab behavior).
+                            windowSwitcherCycleRequest++;
                         } else {
                             // Target the focused monitor passed by toggle-switcher.sh;
                             // an empty target falls back to rendering on every screen.

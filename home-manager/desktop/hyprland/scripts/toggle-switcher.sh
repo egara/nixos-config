@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Toggle the Quickshell window switcher overlay via a FIFO.
-# This script is invoked by Hyprland on ALT + Tab.
+# Open the Quickshell window switcher overlay via a FIFO, or cycle the
+# selection when the overlay is already open. This script is invoked by
+# Hyprland on every ALT + Tab press.
 
 FIFO="/tmp/sicos-switcher-fifo"
 

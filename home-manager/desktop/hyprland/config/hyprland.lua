@@ -129,6 +129,9 @@ hl.bind(mainMod .. " + ALT + Left", hl.dsp.window.resize({ x = -20, y = 0, relat
 hl.bind(mainMod .. " + ALT + Up", hl.dsp.window.resize({ x = 0, y = -20, relative = true }), { repeating = true, description = "Resize Current Window (Up)" })
 hl.bind(mainMod .. " + ALT + Down", hl.dsp.window.resize({ x = 0, y = 20, relative = true }), { repeating = true, description = "Resize Current Window (Down)" })
 hl.bind("ALT + Tab", hl.dsp.exec_cmd("~/.config/sicos/scripts/toggle-switcher.sh"), { description = "Open Window Switcher" })
+-- Confirm-on-release is handled inside the switcher overlay itself: the
+-- overlay owns keyboard focus while open, so it receives the ALT key release
+-- directly (windowswitcher.nix, Keys.onReleased).
 hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("~/.config/sicos/scripts/toggle-monitormanager.sh"), { description = "Monitor Manager (Kanshi)" })
 
 -- Layouts (applied only to the active workspace, not globally)

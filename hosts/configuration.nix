@@ -27,7 +27,7 @@
       enable = true;
       # Enabling some NetworkManager plugins for managing VPNs
       plugins = with pkgs; [
-        networkmanager-fortisslvpn
+        networkmanager-openconnect
         networkmanager-l2tp
         networkmanager-openvpn
         networkmanager_strongswan
@@ -315,7 +315,7 @@
     sops
     keepassxc
     # AI Tools
-    pkgs-stable.opencode
+    opencode
     antigravity-cli
     herdr
   ];
