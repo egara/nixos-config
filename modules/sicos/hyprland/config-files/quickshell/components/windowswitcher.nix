@@ -90,17 +90,18 @@
                 }
             }
 
-            // Last window that received focus, tracked continuously. The
-            // overlay itself steals keyboard focus when it maps (which nulls
-            // Hyprland.focusedToplevel), so the initial selection must anchor
-            // to this stored value instead of a live lookup.
-            property string lastFocusedAddress: ""
+            // MRU history of focused window addresses (most recent first).
+            // The overlay itself steals keyboard focus when it maps (which
+            // nulls Hyprland.focusedToplevel), so the selection must anchor
+            // to this tracked history instead of a live lookup:
+            // history[0] is the current window, history[1] the previous one.
+            property var focusHistory: []
 
             Component.onCompleted: {
-                // Seed the anchor with the window focused at startup, so the
+                // Seed the history with the window focused at startup, so the
                 // first Alt+Tab of the session already anchors correctly.
                 if (Hyprland.focusedToplevel && Hyprland.focusedToplevel.address) {
-                    lastFocusedAddress = Hyprland.focusedToplevel.address.replace("0x", "");
+                    focusHistory = [Hyprland.focusedToplevel.address.replace("0x", "")];
                 }
             }
 
@@ -110,7 +111,10 @@
                 // data so both sources always match.
                 addr = addr.replace("0x", "");
                 if (!addr) return;
-                lastFocusedAddress = addr;
+                // Move the address to the front of the MRU history.
+                var idx = focusHistory.indexOf(addr);
+                if (idx !== -1) focusHistory.splice(idx, 1);
+                focusHistory.unshift(addr);
                 var now = Date.now();
                 var factor = Math.pow(0.5, (now - lastDecayTime) / usageHalfLifeMs);
                 for (var key in focusCounts) {
@@ -124,10 +128,21 @@
             }
 
             function sortWindowsByUsage(wins) {
+                // Firefox-style ordering: the previously focused window comes
+                // first (the default suggestion), the current window is left
+                // out (switching to itself makes no sense), and the rest
+                // follow ordered by usage frequency.
+                var current = focusHistory.length > 0 ? focusHistory[0] : "";
+                var previous = focusHistory.length > 1 ? focusHistory[1] : "";
                 var counts = focusCounts;
                 var times = lastFocusTime;
-                var arr = wins.slice();
+                var arr = [];
+                for (var i = 0; i < wins.length; i++) {
+                    if (wins[i].address !== current) arr.push(wins[i]);
+                }
                 arr.sort(function(a, b) {
+                    if (a.address === previous) return -1;
+                    if (b.address === previous) return 1;
                     var ca = counts[a.address] || 0;
                     var cb = counts[b.address] || 0;
                     if (ca !== cb) return cb - ca;
@@ -148,14 +163,31 @@
             property int selectedIndex: 0
 
             function focusSelected() {
+                // Close first: while the overlay owns keyboard focus, Hyprland
+                // ignores toplevel focus dispatches, so the actual focus call
+                // must wait until the overlay surface is gone (fade ~200ms).
+                windowSwitcherActive = false;
                 if (selectedIndex >= 0 && selectedIndex < allWindows.length) {
                     var win = allWindows[selectedIndex];
                     if (win && win.address) {
-                        var addrFormatted = "0x" + win.address.replace("0x", "");
-                        Hyprland.dispatch("hl.dsp.focus({ window = 'address:" + addrFormatted + "' })");
+                        focusDispatchTimer.targetAddress = win.address;
+                        focusDispatchTimer.restart();
                     }
                 }
-                windowSwitcherActive = false;
+            }
+
+            // Fires the focus dispatch once the overlay surface is gone.
+            // Firing it earlier makes Hyprland silently ignore it and then
+            // restore the window focused before the overlay mapped.
+            Timer {
+                id: focusDispatchTimer
+                property string targetAddress: ""
+                interval: 300
+                repeat: false
+                onTriggered: {
+                    Hyprland.dispatch("hl.dsp.focus({ window = 'address:0x" + targetAddress + "' })");
+                    targetAddress = "";
+                }
             }
 
             function moveSelection(delta) {
@@ -308,22 +340,10 @@
 
             onVisibleChanged: {
                 if (visible) {
-                    var focusedAddr = lastFocusedAddress;
-                    var found = false;
-                    for (var i = 0; i < allWindows.length; i++) {
-                        if (allWindows[i].address === focusedAddr) {
-                            selectedIndex = i;
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found) selectedIndex = 0;
-
-                    // Classic Alt+Tab behavior: the same keypress that opens
-                    // the overlay already moves the selection one window
-                    // ahead, so a quick tap switches and releasing ALT
-                    // confirms without ever needing Enter.
-                    moveSelection(1);
+                    // Firefox-style: the list starts with the previously
+                    // focused window, so it is the first suggestion right
+                    // away — a quick Alt+Tab tap switches to it on release.
+                    selectedIndex = 0;
 
                     // Small delay to ensure Wayland has mapped the surface before requesting focus
                     focusTimer.start();
