@@ -33,9 +33,11 @@
     # Gateway
     defaultGateway = "10.18.8.1";
     # DNS
+    # NOTE: .145 and .171 are unreachable from this network,
+    # .133/.132 are the ones handed out by the campus DHCP
     nameservers = [
-      "193.146.97.145"
-      "193.146.97.171"
+      "193.146.97.133"
+      "193.146.97.132"
     ];
   };
 
