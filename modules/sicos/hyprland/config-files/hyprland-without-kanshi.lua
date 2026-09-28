@@ -316,6 +316,10 @@ hl.config({
 
 hl.curve("overshot", { type = "bezier", points = { {0.13, 0.99}, {0.29, 1.1} } })
 
+-- Easing curves (taken from Omarchy) used by the special workspace transition
+hl.curve("easeOutQuint", { type = "bezier", points = { { 0.23, 1 }, { 0.32, 1 } } })
+hl.curve("easeInOutCubic", { type = "bezier", points = { { 0.65, 0.05 }, { 0.36, 1 } } })
+
 hl.animation({ leaf = "windows", enabled = true, speed = 2, bezier = "overshot", style = "slide" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 3, bezier = "default", style = "popin 80%" })
 hl.animation({ leaf = "border", enabled = true, speed = 3, bezier = "default" })
@@ -323,6 +327,13 @@ hl.animation({ leaf = "fade", enabled = true, speed = 4, bezier = "default" })
 hl.animation({ leaf = "workspaces", enabled = true, speed = 6, bezier = "overshot", style = "fade" })
 hl.animation({ leaf = "layersIn", enabled = true, speed = 3, bezier = "default", style = "popin" })
 hl.animation({ leaf = "layersOut", enabled = true, speed = 3, bezier = "default", style = "popin" })
+
+-- Magic workspace transition (taken from Omarchy): the special workspace rises
+-- from the bottom edge when it opens and sinks back down when it closes, the
+-- reverse of Omarchy's top-anchored Quake console. Hyprland inverts the
+-- direction for the Out animation, so the styles use opposite words.
+hl.animation({ leaf = "specialWorkspaceIn", enabled = true, speed = 3, bezier = "easeOutQuint", style = "slide bottom" })
+hl.animation({ leaf = "specialWorkspaceOut", enabled = true, speed = 2, bezier = "easeInOutCubic", style = "slide top" })
 
 -- #####################
 -- Animations - FINISH
