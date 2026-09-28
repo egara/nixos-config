@@ -183,7 +183,7 @@
           "command": "swaync-client -t && walker -m files"
         },
         {
-          "label": "󰋖",
+          "label": "󰌌",
           "command": "swaync-client -t && ~/.config/sicos/scripts/show-hyprland-keybindings.sh"
         },
         {

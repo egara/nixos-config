@@ -523,10 +523,10 @@
                             color: keybindsBtnArea.containsMouse ? "#${c.base03}" : "transparent"
                             Text {
                                 anchors.centerIn: parent
-                                text: "󰋖"
+                                text: "󰌌"
                                 color: "#${c.base05}"
                                 font.family: "${fontName}"
-                                font.pixelSize: 15
+                                font.pixelSize: 21
                             }
                             MouseArea {
                                 id: keybindsBtnArea
