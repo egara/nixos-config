@@ -101,6 +101,8 @@ hl.bind(mainMod .. " + SPACE", hl.dsp.layout("movetoroot"), { description = "Mov
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("~/.config/sicos/scripts/sicos-settings.sh"), { description = "SicOS settings menu" })
 -- hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("uwsm app -- " .. terminal .. " --override term=xterm-256color -e lazyssh"), { description = "Lazyssh" })
 hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd(menu), { description = "App Launcher (Walker)" })
+-- Same shortcut as Omarchy's clipboard manager, served by the elephant clipboard provider through walker
+hl.bind(mainMod .. " + CTRL + V", hl.dsp.exec_cmd(menu .. " --provider clipboard"), { description = "Clipboard History (Walker)" })
 hl.bind(mainMod .. " + CTRL + Up", hl.dsp.window.fullscreen({ mode = "fullscreen" }), { description = "Maximize Window (Toggling)" })
 hl.bind(mainMod .. " + ALT + Right", hl.dsp.window.resize({ x = 20, y = 0, relative = true }), { repeating = true, description = "Resize Current Window (Right)" })
 hl.bind(mainMod .. " + ALT + Left", hl.dsp.window.resize({ x = -20, y = 0, relative = true }), { repeating = true, description = "Resize Current Window (Left)" })

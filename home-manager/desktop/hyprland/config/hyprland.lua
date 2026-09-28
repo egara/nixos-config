@@ -119,6 +119,8 @@ hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("uwsm app -- " .. webapp .. "='https:
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("~/.config/sicos/scripts/sicos-settings.sh"), { description = "SicOS settings menu" })
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("uwsm app -- " .. terminal .. " --override term=xterm-256color -e lazyssh"), { description = "Lazyssh" })
 hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd(menu), { description = "App Launcher (Walker)" })
+-- Same shortcut as Omarchy's clipboard manager, served by the elephant clipboard provider through walker
+hl.bind(mainMod .. " + CTRL + V", hl.dsp.exec_cmd(menu .. " --provider clipboard"), { description = "Clipboard History (Walker)" })
 -- hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu), { description = "App Launcher (Walker)" })
 -- hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd("pkill fuzzel || fuzzel"), { description = "App Launcher (Fuzzel)" })
 -- hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd("pgrep -x .wofi-wrapped >/dev/null 2>&1 && killall .wofi-wrapped || " .. menu), { description = "App Launcher (Wofi)" })
