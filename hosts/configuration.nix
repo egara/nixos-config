@@ -276,6 +276,7 @@
     pkgs-stable.insync
     pciutils
     spotify
+    spotifast
     bind
     pkgs-stable.cryfs
     #pkgs-stable.quickemu
