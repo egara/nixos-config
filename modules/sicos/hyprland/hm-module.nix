@@ -148,6 +148,24 @@ in
           source = ./wallpapers;
           recursive = true;
         };
+
+        # Gdu disk usage analyzer configuration with dynamic Stylix colors
+        ".config/gdu/gdu.yaml".text = with config.lib.stylix.colors.withHashtag; ''
+          style:
+            selected-row:
+              text-color: "${base00}"
+              background-color: "${base0D}"
+            result-row:
+              number-color: "${base09}"
+              directory-color: "${base0D}"
+            header:
+              text-color: "${base00}"
+              background-color: "${base0D}"
+            footer:
+              text-color: "${base00}"
+              background-color: "${base0D}"
+              number-color: "${base05}"
+        '';
       };
 
       # Configure XDG user directories (Downloads, Music, Pictures, etc.)
@@ -238,7 +256,8 @@ in
 
               btop.enable = true;
 
-              gdu.enable = true;
+              # Gdu colors are customized above via .config/gdu/gdu.yaml using Stylix colors
+              gdu.enable = false;
 
               # fuzzel.enable = true;
 
