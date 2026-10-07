@@ -356,18 +356,52 @@
                                 Layout.alignment: Qt.AlignHCenter
                             }
 
-                            // Centered Percentage display matching circular gauge values (pixelSize 16, bold)
-                            Text {
-                                text: Math.round(sysData.diskUsedPct) + "%"
-                                color: "#${c.base05}"
-                                font.family: "${fontName}"
-                                font.pixelSize: 16
-                                font.bold: true
+                            // Circular Gauge (matching CPU & RAM tiles)
+                            Canvas {
                                 Layout.alignment: Qt.AlignHCenter
+                                width: 70
+                                height: 70
+                                property real percentage: Math.min(100.0, Math.max(0.0, parseFloat(sysData.diskUsedPct))) || 0
+
+                                onPercentageChanged: requestPaint()
+
+                                onPaint: {
+                                    var ctx = getContext("2d");
+                                    ctx.clearRect(0, 0, width, height);
+
+                                    var centerX = width / 2;
+                                    var centerY = height / 2;
+                                    var radius = width / 2 - 5;
+
+                                    // Background circle
+                                    ctx.beginPath();
+                                    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                                    ctx.lineWidth = 5;
+                                    ctx.strokeStyle = "#${c.base03}";
+                                    ctx.stroke();
+
+                                    // Foreground arc
+                                    ctx.beginPath();
+                                    var startAngle = -Math.PI / 2;
+                                    var endAngle = startAngle + (percentage / 100) * 2 * Math.PI;
+                                    ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                                    ctx.lineWidth = 5;
+                                    ctx.strokeStyle = "#${c.base0D}";
+                                    ctx.lineCap = "round";
+                                    ctx.stroke();
+                                }
+
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: Math.round(parent.percentage) + "%"
+                                    color: "#${c.base05}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 16
+                                    font.bold: true
+                                }
                             }
 
-                            // Extra breathing space below percentage, pushing everything down
-                            Item { Layout.preferredHeight: 14 }
+                            Item { Layout.preferredHeight: 6 }
 
                             // Filesystem Metrics (Device Size & Allocated Chunk Pool)
                             ColumnLayout {
