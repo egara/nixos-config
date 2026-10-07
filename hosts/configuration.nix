@@ -317,7 +317,7 @@
     # AI Tools
     opencode
     antigravity-cli
-    #herdr
+    herdr
   ];
 
   # List of programs that must be enabled
