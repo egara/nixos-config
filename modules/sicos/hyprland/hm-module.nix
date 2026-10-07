@@ -238,6 +238,8 @@ in
 
               btop.enable = true;
 
+              gdu.enable = true;
+
               # fuzzel.enable = true;
 
               # Waybar theme colors will be built dinamically depending on the
