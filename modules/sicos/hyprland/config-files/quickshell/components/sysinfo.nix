@@ -361,7 +361,7 @@
                                 Layout.alignment: Qt.AlignHCenter
                                 width: 70
                                 height: 70
-                                property real percentage: Math.min(100.0, Math.max(0.0, parseFloat(sysData.diskUsedPct))) || 0
+                                property real percentage: Math.min(100.0, Math.max(0.0, parseFloat(sysData.diskAllocPct))) || 0
 
                                 onPercentageChanged: requestPaint()
 
@@ -436,7 +436,7 @@
                                         Layout.preferredWidth: 70
                                     }
                                     Text {
-                                        text: sysData.diskAllocated + " (" + sysData.diskAllocPct + "%)"
+                                        text: sysData.diskAllocated
                                         color: "#${c.base0D}"
                                         font.family: "${fontName}"
                                         font.pixelSize: 12
@@ -861,7 +861,7 @@
                     font.pixelSize: 18
                 }
                 Text {
-                    text: Math.round(sysData.diskUsedPct) + "%"
+                    text: Math.round(sysData.diskAllocPct) + "%"
                     color: "#${c.base05}"
                     font.family: "${fontName}"
                     font.pixelSize: 14
