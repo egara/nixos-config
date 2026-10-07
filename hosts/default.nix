@@ -78,7 +78,7 @@ let
           config = lib.mkIf (host.desktop == "hyprland") (
             let
               themeMode = "dark";
-              themeScheme = "gruvbox-dark";
+              themeScheme = "ayu-dark";
               themeFontSize = 11;
             in
             {
