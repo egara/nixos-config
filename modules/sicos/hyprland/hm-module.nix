@@ -269,6 +269,7 @@ in
           # Base configuration
           commonConfig = {
             enable = true;
+            autoEnable = false;
             icons = {
               package = pkgs.papirus-icon-theme;
               dark = "Papirus-Dark";
