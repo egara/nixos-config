@@ -1,9 +1,9 @@
 # Proyecto: SicOS Custom Bar (basada en QuickShell)
 
 ## 🎯 Objetivo del Proyecto
-Crear una barra de sistema (panel superior) nativa y totalmente customizada para el entorno de escritorio **SicOS**, utilizando **QuickShell** (el mismo framework subyacente que usa Dank Material Shell o el proyecto Omarchy). 
+Crear una barra de sistema (panel superior) nativa y totalmente customizada para el entorno de escritorio **SicOS**, utilizando **QuickShell**. 
 
-El objetivo es reemplazar (o tener como alternativa de primer nivel) a `waybar` y `dank-material-shell`, manteniendo un diseño estético idéntico al actual de DMS, pero con un control total sobre el código fuente (QML) e integración completa con **Stylix** para el modo claro/oscuro.
+El objetivo es reemplazar (o tener como alternativa de primer nivel) a `waybar`, con un diseño estético moderno de islas flotantes, control total sobre el código fuente (QML) e integración completa con **Stylix** para el modo claro/oscuro.
 
 ## 🏗️ Arquitectura y Archivos Clave
 La integración se realiza directamente en los módulos de NixOS y Home Manager de SicOS.

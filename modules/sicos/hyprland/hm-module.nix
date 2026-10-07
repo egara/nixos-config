@@ -114,11 +114,8 @@ in
             ${if cfg.shell == "waybar" then ''
               uwsm app -- waybar &
               uwsm app -- swaync &
-            '' else if cfg.shell == "sicos-bar" then ''
-              uwsm app -- quickshell &
             '' else ''
-              # DankMaterialShell is managed by its own systemd service.
-              # systemctl --user start dms.service
+              uwsm app -- quickshell &
             ''}
           '';
           executable = true;
@@ -152,69 +149,6 @@ in
           recursive = true;
         };
       };
-
-      # Enable DankMaterialShell service
-      programs.dank-material-shell = lib.mkIf (cfg.shell == "dank-material-shell") {
-        enable = true;
-        systemd.enable = true;
-      };
-
-      # Make DMS settings mutable so we can persist UI changes (like wallpaper)
-      # without breaking stylix integration.
-      xdg.configFile = lib.mkIf (cfg.shell == "dank-material-shell") {
-        "DankMaterialShell/settings.json".force = lib.mkForce true;
-      };
-      xdg.stateFile = lib.mkIf (cfg.shell == "dank-material-shell") {
-        "DankMaterialShell/session.json".force = lib.mkForce true;
-      };
-
-      home.activation.make-dms-mutable = lib.mkIf (cfg.shell == "dank-material-shell") (lib.hm.dag.entryAfter ["linkGeneration"] ''
-        mkdir -p "$HOME/.config/DankMaterialShell"
-        mkdir -p "$HOME/.local/state/DankMaterialShell"
-        
-        # Handle settings.json
-        target="$HOME/.config/DankMaterialShell/settings.json"
-        if [ -L "$target" ]; then
-          real=$(readlink -f "$target")
-          rm "$target"
-          if [ -f "$target.backup" ]; then
-            # Merge user's backup with Stylix's new theme/fonts
-            ${pkgs.jq}/bin/jq -s '.[0] * {
-              currentThemeName: .[1].currentThemeName,
-              customThemeFile: .[1].customThemeFile,
-              fontFamily: .[1].fontFamily,
-              monoFontFamily: .[1].monoFontFamily
-            }' "$target.backup" "$real" > "$target"
-          else
-            cp "$real" "$target"
-          fi
-          chmod 644 "$target"
-        elif [ ! -e "$target" ]; then
-          echo "{}" > "$target"
-          chmod 644 "$target"
-        fi
-
-        # Handle session.json
-        target="$HOME/.local/state/DankMaterialShell/session.json"
-        if [ -L "$target" ]; then
-          real=$(readlink -f "$target")
-          rm "$target"
-          if [ -f "$target.backup" ]; then
-            # Merge user's backup (weather info) with Stylix's wallpaper paths
-            ${pkgs.jq}/bin/jq -s '.[0] * {
-              wallpaperPath: .[1].wallpaperPath,
-              wallpaperPathDark: .[1].wallpaperPathDark,
-              wallpaperPathLight: .[1].wallpaperPathLight
-            }' "$target.backup" "$real" > "$target"
-          else
-            cp "$real" "$target"
-          fi
-          chmod 644 "$target"
-        elif [ ! -e "$target" ]; then
-          echo "{}" > "$target"
-          chmod 644 "$target"
-        fi
-      '');
 
       # Configure XDG user directories (Downloads, Music, Pictures, etc.)
       # to get proper icons and default directory paths in file managers.
@@ -309,8 +243,6 @@ in
               # Waybar theme colors will be built dinamically depending on the
               # scheme defined by the user
               waybar.enable = false;
-
-              dank-material-shell.enable = cfg.shell == "dank-material-shell";
 
               # Yazi is working again with stylix. The custom theming
               # configuration within /hosts/home.nix is disabled

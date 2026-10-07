@@ -71,7 +71,7 @@ Deep-dive instructions for each major desktop subsystem live next to this file. 
 |---|---|---|
 | **Compositor / WM** | Hyprland (Wayland) | `home-manager/desktop/hyprland/config/hyprland.lua` |
 | **Desktop Shell** | QuickShell (QML / C++) | `modules/sicos/hyprland/config-files/quickshell/` |
-| **Alternative Bars** | Waybar / DankMaterialShell | `modules/sicos/hyprland/config-files/waybar/` |
+| **Alternative Bar** | Waybar | `modules/sicos/hyprland/config-files/waybar/` |
 | **Global Theming** | Stylix + Base16 | `modules/sicos/hyprland/hm-module.nix` & `hosts/default.nix` |
 | **Display Manager** | SDDM (Custom SicOS Theme) | `modules/sicos/hyprland/sddm-theme/` |
 | **App Launcher** | Walker | Configured in `hm-module.nix` |

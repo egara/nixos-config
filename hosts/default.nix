@@ -9,7 +9,6 @@
   nixos-hardware,
   nix-flatpak,
   nix-amd-ai,
-  dankmaterialshell,
   self,
   ...
 }:
@@ -85,7 +84,6 @@ let
             {
               # SicOS module options configuration
               programs.sicos.hyprland.enable = true;
-              # programs.sicos.hyprland.shell = "dank-material-shell";
               #programs.sicos.hyprland.shell = "waybar";
               programs.sicos.hyprland.shell = "sicos-bar";
               programs.sicos.hyprland.theming.enable = true;
@@ -141,7 +139,6 @@ let
               (import ./home.nix)
             ]
             ++ lib.optionals (desktop == "hyprland") [
-              dankmaterialshell.homeModules.dank-material-shell
               (import ../modules/sicos/hyprland/hm-module.nix)
             ]
             ++ homeManagerExtraImports;

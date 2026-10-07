@@ -209,12 +209,6 @@ if command -v swaync &> /dev/null; then
     nohup uwsm app -- swaync > /dev/null 2>&1 &
 fi
 
-# Restart DankMaterialShell if active
-if systemctl --user is-active --quiet dms.service; then
-    echo "Restarting DankMaterialShell to apply new theme..."
-    systemctl --user restart dms.service
-fi
-
 # Restart QuickShell if active
 if command -v quickshell &> /dev/null; then
     # Only restart if it's actually running

@@ -26,9 +26,9 @@ in
 
     # Shell
     shell = lib.mkOption {
-      type = lib.types.enum [ "waybar" "dank-material-shell" "sicos-bar" ];
+      type = lib.types.enum [ "waybar" "sicos-bar" ];
       default = "sicos-bar";
-      description = "Which shell to use (waybar, dank-material-shell, or sicos-bar).";
+      description = "Which shell to use (waybar or sicos-bar).";
     };
 
     # Group lock and idle configs
@@ -354,9 +354,6 @@ in
       ] ++ lib.optionals (cfg.shell == "waybar") [
         waybar
         swaynotificationcenter
-      ] ++ lib.optionals (cfg.shell == "dank-material-shell") [
-        inputs.dankmaterialshell.packages.${pkgs.system}.default
-        quickshell
       ] ++ lib.optionals (cfg.shell == "sicos-bar") [
         (pkgs.symlinkJoin {
           name = "quickshell-wrapped";

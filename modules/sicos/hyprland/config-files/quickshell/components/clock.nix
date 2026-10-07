@@ -73,7 +73,7 @@
                 anchors.topMargin: 32 // 26 + 6px
                 spacing: 16
 
-                // Left side: Notifications (DankMaterialShell style placeholder)
+                // Left side: Notifications placeholder
                 ColumnLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
