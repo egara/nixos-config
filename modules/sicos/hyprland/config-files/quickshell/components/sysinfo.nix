@@ -10,7 +10,7 @@
         anchor.rect.height: 1
         anchor.edges: Edges.Bottom | Edges.Left
         visible: root.sysinfoVisible || popupSysContent.opacity > 0
-        implicitWidth: 540
+        implicitWidth: 810
         implicitHeight: 460
         color: "transparent"
 
@@ -59,7 +59,7 @@
                     rotation: 45
                     y: 2
                     anchors.left: parent.left
-                    anchors.leftMargin: 120 // Aligned with the sysinfo widget
+                    anchors.leftMargin: 145 // Aligned with the expanded sysinfo widget island
                 }
             }
 
@@ -93,7 +93,7 @@
                     }
                 }
 
-                // Process Lists
+                // Monitor Tiles (CPU Top 5, RAM Top 5, BTRFS Disk Overview)
                 RowLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -110,6 +110,16 @@
                             anchors.fill: parent
                             anchors.margins: 12
                             spacing: 8
+
+                            Text {
+                                text: "Top CPU"
+                                color: "#${c.base0D}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                                font.bold: true
+                                Layout.alignment: Qt.AlignHCenter
+                            }
+
                             Canvas {
                                 Layout.alignment: Qt.AlignHCenter
                                 width: 70
@@ -152,13 +162,6 @@
                                     font.pixelSize: 16
                                     font.bold: true
                                 }
-                            }
-                            Text {
-                                text: "Top CPU"
-                                color: "#${c.base0D}"
-                                font.family: "${fontName}"
-                                font.pixelSize: 14
-                                Layout.alignment: Qt.AlignHCenter
                             }
                             ListView {
                                 id: cpuList
@@ -224,6 +227,16 @@
                             anchors.fill: parent
                             anchors.margins: 12
                             spacing: 8
+
+                            Text {
+                                text: "Top RAM"
+                                color: "#${c.base0D}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                                font.bold: true
+                                Layout.alignment: Qt.AlignHCenter
+                            }
+
                             Canvas {
                                 Layout.alignment: Qt.AlignHCenter
                                 width: 70
@@ -266,13 +279,6 @@
                                     font.pixelSize: 16
                                     font.bold: true
                                 }
-                            }
-                            Text {
-                                text: "Top RAM"
-                                color: "#${c.base0D}"
-                                font.family: "${fontName}"
-                                font.pixelSize: 14
-                                Layout.alignment: Qt.AlignHCenter
                             }
                             ListView {
                                 id: ramList
@@ -326,9 +332,224 @@
                             }
                         }
                     }
+
+                    // Disk Overview Tile (Homogeneous tile matching CPU & RAM style)
+                    Rectangle {
+                        id: diskTileContainer
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        radius: 12
+                        color: "#${c.base02}"
+
+                        ColumnLayout {
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            spacing: 6
+
+                            // Title centered on top
+                            Text {
+                                text: "Disk"
+                                color: "#${c.base0D}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                                font.bold: true
+                                Layout.alignment: Qt.AlignHCenter
+                            }
+
+                            // Centered Percentage display matching circular gauge values (pixelSize 16, bold)
+                            Text {
+                                text: Math.round(sysData.diskUsedPct) + "%"
+                                color: "#${c.base05}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 16
+                                font.bold: true
+                                Layout.alignment: Qt.AlignHCenter
+                            }
+
+                            // Extra breathing space below percentage, pushing everything down
+                            Item { Layout.preferredHeight: 14 }
+
+                            // Filesystem Metrics (Device Size & Allocated Chunk Pool)
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 4
+
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    Text {
+                                        text: "Size:"
+                                        color: "#${c.base04}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 12
+                                        Layout.preferredWidth: 70
+                                    }
+                                    Text {
+                                        text: sysData.diskTotal
+                                        color: "#${c.base05}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 12
+                                        font.bold: true
+                                    }
+                                }
+
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    Text {
+                                        text: "Allocated:"
+                                        color: "#${c.base04}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 12
+                                        Layout.preferredWidth: 70
+                                    }
+                                    Text {
+                                        text: sysData.diskAllocated + " (" + sysData.diskAllocPct + "%)"
+                                        color: "#${c.base0D}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 12
+                                        font.bold: true
+                                    }
+                                }
+                            }
+
+                            Item { Layout.preferredHeight: 4 }
+
+                            // Clean, elegant status badge using color code without long text literature
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: 6
+
+                                Rectangle {
+                                    width: 8
+                                    height: 8
+                                    radius: 4
+                                    color: {
+                                        if (sysData.diskStatusColor === "ok") return "#${c.base0B}";
+                                        if (sysData.diskStatusColor === "danger") return "#${c.base09}";
+                                        return "#${c.base08}";
+                                    }
+                                }
+
+                                Text {
+                                    text: {
+                                        if (sysData.diskStatusColor === "ok") return "Pool Healthy";
+                                        if (sysData.diskStatusColor === "danger") return "Pool Warning";
+                                        return "Pool Critical";
+                                    }
+                                    color: {
+                                        if (sysData.diskStatusColor === "ok") return "#${c.base0B}";
+                                        if (sysData.diskStatusColor === "danger") return "#${c.base09}";
+                                        return "#${c.base08}";
+                                    }
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 11
+                                    font.bold: true
+                                }
+                            }
+
+                            // Substantial breathing space before the used space of total allocated section
+                            Item { Layout.preferredHeight: 14 }
+
+                            // Subheader: Used space of total allocated
+                            Text {
+                                text: "Used space of total allocated:"
+                                color: "#${c.base05}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 12
+                                font.bold: true
+                            }
+
+                            // Data Allocation Usage Bar
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 3
+
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    Text {
+                                        text: "Data"
+                                        color: "#${c.base04}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 11
+                                    }
+                                    Item { Layout.fillWidth: true }
+                                    Text {
+                                        text: sysData.diskDataPct + "%"
+                                        color: "#${c.base0D}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 11
+                                        font.bold: true
+                                    }
+                                }
+
+                                Rectangle {
+                                    Layout.fillWidth: true
+                                    height: 7
+                                    radius: 3.5
+                                    color: "#${c.base03}"
+                                    clip: true
+
+                                    Rectangle {
+                                        height: parent.height
+                                        width: Math.max(0, parent.width * (Math.min(100.0, Math.max(0.0, sysData.diskDataPct)) / 100.0))
+                                        radius: 3.5
+                                        color: "#${c.base0D}"
+
+                                        Behavior on width {
+                                            NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Metadata Allocation Usage Bar
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 3
+
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    Text {
+                                        text: "Metadata"
+                                        color: "#${c.base04}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 11
+                                    }
+                                    Item { Layout.fillWidth: true }
+                                    Text {
+                                        text: sysData.diskMetaPct + "%"
+                                        color: "#${c.base0D}"
+                                        font.family: "${fontName}"
+                                        font.pixelSize: 11
+                                        font.bold: true
+                                    }
+                                }
+
+                                Rectangle {
+                                    Layout.fillWidth: true
+                                    height: 7
+                                    radius: 3.5
+                                    color: "#${c.base03}"
+                                    clip: true
+
+                                    Rectangle {
+                                        height: parent.height
+                                        width: Math.max(0, parent.width * (Math.min(100.0, Math.max(0.0, sysData.diskMetaPct)) / 100.0))
+                                        radius: 3.5
+                                        color: "#${c.base0D}"
+
+                                        Behavior on width {
+                                            NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
+                                        }
+                                    }
+                                }
+                            }
+
+                            Item { Layout.fillHeight: true }
+                        }
+                    }
                 }
 
-                // Action Buttons (Btop & Force Kill Window)
+                // Action Buttons (Btop, Force Kill Window, Gdu Disk Analyzer)
                 RowLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: false
@@ -432,6 +653,50 @@
                             }
                         }
                     }
+
+                    // Disk Analyzer Button (Gdu TUI)
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: false
+                        Layout.preferredHeight: 32
+                        Layout.maximumHeight: 32
+                        height: 32
+                        radius: 16
+                        color: gduArea.containsMouse ? "#${c.base03}" : "#${c.base02}"
+
+                        Row {
+                            anchors.centerIn: parent
+                            spacing: 8
+
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: "󰋊"
+                                color: "#${c.base0D}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 19
+                            }
+
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: "Disk Analyzer"
+                                color: "#${c.base04}"
+                                font.family: "${fontName}"
+                                font.pixelSize: 14
+                            }
+                        }
+
+                        MouseArea {
+                            id: gduArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                root.sysinfoVisible = false
+                                cmdRunner.command = ["uwsm", "app", "--", "kitty", "--class", "gdu", "-e", "gdu", "/"]
+                                cmdRunner.running = true
+                            }
+                        }
+                    }
                 }
             }
 
@@ -497,19 +762,20 @@
         onVisibleChanged: {
             if (visible) {
                 topProc.running = true
+                diskProc.running = true
             }
         }
     }
   '';
 
   widget = ''
-    // SysInfo Island (CPU & RAM)
+    // SysInfo Island (CPU, RAM & Disk)
     Rectangle {
         id: sysinfoWidgetContainer
         color: hoverSysinfo.hovered ? "#${c.base03}" : "#CC${c.base01}"
         radius: 12 // Pill style
         Layout.preferredHeight: 32
-        Layout.preferredWidth: 110
+        Layout.preferredWidth: 165
         
         RowLayout {
             anchors.centerIn: parent
@@ -520,7 +786,7 @@
                 spacing: 4
                 Text {
                     text: ""
-                    color: "#${c.base05}" // Same as power icon
+                    color: "#${c.base05}"
                     font.family: "${fontName}"
                     font.pixelSize: 20
                 }
@@ -538,12 +804,30 @@
                 spacing: 4
                 Text {
                     text: ""
-                    color: "#${c.base05}" // Same as power icon
+                    color: "#${c.base05}"
                     font.family: "${fontName}"
                     font.pixelSize: 18
                 }
                 Text {
                     text: sysData.ram + "%"
+                    color: "#${c.base05}"
+                    font.family: "${fontName}"
+                    font.pixelSize: 14
+                    font.bold: true
+                }
+            }
+
+            // Disk
+            RowLayout {
+                spacing: 4
+                Text {
+                    text: "󰋊"
+                    color: "#${c.base05}"
+                    font.family: "${fontName}"
+                    font.pixelSize: 18
+                }
+                Text {
+                    text: Math.round(sysData.diskUsedPct) + "%"
                     color: "#${c.base05}"
                     font.family: "${fontName}"
                     font.pixelSize: 14
@@ -586,6 +870,14 @@
             id: sysData
             property string cpu: "0"
             property string ram: "0"
+            property string diskTotal: "0 GiB"
+            property string diskAllocated: "0 GiB"
+            property real diskAllocPct: 0.0
+            property real diskUsedPct: 0.0
+            property real diskDataPct: 0.0
+            property real diskMetaPct: 0.0
+            property string diskStatusText: "No problem, you have enough free space in your filesystem"
+            property string diskStatusColor: "ok"
         }
         
         Process {
@@ -607,6 +899,34 @@
                 }
             }
         }
+
+        Process {
+            id: diskProc
+            property string diskScript: "if [ -x $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/btrfs-disk-stats.py ]; then python3 $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/btrfs-disk-stats.py; elif [ -x $HOME/.config/sicos/scripts/btrfs-disk-stats.py ]; then python3 $HOME/.config/sicos/scripts/btrfs-disk-stats.py; else python3 $HOME/Zero/nixos-config/modules/sicos/hyprland/scripts/btrfs-disk-stats.py; fi"
+
+            command: ["sh", "-c", diskScript]
+            running: false
+
+            stdout: StdioCollector {
+                onStreamFinished: {
+                    if (text !== "") {
+                        try {
+                            let d = JSON.parse(text.trim());
+                            sysData.diskTotal = d.total_str || "0 GiB";
+                            sysData.diskAllocated = d.alloc_str || "0 GiB";
+                            sysData.diskAllocPct = d.alloc_pct || 0.0;
+                            sysData.diskUsedPct = d.used_pct || 0.0;
+                            sysData.diskDataPct = d.data_used_pct || 0.0;
+                            sysData.diskMetaPct = d.meta_used_pct || 0.0;
+                            sysData.diskStatusText = d.status_text || "No problem, you have enough free space in your filesystem";
+                            sysData.diskStatusColor = d.status_color || "ok";
+                        } catch (e) {
+                            console.log("Error parsing disk stats JSON: " + e);
+                        }
+                    }
+                }
+            }
+        }
         
         Timer {
             interval: 3000
@@ -614,6 +934,14 @@
             repeat: true
             onTriggered: cpuRamProc.running = true
             Component.onCompleted: cpuRamProc.running = true
+        }
+
+        Timer {
+            interval: 10000
+            running: true
+            repeat: true
+            onTriggered: diskProc.running = true
+            Component.onCompleted: diskProc.running = true
         }
     }
   '';

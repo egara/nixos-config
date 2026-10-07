@@ -339,6 +339,7 @@ in
         gnome-calculator # Calculator
         system-config-printer # CUPs GUI
         fastfetch # For system information
+        gdu # Fast TUI disk usage analyzer
 
         # Tools for the screensaver and helper scripts
         python3
