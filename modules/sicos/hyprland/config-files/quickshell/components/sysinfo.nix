@@ -478,6 +478,67 @@
                                     font.pixelSize: 11
                                     font.bold: true
                                 }
+
+                                Item { Layout.fillWidth: true }
+
+                                // Balance button (ButterManager functionality): compacts the data and
+                                // metadata chunks left too empty after deleting snapshots and other
+                                // filesystem cleaning operations
+                                Rectangle {
+                                    id: balanceButton
+                                    Layout.preferredHeight: 22
+                                    Layout.preferredWidth: balanceButtonRow.implicitWidth + 16
+                                    radius: 11
+                                    color: balanceArea.containsMouse ? "#${c.base03}" : "transparent"
+                                    border.color: balanceArea.containsMouse ? "#${c.base0D}" : "transparent"
+                                    border.width: 1
+
+                                    Behavior on color { ColorAnimation { duration: 150 } }
+                                    Behavior on border.color { ColorAnimation { duration: 150 } }
+
+                                    Row {
+                                        id: balanceButtonRow
+                                        anchors.centerIn: parent
+                                        spacing: 5
+
+                                        Text {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            text: ""
+                                            color: balanceArea.containsMouse ? "#${c.base0D}" : "#${c.base04}"
+                                            font.family: "${fontName}"
+                                            font.pixelSize: 13
+                                        }
+
+                                        Text {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            text: "Balance"
+                                            color: balanceArea.containsMouse ? "#${c.base05}" : "#${c.base04}"
+                                            font.family: "${fontName}"
+                                            font.pixelSize: 11
+                                            font.bold: balanceArea.containsMouse
+                                        }
+                                    }
+
+                                    MouseArea {
+                                        id: balanceArea
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        cursorShape: Qt.PointingHandCursor
+                                        onClicked: {
+                                            // Closing the popup before starting the balance process
+                                            root.sysinfoVisible = false
+                                            // Dynamically define window rules to float, size, and center the balance window
+                                            var hyprRules = "hyprctl eval 'sicos_balance_rule1 = hl.window_rule({ match = { class = \"sicos-balance\" }, float = true }); sicos_balance_rule2 = hl.window_rule({ match = { class = \"sicos-balance\" }, size = { 1600, 900 } }); sicos_balance_rule3 = hl.window_rule({ match = { class = \"sicos-balance\" }, center = true })'; ";
+                                            // Launching the balance process with the current data and metadata
+                                            // usage percentages, following the same logic as ButterManager
+                                            var dataPct = Math.round(sysData.diskDataPct);
+                                            var metaPct = Math.round(sysData.diskMetaPct);
+                                            var scriptCmd = "if [ -f $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/btrfs-balance.sh ]; then $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/btrfs-balance.sh / " + dataPct + " " + metaPct + "; elif [ -f $HOME/.config/sicos/scripts/btrfs-balance.sh ]; then $HOME/.config/sicos/scripts/btrfs-balance.sh / " + dataPct + " " + metaPct + "; else $HOME/Zero/nixos-config/modules/sicos/hyprland/scripts/btrfs-balance.sh / " + dataPct + " " + metaPct + "; fi";
+                                            cmdRunner.command = ["sh", "-c", hyprRules + "uwsm app -- kitty --class sicos-balance sh -c \"" + scriptCmd + "\""]
+                                            cmdRunner.running = true
+                                        }
+                                    }
+                                }
                             }
 
                             // Substantial breathing space before the used space of total allocated section
