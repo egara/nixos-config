@@ -39,8 +39,18 @@ final: prev: {
     # The tarball contains a single file (`opencode`) at its root
     sourceRoot = ".";
 
-    # Keep the binary bit-identical to upstream: no ELF patching, no rpath
-    # shrinking, nothing that could break the embedded Bun payload
+    # Note on ELF patching:
+    # OpenCode is a Bun single-file executable that embeds JS bytecode.
+    # While autoPatchelfHook can alter sections and break offsets if not careful,
+    # setting ONLY the ELF interpreter (`patchelf --set-interpreter`) preserves
+    # the binary layout perfectly and is strictly required: OpenCode background
+    # service manager inspects `process.execPath` (/proc/self/exe) and re-executes
+    # itself directly via child_process.spawn(process.execPath, ["serve", "--service"]).
+    # If the binary relied solely on an external `ld.so <binary>` wrapper,
+    # /proc/self/exe points to ld.so, causing `ld.so serve --service` which fails with
+    # "cannot open shared object file".
+    nativeBuildInputs = [ final.patchelf ];
+
     dontFixup = true;
     dontConfigure = true;
     dontBuild = true;
@@ -49,13 +59,14 @@ final: prev: {
       runHook preInstall
 
       install -Dm755 opencode $out/bin/.opencode-unwrapped
+      patchelf --set-interpreter ${final.stdenv.cc.bintools.dynamicLinker} $out/bin/.opencode-unwrapped
 
       mkdir -p $out/bin
       cat > $out/bin/opencode <<EOF
       #!${final.runtimeShell}
       # ripgrep available on PATH, same as the official Nix package
       export PATH="${final.lib.makeBinPath [ final.ripgrep ]}:\$PATH"
-      exec ${final.stdenv.cc.libc}/lib64/ld-linux-x86-64.so.2 $out/bin/.opencode-unwrapped "\$@"
+      exec $out/bin/.opencode-unwrapped "\$@"
       EOF
       chmod +x $out/bin/opencode
 
