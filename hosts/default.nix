@@ -23,6 +23,9 @@ let
   pkgs = import nixpkgs {
     inherit system;
     config.allowUnfree = true;
+    # OpenCode v2 overlay: replaces nixpkgs' opencode (v1) with the official v2
+    # binary (see overlays/opencode-v2.nix)
+    overlays = [ (import ../overlays/opencode-v2.nix) ];
   };
 
   # Stable packages
@@ -55,6 +58,10 @@ let
       };
 
       modules = extraModules ++ [
+        # OpenCode v2 overlay: makes pkgs.opencode resolve to the official v2
+        # binary (see overlays/opencode-v2.nix) in all NixOS modules
+        { nixpkgs.overlays = [ (import ../overlays/opencode-v2.nix) ]; }
+
         # Stylix module
         #stylix.nixosModules.stylix
 
