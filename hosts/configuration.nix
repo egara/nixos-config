@@ -315,7 +315,8 @@
     sops
     keepassxc
     # AI Tools
-    opencode
+    # OpenCode version 2 will be installed from Wes Payne's flake
+    inputs.opencode-flake.packages.x86_64-linux.opencode2-avx
     antigravity-cli
     herdr
   ];

@@ -9,6 +9,7 @@
   nixos-hardware,
   nix-flatpak,
   nix-amd-ai,
+  opencode-flake,
   self,
   ...
 }:
@@ -23,9 +24,13 @@ let
   pkgs = import nixpkgs {
     inherit system;
     config.allowUnfree = true;
+    # ##################################################
+    # This overlay has been disabled because Wes Payne's
+    # flake will be used for installing v2 of OpenCode
+    # ##################################################
     # OpenCode v2 overlay: replaces nixpkgs' opencode (v1) with the official v2
     # binary (see overlays/opencode-v2.nix)
-    overlays = [ (import ../overlays/opencode-v2.nix) ];
+    # overlays = [ (import ../overlays/opencode-v2.nix) ];
   };
 
   # Stable packages
@@ -58,9 +63,13 @@ let
       };
 
       modules = extraModules ++ [
+        # ##################################################
+        # This overlay has been disabled because Wes Payne's
+        # flake will be used for installing v2 of OpenCode
+        # ##################################################
         # OpenCode v2 overlay: makes pkgs.opencode resolve to the official v2
         # binary (see overlays/opencode-v2.nix) in all NixOS modules
-        { nixpkgs.overlays = [ (import ../overlays/opencode-v2.nix) ]; }
+        # { nixpkgs.overlays = [ (import ../overlays/opencode-v2.nix) ]; }
 
         # Stylix module
         #stylix.nixosModules.stylix
