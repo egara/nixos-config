@@ -90,6 +90,22 @@ Scope {
         targetOsdTimer.restart();
     }
 
+    // Monitor identification OSD state: flashes every connected screen with
+    // its own connector name so physical displays can be matched to the UI
+    property bool monitorIdentifyActive: false
+
+    Timer {
+        id: monitorIdentifyTimer
+        interval: 3000
+        repeat: false
+        onTriggered: mainScope.monitorIdentifyActive = false
+    }
+
+    function showMonitorIdentify() {
+        mainScope.monitorIdentifyActive = true;
+        monitorIdentifyTimer.restart();
+    }
+
     // Notifications Model and Server (global across screens)
     property var notifObjects: ({})
     property var expandedGroups: ({})

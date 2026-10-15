@@ -132,7 +132,7 @@
                 opacity: monitorManagerActive ? 1 : 0
                 Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                 width: Math.min(monitorWindow.width - 80, Math.max(headerCol.implicitWidth + 80, contentArea.implicitWidth + 80))
-                height: headerCol.implicitHeight + contentArea.implicitHeight + (displayModeRow.visible ? displayModeRow.implicitHeight + 20 : 0) + 96
+                height: headerCol.implicitHeight + contentArea.implicitHeight + (displayModeRow.visible ? displayModeRow.implicitHeight + 20 : 0) + identifyRow.implicitHeight + 20 + 96
                 radius: 28
                 color: "#F0${c.base00}"
                 border.color: "#66${c.base0D}"
@@ -280,6 +280,55 @@
                                 hoverEnabled: true
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: monitorWindow.setDisplayMode("extend")
+                            }
+                        }
+                    }
+
+                    // Screen Identification (flash every display with its own name)
+                    Row {
+                        id: identifyRow
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 12
+
+                        Rectangle {
+                            width: identifyLabelRow.implicitWidth + 32
+                            height: 34
+                            radius: 10
+                            color: identifyMouse.containsMouse ? "#${c.base0C}" : "#2A${c.base0C}"
+                            border.color: "#${c.base0C}"
+                            border.width: 1
+
+                            Behavior on color { ColorAnimation { duration: 150 } }
+
+                            Row {
+                                id: identifyLabelRow
+                                anchors.centerIn: parent
+                                spacing: 8
+
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: "󰈣"
+                                    color: identifyMouse.containsMouse ? "#${c.base00}" : "#${c.base05}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 14
+                                }
+
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: "Identify Screens"
+                                    color: identifyMouse.containsMouse ? "#${c.base00}" : "#${c.base05}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 12
+                                    font.bold: true
+                                }
+                            }
+
+                            MouseArea {
+                                id: identifyMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: showMonitorIdentify()
                             }
                         }
                     }
@@ -1135,6 +1184,68 @@
                         monitorManagerActive = false;
                     }
                     event.accepted = true;
+                }
+            }
+        }
+    }
+
+    // Per-screen identification OSD: flashes the connector name of each
+    // physical display (wallpaper Target OSD style) so the user can match
+    // real screens to the cards and canvas of the manager UI
+    Variants {
+        model: Quickshell.screens
+
+        PanelWindow {
+            id: identifyWindow
+            required property var modelData
+            screen: modelData
+
+            visible: monitorIdentifyActive
+
+            anchors { top: false; bottom: true }
+            margins { bottom: 60 }
+
+            color: "transparent"
+            exclusiveZone: -1
+            WlrLayershell.layer: WlrLayer.Overlay
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+
+            implicitWidth: 340
+            implicitHeight: 110
+
+            Rectangle {
+                id: identifyPill
+                anchors.fill: parent
+                radius: 35
+                color: "#E6${c.base01}"
+                border.color: "#66${c.base0D}"
+                border.width: 2
+
+                opacity: monitorIdentifyActive ? 1 : 0
+                Behavior on opacity {
+                    NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
+                }
+
+                Row {
+                    anchors.centerIn: parent
+                    spacing: 16
+
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "󰍹"
+                        color: "#${c.base0D}"
+                        font.family: "${fontName}"
+                        font.pixelSize: 40
+                    }
+
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: identifyWindow.modelData.name
+                        color: "#${c.base05}"
+                        font.family: "${fontName}"
+                        font.pixelSize: 32
+                        font.bold: true
+                    }
                 }
             }
         }
