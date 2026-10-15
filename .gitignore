@@ -3,3 +3,9 @@
 # This link file will be created when executing nvd diff to see what packages can be updated
 result
 .antigravitycli
+
+# Python bytecode and cache residues
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
