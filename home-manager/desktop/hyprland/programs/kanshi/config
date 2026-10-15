@@ -6,8 +6,8 @@ profile office-taskmaster {
 }
 
 profile meeting-room-taskmaster {
-  output "DP-2" enable mode 1920x1080 position 0,0 scale 1.15
-  output "AU Optronics 0xC48A Unknown" enable mode 1920x1080 position 1920,0 scale 1.000000
+  output "DP-2" enable mode 1920x1080@60 position 0,0 scale 1.15
+  output "AU Optronics 0xC48A Unknown" enable mode 1920x1080@60.04 position 1600,0 scale 1.000000
 }
 
 profile undocked-taskmaster {
