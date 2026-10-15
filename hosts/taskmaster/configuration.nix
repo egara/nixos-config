@@ -106,13 +106,18 @@
   environment.systemPackages = with pkgs; [
     apache-directory-studio
     eclipses.eclipse-jee
-    pkgs-stable.jdk8
+    # NOTE: Use jdk8 from the same nixpkgs (unstable) as Eclipse. If it comes from
+    # nixpkgs-stable it is built against an older glibc and, when Eclipse spawns it,
+    # the LD_LIBRARY_PATH injected by Eclipse's wrapper makes the JVM crash with
+    # "version `GLIBC_2.43' not found", so Eclipse cannot detect the Java version
+    # and Tomcat fails to start.
+    jdk8
     python3
   ];
 
   # Mounting openjdk8 via bind mount so Eclipse properly recognizes it as a static path without symlink issues
   fileSystems."/var/lib/jvm/openjdk8" = {
-    device = "${pkgs-stable.jdk8}/lib/openjdk";
+    device = "${pkgs.jdk8}/lib/openjdk";
     fsType = "none";
     options = [
       "bind"

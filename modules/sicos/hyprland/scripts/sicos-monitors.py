@@ -6,6 +6,7 @@
 #   sicos-monitors.py --status
 #   sicos-monitors.py --toggle <MONITOR_NAME>
 #   sicos-monitors.py --set <MONITOR_NAME> <enable|disable>
+#   sicos-monitors.py --display-mode <clone|extend>
 
 import sys
 import os
@@ -286,11 +287,24 @@ def detect_active_profile(profiles, monitors):
 
 
 def reload_kanshi():
-    """Reload Kanshi daemon if active."""
+    """Reload Kanshi daemon if active, restarting it when its IPC socket is unresponsive."""
     try:
         pgrep = subprocess.run(["pgrep", "-x", "kanshi"], capture_output=True)
         if pgrep.returncode == 0:
-            subprocess.run(["kanshictl", "reload"], capture_output=True)
+            res = subprocess.run(["kanshictl", "reload"], capture_output=True)
+            if res.returncode == 0:
+                return True
+            # Kanshi is running but its IPC socket is not accepting connections (stale socket).
+            # Restarting the daemon re-applies the active profile and rebuilds the socket.
+            sys.stderr.write("Warning: kanshictl reload failed, restarting kanshi daemon\n")
+            subprocess.run(["pkill", "-x", "kanshi"], capture_output=True)
+            time.sleep(0.3)
+            subprocess.Popen(
+                ["kanshi"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                start_new_session=True
+            )
             return True
 
         systemctl = subprocess.run(["systemctl", "--user", "is-active", "--quiet", "kanshi.service"])
@@ -439,6 +453,24 @@ def calculate_non_overlapping_position(active_monitors, target_mon, fallback_pos
     return max_right, 0
 
 
+def layouts_overlap(monitors):
+    """Check whether any two active monitors share screen space (cloned layout)."""
+    boxes = []
+    for m in monitors:
+        scale = m.get("scale") or 1.0
+        w = (m.get("width") or 1920) / scale
+        h = (m.get("height") or 1080) / scale
+        boxes.append((m.get("x", 0), m.get("y", 0), w, h))
+
+    for i in range(len(boxes)):
+        for j in range(i + 1, len(boxes)):
+            ax, ay, aw, ah = boxes[i]
+            bx, by, bw, bh = boxes[j]
+            if ax < bx + bw and bx < ax + aw and ay < by + bh and by < ay + ah:
+                return True
+    return False
+
+
 def update_kanshi_output_status(config_path, active_profile, monitor_name, new_status, new_pos_str=None, new_mode_str=None, new_scale_val=None):
     """Update enable/disable status for monitor in target Kanshi config file with correct position and mode."""
     if not config_path.exists() or not os.access(config_path, os.W_OK):
@@ -502,6 +534,25 @@ def update_kanshi_output_status(config_path, active_profile, monitor_name, new_s
     return False
 
 
+def resolve_non_overlapping_position(active_monitors, target_mon, fallback_pos=None):
+    """Use the fallback position only when it does not collide with currently active monitors; otherwise compute an adjacent one."""
+    pos_x, pos_y = calculate_non_overlapping_position(active_monitors, target_mon, fallback_pos)
+
+    scale = target_mon.get("scale") or 1.0
+    width = (target_mon.get("width") or 1920) / scale
+    height = (target_mon.get("height") or 1080) / scale
+
+    for other in active_monitors:
+        o_scale = other.get("scale") or 1.0
+        o_w = (other.get("width") or 1920) / o_scale
+        o_h = (other.get("height") or 1080) / o_scale
+        o_x, o_y = other.get("x", 0), other.get("y", 0)
+        if pos_x < o_x + o_w and o_x < pos_x + width and pos_y < o_y + o_h and o_y < pos_y + height:
+            return calculate_non_overlapping_position(active_monitors, target_mon)
+
+    return pos_x, pos_y
+
+
 def set_monitor_status(monitor_name, target_status):
     """Enable or disable monitor live in Hyprland and persist in Kanshi config with auto-positioning."""
     sync_local_kanshi_config()
@@ -527,8 +578,7 @@ def set_monitor_status(monitor_name, target_status):
         defaults = resolve_monitor_defaults(profiles, target_mon)
         active_monitors = [m for m in monitors if not m.get("disabled", False) and m.get("name") != monitor_name]
 
-        pos_x, pos_y = calculate_non_overlapping_position(active_monitors, target_mon, defaults.get("position"))
-        pos_str = f"{pos_x},{pos_y}"
+        pos_x, pos_y = resolve_non_overlapping_position(active_monitors, target_mon, defaults.get("position"))
 
         width = target_mon.get("width") or 1920
         height = target_mon.get("height") or 1080
@@ -536,10 +586,11 @@ def set_monitor_status(monitor_name, target_status):
         mode_str = defaults.get("mode") or f"{width}x{height}@{rate}"
         scale_val = defaults.get("scale") if defaults.get("scale") is not None else (target_mon.get("scale") or 1.0)
 
-        # 1. Update Kanshi files
+        # 1. Update Kanshi files (status flip plus the recomputed collision-free position)
         if active_profile:
             for p in [KANSHI_REPO_CONFIG, KANSHI_LOCAL_CONFIG, KANSHI_MODULE_CONFIG]:
-                update_kanshi_output_status(p, active_profile, monitor_name, "enable", pos_str, mode_str, scale_val)
+                update_kanshi_output_status(p, active_profile, monitor_name, "enable")
+                update_kanshi_output_position(p, active_profile, monitor_name, pos_x, pos_y)
 
         # 2. Apply live state in Hyprland
         cmd = f'hl.monitor({{ output = "{monitor_name}", mode = "{mode_str}", position = "{pos_x}x{pos_y}", scale = {scale_val} }})'
@@ -774,6 +825,96 @@ def set_monitor_layout(layout_str):
     print(f"Monitor layout '{layout_str}' applied successfully.")
 
 
+def set_display_mode(display_mode):
+    """Apply a global display mode: 'clone' mirrors the main screen on every active output, 'extend' lays them out side by side."""
+    if display_mode not in ("clone", "extend"):
+        sys.stderr.write(f"Error: Unknown display mode '{display_mode}'. Use 'clone' or 'extend'.\n")
+        sys.exit(1)
+
+    sync_local_kanshi_config()
+    monitors = get_hyprland_monitors()
+    active_monitors = [m for m in monitors if not m.get("disabled", False)]
+
+    if len(active_monitors) < 2:
+        sys.stderr.write("Error: At least two active monitors are required to change the display mode.\n")
+        sys.exit(1)
+
+    profiles = parse_kanshi_profiles()
+    active_profile, profiles = get_or_create_active_profile(profiles, monitors)
+
+    # The main screen is the focused monitor, falling back to the first active one
+    primary = next((m for m in active_monitors if m.get("focused", False)), active_monitors[0])
+
+    # Tuples of (monitor, mode_str, scale_val, pos_x, pos_y, mirror_target)
+    updates = []
+
+    if display_mode == "clone":
+        # Cloning is done with Hyprland's 'mirror' keyword: the mirrored output is excluded
+        # from the layout, so no positions overlap. Kanshi cannot represent mirrors, so this
+        # mode is applied live only and the persisted profile keeps the extended arrangement.
+        for m in active_monitors:
+            if m.get("name") == primary.get("name"):
+                continue
+            mode_str = f"{m.get('width') or 1920}x{m.get('height') or 1080}@{m.get('refreshRate') or 60}"
+            scale_val = m.get("scale") or 1.0
+            updates.append((m, mode_str, scale_val, None, None, primary.get("name")))
+    else:
+        # Overlapping screens mean the layout is currently cloned and must be re-laid out;
+        # otherwise the current arrangement is kept untouched
+        needs_layout = layouts_overlap(active_monitors)
+        placed = []
+        ordered = [primary] + [m for m in active_monitors if m.get("name") != primary.get("name")]
+
+        for m in ordered:
+            mode_str = f"{m.get('width') or 1920}x{m.get('height') or 1080}@{m.get('refreshRate') or 60}"
+            scale_val = m.get("scale") or 1.0
+
+            if needs_layout:
+                pos_x, pos_y = calculate_non_overlapping_position(placed, m)
+                placed.append({
+                    "x": pos_x,
+                    "y": pos_y,
+                    "width": m.get("width"),
+                    "scale": scale_val
+                })
+            else:
+                pos_x = m.get("x", 0)
+                pos_y = m.get("y", 0)
+
+            updates.append((m, mode_str, scale_val, pos_x, pos_y, None))
+
+    for m, mode_str, scale_val, pos_x, pos_y, mirror_target in updates:
+        name = m.get("name")
+
+        if mirror_target:
+            # Mirrored outputs are excluded from the layout, so their position stays on auto
+            cmd = f'hl.monitor({{ output = "{name}", mode = "{mode_str}", position = "auto", scale = {scale_val}, mirror = "{mirror_target}" }})'
+            subprocess.run(["hyprctl", "eval", cmd], capture_output=True, text=True)
+            continue
+
+        # 1. Persist in the Kanshi config files
+        if active_profile:
+            for p in [KANSHI_REPO_CONFIG, KANSHI_LOCAL_CONFIG, KANSHI_MODULE_CONFIG]:
+                update_kanshi_output_position(p, active_profile, name, pos_x, pos_y)
+                update_kanshi_output_mode(p, active_profile, name, mode_str)
+
+        # 2. Apply live state in Hyprland. The explicit empty 'mirror' is required because
+        # Hyprland's runtime rule replacement does not clear an existing mirroring by itself
+        cmd = f'hl.monitor({{ output = "{name}", mode = "{mode_str}", position = "{pos_x}x{pos_y}", scale = {scale_val}, mirror = "" }})'
+        subprocess.run(["hyprctl", "eval", cmd], capture_output=True, text=True)
+
+    # Only reload Kanshi when the persisted profile changed; reloading while cloned would
+    # make Kanshi re-apply its stored (extended) positions and fight the live mirror state
+    if display_mode == "extend":
+        reload_kanshi()
+    time.sleep(0.1)
+
+    if display_mode == "clone":
+        print(f"Display mode 'clone' applied: main screen mirrored on {len(updates)} other monitor(s).")
+    else:
+        print(f"Display mode 'extend' applied across {len(updates)} monitor(s).")
+
+
 def set_monitor_mode(monitor_name, target_mode):
     """Change monitor resolution/mode live in Hyprland and persist in Kanshi config."""
     sync_local_kanshi_config()
@@ -824,7 +965,7 @@ def set_monitor_mode(monitor_name, target_mode):
 
 def main():
     if len(sys.argv) < 2 or sys.argv[1] in ["-h", "--help"]:
-        print("Usage: sicos-monitors.py {--status|--toggle <MONITOR_NAME>|--set <MONITOR_NAME> <enable|disable>|--mode <MONITOR_NAME> <MODE>|--position <MONITOR_NAME> <X> <Y>|--layout <LAYOUT_STRING>}")
+        print("Usage: sicos-monitors.py {--status|--toggle <MONITOR_NAME>|--set <MONITOR_NAME> <enable|disable>|--mode <MONITOR_NAME> <MODE>|--position <MONITOR_NAME> <X> <Y>|--layout <LAYOUT_STRING>|--display-mode <clone|extend>}")
         sys.exit(0)
 
     cmd = sys.argv[1]
@@ -855,6 +996,11 @@ def main():
             sys.stderr.write("Usage: sicos-monitors.py --layout '<MON1:X,Y MON2:X,Y>'\n")
             sys.exit(1)
         set_monitor_layout(sys.argv[2])
+    elif cmd == "--display-mode":
+        if len(sys.argv) < 3:
+            sys.stderr.write("Usage: sicos-monitors.py --display-mode <clone|extend>\n")
+            sys.exit(1)
+        set_display_mode(sys.argv[2])
     else:
         sys.stderr.write(f"Unknown command: {cmd}\n")
         sys.exit(1)

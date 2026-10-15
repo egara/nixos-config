@@ -111,6 +111,13 @@
                 monitorActionProc.running = true;
             }
 
+            function setDisplayMode(modeStr) {
+                if (!modeStr) return;
+                var scriptCmd = "if [ -f $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/sicos-monitors.py ]; then python3 $HOME/Zero/nixos-config/home-manager/desktop/hyprland/scripts/sicos-monitors.py --display-mode " + modeStr + "; elif [ -f $HOME/.config/sicos/scripts/sicos-monitors.py ]; then python3 $HOME/.config/sicos/scripts/sicos-monitors.py --display-mode " + modeStr + "; else python3 $HOME/Zero/nixos-config/modules/sicos/hyprland/scripts/sicos-monitors.py --display-mode " + modeStr + "; fi";
+                monitorActionProc.command = ["sh", "-c", scriptCmd];
+                monitorActionProc.running = true;
+            }
+
             function moveSelection(delta) {
                 var count = monitorList.length;
                 if (count === 0) return;
@@ -125,7 +132,7 @@
                 opacity: monitorManagerActive ? 1 : 0
                 Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                 width: Math.min(monitorWindow.width - 80, Math.max(headerCol.implicitWidth + 80, contentArea.implicitWidth + 80))
-                height: headerCol.implicitHeight + contentArea.implicitHeight + 96
+                height: headerCol.implicitHeight + contentArea.implicitHeight + (displayModeRow.visible ? displayModeRow.implicitHeight + 20 : 0) + 96
                 radius: 28
                 color: "#F0${c.base00}"
                 border.color: "#66${c.base0D}"
@@ -181,6 +188,98 @@
                                 font.family: "${fontName}"
                                 font.pixelSize: 15
                                 font.bold: true
+                            }
+                        }
+                    }
+
+                    // Global Display Mode Actions (Clone main screen / Extend desktop)
+                    Row {
+                        id: displayModeRow
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 12
+                        visible: monitorWindow.kanshiEnabled && monitorWindow.monitorList.length > 1
+
+                        Rectangle {
+                            width: cloneLabelRow.implicitWidth + 32
+                            height: 34
+                            radius: 10
+                            color: cloneMouse.containsMouse ? "#${c.base0D}" : "#2A${c.base0D}"
+                            border.color: "#${c.base0D}"
+                            border.width: 1
+
+                            Behavior on color { ColorAnimation { duration: 150 } }
+
+                            Row {
+                                id: cloneLabelRow
+                                anchors.centerIn: parent
+                                spacing: 8
+
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: "󰍺"
+                                    color: cloneMouse.containsMouse ? "#${c.base00}" : "#${c.base05}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 14
+                                }
+
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: "Clone Main Screen"
+                                    color: cloneMouse.containsMouse ? "#${c.base00}" : "#${c.base05}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 12
+                                    font.bold: true
+                                }
+                            }
+
+                            MouseArea {
+                                id: cloneMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: monitorWindow.setDisplayMode("clone")
+                            }
+                        }
+
+                        Rectangle {
+                            width: extendLabelRow.implicitWidth + 32
+                            height: 34
+                            radius: 10
+                            color: extendMouse.containsMouse ? "#${c.base0D}" : "#2A${c.base0D}"
+                            border.color: "#${c.base0D}"
+                            border.width: 1
+
+                            Behavior on color { ColorAnimation { duration: 150 } }
+
+                            Row {
+                                id: extendLabelRow
+                                anchors.centerIn: parent
+                                spacing: 8
+
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: "󰐕"
+                                    color: extendMouse.containsMouse ? "#${c.base00}" : "#${c.base05}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 14
+                                }
+
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: "Extend Desktop"
+                                    color: extendMouse.containsMouse ? "#${c.base00}" : "#${c.base05}"
+                                    font.family: "${fontName}"
+                                    font.pixelSize: 12
+                                    font.bold: true
+                                }
+                            }
+
+                            MouseArea {
+                                id: extendMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: monitorWindow.setDisplayMode("extend")
                             }
                         }
                     }

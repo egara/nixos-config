@@ -94,10 +94,11 @@ SicOS integrates dynamic runtime scaling and multi-monitor positioning with pers
    ```bash
    kanshictl reload
    ```
-4. If Kanshi daemon is not active, fallback directly to Hyprland IPC:
+4. If Kanshi daemon is not active, fallback directly to Hyprland IPC. Since Hyprland 0.55+ (Lua config), `hyprctl keyword monitor` no longer works ("keyword can't work with non-legacy parsers"): everything must go through `hyprctl eval` with the Lua API:
    ```bash
-   hyprctl keyword monitor "<output>,<resolution>,<position>,<scale>"
+   hyprctl eval 'hl.monitor({ output = "<output>", mode = "<resolution>", position = "<x>x<y>", scale = <scale> })'
    ```
+   Beware: runtime `hl.monitor` rules are applied asynchronously and may need an explicit `mirror = ""` field to clear an existing mirroring. On Hyprland 0.56.2, position/mode changes for already-connected outputs are accepted (`ok`) but silently not applied; only new state like `mirror` takes effect at runtime. Treat Kanshi (`kanshictl reload` after persisting the change) as the only reliable live applier, and check `kanshictl`'s exit code — a stale IPC socket ("Couldn't connect") requires restarting the Kanshi daemon.
 
 ### Disambiguating Identical Displays:
 `sicos-monitors.py` resolves connector IDs (`DP-1`, `DP-2`) with priority over monitor descriptions. This prevents multi-monitor profiles from confusing identical panels in multi-display setups.
