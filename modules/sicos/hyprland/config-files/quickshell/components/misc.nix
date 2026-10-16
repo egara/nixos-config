@@ -856,6 +856,36 @@
                 }
             }
 
+            // Multi-Screen Indicator
+            // Only relevant with more than one connected screen; toggles the
+            // Monitor Manager overlay (same state as the Super + K toggle).
+            // Uses the base0D accent to match the Monitor Manager iconography
+            // and the interactive badge semantics of this island
+            Rectangle {
+                width: 24; height: 24
+                radius: 12
+                color: "#${c.base0D}"
+                visible: Quickshell.screens.length > 1
+
+                Text {
+                    anchors.centerIn: parent
+                    text: "󰍹"
+                    color: "#${c.base00}"
+                    font.family: "${fontName}"
+                    font.pixelSize: 15
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        // Render the overlay on the screen whose bar was clicked
+                        mainScope.monitorManagerTargetScreen = root.screen.name;
+                        mainScope.monitorManagerActive = !mainScope.monitorManagerActive;
+                    }
+                }
+            }
+
             // Power Profile Indicator
             Rectangle {
                 width: 24; height: 24
