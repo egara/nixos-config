@@ -245,7 +245,7 @@
     #kdePackages.okular
     papers
     pkgs-stable.qmmp
-    audacity
+    pkgs-stable.audacity
     #pkgs-stable.carla
     # Changing carla to helvum (native patchbay for PipeWire based on GTK4)
     helvum
@@ -304,7 +304,7 @@
     posting
     k9s
     mesa-demos
-    buttermanager
+    pkgs-stable.buttermanager
     openssl
     lazyssh # For SSH management
     inetutils # Network utilities
