@@ -168,6 +168,29 @@ in
         '';
       };
 
+      # Declarative hypridle systemd user unit.
+      # The unit shipped inside the hypridle package is never exposed to systemd by NixOS,
+      # and linking it manually from ~/.config/systemd/user breaks when the store path is
+      # garbage-collected (this is what broke the Caffeine toggle).
+      systemd.user.services.hypridle = {
+        Unit = {
+          Description = "Hyprland's idle daemon";
+          Documentation = [ "https://wiki.hyprland.org/Hypr-Ecosystem/hypridle" ];
+          PartOf = [ "graphical-session.target" ];
+          After = [ "graphical-session.target" ];
+          # Do not start hypridle outside a Wayland session
+          ConditionEnvironment = "WAYLAND_DISPLAY";
+        };
+        Service = {
+          ExecStart = "${lib.getExe pkgs.hypridle}";
+          Restart = "on-failure";
+          RestartSec = 5;
+        };
+        Install = {
+          WantedBy = [ "graphical-session.target" ];
+        };
+      };
+
       # Configure XDG user directories (Downloads, Music, Pictures, etc.)
       # to get proper icons and default directory paths in file managers.
       xdg.userDirs = {
