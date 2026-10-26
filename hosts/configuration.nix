@@ -245,7 +245,7 @@
     #kdePackages.okular
     papers
     pkgs-stable.qmmp
-    pkgs-stable.audacity
+    audacity
     #pkgs-stable.carla
     # Changing carla to helvum (native patchbay for PipeWire based on GTK4)
     helvum
