@@ -333,6 +333,12 @@
     appimage = {
       enable = true;
       binfmt = true;
+      # nixpkgs removed libgcrypt and libgpg-error from appimageTools' FHS env
+      # (https://github.com/NixOS/nixpkgs/commit/3b5bba1a98148fe502ac053fce7e0af8792d07ac)
+      # but some AppImages (e.g. Navicat) still need them at runtime
+      package = pkgs.appimage-run.override {
+        extraPkgs = pkgs: [ pkgs.libgpg-error pkgs.libgcrypt ];
+      };
     };
 
     # Virtual Manager
