@@ -277,7 +277,7 @@
     pciutils
     spotify
     bind
-    pkgs-stable.cryfs
+    gocryptfs
     #pkgs-stable.quickemu
     #pkgs-stable.quickgui
     quickemu
