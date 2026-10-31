@@ -297,6 +297,11 @@ hl.config({
     gestures = {
         -- See https://wiki.hyprland.org/Configuring/Variables/ for more
         workspace_swipe_touch = false,
+        workspace_swipe_distance = 300,
+        workspace_swipe_invert = true,
+        workspace_swipe_cancel_ratio = 0.5,
+        workspace_swipe_create_new = true,
+        workspace_swipe_forever = false,
     },
 
     misc = {
@@ -311,6 +316,10 @@ hl.config({
         },
     },
 })
+
+-- Touchpad Gestures
+-- Enables 1:1 3-finger horizontal workspace switching
+hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
 
 -- ####################
 -- Animations - START
