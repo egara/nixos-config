@@ -320,6 +320,22 @@ hl.config({
 -- Touchpad Gestures
 -- Enables 1:1 3-finger horizontal workspace switching
 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
+-- 3-finger swipe up opens SicOS workspace overview (Exposé)
+hl.gesture({
+    fingers = 3,
+    direction = "up",
+    action = function()
+        hl.exec_cmd(os.getenv("HOME") .. "/.config/sicos/scripts/toggle-overview.sh open")
+    end,
+})
+-- 3-finger swipe down closes SicOS workspace overview
+hl.gesture({
+    fingers = 3,
+    direction = "down",
+    action = function()
+        hl.exec_cmd(os.getenv("HOME") .. "/.config/sicos/scripts/toggle-overview.sh close")
+    end,
+})
 
 -- ####################
 -- Animations - START

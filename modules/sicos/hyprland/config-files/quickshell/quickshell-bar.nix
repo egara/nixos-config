@@ -824,6 +824,35 @@ PanelWindow {
         }
     }
 
+    // FIFO listener for Hyprland -> Quickshell workspace overview toggle
+    Process {
+        id: overviewFifo
+        command: ["bash", "-c", "FIFO=/tmp/sicos-overview-fifo; rm -f $FIFO; mkfifo $FIFO; tail -f $FIFO"]
+        running: true
+        stdout: SplitParser {
+            onRead: function(line) {
+                var msg = line.trim();
+                var parts = msg.split(/\s+/);
+                var action = parts[0];
+                var target = parts.length > 1 ? parts[1] : "";
+
+                if (action === "open") {
+                    overviewTargetScreen = target;
+                    overviewActive = true;
+                } else if (action === "close") {
+                    overviewActive = false;
+                } else if (action === "toggle") {
+                    if (overviewActive) {
+                        overviewActive = false;
+                    } else {
+                        overviewTargetScreen = target;
+                        overviewActive = true;
+                    }
+                }
+            }
+        }
+    }
+
     ${overview}
     ${windowSwitcher}
     ${windowKiller}
