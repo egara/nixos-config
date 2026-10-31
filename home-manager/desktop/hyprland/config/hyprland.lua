@@ -30,8 +30,9 @@ hl.on("hyprland.start", function ()
     hl.exec_cmd("systemctl --user enable --now hypridle.service")
     -- hl.exec_cmd("swayidle -w timeout 300 '$lock' timeout 300 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' before-sleep '$lock'")
 
-    -- Initilize wallpaper daemon
+    -- Initilize wallpaper daemon and restore cached wallpaper once outputs are settled
     hl.exec_cmd("uwsm app -- awww-daemon")
+    hl.exec_cmd("uwsm app -- sh -c 'sleep 1 && awww restore'")
 
     -- Networking
     hl.exec_cmd("uwsm app -- nm-applet --indicator")

@@ -32,8 +32,9 @@ hl.on("hyprland.start", function ()
     -- Screensaver (IDLE)
     hl.exec_cmd("systemctl --user enable --now hypridle.service")
 
-    -- Initilize wallpaper daemon
+    -- Initilize wallpaper daemon and restore cached wallpaper once outputs are settled
     hl.exec_cmd("uwsm app -- awww-daemon")
+    hl.exec_cmd("uwsm app -- sh -c 'sleep 1 && awww restore'")
 
     -- Networking
     hl.exec_cmd("uwsm app -- nm-applet --indicator")
