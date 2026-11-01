@@ -274,6 +274,10 @@ hl.config({
             render_power = 3,
             color = "rgba(1a1a1aee)",
         },
+
+        wobble = {
+            enabled = true,
+        },
     },
 
     -- ##################################
@@ -401,6 +405,12 @@ hl.window_rule({
     pin = true,
     border_size = 0,
     no_shadow = true,
+})
+
+-- Only floating windows should wobble (disable wobble for tiled windows)
+hl.window_rule({
+    match = { float = false },
+    no_wobble = true,
 })
 
 -- #######################

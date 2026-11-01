@@ -326,6 +326,10 @@ hl.config({
             render_power = 3,
             color = "rgba(1a1a1aee)",
         },
+
+        wobble = {
+            enabled = true,
+        },
     },
 
     dwindle = {
@@ -454,6 +458,12 @@ hl.window_rule({
 hl.window_rule({
     match = { class = "^(firefox|google-chrome|com.stremio.stremio)$" },
     idle_inhibit = "focus",
+})
+
+-- Only floating windows should wobble (disable wobble for tiled windows)
+hl.window_rule({
+    match = { float = false },
+    no_wobble = true,
 })
 
 -- #######################
