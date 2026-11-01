@@ -290,7 +290,8 @@ in
         hypridle
         hyprsunset
         nautilus # File manager
-        hyprland-qtutils
+        # hyprland-qtutils has been removed upstream, successor hyprland-guiutils is already on PATH
+        hyprland-guiutils
         wlogout
         xdg-desktop-portal-gtk
         xdg-desktop-portal-hyprland
