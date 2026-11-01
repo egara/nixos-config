@@ -119,7 +119,8 @@ hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("uwsm app -- " .. browser .. " --priv
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("uwsm app -- " .. webapp .. "='https://gemini.google.com/'"), { description = "Gemini" })
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("~/.config/sicos/scripts/sicos-settings.sh"), { description = "SicOS settings menu" })
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("uwsm app -- " .. terminal .. " --override term=xterm-256color -e lazyssh"), { description = "Lazyssh" })
-hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd(menu), { description = "App Launcher (Walker)" })
+-- App launcher on Super key release
+hl.bind("SUPER_L", hl.dsp.exec_cmd(menu), { release = true, description = "App Launcher (Walker)" })
 -- Same shortcut as Omarchy's clipboard manager, served by the elephant clipboard provider through walker
 hl.bind(mainMod .. " + CTRL + V", hl.dsp.exec_cmd(menu .. " --provider clipboard"), { description = "Clipboard History (Walker)" })
 -- hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu), { description = "App Launcher (Walker)" })
