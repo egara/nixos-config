@@ -393,7 +393,7 @@ hl.window_rule({
 })
 
 hl.window_rule({
-    match = { class = "^(kitty|org.gnome.Nautilus)$" },
+    match = { class = "^(kitty|org.gnome.Nautilus|sicos-.*)$" },
     opacity = "0.9 0.8",
 })
 
