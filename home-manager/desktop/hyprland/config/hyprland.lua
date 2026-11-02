@@ -311,10 +311,11 @@ hl.config({
         blur = {
             enabled = true,
             size = 4,
-            passes = 2,
+            passes = 1,
             new_optimizations = true,
             ignore_opacity = true,
             xray = false,
+            variant = "frost",
         },
 
         dim_inactive = true,
@@ -329,6 +330,9 @@ hl.config({
 
         wobble = {
             enabled = true,
+            damping = 8,
+            stiffness = 500,
+            mesh = 20,
         },
     },
 
