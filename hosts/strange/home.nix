@@ -28,10 +28,25 @@
         vision_enabled = true;
       };
       voice = {
-        tts_engine = "online";
-        tts_online_voices = {
-          es = "es-ES-AlvaroNeural";
-          en = "en-US-GuyNeural";
+        tts_engine = "none";
+        # To enable TTS output, switch tts_engine and configure voices:
+        # tts_engine = "online"; # Options: "none", "online", "local"
+        # tts_online_voices = {
+        #   es = "es-ES-AlvaroNeural";
+        #   en = "en-US-GuyNeural";
+        # };
+        # For local offline Piper models:
+        # tts_engine = "local";
+        # tts_offline_voices = [ "en" "es" ];
+      };
+      mcp_servers = {
+        time = {
+          url = "http://127.0.0.1:32770/sse";
+          transport = "sse";
+        };
+        searxng = {
+          url = "http://127.0.0.1:32771/mcp";
+          transport = "streamable_http";
         };
       };
     };
