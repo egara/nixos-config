@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "assistant": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793729390,
+        "narHash": "sha256-k/X5hrxmIMZOqizEefRIz+TJX5FRZZhC/2iPgLs2qks=",
+        "owner": "egara",
+        "repo": "assistant",
+        "rev": "1b531b3e3b2037095a8e3e5eefa7d1b64eaf2f97",
+        "type": "github"
+      },
+      "original": {
+        "owner": "egara",
+        "repo": "assistant",
+        "type": "github"
+      }
+    },
     "autofirma-nix": {
       "inputs": {
         "autofirma-src": "autofirma-src",
@@ -677,6 +697,7 @@
     },
     "root": {
       "inputs": {
+        "assistant": "assistant",
         "autofirma-nix": "autofirma-nix",
         "disko": "disko",
         "elephant": "elephant",

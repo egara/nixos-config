@@ -146,7 +146,7 @@ let
           home-manager.useGlobalPkgs = false;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {
-            inherit username pkgs;
+            inherit inputs username pkgs;
             host = hostArg;
           };
           home-manager.users.${username} = {
@@ -237,6 +237,7 @@ let
     ./strange/configuration.nix
     #../modules/custom/autofirma.nix
   ];
+  strangeHomeManagerExtraImports = [ (import ./strange/home.nix) ];
 
 in
 {
@@ -292,5 +293,6 @@ in
     hostName = "strange";
     desktop = "hyprland";
     extraModules = strangeModules;
+    homeManagerExtraImports = strangeHomeManagerExtraImports;
   };
 }

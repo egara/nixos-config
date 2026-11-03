@@ -118,6 +118,7 @@ hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("uwsm app -- " .. browser), { descrip
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("uwsm app -- " .. browser .. " --private-window"), { description = "Firefox (Private Window)" })
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("uwsm app -- " .. webapp .. "='https://gemini.google.com/'"), { description = "Gemini" })
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("~/.config/sicos/scripts/sicos-settings.sh"), { description = "SicOS settings menu" })
+hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("assistant"), { description = "AI Desktop Assistant (Voice & Text)" })
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("uwsm app -- " .. terminal .. " --override term=xterm-256color -e lazyssh"), { description = "Lazyssh" })
 -- App launcher on Super key release
 hl.bind("SUPER_L", hl.dsp.exec_cmd(menu), { release = true, description = "App Launcher (Walker)" })
@@ -457,6 +458,14 @@ hl.window_rule({
     match = { class = "^(Qmmp|buttermanager|es-estoes-wallpaperDownloader-Main|quickgui|SshAskpass|com.gabm.satty)$" },
     float = true,
     center = true,
+})
+
+hl.window_rule({
+    match = { title = "^(Assistant AI|Mofakir AI)$" },
+    float = true,
+    center = true,
+    size = { "45%", "55%" },
+    opacity = "0.92 0.85",
 })
 
 hl.window_rule({

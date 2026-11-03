@@ -101,6 +101,12 @@
     opencode-flake = {
       url = "github:noblepayne/opencode-flake";
     };
+
+    # Assistant - Local AI desktop assistant (fork of Mofakir)
+    assistant = {
+      url = "github:egara/assistant";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # The binary cache configuration is strongly recommended to avoid unnecessary local compilation.
@@ -139,6 +145,7 @@
     nix-flatpak,
     nix-amd-ai,
     opencode-flake,
+    assistant,
     ... }:
   {
     nixosModules = {
@@ -181,7 +188,8 @@
           nixos-hardware
           nix-flatpak
           nix-amd-ai self
-          opencode-flake;
+          opencode-flake
+          assistant;
       }
     );
   };
