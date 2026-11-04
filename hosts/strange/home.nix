@@ -26,6 +26,13 @@
         model = "gemma4-it:12b";
         api_key = "sk-none";
         vision_enabled = true;
+        fallback = {
+          provider_name = "local";
+          base_url = "http://127.0.0.1:8010/v1";
+          model = "GLM-5.3-Flash";
+          api_key = "sk-none";
+          vision_enabled = true;
+        };
       };
       voice = {
         tts_engine = "none";
