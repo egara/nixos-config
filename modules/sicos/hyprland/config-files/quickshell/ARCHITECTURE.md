@@ -125,7 +125,7 @@ The Wallpaper Gallery (`wallpaper.nix`) is integrated into SicOS-Bar as an inter
 - **Backend Service (`sicos-wallpapers.py`):**
   - `--list`: Scans `~/.config/sicos/wallpapers` and subdirectories, queries active outputs and current wallpapers via `awww query`, and returns structured JSON with thumbnail cache locations.
   - `--set <path> [-o <output>] [-r <mode>]`: Dispatches wallpaper change via `awww img` with optional target output (`-o <output>` or all outputs) and resize method (`--resize <fit|crop|stretch|no>`).
-  - `--random [-o <output>] [-r <mode>]`: Selects a random wallpaper from the collection and applies it to the selected display with chosen resize mode.
+  - `--random [-o <output>] [-r <mode>]`: Selects random wallpapers from the collection and applies them with the chosen resize mode. When a specific output is targeted, one random wallpaper is applied to it; when targeting all outputs (no `-o` or `all`), a different random wallpaper is applied to each connected monitor. Prints a JSON map (`{"output": "path"}`) of what was applied so the UI can refresh its per-monitor indicators. Broken symlinks are skipped, and `awww` failures are reported on stderr instead of failing silently.
   - `--gen-thumbs`: Generates local cached square/16:9 thumbnail previews in `~/.cache/sicos-wallpaper-thumbs` for snappy UI scrolling.
 - **Interactive UI Controls:**
   - **Outputs Dropdown:** Placed directly above the category pills. Automatically populates connected monitors (e.g. `eDP-1`, `DP-1`) alongside an `All Outputs` option. Selecting an entry triggers the shared Target OSD on the referenced screen (`Output | DP-1`), or one OSD per monitor for `All Outputs`, so the user sees where the next wallpaper will be applied.

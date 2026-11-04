@@ -156,7 +156,9 @@ def cmd_batch_thumbs(limit=60):
 
 def cmd_set(image_path, target_output=None, resize_mode="fit"):
     if not os.path.exists(image_path):
-        sys.exit(1)
+        # Broken symlink or missing file: report instead of exiting silently
+        sys.stderr.write(f"Wallpaper file not found or broken symlink: {image_path}\n")
+        return False
     
     valid_resizes = {"fit", "crop", "stretch", "no"}
     if resize_mode not in valid_resizes:
@@ -175,19 +177,55 @@ def cmd_set(image_path, target_output=None, resize_mode="fit"):
         "--transition-step", "90",
         image_path
     ])
-    subprocess.run(cmd)
+    try:
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        if res.returncode != 0:
+            # Surface awww failures so callers (and the user) can see why nothing changed
+            sys.stderr.write(f"awww failed (exit {res.returncode}) for {image_path}: {res.stderr.strip()}\n")
+            return False
+    except subprocess.TimeoutExpired:
+        sys.stderr.write(f"awww timed out applying {image_path}\n")
+        return False
+    return True
 
-def cmd_random(target_output=None, resize_mode="fit"):
+def cmd_random(target_output=None, resize_mode="stretch"):
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     candidates = []
     if WALLPAPERS_DIR.exists():
         for root, dirs, files in os.walk(WALLPAPERS_DIR, followlinks=True):
             for f in files:
                 if os.path.splitext(f)[1].lower() in VALID_EXTENSIONS:
-                    candidates.append(os.path.join(root, f))
-    if candidates:
-        pick = random.choice(candidates)
-        cmd_set(pick, target_output=target_output, resize_mode=resize_mode)
+                    full_path = os.path.join(root, f)
+                    # Skip broken symlinks so a dead pick never fails silently
+                    if os.path.exists(full_path):
+                        candidates.append(full_path)
+    if not candidates:
+        return
+
+    # When targeting every output, apply a different random wallpaper to each
+    # monitor; a single shared image would defeat the purpose of randomness
+    if target_output and target_output.lower() not in ("all", "*", ""):
+        outputs = [target_output]
+    else:
+        outputs, _, _ = get_outputs_and_wallpapers()
+        if not outputs:
+            outputs = [None]
+
+    picked = {}
+    pool = candidates[:]
+    for out in outputs:
+        if not pool:
+            # Reuse the pool (reshuffled) when there are fewer candidates than outputs
+            pool = candidates[:]
+        pick = random.choice(pool)
+        pool.remove(pick)
+        # Keep applying to the remaining monitors even if one output fails
+        if cmd_set(pick, target_output=out, resize_mode=resize_mode):
+            picked[out if out else "all"] = pick
+
+    # Report what was applied where, as JSON, so the UI can refresh its indicators
+    if picked:
+        print(json.dumps(picked))
 
 if __name__ == "__main__":
     import argparse
@@ -198,13 +236,14 @@ if __name__ == "__main__":
     parser.add_argument("--set", type=str, help="Set wallpaper image path")
     parser.add_argument("--random", action="store_true", help="Pick and set random wallpaper")
     parser.add_argument("-o", "--output", type=str, default=None, help="Target output (e.g. eDP-1, DP-1, or 'all')")
-    parser.add_argument("-r", "--resize", type=str, default="fit", help="Resize mode (fit, crop, stretch, no)")
+    parser.add_argument("-r", "--resize", type=str, default="stretch", help="Resize mode (fit, crop, stretch, no)")
     parser.add_argument("query", nargs="?", default=None, help="Optional search query filter for --list")
 
     args = parser.parse_args()
 
     if args.set:
-        cmd_set(args.set, target_output=args.output, resize_mode=args.resize)
+        if not cmd_set(args.set, target_output=args.output, resize_mode=args.resize):
+            sys.exit(1)
     elif args.random:
         cmd_random(target_output=args.output, resize_mode=args.resize)
     elif args.thumb:

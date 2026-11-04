@@ -50,7 +50,7 @@ in
             property var outputList: ["All Outputs"]
             property string selectedOutput: "All Outputs"
             property var outputWallpapers: ({})
-            property string selectedResize: "fit"
+            property string selectedResize: "stretch"
             property var resizeOptions: ["fit", "crop", "stretch", "no"]
             property int openDropdownIndex: -1 // -1: closed, 1: outputs dropdown, 2: resize dropdown
 
@@ -109,7 +109,17 @@ in
                 running: false
                 stdout: StdioCollector {
                     onStreamFinished: {
-                        if (text.trim() !== "") {
+                        if (text.trim() === "") return;
+                        // The backend reports a JSON map of output -> applied wallpaper
+                        // (one different image per monitor when targeting all outputs)
+                        try {
+                            var map = JSON.parse(text.trim());
+                            for (var out in map) {
+                                popupContentWallpaper.outputWallpapers[out] = map[out];
+                                popupContentWallpaper.currentWallpaperPath = map[out];
+                            }
+                        } catch (e) {
+                            // Backwards compatible plain-path output
                             popupContentWallpaper.currentWallpaperPath = text.trim();
                             if (popupContentWallpaper.selectedOutput !== "All Outputs") {
                                 popupContentWallpaper.outputWallpapers[popupContentWallpaper.selectedOutput] = text.trim();
