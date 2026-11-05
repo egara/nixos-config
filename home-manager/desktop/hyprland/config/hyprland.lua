@@ -111,7 +111,32 @@ hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("uwsm app -- zeditor"), { description
 hl.bind(mainMod .. " + Q", hl.dsp.window.close(), { description = "Close Window" })
 hl.bind("CTRL + ALT + Delete", hl.dsp.exit(), { description = "Exit" })
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("uwsm app -- " .. fileManager), { description = "File Manager (Nautilus)" })
-hl.bind(mainMod .. " + F", hl.dsp.window.float({ action = "toggle" }), { description = "Toggle Floating Window" })
+-- Floating a tiled window keeps the tiny size the client requested when it
+-- mapped, so the window shows up minuscule in the middle of the screen. When a
+-- window becomes floating, resize it to a sensible fraction of the monitor and
+-- center it. Windows going back to tiling are left untouched.
+hl.bind(mainMod .. " + F", function()
+    local window = hl.get_active_window()
+    if window == nil then
+        return
+    end
+
+    -- Snapshot before dispatching: dispatches queued here run afterwards, so
+    -- re-reading the state mid-function would return stale values anyway
+    local wasFloating = window.floating
+    local monitor = window.monitor or hl.get_active_monitor()
+
+    hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
+
+    if not wasFloating and monitor then
+        hl.dispatch(hl.dsp.window.resize({
+            x = math.floor(monitor.width * 0.6),
+            y = math.floor(monitor.height * 0.75),
+            relative = false,
+        }))
+        hl.dispatch(hl.dsp.window.center({ window = "address:" .. window.address }))
+    end
+end, { description = "Toggle Floating Window" })
 hl.bind(mainMod .. " + KP_Multiply", hl.dsp.window.pseudo(), { description = "Reduce/Enlarge Current Window" })
 hl.bind(mainMod .. " + KP_Divide", hl.dsp.layout("togglesplit"), { description = "Change Layout" })
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("uwsm app -- " .. browser), { description = "Firefox" })
