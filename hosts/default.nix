@@ -222,6 +222,7 @@ let
     ./taskmaster/configuration.nix
     #../modules/custom/autofirma.nix
   ];
+  taskmasterHomeManagerExtraImports = [ (import ./taskmaster/home.nix) ];
 
   # Modules for Strange
   strangeModules = [
@@ -288,6 +289,7 @@ in
     hostName = "taskmaster";
     desktop = "hyprland";
     extraModules = taskmasterModules;
+    homeManagerExtraImports = taskmasterHomeManagerExtraImports;
   };
   "strange-hyprland" = mkHost {
     hostName = "strange";
