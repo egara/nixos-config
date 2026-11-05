@@ -319,6 +319,7 @@
     inputs.opencode-flake.packages.x86_64-linux.opencode2-avx
     antigravity-cli
     herdr
+    spec-kit
   ];
 
   # List of programs that must be enabled
@@ -337,7 +338,10 @@
       # (https://github.com/NixOS/nixpkgs/commit/3b5bba1a98148fe502ac053fce7e0af8792d07ac)
       # but some AppImages (e.g. Navicat) still need them at runtime
       package = pkgs.appimage-run.override {
-        extraPkgs = pkgs: [ pkgs.libgpg-error pkgs.libgcrypt ];
+        extraPkgs = pkgs: [
+          pkgs.libgpg-error
+          pkgs.libgcrypt
+        ];
       };
     };
 
