@@ -21,17 +21,24 @@
     '';
     settings = {
       llm = {
-        provider_name = "local";
-        base_url = "http://127.0.0.1:52625/v1";
-        model = "gemma4-it:12b";
-        api_key = "sk-none";
-        vision_enabled = true;
-        fallback = {
-          provider_name = "local";
-          base_url = "http://127.0.0.1:8010/v1";
-          model = "GLM-5.3-Flash";
-          api_key = "sk-none";
-          vision_enabled = true;
+        default = "gemma";
+        models = {
+          gemma = {
+            provider_name = "local";
+            base_url = "http://127.0.0.1:52625/v1";
+            model = "gemma4-it:12b";
+            api_key = "sk-none";
+            vision_enabled = true;
+            timeout = 180.0;
+          };
+          glm = {
+            provider_name = "local";
+            base_url = "http://127.0.0.1:8010/v1";
+            model = "GLM-5.3-Flash";
+            api_key = "sk-none";
+            vision_enabled = true;
+            timeout = 180.0;
+          };
         };
       };
       voice = {
