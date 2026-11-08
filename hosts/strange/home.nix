@@ -49,7 +49,8 @@
         confidence_threshold = 0.60;
       };
       voice = {
-        tts_engine = "none";
+        tts_engine = "local";
+        tts_offline_voices = [ "es" "en" ];
         silence_duration = "0.7";
         silence_threshold = "1%";
         asr = {
@@ -59,15 +60,12 @@
           language = "es";
           timeout = 10.0;
         };
-        # To enable TTS output, switch tts_engine and configure voices:
-        # tts_engine = "online"; # Options: "none", "online", "local"
+        # To enable TTS output via Edge cloud:
+        # tts_engine = "online";
         # tts_online_voices = {
         #   es = "es-ES-AlvaroNeural";
         #   en = "en-US-GuyNeural";
         # };
-        # For local offline Piper models:
-        # tts_engine = "local";
-        # tts_offline_voices = [ "en" "es" ];
       };
       mcp_servers = {
         searxng = {
