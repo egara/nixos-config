@@ -41,6 +41,13 @@
           };
         };
       };
+      decision_router = {
+        enabled = true;
+        endpoint = "http://127.0.0.1:8000/v1/systemone";
+        model = "d3:edge";
+        timeout = 1.5;
+        confidence_threshold = 0.60;
+      };
       voice = {
         tts_engine = "none";
         # To enable TTS output, switch tts_engine and configure voices:
