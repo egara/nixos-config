@@ -50,6 +50,15 @@
       };
       voice = {
         tts_engine = "none";
+        silence_duration = "0.7";
+        silence_threshold = "1%";
+        asr = {
+          enabled = true;
+          endpoint = "http://127.0.0.1:52625/v1/audio/transcriptions";
+          model = "whisper";
+          language = "es";
+          timeout = 10.0;
+        };
         # To enable TTS output, switch tts_engine and configure voices:
         # tts_engine = "online"; # Options: "none", "online", "local"
         # tts_online_voices = {
