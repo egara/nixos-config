@@ -104,7 +104,7 @@
 
     # Assistant - Local AI desktop assistant (fork of Mofakir)
     assistant = {
-      url = "github:egara/assistant";
+      url = "github:egara/assistant/devel";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
