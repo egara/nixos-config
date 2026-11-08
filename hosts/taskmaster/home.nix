@@ -56,10 +56,6 @@
       # MCP containers running in Docker on this host. The published ports are
       # different from strange's ones (32770/32771 there)
       mcp_servers = {
-        time = {
-          url = "http://127.0.0.1:32770/sse";
-          transport = "sse";
-        };
         searxng = {
           url = "http://127.0.0.1:32771/mcp";
           transport = "streamable_http";

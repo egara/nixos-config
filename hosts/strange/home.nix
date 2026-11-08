@@ -61,10 +61,6 @@
         # tts_offline_voices = [ "en" "es" ];
       };
       mcp_servers = {
-        time = {
-          url = "http://127.0.0.1:32770/sse";
-          transport = "sse";
-        };
         searxng = {
           url = "http://127.0.0.1:32771/mcp";
           transport = "streamable_http";
