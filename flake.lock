@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794126438,
-        "narHash": "sha256-1l5dP5T5bqiq3/b1Kvyh8R6EprHi2JlBRfgEJkZwFaA=",
+        "lastModified": 1794126809,
+        "narHash": "sha256-fFyE+AzjSTlPhk7VOl/e18qARommuSEBiZsJAavH3Wo=",
         "owner": "egara",
         "repo": "assistant",
-        "rev": "5625d1712fa9092604b7a69f2b0494ae6d03e19c",
+        "rev": "406679b112ffc7296bb3ba9b954c7b8b4c391019",
         "type": "github"
       },
       "original": {
