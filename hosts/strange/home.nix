@@ -43,7 +43,7 @@
       };
       decision_router = {
         enabled = true;
-        endpoint = "http://127.0.0.1:8000/v1/systemone";
+        endpoint = "http://127.0.0.1:52625/v1/systemone";
         model = "d3:edge";
         timeout = 1.5;
         confidence_threshold = 0.60;
