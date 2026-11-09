@@ -135,8 +135,9 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # In order to use JACK applications
-    jack.enable = true;
+    # JACK applications: services.pipewire.jack.enable is deprecated because it
+    # introduces global impurity via LD_LIBRARY_PATH. Use the pw-jack wrapper
+    # instead: pw-jack <jack-application>
 
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)

@@ -17,6 +17,7 @@
       The username is egarcia and the hostname is strange.
       The name's user is Eloy and he lives in León (Spain).
       Respond concisely and execute system commands or window actions when asked.
+      Don't hallucinate. If you don't know something, search on Internet.
       Always reply in the user's language (primarily Spanish).
     '';
     settings = {
@@ -50,7 +51,10 @@
       };
       voice = {
         tts_engine = "local";
-        tts_offline_voices = [ "es" "en" ];
+        tts_offline_voices = [
+          "es"
+          "en"
+        ];
         silence_duration = "0.7";
         silence_threshold = "1%";
         asr = {
