@@ -29,10 +29,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-#    # Hyprswitch (for windows switching in Hyprland)
-#    hyprswitch = {
-#      url = "github:h3rmt/hyprswitch/release";
-#    };
+    #    # Hyprswitch (for windows switching in Hyprland)
+    #    hyprswitch = {
+    #      url = "github:h3rmt/hyprswitch/release";
+    #    };
 
     # WallpaperDownloader flake
     wallpaperdownloader = {
@@ -41,13 +41,13 @@
 
     # Autofirma flake
     # For more information https://nix-community.github.io/autofirma-nix
-   autofirma-nix = {
-     # url = "github:nix-community/autofirma-nix";  # For nixpkgs-unstable
-     # inputs.nixpkgs.follows = "nixpkgs";
-     # Stable release
-     url = "github:nix-community/autofirma-nix/release-25.11";  # For NixOS 25.11
-     inputs.nixpkgs.follows = "nixpkgs-stable";
-   };
+    autofirma-nix = {
+      # url = "github:nix-community/autofirma-nix";  # For nixpkgs-unstable
+      # inputs.nixpkgs.follows = "nixpkgs";
+      # Stable release
+      url = "github:nix-community/autofirma-nix/release-25.11"; # For NixOS 25.11
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+    };
 
     # autofirma-nix = {
     #   url = "git+https://github.com/nix-community/autofirma-nix.git?rev=75770f68709e764659712ff152193d7986db2530";
@@ -102,10 +102,19 @@
       url = "github:noblepayne/opencode-flake";
     };
 
-    # Assistant - Local AI desktop assistant (fork of Mofakir)
+    # TEMP (2026-11-09): nixpkgs pinned to commit b9eb668f72 (master, 2026-11-07),
+    # which contains "python3Packages.primp: fix build with system libs".
+    # nixos-unstable is frozen for the 26.11 release and primp fails to build
+    # there (missing pkg-config/zstd-c/aws-lc). Remove this input and restore
+    # assistant -> follows "nixpkgs" once the fix reaches nixos-unstable.
+    nixpkgs-primp-fix = {
+      url = "github:nixos/nixpkgs/b9eb668f72ae56cfbb69190682086d82ca73f61b";
+    };
+
+    # Assistant - Local AI desktop assistant
     assistant = {
       url = "github:egara/assistant/devel";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-primp-fix";
     };
   };
 
@@ -131,67 +140,71 @@
   };
 
   # Function that tells my flake which to use and what do what to do with the dependencies.
-  outputs = inputs @ {
-    self,
-    disko,
-    nixpkgs,
-    nixpkgs-stable,
-    home-manager,
-    wallpaperdownloader,
-    autofirma-nix,
-    stylix,
-    walker,
-    nixos-hardware,
-    nix-flatpak,
-    nix-amd-ai,
-    opencode-flake,
-    assistant,
-    ... }:
-  {
-    nixosModules = {
-      sicos-hyprland = {
-        _module.args.sicos-source-path = self;
-        imports = [
-          walker.nixosModules.default
-          (import ./modules/sicos/hyprland)
-        ];
+  outputs =
+    inputs@{
+      self,
+      disko,
+      nixpkgs,
+      nixpkgs-stable,
+      home-manager,
+      wallpaperdownloader,
+      autofirma-nix,
+      stylix,
+      walker,
+      nixos-hardware,
+      nix-flatpak,
+      nix-amd-ai,
+      opencode-flake,
+      assistant,
+      ...
+    }:
+    {
+      nixosModules = {
+        sicos-hyprland = {
+          _module.args.sicos-source-path = self;
+          imports = [
+            walker.nixosModules.default
+            (import ./modules/sicos/hyprland)
+          ];
+        };
       };
-    };
 
-    homeManagerModules = {
-      sicos-hyprland = {
-        imports = [
-          stylix.homeModules.stylix
-          (import ./modules/sicos/hyprland/hm-module.nix)
-        ];
+      homeManagerModules = {
+        sicos-hyprland = {
+          imports = [
+            stylix.homeModules.stylix
+            (import ./modules/sicos/hyprland/hm-module.nix)
+          ];
+        };
       };
-    };
 
-    nixosConfigurations = (
-      # Imports ./hosts/default.nix module
-      import ./hosts {
-        inherit (nixpkgs) lib;
-        # Also inherit disko, home-manager and the rest of the variables so it does not need
-        # to be defined anymore.
-        # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
-        # inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix walker;
-        inherit
-          inputs
-          nixpkgs
-          nixpkgs-stable
-          disko
-          home-manager
-          wallpaperdownloader
-          autofirma-nix
-          stylix
-          walker
-          nixos-hardware
-          nix-flatpak
-          nix-amd-ai self
-          opencode-flake
-          assistant;
-      }
-    );
-  };
+      nixosConfigurations = (
+        # Imports ./hosts/default.nix module
+        import ./hosts {
+          inherit (nixpkgs) lib;
+          # Also inherit disko, home-manager and the rest of the variables so it does not need
+          # to be defined anymore.
+          # inherit inputs nixpkgs nixpkgs-stable disko home-manager hyprswitch wallpaperdownloader hyprland hyprland-plugins username location;
+          # inherit inputs nixpkgs nixpkgs-stable disko home-manager wallpaperdownloader username location autofirma-nix walker;
+          inherit
+            inputs
+            nixpkgs
+            nixpkgs-stable
+            disko
+            home-manager
+            wallpaperdownloader
+            autofirma-nix
+            stylix
+            walker
+            nixos-hardware
+            nix-flatpak
+            nix-amd-ai
+            self
+            opencode-flake
+            assistant
+            ;
+        }
+      );
+    };
 
 }
