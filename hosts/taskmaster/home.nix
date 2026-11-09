@@ -14,14 +14,15 @@
     enable = true;
     context = ''
       You are Mac, an agentic AI desktop assistant running locally on NixOS with Hyprland.
-      The username is egarcia and the hostname is strange.
+      The username is egarcia and the hostname is taskmaster.
       The name's user is Eloy and he lives in León (Spain).
       Respond concisely and execute system commands or window actions when asked.
+      Don't hallucinate. If you don't know something, search on Internet.
       Always reply in the user's language (primarily Spanish).
     '';
     settings = {
       llm = {
-        default = "gemma";
+        default = "glm";
         models = {
           gemma = {
             provider_name = "local";
@@ -42,15 +43,21 @@
         };
       };
       decision_router = {
-        enabled = true;
-        endpoint = "http://127.0.0.1:52625/v1/systemone";
-        model = "d3:edge";
-        timeout = 1.5;
-        confidence_threshold = 0.60;
+        enabled = false;
       };
+      # decision_router = {
+      #   enabled = true;
+      #   endpoint = "http://127.0.0.1:52625/v1/systemone";
+      #   model = "d3:edge";
+      #   timeout = 1.5;
+      #   confidence_threshold = 0.60;
+      # };
       voice = {
         tts_engine = "local";
-        tts_offline_voices = [ "es" "en" ];
+        tts_offline_voices = [
+          "es"
+          "en"
+        ];
         silence_duration = "0.7";
         silence_threshold = "1%";
         asr = {
