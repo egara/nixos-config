@@ -107,14 +107,14 @@
     # nixos-unstable is frozen for the 26.11 release and primp fails to build
     # there (missing pkg-config/zstd-c/aws-lc). Remove this input and restore
     # assistant -> follows "nixpkgs" once the fix reaches nixos-unstable.
-    nixpkgs-primp-fix = {
-      url = "github:nixos/nixpkgs/b9eb668f72ae56cfbb69190682086d82ca73f61b";
-    };
+    # nixpkgs-primp-fix = {
+    #   url = "github:nixos/nixpkgs/b9eb668f72ae56cfbb69190682086d82ca73f61b";
+    # };
 
     # Assistant - Local AI desktop assistant
     assistant = {
       url = "github:egara/assistant/devel";
-      inputs.nixpkgs.follows = "nixpkgs-primp-fix";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
   };
 
