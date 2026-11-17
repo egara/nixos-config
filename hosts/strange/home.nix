@@ -75,6 +75,9 @@
         searxng = {
           url = "http://127.0.0.1:32771/mcp";
           transport = "streamable_http";
+          type = "web_search";
+          priority = 10;
+          description = "Búsqueda en Internet a través de instancia local de SearXNG.";
         };
       };
     };
