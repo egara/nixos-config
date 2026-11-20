@@ -143,7 +143,8 @@ hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("uwsm app -- " .. browser), { descrip
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("uwsm app -- " .. browser .. " --private-window"), { description = "Firefox (Private Window)" })
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("uwsm app -- " .. webapp .. "='https://gemini.google.com/'"), { description = "Gemini" })
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("~/.config/sicos/scripts/sicos-settings.sh"), { description = "SicOS settings menu" })
-hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("assistant"), { description = "AI Desktop Assistant (Voice & Text)" })
+hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("assistant"), { release = true, description = "Toggle AI Desktop Assistant Window" })
+hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("assistant --voice"), { long_press = true, description = "AI Desktop Assistant Voice Mode (Headless)" })
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("uwsm app -- " .. terminal .. " --override term=xterm-256color -e lazyssh"), { description = "Lazyssh" })
 -- App launcher on Super key release
 hl.bind("SUPER_L", hl.dsp.exec_cmd(menu), { release = true, description = "App Launcher (Walker)" })
