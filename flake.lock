@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795347889,
-        "narHash": "sha256-pAzGXJmri5V5pvf0Nmq/h1jAkVbUcPu4MwRVbu2BZI4=",
+        "lastModified": 1795419276,
+        "narHash": "sha256-xzBMVIGmJriAgNYtsFI9TNqLPB2RvE8r1HaeNIDwxWA=",
         "owner": "egara",
         "repo": "assistant",
-        "rev": "d229269cc48ab677fa422f97fdd961c283a5d3cc",
+        "rev": "2dcbec1f7df1ce57572135f90706780d56ba1a97",
         "type": "github"
       },
       "original": {
@@ -683,11 +683,11 @@
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1794979221,
-        "narHash": "sha256-vWs2KOmSQRWsowAX6GN0jg1HtnhXU74CDK+2JxJSyEA=",
+        "lastModified": 1795380583,
+        "narHash": "sha256-+T0zTBMt1QF+KYGqpb/P3GDnJPdMbQqQ9NWJTO3mghI=",
         "owner": "noblepayne",
         "repo": "opencode-flake",
-        "rev": "eaaf3d85aed63e3cedcada2241f090abc5a05512",
+        "rev": "49d4c20193ad7379d9b215480ea9a733a0e0f985",
         "type": "github"
       },
       "original": {
